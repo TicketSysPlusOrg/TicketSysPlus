@@ -1,0 +1,35 @@
+import express from 'express';
+import mongoose from 'mongoose';
+import bodyparser from 'body-parser';
+import cors from 'cors';
+import routes from './routes/soccerRoutes';
+
+const app = express();
+const PORT = 4001;
+
+//mongo connection: lib simplifies connections to mongo and allows shorter syntax for queries
+//mongo will tell us we're connected and we will get promise response
+mongoose.Promise = global.Promise;
+mongoose.connect('mongodb://127.0.0.1:27017', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+
+//bodyparser setup
+app.use(bodyparser.urlencoded({ extended: true }));
+app.use(bodyparser.json());
+
+//CORS setup
+app.use(cors());
+
+//pass routes to express app. routes now available
+routes(app);
+
+app.get('/', (req, res) => {
+  res.send(`Our MERN app is running on port ${PORT}.`);
+});
+
+app.listen(PORT),
+  () => {
+    console.log(`Your server is running on port ${PORT}.`);
+  };
