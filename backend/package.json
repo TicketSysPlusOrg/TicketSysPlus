@@ -21,6 +21,8 @@
   },
   "dependencies": {
     "cors": "^2.8.5",
-    "mongodb": "^4.5.0"
+    "minimist": "^1.2.6",
+    "mongodb": "^4.5.0",
+    "mysql": "^2.18.1"
   }
 }

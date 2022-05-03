@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import bodyparser from 'body-parser';
 import cors from 'cors';
 import routes from './routes/soccerRoutes';
+import ticketRouter from './routes/ticketRoutes';
 
 const app = express();
 const PORT = 4001;
@@ -25,8 +26,12 @@ app.use(cors());
 //pass routes to express app. routes now available
 routes(app);
 
+//pass ticket route(s) to express app
+app.use('/ticketInfo', ticketRouter);
+
+
 app.get('/', (req, res) => {
-  res.send(`Our MERN app is running on port ${PORT}.`);
+  res.send(`Our Ticket app is running on port ${PORT}.`);
 });
 
 app.listen(PORT),
