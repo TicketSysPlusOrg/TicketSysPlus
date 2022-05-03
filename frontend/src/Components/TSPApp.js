@@ -23,13 +23,24 @@ function TSPApp(props) {
     if (!apiData) return null;
 
     return(
-        <div>
-            <h1 className="text-center">Make a Ticket</h1>
-            <p className="text-center">Some stuff: {apiData.properties.grocery_info.title}</p>
-        </div>
+        < >
+            <div className="">
+                <h1 className="text-center">Order Form</h1>
+                <p className="text-center text-dark">JSON Data generated: {apiData.properties.grocery_info.title}</p>
+            </div>
+            <div className="container mt-5">
+                <div className="row align-items-center justify-content-center">
+                    <div className="col-6 text-center">
+                        <input className="form-check-input " type="checkbox" value="" id="flexCheckChecked" />
+                        <label className="form-check-label ms-2" htmlFor="flexCheckChecked">
+                            Do some shopping?
+                        </label>
+                    </div>
 
+                </div>
+            </div>
+        </>
     );
-}
-
+};
 
 export default TSPApp;
