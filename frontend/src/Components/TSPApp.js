@@ -54,7 +54,7 @@ function TSPApp(props) {
                     <div className="col-6 text-center">
                         <input className="form-check-input mt-3" type="checkbox" value="" id="flexCheckChecked" onClick={onClickCheck}/>
                         <label className="form-check-label ms-2 fs-3" htmlFor="flexCheckChecked">
-                            Do some shopping!
+                            See Grocery Stock
                         </label>
                     </div>
                     {showDiv ?
@@ -75,16 +75,22 @@ function TSPApp(props) {
                         </select>
 
                         {showVeg ?
-                            <ul className="list-unstyled">
+                            <ul className="list-unstyled list-group align-items-center list-group-flush">
                                 {apiData.properties.grocery_info.properties.items.items.anyOf[0].veggies.map((thisVeggie) => (
-                                    <li key={thisVeggie}>{thisVeggie}</li>
+                                    <li key={thisVeggie} className="list-group-item w-25 me-5">
+                                        <input className="form-check-input ms-5 float-start" type="checkbox"  id={thisVeggie}/>
+                                        {thisVeggie}
+                                    </li>
                                 ))}
                             </ul>
                             : null}
                         {showFruit ?
-                            <ul className="list-unstyled">
+                            <ul className="list-unstyled list-group align-items-center list-group-flush">
                                 {apiData.properties.grocery_info.properties.items.items.anyOf[1].fruits.map((thisFruit) => (
-                                    <li key={thisFruit}>{thisFruit}</li>
+                                    <li key={thisFruit} className="list-group-item w-25 me-5">
+                                        <input className="form-check-input ms-5 float-start" type="checkbox"  id={thisFruit}/>
+                                        {thisFruit}
+                                    </li>
                                 ))}
                             </ul>
                             : null}
@@ -95,7 +101,7 @@ function TSPApp(props) {
                 </div>
 
                 <div className="row align-items-center justify-content-center mt-5">
-                    <div className="col-6 text-center">
+                    <div className="col-7 text-center">
                         <input className="form-check-input mt-3" type="checkbox" value="" id="flexCheckChecked2" onClick={onClickJSON}/>
                         <label className="form-check-label ms-2 fs-3" htmlFor="flexCheckChecked2">
                             View JSON
@@ -103,7 +109,7 @@ function TSPApp(props) {
                     </div>
 
                         {showJSON ?
-                            <div className="container">
+                            <div className="col-7 text-center">
                                 <article>
                                     {JSON.stringify(apiData)}
                                 </article>

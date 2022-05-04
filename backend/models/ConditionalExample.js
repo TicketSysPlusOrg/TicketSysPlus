@@ -59,7 +59,7 @@ export const ConditionalExample = {
                                     "apple",
                                     "orange",
                                     "grape",
-                                    "Banana"
+                                    "pear"
                                 ],
                                 "required": ["fruits_types"]
                             }
