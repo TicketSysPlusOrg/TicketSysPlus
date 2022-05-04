@@ -79,7 +79,9 @@ function TSPApp(props) {
                                 {apiData.properties.grocery_info.properties.items.items.anyOf[0].veggies.map((thisVeggie) => (
                                     <li key={thisVeggie} className="list-group-item w-25 me-5">
                                         <input className="form-check-input ms-5 float-start" type="checkbox"  id={thisVeggie}/>
-                                        {thisVeggie}
+                                        <label className="" htmlFor={thisVeggie}>
+                                            {thisVeggie}
+                                        </label>
                                     </li>
                                 ))}
                             </ul>
@@ -89,7 +91,9 @@ function TSPApp(props) {
                                 {apiData.properties.grocery_info.properties.items.items.anyOf[1].fruits.map((thisFruit) => (
                                     <li key={thisFruit} className="list-group-item w-25 me-5">
                                         <input className="form-check-input ms-5 float-start" type="checkbox"  id={thisFruit}/>
-                                        {thisFruit}
+                                        <label className="" htmlFor={thisFruit}>
+                                            {thisFruit}
+                                        </label>
                                     </li>
                                 ))}
                             </ul>
