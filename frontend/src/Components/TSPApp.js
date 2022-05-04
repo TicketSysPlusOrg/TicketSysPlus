@@ -8,22 +8,25 @@ function TSPApp(props) {
     const [showDiv, setShowDiv] = useState(false);
     let onClickCheck = () => showDiv ? setShowDiv(false) : setShowDiv(true);
 
+    const [showJSON, setShowJSON] = useState(false);
+    let onClickJSON = () => showJSON ? setShowJSON(false) : setShowJSON(true);
+
     //onselect event to show/hide related lists
     const [showVeg, setShowVeg] = useState(false);
-    let onSelectVeg = () => !showVeg ? setShowVeg(true) : setShowVeg(false);
     const [showFruit, setShowFruit] = useState(false);
-    let onSelectFruit = () => !showFruit ? setShowFruit(true) : setShowFruit(false);
 
     let onSelectList = () =>
     {
+        let thisStateList = document.getElementById('selectLists').value;
+        console.log(thisStateList);
+        console.log(typeof thisStateList)
         setShowVeg(false);
         setShowFruit(false);
-        // console.log(val);
 
-        if(1) {
+        if(thisStateList === '1') {
             setShowVeg(true);
         }
-        else if (2) {
+        else if (thisStateList === '2') {
             setShowFruit(true);
         }
     }
@@ -44,7 +47,7 @@ function TSPApp(props) {
         < >
             <div className="">
                 <h1 className="text-center">Order Form</h1>
-                <p className="text-center text-dark"><i>JSON Data generated:</i> {apiData.properties.grocery_info.title}</p>
+                <p className="text-center text-dark"><i>JSON Data generated:</i> <strong>{apiData.properties.grocery_info.title}</strong></p>
             </div>
             <div className="container mt-5">
                 <div className="row align-items-center justify-content-center">
@@ -57,15 +60,15 @@ function TSPApp(props) {
                     {showDiv ?
                     <div className="text-center mt-4">
                         <label className="px-2 d-block mb-2">{apiData.properties.grocery_info.properties.items.description}</label>
-                        <select className="px-2 py-1" onChange={onSelectList}>
+                        <select className="px-2 py-1" id="selectLists" onChange={onSelectList}>
 
-                            <option className="text-secondary" value={0}> Select a List </option>
+                            <option className="text-secondary" value="0"> Select a List </option>
 
-                            <option value={1} >
+                            <option value="1" >
                                 {apiData.properties.grocery_info.properties.items.items.anyOf[0].title}
                             </option>
 
-                            <option  value={2}>
+                            <option  value="2">
                                 {apiData.properties.grocery_info.properties.items.items.anyOf[1].title}
                             </option>
 
@@ -88,6 +91,25 @@ function TSPApp(props) {
 
                     </div>
                     : null}
+
+                </div>
+
+                <div className="row align-items-center justify-content-center mt-5">
+                    <div className="col-6 text-center">
+                        <input className="form-check-input mt-3" type="checkbox" value="" id="flexCheckChecked2" onClick={onClickJSON}/>
+                        <label className="form-check-label ms-2 fs-3" htmlFor="flexCheckChecked2">
+                            View JSON
+                        </label>
+                    </div>
+
+                        {showJSON ?
+                            <div className="container">
+                                <article>
+                                    {JSON.stringify(apiData)}
+                                </article>
+                            </div>
+                        : null}
+
                 </div>
             </div>
         </>
