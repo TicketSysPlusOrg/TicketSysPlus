@@ -58,7 +58,7 @@ function TSPApp(props) {
                         </label>
                     </div>
                     {showDiv ?
-                    <div className="text-center mt-4">
+                    <div className="text-center mt-4 ">
                         <label className="px-2 d-block mb-2">{apiData.properties.grocery_info.properties.items.description}</label>
                         <select className="px-2 py-1" id="selectLists" onChange={onSelectList}>
 
@@ -75,9 +75,9 @@ function TSPApp(props) {
                         </select>
 
                         {showVeg ?
-                            <ul className="list-unstyled list-group align-items-center list-group-flush">
+                            <ul className="list-unstyled list-group align-items-center list-group-flush ">
                                 {apiData.properties.grocery_info.properties.items.items.anyOf[0].veggies.map((thisVeggie) => (
-                                    <li key={thisVeggie} className="list-group-item w-25 me-5">
+                                    <li key={thisVeggie} className="list-group-item w-25 ">
                                         <input className="form-check-input ms-5 float-start" type="checkbox"  id={thisVeggie}/>
                                         <label className="" htmlFor={thisVeggie}>
                                             {thisVeggie}
@@ -87,9 +87,9 @@ function TSPApp(props) {
                             </ul>
                             : null}
                         {showFruit ?
-                            <ul className="list-unstyled list-group align-items-center list-group-flush">
+                            <ul className="list-unstyled list-group align-items-center list-group-flush ">
                                 {apiData.properties.grocery_info.properties.items.items.anyOf[1].fruits.map((thisFruit) => (
-                                    <li key={thisFruit} className="list-group-item w-25 me-5">
+                                    <li key={thisFruit} className="list-group-item w-25 ">
                                         <input className="form-check-input ms-5 float-start" type="checkbox"  id={thisFruit}/>
                                         <label className="" htmlFor={thisFruit}>
                                             {thisFruit}
@@ -113,8 +113,8 @@ function TSPApp(props) {
                     </div>
 
                         {showJSON ?
-                            <div className="col-7 text-center">
-                                <article>
+                            <div className="col-7 text-center border border-3 border-info p-3 bg-white shadow-lg">
+                                <article className="text-wrap text-break">
                                     {JSON.stringify(apiData)}
                                 </article>
                             </div>

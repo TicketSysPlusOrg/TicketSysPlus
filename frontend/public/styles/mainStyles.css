@@ -11,3 +11,11 @@
 #hiddenForm {
     display: none;
 }
+
+body {
+    background-image: linear-gradient(to right, white, #ffe6d9);
+}
+
+li:hover {
+    background-color: #b7e7e7;
+}
