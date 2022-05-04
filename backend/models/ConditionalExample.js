@@ -5,7 +5,7 @@ export const ConditionalExample = {
     "properties": {
         "detail": BaseSchema,
         "grocery_info": {
-            "title" : "Grocery Information",
+            "title" : "Grocery Shopping",
             "type": "object",
             "properties" : {
                 "items": {
@@ -25,6 +25,14 @@ export const ConditionalExample = {
                                         "enum" : ["Yes"]
                                     }
                                 },
+                                "veggies" : [
+                                        "celery",
+                                        "artichoke",
+                                        "chive",
+                                        "lettuce",
+                                        "carrot",
+                                        "onion"
+                                    ],
                                 "required" : ["raw_vegetables"]
                             },
                             {
@@ -45,6 +53,14 @@ export const ConditionalExample = {
                                         "minItems": 1
                                     }
                                 },
+                                "fruits" : [
+                                    "banana",
+                                    "tomato",
+                                    "apple",
+                                    "orange",
+                                    "grape",
+                                    "Banana"
+                                ],
                                 "required": ["fruits_types"]
                             }
                         ]

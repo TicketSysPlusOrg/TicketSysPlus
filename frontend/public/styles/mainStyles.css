@@ -1,9 +1,13 @@
 #motorqLogo {
-    max-width: 60%;
+    max-width: 50%;
 }
 
 #groceries {
     color: dodgerblue;
     font-size: 1.5rem;
     font-weight: 700;
+}
+
+#hiddenForm {
+    display: none;
 }
