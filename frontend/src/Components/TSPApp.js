@@ -10,9 +10,23 @@ function TSPApp(props) {
 
     //onselect event to show/hide related lists
     const [showVeg, setShowVeg] = useState(false);
-    let onSelectVeg = () => showVeg ? setShowVeg(false) : setShowVeg(true);
+    let onSelectVeg = () => !showVeg ? setShowVeg(true) : setShowVeg(false);
     const [showFruit, setShowFruit] = useState(false);
-    let onSelectFruit = () => showFruit ? setShowFruit(false) : setShowFruit(true);
+    let onSelectFruit = () => !showFruit ? setShowFruit(true) : setShowFruit(false);
+
+    let onSelectList = () =>
+    {
+        setShowVeg(false);
+        setShowFruit(false);
+        // console.log(val);
+
+        if(1) {
+            setShowVeg(true);
+        }
+        else if (2) {
+            setShowFruit(true);
+        }
+    }
 
     useEffect(() => {
         if (!props.login) return;
@@ -43,14 +57,15 @@ function TSPApp(props) {
                     {showDiv ?
                     <div className="text-center mt-4">
                         <label className="px-2 d-block mb-2">{apiData.properties.grocery_info.properties.items.description}</label>
-                        <select className="px-2 py-1">
-                            <option className="text-secondary"> Select a List </option>
+                        <select className="px-2 py-1" onChange={onSelectList}>
 
-                            <option onSelect={onSelectVeg} value="true">
+                            <option className="text-secondary" value={0}> Select a List </option>
+
+                            <option value={1} >
                                 {apiData.properties.grocery_info.properties.items.items.anyOf[0].title}
                             </option>
 
-                            <option onSelect={onSelectFruit} value="true">
+                            <option  value={2}>
                                 {apiData.properties.grocery_info.properties.items.items.anyOf[1].title}
                             </option>
 
@@ -73,7 +88,6 @@ function TSPApp(props) {
 
                     </div>
                     : null}
-
                 </div>
             </div>
         </>
