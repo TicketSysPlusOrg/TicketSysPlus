@@ -1,2 +1,2 @@
-# MERNrepo
-testing app for MERN learning
+# TicketSysPlus
+app dev repo for TSP stack
