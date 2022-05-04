@@ -47,7 +47,7 @@ function TSPApp(props) {
         < >
             <div className="">
                 <h1 className="text-center">Order Form</h1>
-                <p className="text-center text-dark"><i>JSON Data generated:</i> <strong>{apiData.properties.grocery_info.title}</strong></p>
+                {/*<p className="text-center text-dark"><i>JSON Data generated:</i> <strong>{apiData.properties.grocery_info.title}</strong></p>*/}
             </div>
             <div className="container mt-5">
                 <div className="row align-items-center justify-content-center">
