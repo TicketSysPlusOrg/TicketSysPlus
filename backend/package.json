@@ -4,7 +4,8 @@
   "description": "backend stuff for mern testing",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon ./index.js --exec babel-node -e js"
+    "start": "concurrently \"nodemon ./index.js --exec babel-node -e js\" \"cd ../frontend && npm start\"",
+    "server": "nodemon index.js"
   },
   "author": "Conor O'Brien",
   "license": "ISC",
@@ -20,6 +21,7 @@
     "npm": "^8.8.0"
   },
   "dependencies": {
+    "concurrently": "^7.1.0",
     "cors": "^2.8.5",
     "minimist": "^1.2.6",
     "mongodb": "^4.5.0",
