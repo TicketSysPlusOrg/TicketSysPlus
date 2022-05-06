@@ -1,5 +1,6 @@
 import React, { useState, Suspense } from 'react';
 import fetchData from "../APIActions/FetchData";
+import NavPage from "../NavPage";
 
 const fetchDataPromise = fetchData();
 
@@ -38,6 +39,7 @@ function TSPApp(props) {
     return(
         < >
             <Suspense fallback={<h1 className="ms-5 ps-5">API data loading...</h1>}>
+                <NavPage />
                 <div className="">
                     <h1 className="text-center">Order Form</h1>
                 </div>

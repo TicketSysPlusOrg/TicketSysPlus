@@ -4,7 +4,7 @@ import TSPApp from "./TSPApp";
 function TSPAppFetched(props) {
     const waitingMessage =
         <div className="container">
-            <h1 className="text-center">API data loading...</h1>
+            <h1 className="text-center text-danger">API data loading...</h1>
         </div>
 
     return(
