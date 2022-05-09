@@ -21,6 +21,20 @@
     background-color: white;
 }
 
+.makeTicket {
+    border-radius: 25px;
+    border: 4px double #ec7a6f;
+    background-color: rgb(252,120,54);
+    color: white;
+}
+
+.makeTicket:hover {
+    background-color: rgb(232, 99, 35);
+}
+
+.makeTicket:active {
+    background-color: rgb(245, 98, 28);
+}
 
 /*override colors for user info button*/
 .bootstrapOverride #userBtn {
