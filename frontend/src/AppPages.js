@@ -5,7 +5,7 @@ import Admin from "./Components/TicketSysPlusPages/Admin";
 import Error from "./Components/TicketSysPlusPages/ErrorPage";
 import TSPAppFetched from "./Components/TicketSysPlusPages/TSPAppFetched";
 
-function MainApp(props) {
+function MainApp() {
         return (
             <>
                     <Routes>
