@@ -1,5 +1,3 @@
-import React from "react";
-
 function wrapPromise(promise) {
     let status = 'DATA PENDING'
     let response

@@ -1,10 +1,10 @@
 import React, { useState, Suspense } from 'react';
 import fetchData from "../APIActions/FetchData";
-import NavPage from "../NavPage";
+import NavBarHeader from "../NavBarHeader";
 
 const fetchDataPromise = fetchData();
 
-function TSPApp(props) {
+function TSPApp() {
     const dataDetails = fetchDataPromise.read()
 
     //onclick event to show or hide shopping choices
@@ -39,7 +39,7 @@ function TSPApp(props) {
     return(
         < >
             <Suspense fallback={<h1 className="ms-5 ps-5">API data loading...</h1>}>
-                <NavPage />
+                <NavBarHeader />
                 <div className="">
                     <h1 className="text-center">Order Form</h1>
                 </div>

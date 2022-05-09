@@ -1,4 +1,3 @@
-import React from 'react';
 import wrapPromise from "./WrapPromise";
 
 function FetchData () {

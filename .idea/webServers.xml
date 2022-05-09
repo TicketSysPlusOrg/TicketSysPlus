@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="25a42bcd-3678-42fd-9a90-28df5cfbd2fa" name="ConorWHFS" url="https://cobrien2.greenriverdev.com">
+        <fileTransfer rootFolder="/home/cobrieng/public_html/TicketSysPlus" accessType="SFTP" host="cobrien2.greenriverdev.com" port="18765" sshConfigId="4f392af5-74ef-430f-ad5b-9975ddd15abb" sshConfig="cobrieng@cobrien2.greenriverdev.com:18765 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

@@ -12,6 +12,25 @@
     display: none;
 }
 
+#ts-color {
+    color: darkblue;
+}
+
+#sidebar {
+    min-height: 100vh;
+    background-color: white;
+}
+
+
+/*override colors for user info button*/
+.bootstrapOverride #userBtn {
+    background-color: rgb(252,120,54);
+    color: white;
+}
+.bootstrapOverride #userBtn:hover {
+    background-color: rgb(232, 99, 35);
+}
+
 body {
     background-image: linear-gradient(to right, white, #ffe6d9);
 }
