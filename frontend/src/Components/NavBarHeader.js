@@ -28,7 +28,7 @@ function NavBarHeader(props) {
                                 : null
                             }
                             {currLocation.pathname !== "/user" ?
-                                <NavLink to="/user">
+                                <NavLink to="/user" >
                                     <button type="button" className="btn btn-primary mx-3">USER PAGE</button>
                                 </NavLink>
                                 : null
