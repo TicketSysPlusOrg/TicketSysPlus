@@ -1,11 +1,15 @@
 import React from 'react';
 import NavBarHeader from "../NavBarHeader";
+import AdminJson from "../AdminUser/AdminJsonDisplay";
 
-function Admin(props) {
+
+
+function Admin() {
+
     return(
         <>
             <NavBarHeader />
-            <h3 className="ms-5 ps-5">Admin Page</h3>
+            <AdminJson />
         </>
     );
 }

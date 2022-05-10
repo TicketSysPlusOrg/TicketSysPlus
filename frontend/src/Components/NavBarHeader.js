@@ -51,7 +51,7 @@ function NavBarHeader(props) {
                     <div className="modal-content">
                         <div className="modal-header">
                             <h5 className="modal-title" id="makeTicketModalLabel">Make a Ticket</h5>
-                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"/>
                         </div>
                         <div className="modal-body">
                             Placeholder Modal Body Text. VERY cool.

@@ -37,7 +37,7 @@ function TSPApp() {
     }
 
     return(
-        < >
+        <>
             <Suspense fallback={<h1 className="ms-5 ps-5">API data loading...</h1>}>
                 <NavBarHeader />
                 <div className="">
@@ -120,7 +120,7 @@ function TSPApp() {
 
         </>
     );
-};
+}
 
 
 export default TSPApp;
