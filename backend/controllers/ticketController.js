@@ -38,3 +38,18 @@ export const getTicketWithPriorityOne = (req, res) => {
         res.json(Ticket);
     });
 };
+
+//PUT
+export const updateTicket = (req, res) => {
+    Ticket.findOneAndUpdate(
+        { _id: req.params.TicketId },
+        req.body,
+        { new: true },
+        (err, Ticket) => {
+            if (err) {
+                res.send(err);
+            }
+            res.json(Player);
+        }
+    );
+}

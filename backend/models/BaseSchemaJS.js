@@ -51,4 +51,12 @@ export const TicketSchema = new Schema({
         minItems: 0,
         maxItems: 3
     },
+    blocked: {
+        type: Boolean,
+        default: false
+    },
+    canceled: {
+        type: Boolean,
+        default: false
+    },
 });

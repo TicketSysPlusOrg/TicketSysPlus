@@ -1,14 +1,15 @@
 import {
     addNewTicket,
     getTickets,
-    getTicketWithPriorityOne
+    getTicketWithPriorityOne, updateTicket
 } from "../controllers/ticketController";
 
 const mongoTicketRoutes = (app) => {
     app
         .route('/tix')
         .get(getTickets)
-        .post(addNewTicket);
+        .post(addNewTicket)
+        .put(updateTicket);
 
     app
         .route('/hottix')

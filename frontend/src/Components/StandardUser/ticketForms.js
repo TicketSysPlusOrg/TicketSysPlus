@@ -1,8 +1,14 @@
 // forms to fill to create a new ticket
-import React, { createRef } from 'react';
+import React, { createRef, useState } from 'react';
 import axios from 'axios';
+import {Button} from 'react-bootstrap';
 
+//TODO: make react-bootstrap friendly.
+//TODO: use the array inputs properly.
 function TicketForm() {
+    const [show, setShow] = useState(false);
+
+    const handleClose = () => setShow(false);
 
     let inputTitle = createRef();
     let inputDesc = createRef();
@@ -14,7 +20,8 @@ function TicketForm() {
 
     function submitTicket(SubmitEvent)
     {
-        SubmitEvent.preventDefault();
+        //TODO: stop reload of page but close out the modal
+        /*SubmitEvent.preventDefault();*/
 
         const ticketTitle = inputTitle.current.value;
         const ticketDesc = inputDesc.current.value;
@@ -76,13 +83,16 @@ function TicketForm() {
                                 <input id="tickAttachments" ref={inputAttachment} type="text" />
                             </div>
                         </div>
-                        <button
-                            className="btn waves-effect waves-light btn btn-success float-end mt-2"
-                            type="submit"
-                            name="action"
-                        >
-                            Create Ticket
-                        </button>
+                        {/*<button*/}
+                        {/*    className="btn waves-effect waves-light btn btn-success float-end mt-2"*/}
+                        {/*    type="submit"*/}
+                        {/*    name="action"*/}
+                        {/*>*/}
+                        {/*    Create Ticket*/}
+                        {/*</button>*/}
+                        <Button variant="primary" onClick={handleClose} type="submit" name="action" className="waves-effect waves-light float-end mt-2">
+                                    Create Ticket
+                        </Button>
                     </form>
 
 
