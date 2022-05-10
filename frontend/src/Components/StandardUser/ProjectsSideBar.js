@@ -5,8 +5,8 @@ function PrjSideBar() {
     return (
         <>
 
-            <div className="container d-flex flex-column justify-content-center">
-                <div className="card m-2 mt-3">
+            <div className="container d-flex flex-column justify-content-center ">
+                <div className="card m-2 mt-3 shadow-lg">
                     <div className="card-title ms-2">
                         Tesla
                     </div>
@@ -14,7 +14,7 @@ function PrjSideBar() {
 
                     </div>
                 </div>
-                <div className="card m-2">
+                <div className="card m-2 shadow-lg">
                     <div className="card-title ms-2">
                         Porsche
                     </div>
@@ -22,7 +22,7 @@ function PrjSideBar() {
 
                     </div>
                 </div>
-                <div className="card m-2">
+                <div className="card m-2 shadow-lg">
                     <div className="card-title ms-2">
                         Enterprise
                     </div>
@@ -30,7 +30,7 @@ function PrjSideBar() {
 
                     </div>
                 </div>
-                <div className="card m-2">
+                <div className="card m-2 shadow-lg">
                     <div className="card-title ms-2">
                         Large Truck Company
                     </div>
@@ -38,7 +38,7 @@ function PrjSideBar() {
 
                     </div>
                 </div>
-                <div className="card m-2">
+                <div className="card m-2 shadow-lg">
                     <div className="card-title ms-2">
                         Medium Truck Company
                     </div>
