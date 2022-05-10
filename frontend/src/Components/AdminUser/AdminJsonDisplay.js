@@ -2,7 +2,7 @@ import React from "react";
 import fetchData from "../APIActions/FetchData";
 import '../TicketSysPlusPages/TSPApp.css';
 
-const fetchDataPromise = fetchData();
+const fetchDataPromise = fetchData("ticketInfo");
 
 function AdminJson() {
 
@@ -22,7 +22,7 @@ function AdminJson() {
                 <div className="col-7 text-center border border-3 border-info p-3 bg-white shadow-lg">
                     {/*TODO: Make height responsive to text area content (scrollHeight)*/}
                     <textarea style={{height: "400px"}} name="ticketData" className="text-wrap text-break w-100">
-                        {JSON.stringify(dataDetails)}
+                        {JSON.stringify(dataDetails, null, 3)}
                     </textarea>
                 </div>
             </div>
