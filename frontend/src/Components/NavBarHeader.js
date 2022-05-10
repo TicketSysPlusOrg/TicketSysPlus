@@ -1,10 +1,17 @@
 import React from "react";
 import {NavLink, useLocation} from 'react-router-dom'
 import './TicketSysPlusPages/TSPApp.css'
+import NewTicketFetched from "./TicketSysPlusPages/NewTicketFetched";
+import { Modal, Button } from 'react-bootstrap';
+
 
 function NavBarHeader(props) {
     const currLocation = useLocation();
-    console.log(currLocation.pathname);
+    const [show, setShow] = useState(false);
+
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+
 
     return (
         <>
@@ -17,10 +24,10 @@ function NavBarHeader(props) {
                                 <p className="d-inline-block" id="ts-color"><strong>TicketSystem+</strong></p>
                             </a>
                         </div>
-                        <div className="col-7 d-flex justify-content-end">
-                            <button className="makeTicket" data-bs-toggle="modal" data-bs-target="#makeTicketModal">
+                        <div className="col-7 d-flex justify-content-end mt-4">
+                            <Button className="makeTicket" variant="primary" onClick={handleShow}>
                                 Create Ticket
-                            </button>
+                            </Button>
                             {currLocation.pathname !== "/" ?
                                 <NavLink to="/">
                                     <button type="button" className='btn btn-primary mx-3'>TEST PAGE</button>
@@ -28,7 +35,7 @@ function NavBarHeader(props) {
                                 : null
                             }
                             {currLocation.pathname !== "/user" ?
-                                <NavLink to="/user">
+                                <NavLink to="/user" >
                                     <button type="button" className="btn btn-primary mx-3">USER PAGE</button>
                                 </NavLink>
                                 : null
@@ -40,30 +47,30 @@ function NavBarHeader(props) {
                                 : null
                             }
                             {/*TODO: make this a custom button. don't overuse bootstrap.*/}
-                            <button className="btn mx-3" id="userBtn" type="button">CurrentUser</button>
+                            <button className="btn ms-3" id="userBtn" type="button">User's Name Here</button>
                         </div>
                 </div>
             </nav>
 
             {/*TODO: extract to separate component?*/}
-            <div className="modal fade" id="makeTicketModal" tabIndex="-1" aria-labelledby="makeTicketModal" aria-hidden="true">
-                <div className="modal-dialog">
-                    <div className="modal-content">
-                        <div className="modal-header">
-                            <h5 className="modal-title" id="makeTicketModalLabel">Make a Ticket</h5>
-                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"/>
-                        </div>
-                        <div className="modal-body">
-                            Placeholder Modal Body Text. VERY cool.
-                        </div>
-                        <div className="modal-footer">
-                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" className="btn btn-primary">Save changes</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <Modal show={show} onHide={handleClose}>
+                <Modal.Dialog className="modal-dialog">
 
+                        <Modal.Header closeButton>
+                            <Modal.Title>Make a Ticket</Modal.Title>
+                        </Modal.Header>
+
+                        <Modal.Body>
+                            <NewTicketFetched />
+                        </Modal.Body>
+
+                        {/*<Modal.Footer>*/}
+                        {/*    <Button variant="primary" onClick={handleClose} type="submit" name="action">*/}
+                        {/*        Create Ticket*/}
+                        {/*    </Button>*/}
+                        {/*</Modal.Footer>*/}
+                </Modal.Dialog>
+            </Modal>
         </>
     )
 

@@ -1,4 +1,5 @@
 function wrapPromise(promise) {
+    // console.log(promise);
     let status = 'DATA PENDING'
     let response
 

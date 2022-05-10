@@ -1,20 +1,22 @@
 import express from 'express';
-// import mongoose from 'mongoose';
+import mongoose from 'mongoose';
 import bodyparser from 'body-parser';
 import cors from 'cors';
-// import routes from './routes/soccerRoutes';
+// import routes from './routes/testTicketRoutes';
+import mongoTicketRoutes from "./routes/testTicketRoutes";
 import ticketRouter from './routes/ticketRoutes';
+import tickSchemaRoute from "./routes/tickSchemaRoute";
 
 const app = express();
 const PORT = 4001;
 
 //mongo connection: lib simplifies connections to mongo and allows shorter syntax for queries
 //mongo will tell us we're connected and we will get promise response
-// mongoose.Promise = global.Promise;
-// mongoose.connect('mongodb://127.0.0.1:27017', {
-//   useNewUrlParser: true,
-//   useUnifiedTopology: true,
-// });
+mongoose.Promise = global.Promise;
+mongoose.connect('mongodb://127.0.0.1:27017', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 
 //bodyparser setup
 app.use(bodyparser.urlencoded({ extended: true }));
@@ -24,10 +26,11 @@ app.use(bodyparser.json());
 app.use(cors());
 
 //pass routes to express app. routes now available
-// routes(app);
+mongoTicketRoutes(app);
 
 //pass ticket route(s) to express app
 app.use('/ticketInfo', ticketRouter);
+app.use('/ticketSchema', tickSchemaRoute);
 
 
 app.get('/', (req, res) => {
