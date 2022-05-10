@@ -1,10 +1,12 @@
 import React from "react";
 import {NavLink, useLocation} from 'react-router-dom'
 import './TicketSysPlusPages/TSPApp.css'
+import NewTicketFetched from "./TicketSysPlusPages/NewTicketFetched";
+
 
 function NavBarHeader(props) {
     const currLocation = useLocation();
-    console.log(currLocation.pathname);
+    // console.log(currLocation.pathname);
 
     return (
         <>
@@ -54,12 +56,12 @@ function NavBarHeader(props) {
                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div className="modal-body">
-                            Placeholder Modal Body Text. VERY cool.
+                            <NewTicketFetched />
                         </div>
-                        <div className="modal-footer">
-                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" className="btn btn-primary">Save changes</button>
-                        </div>
+                        {/*<div className="modal-footer">*/}
+                        {/*    <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>*/}
+                        {/*    <button type="button" className="btn btn-primary">Save changes</button>*/}
+                        {/*</div>*/}
                     </div>
                 </div>
             </div>
