@@ -52,6 +52,7 @@ function TicketForm() {
             <div className="row">
                 <div className="col ">
                     {/*<h1 className="center">Add a New Ticket</h1>*/}
+                    {/*TODO: validation  for all fields*/}
                     <form className="col s12" onSubmit={submitTicket}>
                         <div className="row">
                             <div className="input-field col s6">

@@ -21,7 +21,7 @@ function TSPlist() {
             <h4>Tickets</h4>
 
             {ticketArray.map((thisTicket) => (
-                <Col sm={3} >
+                <Col sm={3} key={thisTicket._id}>
                     <Card className="my-3 mx-4" key={thisTicket._id}>
                         <Card.Body>
                             <Card.Title>{thisTicket.title}</Card.Title>
