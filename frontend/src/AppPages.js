@@ -10,9 +10,9 @@ function MainApp({ pca }) {
         return (
             <MsalProvider instance={pca}>
                     <Routes>
-                        <Route path="/" element={<TSPAppFetched />} />
-                        <Route path="/user" element={ <StandardUser />} exact/>
+                        <Route path="/" element={ <StandardUser />} exact/>
                         <Route path="/admin" element={ <Admin />}/>
+                        <Route path="/test" element={<TSPAppFetched />} />
                         <Route path="*" element={ <Error />}/>
                     </Routes>
             </MsalProvider>
