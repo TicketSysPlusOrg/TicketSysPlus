@@ -4,6 +4,9 @@ import './TicketSysPlusPages/TSPApp.css'
 import NewTicketFetched from "./TicketSysPlusPages/NewTicketFetched";
 import { Modal, Button } from 'react-bootstrap';
 
+import { useMsal } from "@azure/msal-react";
+import { loginRequest } from "../authConfig";
+import { callMsGraph } from "./graph";
 
 function NavBarHeader(props) {
     const currLocation = useLocation();
@@ -11,7 +14,22 @@ function NavBarHeader(props) {
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+    
+    const { instance, accounts } = useMsal();
+    const [graphData, setGraphData] = useState(null);
 
+    function RequestProfileData() {
+        // Silently acquires an access token which is then attached to a request for MS Graph data
+        instance.acquireTokenSilent({
+            ...loginRequest,
+            account: accounts[0]
+        }).then((response) => {
+            callMsGraph(response.accessToken).then(response => {
+                setGraphData(response);
+                console.log(response);
+            });
+        });
+    }
 
     return (
         <>
@@ -47,7 +65,7 @@ function NavBarHeader(props) {
                                 : null
                             }
                             {/*TODO: make this a custom button. don't overuse bootstrap.*/}
-                            <button className="btn ms-3" id="userBtn" type="button">User's Name Here</button>
+                            <button className="btn ms-3" id="userBtn" type="button" onClick={RequestProfileData}>{graphData ? graphData.displayName : "Unknown"}</button>
                         </div>
                 </div>
             </nav>
