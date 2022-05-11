@@ -51,7 +51,6 @@ function NavBarHeader(props) {
         <>
             <nav className="navbar navbar-light bg-light shadow">
                 <div className="container-fluid row align-content-between">
-<<<<<<< HEAD
                     <div className="mx-5 my-2 col-3">
                         <a className="navbar-brand ms-4 " href="https://motorq.com/" rel="noreferrer" target="_blank">
                             <img id="motorqLogo" src="/motorqLogo.png" alt="Orange Motorq Logo"
@@ -88,40 +87,6 @@ function NavBarHeader(props) {
 
                         </button>
                     </div>
-=======
-                        <div className="mx-5 my-2 col-3">
-                            <a className="navbar-brand ms-4 " href="https://motorq.com/" rel="noreferrer" target="_blank">
-                                <img id="motorqLogo" src="/motorqLogo.png" alt="Orange Motorq Logo"
-                                     className="img-responsive pe-2"/>
-                                <p className="d-inline-block" id="ts-color"><strong>TicketSystem+</strong></p>
-                            </a>
-                        </div>
-                        <div className="col-7 d-flex justify-content-end mt-4">
-                            <Button className="makeTicket" variant="primary" onClick={handleShow}>
-                                Create Ticket
-                            </Button>
-                            {/*{currLocation.pathname !== "/test" ?*/}
-                            {/*    <NavLink to="/test">*/}
-                            {/*        <button type="button" className='btn btn-primary mx-3'>TEST PAGE</button>*/}
-                            {/*    </NavLink>*/}
-                            {/*    : null*/}
-                            {/*}*/}
-                            {currLocation.pathname !== "/" ?
-                                <NavLink to="/" >
-                                    <button type="button" className="btn btn-primary mx-3">USER PAGE</button>
-                                </NavLink>
-                                : null
-                            }
-                            {currLocation.pathname !== "/admin" ?
-                                <NavLink to="/admin">
-                                    <button type="button" className="btn btn-primary mx-3">ADMIN PAGE</button>
-                                </NavLink>
-                                : null
-                            }
-                            {/*TODO: make this a custom button. don't overuse bootstrap.*/}
-                            <button className="btn ms-3" id="userBtn" type="button" onClick={RequestProfileData}>{graphData ? graphData.displayName : "Unknown"}</button>
-                        </div>
->>>>>>> 834d838496b1e152523b4726b45a2987b1c2b6e6
                 </div>
             </nav>
 
