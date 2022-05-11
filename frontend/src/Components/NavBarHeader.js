@@ -62,14 +62,14 @@ function NavBarHeader(props) {
                         <Button className="makeTicket" variant="primary" onClick={handleShow}>
                             Create Ticket
                         </Button>
+                        {/*{currLocation.pathname !== "/" ?*/}
+                        {/*    <NavLink to="/">*/}
+                        {/*        <button type="button" className='btn btn-primary mx-3'>TEST PAGE</button>*/}
+                        {/*    </NavLink>*/}
+                        {/*    : null*/}
+                        {/*}*/}
                         {currLocation.pathname !== "/" ?
-                            <NavLink to="/">
-                                <button type="button" className='btn btn-primary mx-3'>TEST PAGE</button>
-                            </NavLink>
-                            : null
-                        }
-                        {currLocation.pathname !== "/user" ?
-                            <NavLink to="/user" >
+                            <NavLink to="/" >
                                 <button type="button" className="btn btn-primary mx-3">USER PAGE</button>
                             </NavLink>
                             : null
