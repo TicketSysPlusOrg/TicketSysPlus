@@ -26,13 +26,13 @@ export const ConditionalExample = {
                                     }
                                 },
                                 "veggies" : [
-                                        "celery",
-                                        "artichoke",
-                                        "chive",
-                                        "lettuce",
-                                        "carrot",
-                                        "onion"
-                                    ],
+                                    "celery",
+                                    "artichoke",
+                                    "chive",
+                                    "lettuce",
+                                    "carrot",
+                                    "onion"
+                                ],
                                 "required" : ["raw_vegetables"]
                             },
                             {
@@ -71,4 +71,4 @@ export const ConditionalExample = {
         }
     },
     "required": ["grocery_info"]
-}
+};

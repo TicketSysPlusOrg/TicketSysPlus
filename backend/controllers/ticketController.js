@@ -1,7 +1,7 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 import {TicketSchema} from "../models/BaseSchemaJS.js";
 
-const Ticket = mongoose.model('Ticket', TicketSchema);
+const Ticket = mongoose.model("Ticket", TicketSchema);
 
 //functions that interact w/ db when sending request to api. request to api w/ route, controller executes func in db
 
@@ -55,4 +55,4 @@ export const blockTicket = (req, res) => {
             res.json(Ticket);
         }
     );
-}
+};

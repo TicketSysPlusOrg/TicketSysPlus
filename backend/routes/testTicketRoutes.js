@@ -6,13 +6,13 @@ import {
 
 const mongoTicketRoutes = (app) => {
     app
-        .route('/tix')
+        .route("/tix")
         .get(getTickets)
         .post(addNewTicket)
         .put(blockTicket);
 
     app
-        .route('/hottix')
+        .route("/hottix")
         .get(getTicketWithPriorityOne);
 };
 
