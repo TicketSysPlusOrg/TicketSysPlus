@@ -32,7 +32,6 @@ function NavBarHeader(props) {
     }, []);
 
 
-
     return (
         <>
             <nav className="navbar navbar-light bg-light shadow">

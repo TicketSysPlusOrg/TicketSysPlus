@@ -35,6 +35,17 @@
             "always"
         ],
         "no-unused-vars": "off",
+        "eol-last": [
+            "error",
+            "always"
+        ],
+        "no-multiple-empty-lines": [
+            "error",
+            {
+                "max": 2,
+                "maxEOF": 0
+            }
+        ],
         "react/react-in-jsx-scope": "off",
         "react/prop-types": 1
     }
