@@ -1,2 +1,2 @@
 # TicketSysPlus
-app dev repo for TSP stack
+development repo for TSP stack
