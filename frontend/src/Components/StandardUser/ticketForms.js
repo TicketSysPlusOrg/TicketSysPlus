@@ -1,7 +1,7 @@
 // forms to fill to create a new ticket
-import React, { createRef, useState } from 'react';
-import axios from 'axios';
-import {Button} from 'react-bootstrap';
+import React, { createRef, useState } from "react";
+import axios from "axios";
+import {Button} from "react-bootstrap";
 
 //TODO: make react-bootstrap friendly.
 //TODO: use the array inputs properly.
@@ -31,7 +31,7 @@ function TicketForm() {
         const tickAttachments = inputAttachment.current.value;
 
         axios
-            .post('http://localhost:4001/tix', {
+            .post("http://localhost:4001/tix", {
                 title: ticketTitle,
                 description: ticketDesc,
                 due_date: tickDate,
@@ -43,7 +43,7 @@ function TicketForm() {
                 console.log(res);
             })
             .catch((err) => {
-                console.log(err)
+                console.log(err);
             });
     }
 
@@ -101,7 +101,7 @@ function TicketForm() {
 
             </div>
         </>
-    )
+    );
 
 }
 

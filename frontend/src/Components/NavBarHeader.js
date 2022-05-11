@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { NavLink, useLocation } from 'react-router-dom'
-import './TicketSysPlusPages/TSPApp.css'
+import { NavLink, useLocation } from "react-router-dom";
+import "./TicketSysPlusPages/TSPApp.css";
 import NewTicketFetched from "./TicketSysPlusPages/NewTicketFetched";
-import { Modal, Button } from 'react-bootstrap';
+import { Modal, Button } from "react-bootstrap";
 
 import { useMsal } from "@azure/msal-react";
 import { loginRequest } from "../authConfig";
@@ -29,7 +29,7 @@ function NavBarHeader(props) {
                 console.log(response);
             });
         });
-    }, [])
+    }, []);
 
 
 
@@ -69,7 +69,7 @@ function NavBarHeader(props) {
                         {/*TODO: make this a custom button. don't overuse bootstrap.  */}
                         <button className="btn ms-3" id="userBtn" type="button" >
 
-                            {graphData ? graphData.displayName : 'Loading...'}
+                            {graphData ? graphData.displayName : "Loading..."}
 
                         </button>
                     </div>
@@ -96,7 +96,7 @@ function NavBarHeader(props) {
                 </Modal.Dialog>
             </Modal>
         </>
-    )
+    );
 
 }
 

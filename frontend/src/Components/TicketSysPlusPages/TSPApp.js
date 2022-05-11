@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import fetchData from "../APIActions/FetchData";
 import NavBarHeader from "../NavBarHeader";
 
 const fetchDataPromise = fetchData("ticketInfo");
 
 function TSPApp() {
-    const dataDetails = fetchDataPromise.read()
+    const dataDetails = fetchDataPromise.read();
 
     //onclick event to show or hide shopping choices
     const [showDiv, setShowDiv] = useState(false);
@@ -22,19 +22,19 @@ function TSPApp() {
     //read what's selected from list, set states because of it
     let onSelectList = () =>
     {
-        let thisStateList = document.getElementById('selectLists').value;
+        let thisStateList = document.getElementById("selectLists").value;
         console.log(thisStateList);
-        console.log(typeof thisStateList)
+        console.log(typeof thisStateList);
         setShowVeg(false);
         setShowFruit(false);
 
-        if(thisStateList === '1') {
+        if(thisStateList === "1") {
             setShowVeg(true);
         }
-        else if (thisStateList === '2') {
+        else if (thisStateList === "2") {
             setShowFruit(true);
         }
-    }
+    };
 
     return(
         <>
@@ -117,7 +117,7 @@ function TSPApp() {
             </div>
         </>
     );
-};
+}
 
 
 export default TSPApp;

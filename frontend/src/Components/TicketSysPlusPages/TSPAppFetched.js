@@ -17,20 +17,20 @@ function TSPAppFetched(props) {
     const waitingMessage =
         <div className="container">
             <h1 className="text-center text-danger">API data loading...</h1>
-        </div>
+        </div>;
 
     return(
         <Suspense fallback={waitingMessage}>
-        <MsalAuthenticationTemplate
-            interactionType={InteractionType.Popup} 
-            authenticationRequest={authRequest} 
-            errorComponent={ErrorComponent} 
-            loadingComponent={Loading}
-        >
-            <TSPApp login={true} />
-        </MsalAuthenticationTemplate >
+            <MsalAuthenticationTemplate
+                interactionType={InteractionType.Popup} 
+                authenticationRequest={authRequest} 
+                errorComponent={ErrorComponent} 
+                loadingComponent={Loading}
+            >
+                <TSPApp login={true} />
+            </MsalAuthenticationTemplate >
         </Suspense>
-        )
+    );
 }
 
 export default TSPAppFetched;

@@ -1,7 +1,7 @@
 //list of all of the current standard user's tickets
-import React, {useState} from 'react';
+import React, {useState} from "react";
 import axios from "axios";
-import {Button, Card, Col} from 'react-bootstrap';
+import {Button, Card, Col} from "react-bootstrap";
 
 
 function TSPlist() {
@@ -11,24 +11,24 @@ function TSPlist() {
 
     function blockTicket(userID) {
         axios
-            .put('http://localhost:4001/tix', {
+            .put("http://localhost:4001/tix", {
                 _id: userID
             })
             .then((res) => {
-                console.log(res)
+                console.log(res);
             })
             .catch((err) => {
-                console.log(err)
+                console.log(err);
             });
     }
 
     axios
-        .get('http://localhost:4001/tix')
+        .get("http://localhost:4001/tix")
         .then((res) => {
             setTickets(res.data);
         })
         .catch((err) => {
-            console.log(err)
+            console.log(err);
         });
 
     return (
@@ -54,7 +54,7 @@ function TSPlist() {
 
             ))}
         </>
-        )
+    );
 
 }
 

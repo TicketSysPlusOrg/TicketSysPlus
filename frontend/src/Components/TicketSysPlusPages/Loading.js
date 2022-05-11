@@ -1,3 +1,3 @@
 export const Loading = () => {
-  return <p>Authentication in progress...</p>
-}
+    return <p>Authentication in progress...</p>;
+};

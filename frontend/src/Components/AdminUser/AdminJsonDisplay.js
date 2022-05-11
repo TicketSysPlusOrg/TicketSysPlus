@@ -1,6 +1,6 @@
 import React from "react";
 import fetchData from "../APIActions/FetchData";
-import '../TicketSysPlusPages/TSPApp.css';
+import "../TicketSysPlusPages/TSPApp.css";
 
 const fetchDataPromise = fetchData("ticketInfo");
 

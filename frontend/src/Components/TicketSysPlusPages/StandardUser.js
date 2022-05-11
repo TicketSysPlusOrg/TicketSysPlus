@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 import { MsalAuthenticationTemplate } from "@azure/msal-react";
 import { InteractionType } from "@azure/msal-browser";
@@ -10,7 +10,7 @@ import { Loading } from "./Loading";
 import NavBarHeader from "../NavBarHeader";
 import PrjSideBar from "../StandardUser/ProjectsSideBar";
 import UserTickets from "../StandardUser/userTickets";
-import {Container, Row} from 'react-bootstrap'
+import {Container, Row} from "react-bootstrap";
 
 function StandardUser(props) {
     const authRequest = {
