@@ -1,7 +1,7 @@
 import {
     addNewTicket,
     getTickets,
-    getTicketWithPriorityOne, updateTicket
+    getTicketWithPriorityOne, blockTicket
 } from "../controllers/ticketController";
 
 const mongoTicketRoutes = (app) => {
@@ -9,7 +9,7 @@ const mongoTicketRoutes = (app) => {
         .route('/tix')
         .get(getTickets)
         .post(addNewTicket)
-        .put(updateTicket);
+        .put(blockTicket);
 
     app
         .route('/hottix')

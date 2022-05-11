@@ -40,16 +40,19 @@ export const getTicketWithPriorityOne = (req, res) => {
 };
 
 //PUT
-export const updateTicket = (req, res) => {
-    Ticket.findOneAndUpdate(
-        { _id: req.params.TicketId },
+export const blockTicket = (req, res) => {
+    let bodyid = req.body;
+    console.log(bodyid);
+
+    Ticket.findByIdAndUpdate(
         req.body,
+        { blocked : true},
         { new: true },
         (err, Ticket) => {
             if (err) {
                 res.send(err);
             }
-            res.json(Player);
+            res.json(Ticket);
         }
     );
 }

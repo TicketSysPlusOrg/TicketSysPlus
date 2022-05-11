@@ -1,11 +1,26 @@
 //list of all of the current standard user's tickets
-import React, { useState, useEffect } from 'react';
+import React, {useState} from 'react';
 import axios from "axios";
-import {Card, Button, Col} from 'react-bootstrap';
+import {Button, Card, Col} from 'react-bootstrap';
 
 
 function TSPlist() {
     const [ticketArray, setTickets] = useState([]);
+    const [ticketID, setTickID] = useState(null);
+
+
+    function blockTicket(userID) {
+        axios
+            .put('http://localhost:4001/tix', {
+                _id: userID
+            })
+            .then((res) => {
+                console.log(res)
+            })
+            .catch((err) => {
+                console.log(err)
+            });
+    }
 
     axios
         .get('http://localhost:4001/tix')
@@ -18,7 +33,7 @@ function TSPlist() {
 
     return (
         <>
-            <h4>Tickets</h4>
+            <h4 className="mt-4">Tickets</h4>
 
             {ticketArray.map((thisTicket) => (
                 <Col sm={3} key={thisTicket._id}>
@@ -26,10 +41,13 @@ function TSPlist() {
                         <Card.Body>
                             <Card.Title>{thisTicket.title}</Card.Title>
                             <Card.Text>
-                                {thisTicket.description}
+                                {thisTicket.blocked ? <strong>Ticket Blocked</strong> : thisTicket.description}
                             </Card.Text>
-                            <Button variant="primary">Block Ticket</Button>
-                            <Button variant="secondary">Cancel Ticket</Button>
+                            <Card.Text>
+                                Due: {thisTicket.due_date} Priority: {thisTicket.priority}
+                            </Card.Text>
+                            <Button onClick={() => blockTicket(thisTicket._id)} type="submit" name="action">Block Ticket</Button>
+                            {/*<Button variant="secondary">Cancel Ticket</Button>*/}
                         </Card.Body>
                     </Card>
                 </Col>
