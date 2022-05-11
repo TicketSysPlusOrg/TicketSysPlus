@@ -1,12 +1,29 @@
 import React from 'react';
+
+import { MsalAuthenticationTemplate } from "@azure/msal-react";
+import { InteractionType } from "@azure/msal-browser";
+import { loginRequest } from "../../authConfig";
+
+import { ErrorComponent } from "./ErrorComponent";
+import { Loading } from "./Loading";
+
 import NavBarHeader from "../NavBarHeader";
 import PrjSideBar from "../StandardUser/ProjectsSideBar";
 import UserTickets from "../StandardUser/userTickets";
 import {Container, Row} from 'react-bootstrap'
 
 function StandardUser(props) {
+    const authRequest = {
+        ...loginRequest
+    };
+
     return(
-        <>
+        <MsalAuthenticationTemplate
+            interactionType={InteractionType.Popup} 
+            authenticationRequest={authRequest} 
+            errorComponent={ErrorComponent} 
+            loadingComponent={Loading}
+        >
             <NavBarHeader />
             <div className="row">
 
@@ -25,7 +42,7 @@ function StandardUser(props) {
 
             </div>
 
-        </>
+        </MsalAuthenticationTemplate >
     );
 }
 
