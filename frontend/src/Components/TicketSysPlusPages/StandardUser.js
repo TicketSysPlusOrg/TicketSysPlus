@@ -19,7 +19,7 @@ function StandardUser(props) {
 
     return(
         <MsalAuthenticationTemplate
-            interactionType={InteractionType.Popup} 
+            interactionType={InteractionType.Redirect} 
             authenticationRequest={authRequest} 
             errorComponent={ErrorComponent} 
             loadingComponent={Loading}

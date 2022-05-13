@@ -22,7 +22,7 @@ function TSPAppFetched(props) {
     return(
         <Suspense fallback={waitingMessage}>
             <MsalAuthenticationTemplate
-                interactionType={InteractionType.Popup} 
+                interactionType={InteractionType.Redirect} 
                 authenticationRequest={authRequest} 
                 errorComponent={ErrorComponent} 
                 loadingComponent={Loading}
