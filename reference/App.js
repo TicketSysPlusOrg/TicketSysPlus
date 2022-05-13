@@ -50,7 +50,7 @@ class App extends React.Component {
                 <div className="row">
                     <nav>
                         <div className="nav-wrapper purple darken-2">
-                            <a href="/" className="brand-logo center">
+                            <a href="/frontend/public" className="brand-logo center">
                 Soccer Management Co
                             </a>
                         </div>

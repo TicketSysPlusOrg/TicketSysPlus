@@ -26,9 +26,4 @@ yarn-error.log*
 /.idea
 
 # learning files
-/backend/controllers/playerControllers.js
-/backend/models/playerModel.js
-/backend/routes/soccerRoutes.js
-/frontend/src/Components/App.css
-/frontend/src/Components/App.js
-/frontend/src/Components/Player
+/reference/

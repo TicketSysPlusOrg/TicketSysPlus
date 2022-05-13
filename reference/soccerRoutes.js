@@ -4,7 +4,7 @@ import {
     getPlayers,
     getPlayerWithID,
     updatePlayer,
-} from "../controllers/playerControllers";
+} from "./playerControllers";
 
 const routes = (app) => {
     app
