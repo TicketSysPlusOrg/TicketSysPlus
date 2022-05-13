@@ -31,6 +31,9 @@ function NavBarHeader(props) {
         });
     }, []);
 
+    function logout() {
+        instance.logoutRedirect({account: accounts[0]});
+    }
 
     return (
         <>
@@ -71,6 +74,8 @@ function NavBarHeader(props) {
                             {graphData ? graphData.displayName : "Loading..."}
 
                         </button>
+
+                        <Button onClick={logout}>Logout</Button>
                     </div>
                 </div>
             </nav>
