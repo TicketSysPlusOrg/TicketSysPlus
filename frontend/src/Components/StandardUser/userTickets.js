@@ -6,7 +6,6 @@ import {Button, Card, Col} from "react-bootstrap";
 
 function TSPlist() {
     const [ticketArray, setTickets] = useState([]);
-    const [ticketID, setTickID] = useState(null);
 
 
     function blockTicket(userID) {
@@ -33,11 +32,11 @@ function TSPlist() {
 
     return (
         <>
-            <h4 className="mt-4">Tickets</h4>
+            <h4 className="mt-4">Project Tickets</h4>
 
             {ticketArray.map((thisTicket) => (
-                <Col sm={3} key={thisTicket._id}>
-                    <Card className="my-3 mx-4" key={thisTicket._id}>
+                <Col xs={12} md={6} xl={3} key={thisTicket._id}>
+                    <Card className="my-2 mx-2" key={thisTicket._id}>
                         <Card.Body>
                             <Card.Title>{thisTicket.title}</Card.Title>
                             <Card.Text>
@@ -47,7 +46,7 @@ function TSPlist() {
                                 Due: {thisTicket.due_date} Priority: {thisTicket.priority}
                             </Card.Text>
                             <Button onClick={() => blockTicket(thisTicket._id)} type="submit" name="action">Block Ticket</Button>
-                            {/*<Button variant="secondary">Cancel Ticket</Button>*/}
+                            {/*<Button onClick={() => blockTicket(thisTicket._id)} type="submit" name="action">Block Ticket</Button>*/}
                         </Card.Body>
                     </Card>
                 </Col>

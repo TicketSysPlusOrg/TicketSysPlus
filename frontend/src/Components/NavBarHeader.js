@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import "./TicketSysPlusPages/TSPApp.css";
 import NewTicketFetched from "./TicketSysPlusPages/NewTicketFetched";
-import { Modal, Button } from "react-bootstrap";
+import { Modal, Button, Collapse } from "react-bootstrap";
 
 import { useMsal } from "@azure/msal-react";
 import { loginRequest } from "../authConfig";
@@ -17,6 +17,9 @@ function NavBarHeader(props) {
 
     const { instance, accounts } = useMsal();
     const [graphData, setGraphData] = useState(null);
+
+    const [toggle, setToggle] = useState(false);
+    const toggleFunc = useCallback(() => setToggle(!toggle));
 
     useEffect(() => {
         // Silently acquires an access token which is then attached to a request for MS Graph data
@@ -39,43 +42,44 @@ function NavBarHeader(props) {
         <>
             <nav className="navbar navbar-light bg-light shadow">
                 <div className="container-fluid row align-content-between">
-                    <div className="mx-5 my-2 col-3">
+                    <div className="mx-5 my-2 col-7 col-md-3">
                         <a className="navbar-brand ms-4 " href="https://motorq.com/" rel="noreferrer" target="_blank">
+                            {/*TODO: replace with better quality motorq logo*/}
                             <img id="motorqLogo" src="/motorqLogo.png" alt="Orange Motorq Logo"
-                                className="img-responsive pe-2" />
+                                className="img-fluid pe-2" />
                             <p className="d-inline-block" id="ts-color"><strong>TicketSystem+</strong></p>
                         </a>
                     </div>
-                    <div className="col-7 d-flex justify-content-end mt-4">
-                        <Button className="makeTicket" variant="primary" onClick={handleShow}>
-                            Create Ticket
-                        </Button>
-                        {/*{currLocation.pathname !== "/" ?*/}
-                        {/*    <NavLink to="/">*/}
-                        {/*        <button type="button" className='btn btn-primary mx-3'>TEST PAGE</button>*/}
-                        {/*    </NavLink>*/}
-                        {/*    : null*/}
-                        {/*}*/}
+                    <div className="col-3 col-md-7 d-flex justify-content-end mt-4">
+                        <div>
+                            <Button className="makeTicket mx-3" onClick={handleShow}>
+                                Create Ticket
+                            </Button>
+                        </div>
                         {currLocation.pathname !== "/" ?
                             <NavLink to="/" >
-                                <button type="button" className="btn btn-primary mx-3">USER PAGE</button>
+                                <Button className="btn btn-primary mx-3">USER PAGE</Button>
                             </NavLink>
                             : null
                         }
                         {currLocation.pathname !== "/admin" ?
                             <NavLink to="/admin">
-                                <button type="button" className="btn btn-primary mx-3">ADMIN PAGE</button>
+                                <Button className="btn btn-primary mx-3">ADMIN PAGE</Button>
                             </NavLink>
                             : null
                         }
                         {/*TODO: make this a custom button. don't overuse bootstrap.  */}
-                        <button className="btn ms-3" id="userBtn" type="button" >
+                        {/*TODO: make this collapse show up below name. looks bad right now.*/}
+                        <div className="d-flex">
+                            <button onClick={toggleFunc} className="btn ms-3" id="userBtn" type="button" >
+                                {graphData ? graphData.displayName : "Loading..."}
+                            </button>
+                            <Collapse in={toggle}>
+                                <Button onClick={logout}>Logout</Button>
+                            </Collapse>
 
-                            {graphData ? graphData.displayName : "Loading..."}
+                        </div>
 
-                        </button>
-
-                        <Button onClick={logout}>Logout</Button>
                     </div>
                 </div>
             </nav>
@@ -91,12 +95,6 @@ function NavBarHeader(props) {
                     <Modal.Body>
                         <NewTicketFetched />
                     </Modal.Body>
-
-                    {/*<Modal.Footer>*/}
-                    {/*    <Button variant="primary" onClick={handleClose} type="submit" name="action">*/}
-                    {/*        Create Ticket*/}
-                    {/*    </Button>*/}
-                    {/*</Modal.Footer>*/}
                 </Modal.Dialog>
             </Modal>
         </>

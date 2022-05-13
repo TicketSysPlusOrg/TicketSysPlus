@@ -3,6 +3,8 @@ import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 // import App from './Components/App';
 import AppPages from "./AppPages";
+import 'bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 // MSAL imports
 import { PublicClientApplication, EventType } from "@azure/msal-browser";

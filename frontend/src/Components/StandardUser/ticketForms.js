@@ -67,7 +67,7 @@ function TicketForm() {
                         <div className="row">
                             <div className="input-field col s6">
                                 <label htmlFor="tickDate">Due Date</label>
-                                <input id="tickDate" ref={inputDate} type="text" />
+                                <input id="tickDate" ref={inputDate} type="date" className="d-block w-75 p-2"/>
                             </div>
                             <div className="input-field col s6">
                                 <label htmlFor="tickPriority">Priority</label>

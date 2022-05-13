@@ -20,7 +20,7 @@ function AdminJson() {
 
 
                 <div className="col-7 text-center border border-3 border-info p-3 bg-white shadow-lg">
-                    {/*TODO: Make height responsive to text area content (scrollHeight)*/}
+                    {/*TODO: Make height responsive to text area content (scrollHeight). also set this JSONstringify to defaultvalue or value of textarea*/}
                     <textarea style={{height: "400px"}} name="ticketData" className="text-wrap text-break w-100">
                         {JSON.stringify(dataDetails, null, 3)}
                     </textarea>
