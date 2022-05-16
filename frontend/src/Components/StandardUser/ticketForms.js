@@ -62,10 +62,11 @@ function TicketForm() {
                                 <Form.Control type="text" placeholder="Enter title" ref={inputTitle}/>
                                 <Form.Text id="ticketTitle" name="ticketTitle" />
                             </Form.Group>
+                            {/*TODO: make this mentions section autofill...? at least mention if we need to insert emails or what*/}
                             <Form.Group className="col s6">
-                                <Form.Label htmlFor="ticketDesc">Ticket Description</Form.Label>
-                                <Form.Control type="text" placeholder="Enter description" ref={inputDesc}/>
-                                <Form.Text id="ticketDesc" name="ticketDesc"  />
+                                <Form.Label htmlFor="tickMentions">Mentions</Form.Label>
+                                <Form.Control type="text" placeholder="Enter associates" ref={inputMentions}/>
+                                <Form.Text id="tickMentions" name="tickMentions"  />
                             </Form.Group>
                         </div>
                         <div className="row mb-2">
@@ -87,12 +88,13 @@ function TicketForm() {
                             </Form.Group>
                         </div>
                         <div className="row mb-2">
-                            {/*TODO: make this mentions section autofill...? at least mention if we need to insert emails or what*/}
                             <Form.Group className="col s6">
-                                <Form.Label htmlFor="tickMentions">Mentions</Form.Label>
-                                <Form.Control type="text" placeholder="Enter associates" ref={inputMentions}/>
-                                <Form.Text id="tickMentions" name="tickMentions"  />
+                                <Form.Label htmlFor="ticketDesc">Ticket Description</Form.Label>
+                                <Form.Control as="textarea" rows="2" type="text" placeholder="Enter description" ref={inputDesc}/>
+                                <Form.Text id="ticketDesc" name="ticketDesc"  />
                             </Form.Group>
+                        </div>
+                        <div className="row mb-2">
                             {/*TODO: make this attachment form real*/}
                             <Form.Group className="col s6">
                                 <Form.Label htmlFor="tickAttachments">Attachments</Form.Label>

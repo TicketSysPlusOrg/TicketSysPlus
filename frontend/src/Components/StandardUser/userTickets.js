@@ -7,11 +7,6 @@ import {Button, Card, Col} from "react-bootstrap";
 function TSPlist() {
     const [ticketArray, setTickets] = useState([]);
 
-    // function blockedColor(blockState) {
-    //     return blockState ?  : null;
-    // }
-
-
     function blockTicket(userID) {
         axios
             .put("http://localhost:4001/tix", {
