@@ -22,28 +22,34 @@
     border-right: 3px solid rgba(184, 134, 11, 0.3);
 }
 
-.makeTicket {
+.bootstrapOverride .makeTicket {
     border-radius: 25px;
     border: 4px double #ec7a6f;
     background-color: rgb(252,120,54);
     color: white;
 }
 
-.makeTicket:hover {
+.bootstrapOverride .makeTicket:hover {
     background-color: rgb(232, 99, 35);
 }
 
-.makeTicket:active {
+.bootstrapOverride .makeTicket:active, .bootstrapOverride .makeTicket:focus {
     background-color: rgb(245, 98, 28);
+    border-color: orange;
 }
 
 /*override colors for user info button*/
 .bootstrapOverride #userBtn {
     background-color: rgb(252,120,54);
+    border: rgb(255, 89, 0);
     color: white;
 }
 .bootstrapOverride #userBtn:hover {
     background-color: rgb(232, 99, 35);
+}
+
+.bootstrapOverride #userCollapse {
+    position: absolute;
 }
 
 body {

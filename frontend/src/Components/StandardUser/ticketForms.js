@@ -51,7 +51,6 @@ function TicketForm() {
         <>
             <div className="row">
                 <div className="col ">
-                    {/*<h1 className="center">Add a New Ticket</h1>*/}
                     {/*TODO: validation  for all fields*/}
                     <form className="col s12" onSubmit={submitTicket}>
                         <div className="row">
@@ -92,7 +91,7 @@ function TicketForm() {
                         {/*    Create Ticket*/}
                         {/*</button>*/}
                         <Button variant="primary" onClick={handleClose} type="submit" name="action" className="waves-effect waves-light float-end mt-2">
-                                    Create Ticket
+                                    Submit
                         </Button>
                     </form>
 

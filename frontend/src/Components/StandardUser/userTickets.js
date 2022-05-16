@@ -7,6 +7,10 @@ import {Button, Card, Col} from "react-bootstrap";
 function TSPlist() {
     const [ticketArray, setTickets] = useState([]);
 
+    // function blockedColor(blockState) {
+    //     return blockState ?  : null;
+    // }
+
 
     function blockTicket(userID) {
         axios
@@ -35,8 +39,8 @@ function TSPlist() {
             <h4 className="mt-4">Project Tickets</h4>
 
             {ticketArray.map((thisTicket) => (
-                <Col xs={12} md={6} xl={3} key={thisTicket._id}>
-                    <Card className="my-2 mx-2" key={thisTicket._id}>
+                <Col xs={12} md={6} xl={3} key={thisTicket._id} >
+                    <Card className="my-2 mx-2" key={thisTicket._id} style={thisTicket.blocked ? { border:"0.3rem solid rgb(255, 0, 0)" } : null}>
                         <Card.Body>
                             <Card.Title>{thisTicket.title}</Card.Title>
                             <Card.Text>
@@ -45,8 +49,9 @@ function TSPlist() {
                             <Card.Text>
                                 Due: {thisTicket.due_date} Priority: {thisTicket.priority}
                             </Card.Text>
-                            <Button onClick={() => blockTicket(thisTicket._id)} type="submit" name="action">Block Ticket</Button>
-                            {/*<Button onClick={() => blockTicket(thisTicket._id)} type="submit" name="action">Block Ticket</Button>*/}
+                            {!thisTicket.blocked? <Button onClick={() => blockTicket(thisTicket._id)} className="d-inline-block" size="sm" type="submit" name="action">Block</Button> : null}
+
+                            <Button onClick={() => blockTicket(thisTicket._id)} className="d-inline-block" size="sm" type="submit" name="action">Cancel</Button>
                         </Card.Body>
                     </Card>
                 </Col>

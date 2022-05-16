@@ -20,6 +20,7 @@ function NavBarHeader(props) {
 
     const [toggle, setToggle] = useState(false);
     const toggleFunc = useCallback(() => setToggle(!toggle));
+    const toggleBlur = () => {if(toggle) {toggleFunc();}};
 
     useEffect(() => {
         // Silently acquires an access token which is then attached to a request for MS Graph data
@@ -33,6 +34,7 @@ function NavBarHeader(props) {
             });
         });
     }, []);
+
 
     function logout() {
         instance.logoutRedirect({account: accounts[0]});
@@ -70,14 +72,15 @@ function NavBarHeader(props) {
                         }
                         {/*TODO: make this a custom button. don't overuse bootstrap.  */}
                         {/*TODO: make this collapse show up below name. looks bad right now.*/}
-                        <div className="d-flex">
-                            <button onClick={toggleFunc} className="btn ms-3" id="userBtn" type="button" >
+                        <div>
+                            <Button onClick={toggleFunc} onBlur={toggleBlur} className="ms-3 " id="userBtn">
                                 {graphData ? graphData.displayName : "Loading..."}
-                            </button>
-                            <Collapse in={toggle}>
-                                <Button onClick={logout}>Logout</Button>
+                            </Button>
+                            <Collapse in={toggle}  id="userCollapse" >
+                                <div>
+                                    <Button onClick={logout} className="ms-4">Logout</Button>
+                                </div>
                             </Collapse>
-
                         </div>
 
                     </div>
