@@ -17,7 +17,7 @@ function TicketForm() {
     let inputMentions = createRef();
     let inputAttachment = createRef();
 
-
+    /*get vals from ref, post to db*/
     function submitTicket(SubmitEvent)
     {
         //TODO: stop reload of page but close out the modal
@@ -27,7 +27,9 @@ function TicketForm() {
         const ticketDesc = inputDesc.current.value;
         const tickDate = inputDate.current.value;
         const tickPriority = inputPriority.current.value;
-        const tickMentions = inputMentions.current.value;
+        const tickMentions = inputMentions.current.value.split(/[,| ]+/).map(function (value) {
+            return value.trim();
+        });
         const tickAttachments = inputAttachment.current.value;
 
         axios

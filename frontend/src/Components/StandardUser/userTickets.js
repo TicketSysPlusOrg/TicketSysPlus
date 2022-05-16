@@ -53,7 +53,7 @@ function TSPlist() {
 
             {ticketArray.map((thisTicket) => (
                 <Col xs={12} md={6} xl={3} key={thisTicket._id} >
-                    <Card className="my-2 mx-2" key={thisTicket._id} style={thisTicket.blocked ? { border:"0.3rem solid rgb(255, 0, 0)" } : null}>
+                    <Card className="my-1 mx-1" key={thisTicket._id} style={thisTicket.blocked ? { border:"0.3rem solid rgb(255, 0, 0)" } : null}>
                         <Card.Body>
                             <Card.Title>{thisTicket.title}</Card.Title>
                             <Card.Text>
