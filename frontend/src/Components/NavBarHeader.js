@@ -89,7 +89,7 @@ function NavBarHeader(props) {
 
             {/*TODO: extract to separate component?*/}
             <Modal show={show} onHide={handleClose}>
-                <Modal.Dialog className="modal-dialog">
+                <Modal.Dialog className="shadow-lg">
 
                     <Modal.Header closeButton>
                         <Modal.Title>Make a Ticket</Modal.Title>
