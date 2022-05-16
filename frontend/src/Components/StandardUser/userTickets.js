@@ -25,6 +25,19 @@ function TSPlist() {
             });
     }
 
+    function deleteTicket(userID) {
+        axios
+            .delete("http://localhost:4001/tix", {
+                _id: userID
+            })
+            .then((res) => {
+                console.log(res);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+
     axios
         .get("http://localhost:4001/tix")
         .then((res) => {
@@ -51,7 +64,7 @@ function TSPlist() {
                             </Card.Text>
                             {!thisTicket.blocked? <Button onClick={() => blockTicket(thisTicket._id)} className="d-inline-block" size="sm" type="submit" name="action">Block</Button> : null}
 
-                            <Button onClick={() => blockTicket(thisTicket._id)} className="d-inline-block" size="sm" type="submit" name="action">Cancel</Button>
+                            <Button onClick={() => deleteTicket(thisTicket._id)} className="d-inline-block float-end" size="sm" type="submit" name="action">Cancel</Button>
                         </Card.Body>
                     </Card>
                 </Col>

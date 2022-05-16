@@ -1,7 +1,7 @@
 // forms to fill to create a new ticket
 import React, { createRef, useState } from "react";
 import axios from "axios";
-import {Button} from "react-bootstrap";
+import {Button, Form} from "react-bootstrap";
 
 //TODO: make react-bootstrap friendly.
 //TODO: use the array inputs properly.
@@ -51,50 +51,63 @@ function TicketForm() {
         <>
             <div className="row">
                 <div className="col ">
+
                     {/*TODO: validation  for all fields*/}
-                    <form className="col s12" onSubmit={submitTicket}>
-                        <div className="row">
-                            <div className="input-field col s6">
-                                <label htmlFor="ticketTitle">Ticket Title</label>
-                                <input id="ticketTitle" ref={inputTitle} type="text" />
-                            </div>
-                            <div className="input-field col s6">
-                                <label htmlFor="ticketDesc">Ticket Description</label>
-                                <input id="ticketDesc" ref={inputDesc} type="text" />
-                            </div>
+                    <Form className="col s12" onSubmit={submitTicket}>
+                        <div className="row mb-2">
+                            <Form.Group className="col s6">
+                                <Form.Label htmlFor="ticketTitle">Ticket Title</Form.Label>
+                                <Form.Control type="text" placeholder="Enter title" ref={inputTitle}/>
+                                <Form.Text id="ticketTitle" name="ticketTitle" />
+                            </Form.Group>
+                            <Form.Group className="col s6">
+                                <Form.Label htmlFor="ticketDesc">Ticket Description</Form.Label>
+                                <Form.Control type="text" placeholder="Enter description" ref={inputDesc}/>
+                                <Form.Text id="ticketDesc" name="ticketDesc"  />
+                            </Form.Group>
                         </div>
-                        <div className="row">
-                            <div className="input-field col s6">
-                                <label htmlFor="tickDate">Due Date</label>
-                                <input id="tickDate" ref={inputDate} type="date" className="d-block w-75 p-2"/>
-                            </div>
-                            <div className="input-field col s6">
-                                <label htmlFor="tickPriority">Priority</label>
-                                <input id="tickPriority" ref={inputPriority} type="text" />
-                            </div>
+                        <div className="row mb-2">
+                            <Form.Group className="col s6">
+                                <Form.Label htmlFor="tickDate">Due Date</Form.Label>
+                                <Form.Control id="tickDate" name="tickDate" ref={inputDate} type="date" />
+                            </Form.Group>
+                            <Form.Group className="col s6">
+                                <Form.Label className="d-block">Priority</Form.Label>
+                                <Form.Label htmlFor="tickPriority1" className="ms-4">
+                                    1 <Form.Check inline name="tickPriority" id="tickPriority1" ref={inputPriority} type="radio" value={1}/>
+                                </Form.Label>
+                                <Form.Label htmlFor="tickPriority2">
+                                    2 <Form.Check inline name="tickPriority" id="tickPriority2" ref={inputPriority} type="radio" value={1}/>
+                                </Form.Label>
+                                <Form.Label htmlFor="tickPriority3">
+                                    3 <Form.Check inline defaultChecked name="tickPriority" id="tickPriority3" ref={inputPriority} type="radio" value={1}/>
+                                </Form.Label>
+                            </Form.Group>
                         </div>
-                        <div className="row">
-                            <div className="input-field col s6">
-                                <label htmlFor="tickMentions">Mentions</label>
-                                <input id="tickMentions" ref={inputMentions} type="text" />
-                            </div>
-                            <div className="input-field col s6">
-                                <label htmlFor="tickAttachments">Attachments</label>
-                                <input id="tickAttachments" ref={inputAttachment} type="text" />
-                            </div>
+                        <div className="row mb-2">
+                            {/*TODO: make this mentions section autofill...? at least mention if we need to insert emails or what*/}
+                            <Form.Group className="col s6">
+                                <Form.Label htmlFor="tickMentions">Mentions</Form.Label>
+                                <Form.Control type="text" placeholder="Enter associates" ref={inputMentions}/>
+                                <Form.Text id="tickMentions" name="tickMentions"  />
+                            </Form.Group>
+                            {/*TODO: make this attachment form real*/}
+                            <Form.Group className="col s6">
+                                <Form.Label htmlFor="tickAttachments">Attachments</Form.Label>
+                                <Form.Control id="tickAttachments" name="tickAttachments" ref={inputAttachment} type="file" />
+                            </Form.Group>
                         </div>
                         {/*<button*/}
-                        {/*    className="btn waves-effect waves-light btn btn-success float-end mt-2"*/}
+                        {/*    className="btn btn-success float-end mt-2"*/}
                         {/*    type="submit"*/}
                         {/*    name="action"*/}
                         {/*>*/}
                         {/*    Create Ticket*/}
                         {/*</button>*/}
-                        <Button variant="primary" onClick={handleClose} type="submit" name="action" className="waves-effect waves-light float-end mt-2">
+                        <Button onClick={handleClose} type="submit" name="action" className="float-end mt-2">
                                     Submit
                         </Button>
-                    </form>
-
+                    </Form>
 
                 </div>
 

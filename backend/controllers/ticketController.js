@@ -56,3 +56,15 @@ export const blockTicket = (req, res) => {
         }
     );
 };
+
+export const deleteTicket = (req, res) => {
+    Ticket.deleteOne(
+        req.body,
+        (err, Ticket) => {
+            if (err) {
+                res.send(err);
+            }
+            res.json(Ticket);
+        }
+    );
+};
