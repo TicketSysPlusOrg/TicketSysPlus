@@ -1,8 +1,15 @@
 import {
     addNewTicket,
     getTickets,
-    getTicketWithPriorityOne, blockTicket, deleteTicket
+    getTicketWithPriorityOne,
+    blockTicket,
+    deleteTicket
 } from "../controllers/ticketController";
+import {addJson,
+        changeJson,
+        deleteJson,
+        getJson
+} from "../controllers/jsonController";
 
 const mongoTicketRoutes = (app) => {
     app
@@ -15,6 +22,14 @@ const mongoTicketRoutes = (app) => {
     app
         .route("/hottix")
         .get(getTicketWithPriorityOne);
+
+    app
+        .route("/json")
+        .get(getJson)
+        .post(addJson)
+        .put(changeJson)
+        .delete(deleteJson)
+
 };
 
 export default mongoTicketRoutes;
