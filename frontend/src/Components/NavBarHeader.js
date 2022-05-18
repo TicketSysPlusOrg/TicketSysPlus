@@ -71,7 +71,6 @@ function NavBarHeader(props) {
                             : null
                         }
                         {/*TODO: make this a custom button. don't overuse bootstrap.  */}
-                        {/*TODO: make this collapse show up below name. looks bad right now.*/}
                         <div>
                             <Button onClick={toggleFunc} onBlur={toggleBlur} className="ms-3 " id="userBtn">
                                 {graphData ? graphData.displayName : "Loading..."}

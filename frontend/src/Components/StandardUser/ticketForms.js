@@ -1,10 +1,11 @@
 // forms to fill to create a new ticket
 import React, { createRef, useState } from "react";
 import axios from "axios";
-import {Button, Form} from "react-bootstrap";
+import {Button, Col, Form, Row} from "react-bootstrap";
+import ConditionalForms from "./ConditionalForms";
 
 //TODO: make react-bootstrap friendly.
-//TODO: use the array inputs properly.
+//TODO: make file uploads real
 function TicketForm() {
     const [show, setShow] = useState(false);
 
@@ -51,12 +52,12 @@ function TicketForm() {
 
     return (
         <>
-            <div className="row">
-                <div className="col ">
+            <Row>
+                <Col>
 
                     {/*TODO: validation  for all fields*/}
                     <Form className="col s12" onSubmit={submitTicket}>
-                        <div className="row mb-2">
+                        <Row className="mb-2">
                             <Form.Group className="col s6">
                                 <Form.Label htmlFor="ticketTitle">Ticket Title</Form.Label>
                                 <Form.Control type="text" placeholder="Enter title" ref={inputTitle}/>
@@ -68,8 +69,8 @@ function TicketForm() {
                                 <Form.Control type="text" placeholder="Enter associates" ref={inputMentions}/>
                                 <Form.Text id="tickMentions" name="tickMentions"  />
                             </Form.Group>
-                        </div>
-                        <div className="row mb-2">
+                        </Row>
+                        <Row className="mb-2">
                             <Form.Group className="col s6">
                                 <Form.Label htmlFor="tickDate">Due Date</Form.Label>
                                 <Form.Control id="tickDate" name="tickDate" ref={inputDate} type="date" />
@@ -86,36 +87,36 @@ function TicketForm() {
                                     3 <Form.Check inline defaultChecked name="tickPriority" id="tickPriority3" ref={inputPriority} type="radio" value={1}/>
                                 </Form.Label>
                             </Form.Group>
-                        </div>
-                        <div className="row mb-2">
+                        </Row>
+
+                        <Row className="mb-2">
                             <Form.Group className="col s6">
                                 <Form.Label htmlFor="ticketDesc">Ticket Description</Form.Label>
                                 <Form.Control as="textarea" rows="2" type="text" placeholder="Enter description" ref={inputDesc}/>
                                 <Form.Text id="ticketDesc" name="ticketDesc"  />
                             </Form.Group>
-                        </div>
-                        <div className="row mb-2">
+                        </Row>
+
+                        <Row className="mb-2">
                             {/*TODO: make this attachment form real*/}
                             <Form.Group className="col s6">
                                 <Form.Label htmlFor="tickAttachments">Attachments</Form.Label>
                                 <Form.Control id="tickAttachments" name="tickAttachments" ref={inputAttachment} type="file" />
                             </Form.Group>
-                        </div>
-                        {/*<button*/}
-                        {/*    className="btn btn-success float-end mt-2"*/}
-                        {/*    type="submit"*/}
-                        {/*    name="action"*/}
-                        {/*>*/}
-                        {/*    Create Ticket*/}
-                        {/*</button>*/}
+                        </Row>
+
+                        <Row>
+                            <ConditionalForms />
+                        </Row>
+
                         <Button onClick={handleClose} type="submit" name="action" className="float-end mt-2">
                                     Submit
                         </Button>
                     </Form>
 
-                </div>
+                </Col>
 
-            </div>
+            </Row>
         </>
     );
 
