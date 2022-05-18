@@ -5,10 +5,11 @@ import {
     blockTicket,
     deleteTicket
 } from "../controllers/ticketController";
-import {addJson,
-        changeJson,
-        deleteJson,
-        getJson
+import {
+    addJson,
+    changeJson,
+    deleteJson,
+    getJson
 } from "../controllers/jsonController";
 
 const mongoTicketRoutes = (app) => {
@@ -24,7 +25,7 @@ const mongoTicketRoutes = (app) => {
         .get(getTicketWithPriorityOne);
 
     app
-        .route("/json")
+        .route("/jsons")
         .get(getJson)
         .post(addJson)
         .put(changeJson)
