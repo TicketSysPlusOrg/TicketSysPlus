@@ -49,6 +49,12 @@ export const msalConfig = {
     }
 };
 
+// TODO: [SENSITIVE INFO] Temporary until IT Department gets back to Ken
+export const azureConfig = {
+    organizationUrl: "https://dev.azure.com/KrokhalevPavel",
+    token: "fdz6itxbgzuqb2yumqyjvpqcplqrn3fxj7u36obf6aycmnrpzaia"
+};
+
 // Add here scopes for id token to be used at MS Identity Platform endpoints.
 export const loginRequest = {
     scopes: ["User.Read"]

@@ -8,7 +8,26 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 // MSAL imports
 import { PublicClientApplication, EventType } from "@azure/msal-browser";
-import { msalConfig } from "./authConfig";
+import { msalConfig, azureConfig } from "./authConfig";
+
+import { AzureDevOpsApi } from "./azure-devops-api";
+
+export const azureConnection = new AzureDevOpsApi(azureConfig.organizationUrl, azureConfig.token);
+
+// TODO: Example Function. Used to showcase how to use the custom Azure DevOps API
+async function run() {
+    const teams = await azureConnection.getTeams();
+    console.log(teams);
+
+    const projects = await azureConnection.getProjects();
+    console.log(projects);
+
+    if ((projects.count !== undefined && projects.count > 0) && (projects.count !== undefined && teams.count > 0)) {
+        const workItems = await azureConnection.getTasks(projects.value[0].id, teams.value[0].id);
+        console.log(workItems);
+    }
+}
+run();
 
 export const msalInstance = new PublicClientApplication(msalConfig);
 
