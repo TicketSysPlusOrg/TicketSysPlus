@@ -1,9 +1,8 @@
 import mongoose from "mongoose";
-import {TicketSchema} from "../models/BaseSchemaJS.js";
+import { jsonSchema } from "../models/jsonSchema";
 
-const Json = mongoose.model("Json", TicketSchema);
+const Json = mongoose.model("Json", jsonSchema);
 
-//functions that interact w/ db when sending request to api. request to api w/ route, controller executes func in db
 
 //POST
 export const addJson = (req, res) => {
@@ -37,7 +36,7 @@ export const changeJson = (req, res) => {
 
     Json.findByIdAndUpdate(
         req.body,
-        { blocked : true},
+        { blocked: true },
         { new: true },
         (err, Json) => {
             if (err) {

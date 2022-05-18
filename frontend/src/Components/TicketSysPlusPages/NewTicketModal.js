@@ -9,7 +9,7 @@ function NewTicketModal() {
     //not currently using this.
     const dataDetails = fetchDataPromise.read();
 
-    return(
+    return (
         <>
             {/*<textarea>{JSON.stringify(dataDetails)}</textarea>*/}
             <TicketForms />
