@@ -11,7 +11,8 @@
     "start": "concurrently \"nodemon ./index.js --exec babel-node -e js\" \"cd ../frontend && npm start\"",
     "server": "nodemon index.js"
   },
-  "author": "Conor O'Brien",
+  "author": "TicketSys+ Team",
+  "contributors": ["Pavel Krokhalev", "Nathan Arrowsmith", "Adam Percival", "Conor O'Brien"],
   "license": "ISC",
   "devDependencies": {
     "babel-cli": "^6.26.0",
