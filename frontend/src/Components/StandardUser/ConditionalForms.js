@@ -19,13 +19,13 @@ function ConditionalForms() {
             <h5>{conJSON.properties.enrollment_items.title}</h5>
 
             <label>{conJSON.properties.enrollment_items.description}</label>
-            <select onChange={(e) => catchItemStuff(e.currentTarget.value)}>
+            <Form.Select onChange={(e) => catchItemStuff(e.currentTarget.value)}>
                 <option selected disabled>Select a Customer</option>
                 {conJSON.properties.enrollment_items.items.anyOf.map((thisItem, index) => (
                     <option key={index} className="mx-1" value={JSON.stringify(thisItem)}>{thisItem.title}</option>
                 )
                 )}
-            </select>
+            </Form.Select>
 
             {showChoices !== "" ? <label>{showChoices.properties.choices.description}</label> : null }
             {showChoices !== "" ?

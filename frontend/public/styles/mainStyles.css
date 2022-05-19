@@ -1,5 +1,6 @@
 #motorqLogo {
-    max-width: 50%;
+    max-width: 55%;
+    min-width: 40%;
 }
 
 #groceries {
@@ -14,6 +15,8 @@
 
 #ts-color {
     color: darkblue;
+    text-align: justify;
+    font-size: smaller;
 }
 
 #sidebar {
