@@ -5,23 +5,27 @@ import "../TicketSysPlusPages/TSPApp.css";
 import NewJsonFetched from "../TicketSysPlusPages/NewJsonFetched";
 import { Modal, Button, Collapse } from "react-bootstrap";
 
+
 const fetchDataPromise = fetchData("ticketInfo");
 
-function AdminJson() {
+function AdminJson(props) {
 
     const dataDetails = fetchDataPromise.read();
     const json = JSON.stringify(dataDetails, null, 3);
     const [change, setChange] = useState(true);
+    const [data, setData] = useState('');
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+    
 
     function verify() {
         const jsonText = document.getElementById("jsonText").value;
         {/*TODO: && if schema is valid*/ }
         if (jsonText !== json) {
             setChange(false);
+            setData(jsonText);
         }
         else {
             setChange(true);
@@ -69,7 +73,7 @@ function AdminJson() {
                     </Modal.Header>
 
                     <Modal.Body>
-                        <NewJsonFetched />
+                        <NewJsonFetched  parentToChild={data}/>
                     </Modal.Body>
                 </Modal.Dialog>
             </Modal>
