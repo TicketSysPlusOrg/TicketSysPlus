@@ -7,12 +7,11 @@ function PrjSideBar() {
     const [teamList, setTeamList] = useState(null);
 
     useEffect(() => {
-        async function run() {
+        (async () => {
             const teams = await azureConnection.getTeams();
             setTeamList(teams);
             console.log(teams);
-        }
-        run();
+        })();
     }, []);
 
     return (
