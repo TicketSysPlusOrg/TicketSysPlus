@@ -13,7 +13,7 @@ function AdminJson(props) {
     const dataDetails = fetchDataPromise.read();
     const json = JSON.stringify(dataDetails, null, 3);
     const [change, setChange] = useState(true);
-    const [data, setData] = useState('');
+    const [data, setData] = useState("");
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);

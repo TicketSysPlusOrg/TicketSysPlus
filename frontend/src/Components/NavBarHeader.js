@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from "react";
+import React, {createRef, useCallback, useEffect, useState} from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import "./TicketSysPlusPages/TSPApp.css";
 import NewTicketFetched from "./TicketSysPlusPages/NewTicketFetched";
@@ -7,20 +7,31 @@ import {Modal, Button, Collapse, ButtonGroup, Navbar, Row, NavbarBrand, Nav, Con
 import { useMsal } from "@azure/msal-react";
 import { loginRequest } from "../authConfig";
 import { callMsGraph } from "./graph";
+import NavBarButtons from "./NavBarButtons";
 
 function NavBarHeader(props) {
     const currLocation = useLocation();
-    const [show, setShow] = useState(false);
-
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
 
     const { instance, accounts } = useMsal();
     const [graphData, setGraphData] = useState(null);
 
-    const [toggle, setToggle] = useState(false);
-    const toggleFunc = useCallback(() => setToggle(!toggle));
-    const toggleBlur = () => {if(toggle) {toggleFunc();}};
+
+    const classRef = createRef();
+    const [vertOrNot, setVertOrNot] = useState("");
+    const [vertSpace, setVertSpace] = useState("");
+    const width = window.innerWidth;
+    const breakpoint = 768;
+
+    useEffect(() => {
+        if(width < breakpoint)
+        {
+            setVertOrNot("mt-md-2 btn-group-vertical");
+            setVertSpace("mt-3");
+        } else {
+            setVertOrNot("");
+            setVertSpace("");
+        }
+    }, []);
 
     useEffect(() => {
         // Silently acquires an access token which is then attached to a request for MS Graph data
@@ -34,7 +45,6 @@ function NavBarHeader(props) {
             });
         });
     }, []);
-
 
     function logout() {
         instance.logoutRedirect({account: accounts[0]});
@@ -50,44 +60,15 @@ function NavBarHeader(props) {
                         <p className="ms-5" id="ts-color"><strong>TicketSystem+</strong></p>
                     </a>
                 </NavbarBrand>
-                <Navbar.Toggle aria-controls={"offcanvasNavbar-expand-tickets"} />
-                <Navbar.Offcanvas id={"offcanvasNavbar-expand-tickets"} aria-labelledby={"offcanvasNavbarLabel-expand-tickets"} placement="end" className="justify-content-end w-25" >
+                <Navbar.Toggle aria-controls={"offcanvasNavbar-expand-tickets"}  />
+
+                <Navbar.Offcanvas  ref={classRef}  id={"offcanvasNavbar-expand-tickets"} aria-labelledby={"offcanvasNavbarLabel-expand-tickets"} placement="end" className={" justify-content-end "} >
                     <Offcanvas.Header closeButton />
 
                     <Offcanvas.Body>
                         <Nav className="me-2 ms-auto">
 
-                            <ButtonGroup className="mt-md-2">
-
-                                <div>
-                                    <Button className="makeTicket mx-3" onClick={handleShow}>
-                                        Create Ticket
-                                    </Button>
-                                </div>
-                                {currLocation.pathname !== "/" ?
-                                    <NavLink to="/" >
-                                        <Button className="btn btn-primary mx-3">USER PAGE</Button>
-                                    </NavLink>
-                                    : null
-                                }
-                                {currLocation.pathname !== "/admin" ?
-                                    <NavLink to="/admin">
-                                        <Button className="btn btn-primary mx-3">ADMIN PAGE</Button>
-                                    </NavLink>
-                                    : null
-                                }
-                                {/*TODO: make this a custom button. don't overuse bootstrap.  */}
-                                <div>
-                                    <Button onClick={toggleFunc} onBlur={toggleBlur} className="ms-3 " id="userBtn">
-                                        {graphData ? graphData.displayName : "Loading..."}
-                                    </Button>
-                                    <Collapse in={toggle}  id="userCollapse" >
-                                        <div>
-                                            <Button onClick={logout} className="ms-4">Logout</Button>
-                                        </div>
-                                    </Collapse>
-                                </div>
-                            </ButtonGroup>
+                            <NavBarButtons thisInstance={instance} thisAccount={accounts} thisLocation={currLocation} thisGraphData={graphData} btnVertOrNot={vertSpace} vertOrNot={vertOrNot} />
 
                         </Nav>
 
@@ -96,20 +77,6 @@ function NavBarHeader(props) {
                 </Navbar.Offcanvas>
 
             </Navbar>
-
-            {/*TODO: extract to separate component?*/}
-            <Modal show={show} onHide={handleClose}>
-                <Modal.Dialog className="shadow-lg">
-
-                    <Modal.Header closeButton>
-                        <Modal.Title>Make a Ticket</Modal.Title>
-                    </Modal.Header>
-
-                    <Modal.Body>
-                        <NewTicketFetched />
-                    </Modal.Body>
-                </Modal.Dialog>
-            </Modal>
         </>
     );
 
