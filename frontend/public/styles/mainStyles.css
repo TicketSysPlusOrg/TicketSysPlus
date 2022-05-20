@@ -55,6 +55,10 @@
     position: absolute;
 }
 
+.bootstrapOverride .navbar {
+    padding-bottom: 0;
+}
+
 body {
     background-image: linear-gradient(to right, white, #ffe6d9);
 }
