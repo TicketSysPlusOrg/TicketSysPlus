@@ -13,13 +13,13 @@ function PrjSideBar() {
             console.log(teams);
         }
         run();
-    }, [])
+    }, []);
 
     return (
         <>
             <Container className="d-flex flex-column justify-content-center ">
 
-{/*                <Suspense fallback={"Loading data..."}>
+                {/*<Suspense fallback={"Loading data..."}>
                     {teamList.value.map((thisTeam, index) => (
                             <Card key={index} className="card m-2 mt-3 shadow-lg">
                                 <Card.Title className="card-title ms-2">

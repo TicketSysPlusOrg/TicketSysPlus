@@ -96,11 +96,11 @@ export class AzureDevOpsApi {
      */
     async getWorkItem(project, id) {
         return this.instance.get(`${project}/_apis/wit/workitems/${id}`,
-        {
-            params: {
-                "api-version": "7.1-preview.2"
-            },
-        }).then (res => {
+            {
+                params: {
+                    "api-version": "7.1-preview.2"
+                },
+            }).then (res => {
             return res.data;
         }).catch(err => err);
     }
