@@ -22,28 +22,23 @@ async function run() {
     console.log(projects);
 
     if ((projects.count !== undefined && projects.count > 0) && (projects.count !== undefined && teams.count > 0)) {
-        const workItems = await azureConnection.getTasks(projects.value[0].id, teams.value[0].id);
+        const workItems = await azureConnection.getWorkItemTasks(projects.value[0].id, teams.value[0].id);
         console.log(workItems);
     }
 
-    const allWorkItems = await azureConnection.getAllTasks(projects.value[0].id, teams.value[0].id);
+    const allWorkItems = await azureConnection.getAllWorkItems(projects.value[0].id, teams.value[0].id);
     console.log(allWorkItems);
 
-    let listOfIds = [];
-    for (let i = 0; i < allWorkItems.workItems.length; i++) {
-        listOfIds += allWorkItems.workItems[i].id + ",";
-        // listOfIds.push(allWorkItems.workItems[i].id);
-    }
-    listOfIds = listOfIds.substring(0, listOfIds.length -1);
-    console.log("formatted ids? " + listOfIds);
+    const listOfIds = allWorkItems.workItems.map(workItem => workItem.id);
+    console.log("Array of IDs: " + listOfIds);
 
-    const workItemsById = await azureConnection.getWorkTicketByID(projects.value[0].id, teams.value[0].id, allWorkItems.workItems[0].id);
+    const workItemsById = await azureConnection.getWorkItemWhereGreaterThanID(projects.value[0].id, teams.value[0].id, allWorkItems.workItems[0].id);
     console.log(workItemsById);
 
-    const singleTicket = await azureConnection.getOneTicket(projects.value[0].id, allWorkItems.workItems[0].id);
+    const singleTicket = await azureConnection.getWorkItem(projects.value[0].id, allWorkItems.workItems[0].id);
     console.log(singleTicket);
 
-    const ticketBatch = await azureConnection.getTicketBatch(projects.value[0].id, listOfIds);
+    const ticketBatch = await azureConnection.getWorkItems(projects.value[0].id, listOfIds.join(","));
     console.log(ticketBatch);
 }
 run();
