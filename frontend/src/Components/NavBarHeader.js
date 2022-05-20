@@ -1,8 +1,7 @@
 import React, {createRef, useCallback, useEffect, useState} from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import "./TicketSysPlusPages/TSPApp.css";
-import NewTicketFetched from "./TicketSysPlusPages/NewTicketFetched";
-import {Modal, Button, Collapse, ButtonGroup, Navbar, Row, NavbarBrand, Nav, Container, Offcanvas} from "react-bootstrap";
+import {Navbar, NavbarBrand, Nav, Offcanvas} from "react-bootstrap";
 
 import { useMsal } from "@azure/msal-react";
 import { loginRequest } from "../authConfig";
