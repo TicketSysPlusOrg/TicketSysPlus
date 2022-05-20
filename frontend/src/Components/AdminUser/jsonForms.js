@@ -3,7 +3,7 @@ import React, { createRef, useState } from "react";
 import axios from "axios";
 import { Button, Form } from "react-bootstrap";
 
-function JsonForm({parentToChild}) {
+function JsonForm({jsonModal}) {
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
 
@@ -27,7 +27,6 @@ function JsonForm({parentToChild}) {
                 console.log(err);
             });
     }
-    console.log("Passing Props= " + {parentToChild});
     return (
         <>
             <div className="row">
@@ -47,7 +46,7 @@ function JsonForm({parentToChild}) {
                         <div className="row mb-2">
                             <Form.Group className="col s6">
                                 <Form.Label htmlFor="jsonBody">JSON body</Form.Label>
-                                <Form.Control as="textarea" rows="2" type="text" placeholder="Json body" ref={inputBody} />
+                                <Form.Control as="textarea" rows="2" type="text" value={jsonModal} ref={inputBody} readOnly={true} />
                                 <Form.Text id="jsonBody" name="jsonBody" />
                             </Form.Group>
                         </div>

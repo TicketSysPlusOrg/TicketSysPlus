@@ -2,7 +2,7 @@ import React, { Suspense } from "react";
 import NewJsonModal from "./NewJsonModal";
 
 
-function NewJsonFetched() {
+function NewJsonFetched({adminDisplay}) {
     const waitingMessage =
         <div className="container">
             <h1 className="text-center text-danger">JSON data loading...</h1>
@@ -10,7 +10,7 @@ function NewJsonFetched() {
 
     return (
         <Suspense fallback={waitingMessage}>
-            <NewJsonModal />
+            <NewJsonModal jsonFetch={adminDisplay}/>
         </Suspense>
     );
 }
