@@ -11,6 +11,7 @@ import { PublicClientApplication, EventType } from "@azure/msal-browser";
 import { msalConfig, azureConfig } from "./authConfig";
 
 import { AzureDevOpsApi } from "./azure-devops-api";
+import {forEach} from "react-bootstrap/ElementChildren";
 
 export const azureConnection = new AzureDevOpsApi(azureConfig.organizationUrl, azureConfig.token);
 
@@ -26,6 +27,26 @@ async function run() {
         const workItems = await azureConnection.getTasks(projects.value[0].id, teams.value[0].id);
         console.log(workItems);
     }
+
+    const allWorkItems = await azureConnection.getAllTasks(projects.value[0].id, teams.value[0].id);
+    console.log(allWorkItems);
+
+    let listOfIds = [];
+    for (let i = 0; i < allWorkItems.workItems.length; i++) {
+        listOfIds += allWorkItems.workItems[i].id + ",";
+        // listOfIds.push(allWorkItems.workItems[i].id);
+    }
+    listOfIds = listOfIds.substring(0, listOfIds.length -1);
+    console.log("formatted ids? " + listOfIds);
+
+    const workItemsById = await azureConnection.getWorkTicketByID(projects.value[0].id, teams.value[0].id, allWorkItems.workItems[0].id);
+    console.log(workItemsById);
+
+    const singleTicket = await azureConnection.getOneTicket(projects.value[0].id, allWorkItems.workItems[0].id);
+    console.log(singleTicket);
+
+    const ticketBatch = await azureConnection.getTicketBatch(projects.value[0].id, listOfIds);
+    console.log(ticketBatch);
 }
 run();
 

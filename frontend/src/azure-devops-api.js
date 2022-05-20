@@ -46,8 +46,19 @@ export class AzureDevOpsApi {
     }
 
     /**
+     * Get project with the specified id or name
+     * @param {string} projectId the project id or name
+     */
+    async getProject(projectId) {
+        return this.instance.get(`_apis/projects/${projectId}`).then(response => {
+            return response.data;
+        }).catch(error => error);
+    }
+
+    /**
      * Gets work items for a list of work item ids (Maximum 200)
      * @param {string} project Project ID or project name
+     * @param team DevOps instance team
      */
     async getTasks(project, team) {
         return this.instance.post(`${project}/${team}/_apis/wit/wiql`, {
@@ -61,4 +72,69 @@ export class AzureDevOpsApi {
             return response.data;
         }).catch(error => error);
     }
+
+    /**
+     * Get work items for a list of work item ids. Not just tasks, includes all work item types. (200 max)
+     * @param project DevOps prj
+     * @param team DevOps team
+     * @returns data response or error if can't complete request
+     */
+    async getAllTasks(project, team) {
+        //wit is work item tracking in api, wiql is work item query language
+        return this.instance.post(`${project}/${team}/_apis/wit/wiql`, {
+            "query": "Select [System.Id], [System.Title], [System.State] From WorkItems"
+        }, {
+            params: {
+                "api-version": "7.1-preview.2"
+            },
+        }).then (res => {
+            return res.data;
+        }).catch(err => err);
+    }
+
+    /**
+     * Currently setup to get all
+     * @param project
+     * @param team
+     * @param id
+     * @returns {Promise<AxiosResponse<any>>}
+     */
+    async getWorkTicketByID(project, team, id) {
+        return this.instance.post(`${project}/${team}/_apis/wit/wiql`, {
+                "query": `Select [System.Id], [System.Title], [System.State], [System.WorkItemType], [System.Description] From WorkItems Where [System.Id] >= '${id}'`
+            },
+            {
+            params: {
+            "api-version": "7.1-preview.2"
+            },
+        }).then (res => {
+            return res.data;
+        }).catch(err => err);
+    }
+
+    //get a single ticket
+    async getOneTicket(project, id) {
+        return this.instance.get(`${project}/_apis/wit/workitems/${id}`,
+        {
+            params: {
+                "api-version": "7.1-preview.2"
+            },
+        }).then (res => {
+            return res.data;
+        }).catch(err => err);
+    }
+
+    //get a BATCH of tickets
+    async getTicketBatch(project, ids) {
+        return this.instance.get(`${project}/_apis/wit/workitems?ids=${ids}`,
+            {
+                params: {
+                    "api-version": "7.1-preview.2"
+                },
+            }).then (res => {
+            return res.data;
+        }).catch(err => err);
+    }
+
+
 }

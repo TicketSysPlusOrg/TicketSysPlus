@@ -61,7 +61,7 @@ function NavBarButtons(props) {
           </ButtonGroup>
 
           <Modal show={show} onHide={handleClose}>
-              <Modal.Dialog className="shadow-lg">
+              <Modal.Dialog className="shadow-lg mx-3">
 
                   <Modal.Header closeButton>
                       <Modal.Title>Make a Ticket</Modal.Title>
