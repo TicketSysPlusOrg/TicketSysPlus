@@ -10,7 +10,7 @@ import { Loading } from "./Loading";
 import NavBarHeader from "../NavBarHeader";
 import PrjSideBar from "../StandardUser/ProjectsSideBar";
 import UserTickets from "../StandardUser/userTickets";
-import {Container, Row} from "react-bootstrap";
+import {Col, Container, Row} from "react-bootstrap";
 
 function StandardUser(props) {
     const authRequest = {
@@ -25,11 +25,13 @@ function StandardUser(props) {
             loadingComponent={Loading}
         >
             <NavBarHeader />
-            <div className="row">
+            <Row>
 
-                <div className="col-3 " id="sidebar"><PrjSideBar /></div>
+                <Col xs={3} id="sidebar">
+                    <PrjSideBar />
+                </Col>
 
-                <div className="col-8">
+                <Col xs={8}>
 
                     <Container>
                         <Row>
@@ -37,9 +39,9 @@ function StandardUser(props) {
                         </Row>
                     </Container>
 
-                </div>
+                </Col>
 
-            </div>
+            </Row>
 
         </MsalAuthenticationTemplate >
     );

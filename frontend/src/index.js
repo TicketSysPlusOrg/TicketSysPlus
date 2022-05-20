@@ -1,7 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
-// import App from './Components/App';
 import AppPages from "./AppPages";
 import "bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -11,7 +10,6 @@ import { PublicClientApplication, EventType } from "@azure/msal-browser";
 import { msalConfig, azureConfig } from "./authConfig";
 
 import { AzureDevOpsApi } from "./azure-devops-api";
-import {forEach} from "react-bootstrap/ElementChildren";
 
 export const azureConnection = new AzureDevOpsApi(azureConfig.organizationUrl, azureConfig.token);
 
