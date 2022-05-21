@@ -92,11 +92,12 @@ export class AzureDevOpsApi {
         }).catch(err => err);
     }
 
+    //TODO: either get rid of this or make it better. the "greater than or equal to id" has little utility
     /**
-     * Currently setup to get all
-     * @param project
+     * Currently setup to get all tickets with id greater than ID sent in parameter.
+     * @param project the devops project name
      * @param team
-     * @param id
+     * @param id of the work item to get all since then
      * @returns {Promise<AxiosResponse<any>>}
      */
     async getWorkTicketByID(project, team, id) {
@@ -112,7 +113,12 @@ export class AzureDevOpsApi {
         }).catch(err => err);
     }
 
-    //get a single ticket
+    /**
+     * Get a single ticket.
+     * @param project the devops project name
+     * @param id the single work item to get
+     * @returns {Promise<AxiosResponse<any>>} json of work item data
+     */
     async getOneTicket(project, id) {
         return this.instance.get(`${project}/_apis/wit/workitems/${id}`,
         {
@@ -125,6 +131,12 @@ export class AzureDevOpsApi {
     }
 
     //get a BATCH of tickets
+    /**
+     * Get multiple tickets. Have to send get request with many ids separated by commas.
+     * @param project the devops project name
+     * @param ids all work item-associated ids to fetch
+     * @returns {Promise<AxiosResponse<any>>} json of all the work item data
+     */
     async getTicketBatch(project, ids) {
         return this.instance.get(`${project}/_apis/wit/workitems?ids=${ids}`,
             {

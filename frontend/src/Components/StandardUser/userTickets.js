@@ -44,7 +44,7 @@ function TSPlist() {
 
     return (
         <>
-            <h4 className="mt-4">Project Tickets</h4>
+            <h4 className="mt-4">Project Tickets from DB</h4>
 
             {ticketArray.map((thisTicket) => (
                 <Col xs={12} md={6} xl={3} key={thisTicket._id} >
@@ -63,8 +63,9 @@ function TSPlist() {
                         </Card.Body>
                     </Card>
                 </Col>
-
             ))}
+
+            <h4 className="mt-4">Project Tickets from DevOps</h4>
         </>
     );
 
