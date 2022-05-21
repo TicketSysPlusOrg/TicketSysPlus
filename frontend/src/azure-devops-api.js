@@ -41,6 +41,17 @@ export class AzureDevOpsApi {
     }
 
     /**
+     * Get all teams associated with project.
+     * @param projID ID of project to query by
+     * @returns {Promise<AxiosResponse<any>>} JSON of all associated teams
+     */
+    async getTeam(projID) {
+        return this.instance.get(`_apis/projects/${projID}/teams`).then(response => {
+            return response.data;
+        }).catch(error => error);
+    }
+
+    /**
      * Get all projects in the organization that the authenticated user has access to.
      */
     async getProjects() {
