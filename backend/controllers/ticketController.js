@@ -1,7 +1,9 @@
 import mongoose from "mongoose";
-import {TicketSchema} from "../models/BaseSchemaJS.js";
+import { TicketSchema } from "../models/BaseSchemaJS.js";
+import { jsonSchema } from "../models/jsonSchema";
 
 const Ticket = mongoose.model("Ticket", TicketSchema);
+const Json = mongoose.model("Json", jsonSchema);
 
 //functions that interact w/ db when sending request to api. request to api w/ route, controller executes func in db
 
@@ -31,7 +33,7 @@ export const getTickets = (req, res) => {
 
 //ANOTHER GET
 export const getTicketWithPriorityOne = (req, res) => {
-    Ticket.find({priority: 1}, (err, Ticket) => {
+    Ticket.find({ priority: 1 }, (err, Ticket) => {
         if (err) {
             res.send(err);
         }
@@ -46,7 +48,7 @@ export const blockTicket = (req, res) => {
 
     Ticket.findByIdAndUpdate(
         req.body,
-        { blocked : true},
+        { blocked: true },
         { new: true },
         (err, Ticket) => {
             if (err) {
@@ -65,6 +67,63 @@ export const deleteTicket = (req, res) => {
                 res.send(err);
             }
             res.json(Ticket);
+        }
+    );
+};
+
+//JSON TICKET/TEMPLATE FUNCTIONS
+//POST
+export const addJson = (req, res) => {
+    let newJson = new Json(req.body);
+
+    newJson.save((err, Json) => {
+        //save to DB
+        if (err) {
+            res.send(err);
+        }
+        res.json(Json);
+    });
+};
+
+//GET
+export const getJson = (req, res) => {
+    Json.find((err, Json) => {
+        //save to DB
+        if (err) {
+            res.send(err);
+        }
+        res.json(Json);
+    });
+};
+
+
+//PUT
+export const changeJson = (req, res) => {
+    let bodyid = req.body;
+    console.log(bodyid);
+
+    Json.findByIdAndUpdate(
+        req.body,
+        { blocked: true },
+        { new: true },
+        (err, Json) => {
+            if (err) {
+                res.send(err);
+            }
+            res.json(Json);
+        }
+    );
+};
+
+//DELETE
+export const deleteJson = (req, res) => {
+    Json.deleteOne(
+        req.body,
+        (err, Json) => {
+            if (err) {
+                res.send(err);
+            }
+            res.json(Json);
         }
     );
 };

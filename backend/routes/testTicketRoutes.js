@@ -3,14 +3,14 @@ import {
     getTickets,
     getTicketWithPriorityOne,
     blockTicket,
-    deleteTicket
-} from "../controllers/ticketController";
-import {
+    deleteTicket,
     addJson,
     changeJson,
     deleteJson,
     getJson
-} from "../controllers/jsonController";
+} from "../controllers/ticketController";
+
+
 
 const mongoTicketRoutes = (app) => {
     app
