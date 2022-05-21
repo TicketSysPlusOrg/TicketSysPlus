@@ -15,6 +15,15 @@ function JsonForm({jsonModal}) {
         const jsonTitle = inputTitle.current.value;
         const jsonBody = inputBody.current.value;
 
+        axios.delete("http://localhost:4001/jsons")
+            .then((res) => {
+                console.log(res);
+
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+
         axios.post("http://localhost:4001/jsons", {
             title: jsonTitle,
             body: jsonBody
