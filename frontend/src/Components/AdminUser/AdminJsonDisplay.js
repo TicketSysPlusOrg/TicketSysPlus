@@ -67,16 +67,16 @@ function AdminJson() {
             </div>
             <Modal show={show} onHide={handleClose} className="row">
                 <div className="col-12">
-                <Modal.Dialog className="shadow-lg">
+                    <Modal.Dialog className="shadow-lg">
 
-                    <Modal.Header closeButton>
-                        <Modal.Title>save JSON</Modal.Title>
-                    </Modal.Header>
+                        <Modal.Header closeButton>
+                            <Modal.Title>save JSON</Modal.Title>
+                        </Modal.Header>
 
-                    <Modal.Body>
-                        <NewJsonFetched  adminDisplay={data}/>
-                    </Modal.Body>
-                </Modal.Dialog>
+                        <Modal.Body>
+                            <NewJsonFetched  adminDisplay={data}/>
+                        </Modal.Body>
+                    </Modal.Dialog>
                 </div>
             </Modal>
         </>

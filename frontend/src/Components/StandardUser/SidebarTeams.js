@@ -17,17 +17,15 @@ function SidebarTeams(props) {
         <>
             {teamList ?
                 teamList.value.map((thisTeam, index) => (
-                            <Card key={index} className="card m-2 mt-3 shadow-lg">
-                                <Card.Title className="card-title ms-2">
-                                    {teamList ? teamList.value[index].name : "Loading..."}
-                                </Card.Title>
-                                <Card.Body className="card-body">
-                                    {teamList ? teamList.value[index].description : "Loading..."}
-                                </Card.Body>
-                            </Card>
-                        )
-                    )
-                : null}
+                    <Card key={index} className="card m-2 mt-3 shadow-lg">
+                        <Card.Title className="card-title ms-2">
+                            {teamList ? teamList.value[index].name : "Loading..."}
+                        </Card.Title>
+                        <Card.Body className="card-body">
+                            {teamList ? teamList.value[index].description : "Loading..."}
+                        </Card.Body>
+                    </Card>
+                )) : null}
 
         </>
     );

@@ -70,12 +70,12 @@ function TSPlist() {
                         {/*<h1>{devOpsTix ? devOpsTix.value[index].fields['System.Title'] : null}</h1>*/}
                         <Card className="my-1 mx-1" key={index} >
                             <Card.Body>
-                                <Card.Title>{devOpsTix ? devOpsTix.value[index].fields['System.Title'] : null}</Card.Title>
+                                <Card.Title>{devOpsTix ? devOpsTix.value[index].fields["System.Title"] : null}</Card.Title>
                                 <Card.Text>
-                                    {devOpsTix ? devOpsTix.value[index].fields['System.Description'] : null}
+                                    {devOpsTix ? devOpsTix.value[index].fields["System.Description"] : null}
                                 </Card.Text>
                                 <Card.Text>
-                                    Priority: {devOpsTix ? devOpsTix.value[index].fields['System.Priority'] : null}
+                                    Priority: {devOpsTix ? devOpsTix.value[index].fields["System.Priority"] : null}
                                 </Card.Text>
                                 <Button onClick={() => deleteTicket(null)} className="d-inline-block float-end" size="sm" type="submit" name="action">Cancel</Button>
                             </Card.Body>
