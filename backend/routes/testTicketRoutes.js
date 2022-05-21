@@ -8,6 +8,7 @@ import {
 import {
     addJson,
     changeJson,
+    deleteAllJson,
     deleteJson,
     getJson
 } from "../controllers/jsonController";
@@ -30,6 +31,7 @@ const mongoTicketRoutes = (app) => {
         .post(addJson)
         .put(changeJson)
         .delete(deleteJson)
+        .deleteAll(deleteAllJson)
 
 };
 

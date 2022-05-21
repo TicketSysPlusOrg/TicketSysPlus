@@ -3,7 +3,7 @@ import React, { createRef, useState } from "react";
 import axios from "axios";
 import { Button, Form } from "react-bootstrap";
 
-function JsonForm({jsonModal}) {
+function JsonForm({ jsonModal }) {
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
 
@@ -15,6 +15,8 @@ function JsonForm({jsonModal}) {
         const jsonTitle = inputTitle.current.value;
         const jsonBody = inputBody.current.value;
 
+        /*
+
         axios.delete("http://localhost:4001/jsons")
             .then((res) => {
                 console.log(res);
@@ -23,6 +25,15 @@ function JsonForm({jsonModal}) {
             .catch((err) => {
                 console.log(err);
             });
+
+        axios.deleteAll("http://localhost:4001/jsons")
+            .then((res) => {
+                console.log(res);
+
+            })
+            .catch((err) => {
+                console.log(err);
+            }); */
 
         axios.post("http://localhost:4001/jsons", {
             title: jsonTitle,
