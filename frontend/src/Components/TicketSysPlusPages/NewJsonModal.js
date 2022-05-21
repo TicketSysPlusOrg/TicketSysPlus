@@ -5,11 +5,11 @@ import JsonForm from "../AdminUser/jsonForms";
 
 const fetchDataPromise = fetchData("jsonSchema");
 
-function NewJsonModal() {
+function NewJsonModal({jsonFetch}) {
 
     return (
         <>
-            <JsonForm />
+            <JsonForm jsonModal={jsonFetch}/>
         </>
     );
 

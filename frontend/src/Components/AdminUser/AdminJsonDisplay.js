@@ -8,7 +8,7 @@ import { Modal, Button, Collapse } from "react-bootstrap";
 
 const fetchDataPromise = fetchData("ticketInfo");
 
-function AdminJson(props) {
+function AdminJson() {
 
     const dataDetails = fetchDataPromise.read();
     const json = JSON.stringify(dataDetails, null, 3);
@@ -73,7 +73,7 @@ function AdminJson(props) {
                     </Modal.Header>
 
                     <Modal.Body>
-                        <NewJsonFetched  parentToChild={data}/>
+                        <NewJsonFetched  adminDisplay={data}/>
                     </Modal.Body>
                 </Modal.Dialog>
             </Modal>

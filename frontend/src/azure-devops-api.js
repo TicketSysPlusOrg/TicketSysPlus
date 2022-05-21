@@ -3,6 +3,10 @@ import { Buffer } from "buffer";
 
 const apiVersion = "7.1-preview.3";
 
+/**
+ * This class is used to communicate with the Azure DevOps API
+ * TODO: add data validation and input checks to every method
+ */
 export class AzureDevOpsApi {
     constructor(url, token) {
         this.url = url;
@@ -37,6 +41,17 @@ export class AzureDevOpsApi {
     }
 
     /**
+     * Get all teams associated with project.
+     * @param projID ID of project to query by
+     * @returns {Promise<AxiosResponse<any>>} JSON of all associated teams
+     */
+    async getTeam(projID) {
+        return this.instance.get(`_apis/projects/${projID}/teams`).then(response => {
+            return response.data;
+        }).catch(error => error);
+    }
+
+    /**
      * Get all projects in the organization that the authenticated user has access to.
      */
     async getProjects() {
@@ -56,89 +71,42 @@ export class AzureDevOpsApi {
     }
 
     /**
-     * Gets work items for a list of work item ids (Maximum 200)
+     * Gets work items of type "Task" (Maximum 20000)
      * @param {string} project Project ID or project name
-     * @param team DevOps instance team
+     * @param {string} team Team ID or team name
      */
-    async getTasks(project, team) {
-        return this.instance.post(`${project}/${team}/_apis/wit/wiql`, {
-            "query": "Select [System.Id], [System.Title], [System.State] From WorkItems Where [System.WorkItemType] = 'Task'"
-        }, {
-            // Some API endpoints only work on specific versions... so manually overriding the default param is sometimes needed
-            params: {
-                "api-version": "7.1-preview.2"
-            },
-        }).then(response => {
-            return response.data;
-        }).catch(error => error);
+    async getWorkItemTasks(project, team) {
+        return this.queryWIQL("Select [System.Id], [System.Title], [System.State] From WorkItems Where [System.WorkItemType] = 'Task'", project, team);
     }
 
     /**
-     * Get work items for a list of work item ids. Not just tasks, includes all work item types. (200 max)
-     * @param project DevOps prj
-     * @param team DevOps team
-     * @returns data response or error if can't complete request
+     * Gets ALL work items (Maximum 20000)
+     * @param {string} project Project ID or project name
+     * @param {string} team Team ID or team name
      */
-    async getAllTasks(project, team) {
+    async getAllWorkItems(project, team) {
         //wit is work item tracking in api, wiql is work item query language
-        return this.instance.post(`${project}/${team}/_apis/wit/wiql`, {
-            "query": "Select [System.Id], [System.Title], [System.State] From WorkItems"
-        }, {
-            params: {
-                "api-version": "7.1-preview.2"
-            },
-        }).then (res => {
-            return res.data;
-        }).catch(err => err);
-    }
-
-    //TODO: either get rid of this or make it better. the "greater than or equal to id" has little utility
-    /**
-     * Currently setup to get all tickets with id greater than ID sent in parameter.
-     * @param project the devops project name
-     * @param team
-     * @param id of the work item to get all since then
-     * @returns {Promise<AxiosResponse<any>>}
-     */
-    async getWorkTicketByID(project, team, id) {
-        return this.instance.post(`${project}/${team}/_apis/wit/wiql`, {
-                "query": `Select [System.Id], [System.Title], [System.State], [System.WorkItemType], [System.Description] From WorkItems Where [System.Id] >= '${id}'`
-            },
-            {
-            params: {
-            "api-version": "7.1-preview.2"
-            },
-        }).then (res => {
-            return res.data;
-        }).catch(err => err);
+        return this.queryWIQL("Select [System.Id], [System.Title], [System.State] From WorkItems", project, team);
     }
 
     /**
-     * Get a single ticket.
-     * @param project the devops project name
-     * @param id the single work item to get
-     * @returns {Promise<AxiosResponse<any>>} json of work item data
+     * Get all work items that are equal to and greater than the chosen id
+     * @param {string} project Project ID or project name
+     * @param {string} team Team ID or team name
+     * @param {string} id WorkItem ID
      */
-    async getOneTicket(project, id) {
+    async getWorkItemWhereGreaterThanID(project, team, id) {
+        // FIXME: why ">=" ?? if just for testing purposes, this is a reminder to remove this method before production
+        return this.queryWIQL(`Select [System.Id], [System.Title], [System.State], [System.WorkItemType], [System.Description] From WorkItems Where [System.Id] >= '${id}'`, project, team);
+    }
+
+    /**
+     * Returns a single work item.
+     * @param {string} project Project ID or project name
+     * @param {string} id The work item id
+     */
+    async getWorkItem(project, id) {
         return this.instance.get(`${project}/_apis/wit/workitems/${id}`,
-        {
-            params: {
-                "api-version": "7.1-preview.2"
-            },
-        }).then (res => {
-            return res.data;
-        }).catch(err => err);
-    }
-
-    //get a BATCH of tickets
-    /**
-     * Get multiple tickets. Have to send get request with many ids separated by commas.
-     * @param project the devops project name
-     * @param ids all work item-associated ids to fetch
-     * @returns {Promise<AxiosResponse<any>>} json of all the work item data
-     */
-    async getTicketBatch(project, ids) {
-        return this.instance.get(`${project}/_apis/wit/workitems?ids=${ids}`,
             {
                 params: {
                     "api-version": "7.1-preview.2"
@@ -148,5 +116,43 @@ export class AzureDevOpsApi {
         }).catch(err => err);
     }
 
+    /**
+     * Returns a list of work items (Maximum 200)
+     * @param {string} project Project ID or name
+     * @param {Number[]} ids Array of work item ids
+     */
+    async getWorkItems(project, ids) {
+        return this.instance.get(`${project}/_apis/wit/workitems?ids=${ids.join(",")}`,
+            {
+                params: {
+                    "api-version": "7.1-preview.2"
+                },
+            }).then (res => {
+            return res.data;
+        }).catch(err => err);
+    }
 
+    /**
+     * Gets the results of the query given its WIQL.
+     * @param {string} query The statement to pass through WIQL
+     * @param {string} project The project ID or name
+     * @param {string} team The team ID or name
+     */
+    async queryWIQL(query, project, team) {
+        /**
+         * TODO: Look into $top parameter.. hardcode max configurable integer to 20,000?
+         *       Add a failsafe for situations where there are more than 20k entries?
+         */
+        return this.instance.post(`${project}/${team}/_apis/wit/wiql`, {
+            "query": query
+        },
+        {
+            // Some API endpoints only work on specific versions... so manually overriding the default param is sometimes needed
+            params: {
+                "api-version": "7.1-preview.2"
+            }
+        }).then(res => {
+            return res.data;
+        }).catch(err => err);
+    }
 }
