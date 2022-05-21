@@ -32,9 +32,6 @@ async function run() {
     const listOfIds = allWorkItems.workItems.map(workItem => workItem.id);
     console.log("Array of IDs: " + listOfIds);
 
-    const workItemsById = await azureConnection.getWorkItemWhereGreaterThanID(projects.value[0].id, teams.value[0].id, allWorkItems.workItems[0].id);
-    console.log(workItemsById);
-
     const singleTicket = await azureConnection.getWorkItem(projects.value[0].id, allWorkItems.workItems[0].id);
     console.log(singleTicket);
 

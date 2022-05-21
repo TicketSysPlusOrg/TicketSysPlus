@@ -1,6 +1,6 @@
-import React, {useEffect, useState, Suspense} from "react";
+import React, {useEffect, useState} from "react";
 import {azureConnection} from "../../index";
-import {Card} from "react-bootstrap";
+import {Button, Card} from "react-bootstrap";
 
 function SidebarTeams(props) {
     const [teamList, setTeamList] = useState(null);
@@ -9,9 +9,12 @@ function SidebarTeams(props) {
         (async () => {
             const teams = await azureConnection.getTeam(props.thisTeam);
             setTeamList(teams);
-            console.log(teams);
         })();
     }, []);
+
+    function teamValChange(event) {
+        props.onChange(event.target.value);
+    }
 
     return (
         <>
@@ -22,7 +25,11 @@ function SidebarTeams(props) {
                             {teamList ? teamList.value[index].name : "Loading..."}
                         </Card.Title>
                         <Card.Body className="card-body">
-                            {teamList ? teamList.value[index].description : "Loading..."}
+                            {teamList ?
+                                teamList.value[index].description : "Loading..."}
+                            <Button onClick={teamValChange} size={"sm"} className={"float-end"}
+                                    value={teamList ? [teamList.value[index].projectId, teamList.value[index].id] : null}
+                            >See Team Tickets</Button>
                         </Card.Body>
                     </Card>
                 )) : null}

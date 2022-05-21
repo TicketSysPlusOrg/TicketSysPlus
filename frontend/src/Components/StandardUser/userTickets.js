@@ -2,14 +2,12 @@
 import React, {useContext, useEffect, useState} from "react";
 import axios from "axios";
 import {Button, Card, Col} from "react-bootstrap";
-import {Context} from "../../AppPages";
 import {azureConnection} from "../../index";
 
-function TSPlist() {
+function TSPlist(props) {
     const [ticketArray, setTickets] = useState([]);
-    //TODO: finish useContext data path
-    const [context, setContext] = useContext(Context);
 
+    /*axios database function calls*/
     function blockTicket(userID) {
         axios
             .put("http://localhost:4001/tix", {
@@ -22,7 +20,6 @@ function TSPlist() {
                 console.log(err);
             });
     }
-
     function deleteTicket(userID) {
         axios
             .delete("http://localhost:4001/tix", {
@@ -35,7 +32,6 @@ function TSPlist() {
                 console.log(err);
             });
     }
-
     axios
         .get("http://localhost:4001/tix")
         .then((res) => {
@@ -45,29 +41,38 @@ function TSPlist() {
             console.log(err);
         });
 
+    /*devops api data retrieval*/
     const [devOpsTix, setDevOpsTix] = useState(null);
+    const [projects, setProjectsList] = useState(props.projects);
 
+    //rerun run when projects changes.
     useEffect(() => {
-        (async () => {
-            const teams = await azureConnection.getTeams();
-            const projects = await azureConnection.getProjects();
-            const allWorkItems = await azureConnection.getAllWorkItems(projects.value[0].id, teams.value[0].id);
-            const listOfIds = allWorkItems.workItems.map(workItem => workItem.id);
-            const ticketBatch = await azureConnection.getWorkItems(projects.value[0].id, listOfIds);
+        run();
+    }, [projects]);
 
+    //TODO: add api method that pulls all WIs by team only.
+    function run() {
+        (async () => {
+            const allWorkItems = await azureConnection.getAllWorkItems(projects[0], projects[1]);
+            const listOfIds = allWorkItems.workItems.map(workItem => workItem.id);
+            const ticketBatch = await azureConnection.getWorkItems(projects[0], listOfIds);
             setDevOpsTix(ticketBatch);
         })();
-    }, []);
+    }
+
+    useEffect(() => {
+        setProjectsList(props.projects)
+        console.log(projects);
+    }, [props.projects])
+
 
     return (
         <>
             <h4 className="mt-4">Project Tickets from DevOps</h4>
 
             {devOpsTix ?
-
                 devOpsTix.value.map((devTix, index) => (
                     <Col xs={12} md={6} xl={3} key={index} >
-                        {/*<h1>{devOpsTix ? devOpsTix.value[index].fields['System.Title'] : null}</h1>*/}
                         <Card className="my-1 mx-1" key={index} >
                             <Card.Body>
                                 <Card.Title>{devOpsTix ? devOpsTix.value[index].fields["System.Title"] : null}</Card.Title>
@@ -75,14 +80,16 @@ function TSPlist() {
                                     {devOpsTix ? devOpsTix.value[index].fields["System.Description"] : null}
                                 </Card.Text>
                                 <Card.Text>
-                                    Priority: {devOpsTix ? devOpsTix.value[index].fields["System.Priority"] : null}
+                                    Priority: {devOpsTix ? devOpsTix.value[index].fields["Microsoft.VSTS.Common.Priority"] : null}
                                 </Card.Text>
-                                <Button onClick={() => deleteTicket(null)} className="d-inline-block float-end" size="sm" type="submit" name="action">Cancel</Button>
+                                <Button className="d-inline-block float-end" size="sm" type="submit" name="action">Cancel</Button>
                             </Card.Body>
                         </Card>
                     </Col> ))
 
-                : null}
+                :   <Col xs={12}>
+                        <p>Click team to load tickets.</p>
+                    </Col>}
 
 
             <h4 className="mt-4">Project Tickets from DB</h4>

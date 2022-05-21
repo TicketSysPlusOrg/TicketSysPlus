@@ -88,16 +88,7 @@ export class AzureDevOpsApi {
         return this.queryWIQL("Select [System.Id], [System.Title], [System.State] From WorkItems", project, team);
     }
 
-    /**
-     * Get all work items that are equal to and greater than the chosen id
-     * @param {string} project Project ID or project name
-     * @param {string} team Team ID or team name
-     * @param {string} id WorkItem ID
-     */
-    async getWorkItemWhereGreaterThanID(project, team, id) {
-        // FIXME: why ">=" ?? it's for testing purposes.
-        return this.queryWIQL(`Select [System.Id], [System.Title], [System.State], [System.WorkItemType], [System.Description] From WorkItems Where [System.Id] >= '${id}'`, project, team);
-    }
+    //TODO: add method that retrieves work items by team only for use in usertickets
 
     /**
      * Returns a single work item.
@@ -115,7 +106,6 @@ export class AzureDevOpsApi {
         }).catch(err => err);
     }
 
-    //TODO: check if ids.join is possible. i'm getting errors, so am doing that computation elsewhere.
     /**
      * Returns a list of work items (Maximum 200)
      * @param {string} project Project ID or name
