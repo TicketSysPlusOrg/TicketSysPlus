@@ -1,7 +1,7 @@
 // forms to fill to create a new ticket
 import React, { createRef, useState } from "react";
 import axios from "axios";
-import {Button, Col, Form, Row} from "react-bootstrap";
+import { Button, Col, Form, Row } from "react-bootstrap";
 import ConditionalForms from "./ConditionalForms";
 
 //TODO: make react-bootstrap friendly.
@@ -19,8 +19,7 @@ function TicketForm() {
     let inputAttachment = createRef();
 
     /*get vals from ref, post to db*/
-    function submitTicket(SubmitEvent)
-    {
+    function submitTicket(SubmitEvent) {
         //TODO: stop reload of page but close out the modal
         /*SubmitEvent.preventDefault();*/
 
@@ -60,14 +59,14 @@ function TicketForm() {
                         <Row className="mb-2">
                             <Form.Group className="col s6">
                                 <Form.Label htmlFor="ticketTitle">Ticket Title</Form.Label>
-                                <Form.Control type="text" placeholder="Enter title" ref={inputTitle}/>
+                                <Form.Control type="text" placeholder="Enter title" ref={inputTitle} />
                                 <Form.Text id="ticketTitle" name="ticketTitle" />
                             </Form.Group>
                             {/*TODO: make this mentions section autofill...? at least mention if we need to insert emails or what*/}
                             <Form.Group className="col s6">
                                 <Form.Label htmlFor="tickMentions">Mentions</Form.Label>
-                                <Form.Control type="text" placeholder="Enter associates" ref={inputMentions}/>
-                                <Form.Text id="tickMentions" name="tickMentions"  />
+                                <Form.Control type="text" placeholder="Enter associates" ref={inputMentions} />
+                                <Form.Text id="tickMentions" name="tickMentions" />
                             </Form.Group>
                         </Row>
                         <Row className="mb-2">
@@ -77,14 +76,17 @@ function TicketForm() {
                             </Form.Group>
                             <Form.Group className="col s6">
                                 <Form.Label className="d-block">Priority</Form.Label>
-                                <Form.Label htmlFor="tickPriority1" className="ms-4">
-                                    1 <Form.Check inline name="tickPriority" id="tickPriority1" ref={inputPriority} type="radio" value={1}/>
+                                <Form.Label htmlFor="tickPriority1" className="ms-3">
+                                    1 <Form.Check inline name="tickPriority" id="tickPriority1" ref={inputPriority} type="radio" value={1} />
                                 </Form.Label>
                                 <Form.Label htmlFor="tickPriority2">
-                                    2 <Form.Check inline name="tickPriority" id="tickPriority2" ref={inputPriority} type="radio" value={1}/>
+                                    2 <Form.Check inline name="tickPriority" id="tickPriority2" ref={inputPriority} type="radio" value={1} />
                                 </Form.Label>
                                 <Form.Label htmlFor="tickPriority3">
-                                    3 <Form.Check inline defaultChecked name="tickPriority" id="tickPriority3" ref={inputPriority} type="radio" value={1}/>
+                                    3 <Form.Check inline defaultChecked name="tickPriority" id="tickPriority3" ref={inputPriority} type="radio" value={1} />
+                                </Form.Label>
+                                <Form.Label htmlFor="tickPriority4">
+                                    4 <Form.Check inline defaultChecked name="tickPriority" id="tickPriority4" ref={inputPriority} type="radio" value={1} />
                                 </Form.Label>
                             </Form.Group>
                         </Row>
@@ -92,8 +94,8 @@ function TicketForm() {
                         <Row className="mb-2">
                             <Form.Group className="col s6">
                                 <Form.Label htmlFor="ticketDesc">Ticket Description</Form.Label>
-                                <Form.Control as="textarea" rows="2" type="text" placeholder="Enter description" ref={inputDesc}/>
-                                <Form.Text id="ticketDesc" name="ticketDesc"  />
+                                <Form.Control as="textarea" rows="2" type="text" placeholder="Enter description" ref={inputDesc} />
+                                <Form.Text id="ticketDesc" name="ticketDesc" />
                             </Form.Group>
                         </Row>
 
@@ -110,7 +112,7 @@ function TicketForm() {
                         </Row>
 
                         <Button onClick={handleClose} type="submit" name="action" className="float-end mt-2">
-                                    Submit
+                            Submit
                         </Button>
                     </Form>
 

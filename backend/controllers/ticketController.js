@@ -71,6 +71,9 @@ export const deleteTicket = (req, res) => {
     );
 };
 
+//CHANGE TICKET PRIORITY 
+
+
 //JSON TICKET/TEMPLATE FUNCTIONS
 //POST
 export const addJson = (req, res) => {
