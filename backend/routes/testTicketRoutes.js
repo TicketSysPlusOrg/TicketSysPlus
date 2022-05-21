@@ -29,11 +29,7 @@ const mongoTicketRoutes = (app) => {
         .get(getJson)
         .post(addJson)
         .put(changeJson)
-<<<<<<< HEAD
-        .delete(deleteAllJson)
-=======
         .delete(deleteJson)
->>>>>>> bdd09abc6209159cabd136b30233867742a38932
 
 
 };
