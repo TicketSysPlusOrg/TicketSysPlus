@@ -7,6 +7,8 @@ import Error from "./Components/TicketSysPlusPages/ErrorPage";
 import TSPAppFetched from "./Components/TicketSysPlusPages/TSPAppFetched";
 import PropTypes from "prop-types";
 
+export const Context = React.createContext();
+
 
 function MainApp({ pca }) {
     return (
