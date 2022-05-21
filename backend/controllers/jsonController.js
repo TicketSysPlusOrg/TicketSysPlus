@@ -60,15 +60,3 @@ export const deleteJson = (req, res) => {
     );
 };
 
-//DELETE ALL JSON
-export const deleteAllJson = (req, res) => {
-    Json.deleteMany(
-        req.body,
-        (err, Json) => {
-            if (err) {
-                res.send(err);
-            }
-            res.json(Json);
-        }
-    );
-};

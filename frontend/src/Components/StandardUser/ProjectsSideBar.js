@@ -1,10 +1,13 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {azureConnection} from "../../index";
 import {Container} from "react-bootstrap";
 import SidebarTeams from "./SidebarTeams";
+import {Context} from "../../AppPages";
 
 function PrjSideBar() {
     const [projectList, setPrjList] = useState(null);
+    //TODO: finish useContext data path
+    const [context, setContext] = useContext(Context);
 
     useEffect(() => {
         (async () => {

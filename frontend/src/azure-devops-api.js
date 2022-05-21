@@ -43,7 +43,7 @@ export class AzureDevOpsApi {
     /**
      * Get all teams associated with project.
      * @param projID ID of project to query by
-     * @returns {Promise<AxiosResponse<any>>} JSON of all associated teams
+     * @returns {JSON} of all associated teams
      */
     async getTeam(projID) {
         return this.instance.get(`_apis/projects/${projID}/teams`).then(response => {
@@ -85,7 +85,6 @@ export class AzureDevOpsApi {
      * @param {string} team Team ID or team name
      */
     async getAllWorkItems(project, team) {
-        //wit is work item tracking in api, wiql is work item query language
         return this.queryWIQL("Select [System.Id], [System.Title], [System.State] From WorkItems", project, team);
     }
 
@@ -96,7 +95,7 @@ export class AzureDevOpsApi {
      * @param {string} id WorkItem ID
      */
     async getWorkItemWhereGreaterThanID(project, team, id) {
-        // FIXME: why ">=" ?? if just for testing purposes, this is a reminder to remove this method before production
+        // FIXME: why ">=" ?? it's for testing purposes.
         return this.queryWIQL(`Select [System.Id], [System.Title], [System.State], [System.WorkItemType], [System.Description] From WorkItems Where [System.Id] >= '${id}'`, project, team);
     }
 
@@ -116,13 +115,14 @@ export class AzureDevOpsApi {
         }).catch(err => err);
     }
 
+    //TODO: check if ids.join is possible. i'm getting errors, so am doing that computation elsewhere.
     /**
      * Returns a list of work items (Maximum 200)
      * @param {string} project Project ID or name
      * @param {Number[]} ids Array of work item ids
      */
     async getWorkItems(project, ids) {
-        return this.instance.get(`${project}/_apis/wit/workitems?ids=${ids.join(",")}`,
+        return this.instance.get(`${project}/_apis/wit/workitems?ids=${ids}`,
             {
                 params: {
                     "api-version": "7.1-preview.2"
