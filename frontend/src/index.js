@@ -38,7 +38,7 @@ async function run() {
     const singleTicket = await azureConnection.getWorkItem(projects.value[0].id, allWorkItems.workItems[0].id);
     console.log(singleTicket);
 
-    const ticketBatch = await azureConnection.getWorkItems(projects.value[0].id, listOfIds.join(","));
+    const ticketBatch = await azureConnection.getWorkItems(projects.value[0].id, listOfIds);
     console.log(ticketBatch);
 }
 run();

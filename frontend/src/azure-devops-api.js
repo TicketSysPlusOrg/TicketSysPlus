@@ -122,7 +122,7 @@ export class AzureDevOpsApi {
      * @param {Number[]} ids Array of work item ids
      */
     async getWorkItems(project, ids) {
-        return this.instance.get(`${project}/_apis/wit/workitems?ids=${ids}`,
+        return this.instance.get(`${project}/_apis/wit/workitems?ids=${ids.join(",")}`,
             {
                 params: {
                     "api-version": "7.1-preview.2"

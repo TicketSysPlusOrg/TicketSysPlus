@@ -49,10 +49,11 @@ function TSPlist() {
 
     useEffect(() => {
         (async () => {
+            const teams = await azureConnection.getTeams();
             const projects = await azureConnection.getProjects();
-            console.log(projects);
-            const ticketBatch = await azureConnection.getWorkItems(projects.value[0].id, ("1,2,3"));
-            console.log(ticketBatch);
+            const allWorkItems = await azureConnection.getAllWorkItems(projects.value[0].id, teams.value[0].id);
+            const listOfIds = allWorkItems.workItems.map(workItem => workItem.id);
+            const ticketBatch = await azureConnection.getWorkItems(projects.value[0].id, listOfIds);
 
             setDevOpsTix(ticketBatch);
         })();
