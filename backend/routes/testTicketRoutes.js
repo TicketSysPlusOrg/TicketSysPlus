@@ -30,8 +30,8 @@ const mongoTicketRoutes = (app) => {
         .get(getJson)
         .post(addJson)
         .put(changeJson)
-        .delete(deleteJson)
-        .deleteAll(deleteAllJson)
+        .delete(deleteAllJson)
+
 
 };
 
