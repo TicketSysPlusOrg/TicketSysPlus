@@ -65,7 +65,8 @@ function AdminJson() {
                     </textarea>
                 </div>
             </div>
-            <Modal show={show} onHide={handleClose}>
+            <Modal show={show} onHide={handleClose} className="row">
+                <div className="col-12">
                 <Modal.Dialog className="shadow-lg">
 
                     <Modal.Header closeButton>
@@ -76,6 +77,7 @@ function AdminJson() {
                         <NewJsonFetched  adminDisplay={data}/>
                     </Modal.Body>
                 </Modal.Dialog>
+                </div>
             </Modal>
         </>
     );
