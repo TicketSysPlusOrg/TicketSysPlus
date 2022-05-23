@@ -1,10 +1,11 @@
 import React, {useEffect, useState} from "react";
 import {azureConnection} from "../../index";
-import {Button, Card} from "react-bootstrap";
+import {Button, Card, Container} from "react-bootstrap";
 
 function SidebarTeams(props) {
     const [teamList, setTeamList] = useState(null);
 
+    /*get teams associated with project*/
     useEffect(() => {
         (async () => {
             const teams = await azureConnection.getTeam(props.thisTeam);
@@ -12,27 +13,33 @@ function SidebarTeams(props) {
         })();
     }, []);
 
+    /*send updated project val + team ID val to parent*/
     function teamValChange(event) {
-        props.onChange(event.target.value);
+        const splitThis = event.target.value.split(",");
+        props.onChange(splitThis);
+        console.log(splitThis);
     }
 
     return (
         <>
             {teamList ?
                 teamList.value.map((thisTeam, index) => (
-                    <Card key={index} className="card m-2 mt-3 shadow-lg">
-                        <Card.Title className="card-title ms-2">
-                            {teamList ? teamList.value[index].name : "Loading..."}
+                    <Card key={index} className="m-2 mt-3 shadow-lg">
+                        <Card.Title className="m-2">
+                            {teamList ? thisTeam.name : "Loading..."}
                         </Card.Title>
-                        <Card.Body className="card-body">
+                        <Card.Body>
                             {teamList ?
-                                teamList.value[index].description : "Loading..."}
-                            <Button onClick={teamValChange} size={"sm"} className={"float-end"}
-                                    value={teamList ? [teamList.value[index].projectId, teamList.value[index].id] : null}
+                                <p>{thisTeam.description}</p> : "Loading..."}
+                            <Button onClick={teamValChange} size={"sm"} className={" float-end"}
+                                    value={teamList ? ([teamList.value[index].projectId, teamList.value[index].id]) : null}
                             >See Team Tickets</Button>
                         </Card.Body>
                     </Card>
-                )) : null}
+                )) :
+                <Container>
+                    <p>Loading Projects List...</p>
+                </Container>}
 
         </>
     );

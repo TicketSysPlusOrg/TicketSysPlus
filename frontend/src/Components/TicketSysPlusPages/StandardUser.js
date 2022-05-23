@@ -9,7 +9,7 @@ import { Loading } from "./Loading";
 
 import NavBarHeader from "../NavBarHeader";
 import UserTickets from "../StandardUser/userTickets";
-import {Col, Container, Row} from "react-bootstrap";
+import {Card, Col, Container, Row} from "react-bootstrap";
 import SidebarTeams from "../StandardUser/SidebarTeams";
 import {azureConnection} from "../../index";
 
@@ -22,18 +22,20 @@ function StandardUser(props) {
     const [teamVal, setTeamVal] = useState(null);
 
     function teamValChange(newSortingTeam) {
-        setTeamVal(newSortingTeam.split(","));
-        console.log(teamVal);
+        setTeamVal(newSortingTeam);
     }
 
+    /*when team val change is called and teamval is altered, run azure calls, which should (once we have a method to do so) render tickets based on teams (or diff projects once we get that far)*/
     useEffect(() => {
-        (async () => {
-            const prjs = await azureConnection.getProjects();
-            const teams = await azureConnection.getTeams();
-            setPrjList(prjs);
-            setTeamVal(teams.value[0].id, teams.value[0].projectId);
-        })();
+        run();
     }, []);
+
+    async function run() {
+            const prjs = await azureConnection.getProjects();
+            const teams = await azureConnection.getTeams(prjs.value[0].id);
+            setPrjList(prjs);
+            setTeamVal([teams.value[0].projectId, teams.value[0].id]);
+    }
 
     return(
         <MsalAuthenticationTemplate
@@ -44,24 +46,29 @@ function StandardUser(props) {
         >
             <NavBarHeader />
             <Row>
-                <Col xs={3} id="sidebar">
+                <Col xs={5} sm={4} md={3} id="sidebar">
                     <Container className="d-flex flex-column justify-content-center ">
                         {projectList ?
                             projectList.value.map((thisPrj, index) => (
-                                <Container key={index}>
-                                    <h2 className={"mt-2"}>{projectList ? projectList.value[index].name : null}</h2>
-
-                                    {projectList ? <SidebarTeams thisTeam={projectList.value[index].id} value={teamVal} onChange={teamValChange}/> : null}
-                                </Container>
-
+                                    <Card key={index} className="mt-3 shadow-lg">
+                                        <Card.Title className="ms-2 mt-2">
+                                            {thisPrj ? thisPrj.name : "Loading..."}
+                                        </Card.Title>
+                                        <Card.Body>
+                                            <h5><u>Teams</u></h5>
+                                            {thisPrj ?
+                                                <SidebarTeams thisTeam={thisPrj.id} value={teamVal} onChange={teamValChange}/>
+                                                : "Loading..."}
+                                        </Card.Body>
+                                    </Card>
                             ))
                             : null}
                     </Container>
                 </Col>
-                <Col xs={8}>
+                <Col xs={6} sm={7} md={8}>
                     <Container>
                         <Row>
-                            {teamVal ? <UserTickets projects={teamVal} onChange={teamVal}/> : null}
+                            {teamVal ? <UserTickets key={teamVal} projects={teamVal} /> : null}
                         </Row>
                     </Container>
                 </Col>

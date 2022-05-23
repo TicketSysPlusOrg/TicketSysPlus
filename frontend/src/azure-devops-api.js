@@ -88,7 +88,7 @@ export class AzureDevOpsApi {
         return this.queryWIQL("Select [System.Id], [System.Title], [System.State] From WorkItems", project, team);
     }
 
-    //TODO: add method that retrieves work items by team only for use in usertickets
+    //TODO: add method that retrieves work items by team only for use in usertickets. so far only have ability to pull all by project.
 
     /**
      * Returns a single work item.
