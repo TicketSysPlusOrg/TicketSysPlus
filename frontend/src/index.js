@@ -37,6 +37,11 @@ async function run() {
 
     const ticketBatch = await azureConnection.getWorkItems(projects.value[0].id, listOfIds);
     console.log(ticketBatch);
+
+    //TODO: get create working. something is invalid here.
+
+    // const createTicket = await azureConnection.createWorkItem(projects.value[0].id, "task");
+    // console.log(createTicket);
 }
 run();
 

@@ -122,6 +122,45 @@ export class AzureDevOpsApi {
         }).catch(err => err);
     }
 
+    /*https://dev.azure.com/{organization}/{project}/_apis/wit/workitems/${type}?api-version=7.1-preview.3*/
+    //TODO: get create functioning and make it dynamic. so far getting 404 - bad request
+    /**
+     * Creates a work item in devops. Currently in a simple test state.
+     * @param {string} project Project ID or name
+     * @param {string }type work item type - i.e. task, issue, etc.
+     * @returns {string} error if failed, work item info is successful
+     */
+    async createWorkItem(project, type) {
+        return this.instance.post(`${project}/_apis/wit/workitems/${type}`, {
+            "query": [
+                {
+                    "op": "add",
+                    "path": "/fields/System.Title",
+                    "from": null,
+                    "value": "Sample task"
+                },
+                {
+                    "op": "add",
+                    "path": "/fields/System.Description",
+                    "from": null,
+                    "value": "Sample sample description."
+                },
+                {
+                    "op": "add",
+                    "path": "/fields/System.Priority",
+                    "from": null,
+                    "value": 2
+                },
+            ]
+            },
+            {
+            params: {
+                "api-version": "7.1-preview.2"},
+            }).then(response => {
+            return response.data;
+        }).catch(error => error);
+    }
+
     /**
      * Gets the results of the query given its WIQL.
      * @param {string} query The statement to pass through WIQL
