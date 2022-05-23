@@ -5,7 +5,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "cd backend && npm start",
-    "postinstall": "cd backend && npm i && cd ../frontend && npm i"
+    "postinstall": "cd backend && npm i && cd ../frontend && npm i",
+    "fix": "npx eslint --fix \"./**\""
   },
   "repository": {
     "type": "git",
