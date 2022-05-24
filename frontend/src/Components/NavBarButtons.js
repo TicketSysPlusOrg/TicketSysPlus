@@ -34,8 +34,8 @@ function NavBarButtons(props) {
                       Create Ticket
                     </Button>
                 </div>
-                {currLocation.pathname !== "/" ?
-                    <NavLink to="/" >
+                {currLocation.pathname !== "/home" ?
+                    <NavLink to="/home" >
                         <Button className={btnVertSpace +" btn btn-primary mx-3"}>USER PAGE</Button>
                     </NavLink>
                     : null
