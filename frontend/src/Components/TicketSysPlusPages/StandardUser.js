@@ -1,12 +1,5 @@
 import React, {useState, useEffect} from "react";
 
-import { MsalAuthenticationTemplate } from "@azure/msal-react";
-import { InteractionType } from "@azure/msal-browser";
-import { loginRequest } from "../../authConfig";
-
-import { ErrorComponent } from "./ErrorComponent";
-import { Loading } from "./Loading";
-
 import NavBarHeader from "../NavBarHeader";
 import UserTickets from "../StandardUser/userTickets";
 import {Card, Col, Container, Row} from "react-bootstrap";
@@ -14,10 +7,6 @@ import SidebarTeams from "../StandardUser/SidebarTeams";
 import {azureConnection} from "../../index";
 
 function StandardUser(props) {
-    const authRequest = {
-        ...loginRequest
-    };
-
     const [projectList, setPrjList] = useState(null);
     const [teamVal, setTeamVal] = useState(null);
 
@@ -38,12 +27,7 @@ function StandardUser(props) {
     }
 
     return(
-        <MsalAuthenticationTemplate
-            interactionType={InteractionType.Redirect} 
-            authenticationRequest={authRequest} 
-            errorComponent={ErrorComponent} 
-            loadingComponent={Loading}
-        >
+        <>
             <NavBarHeader />
             <Row>
                 <Col xs={5} sm={4} md={3} id="sidebar">
@@ -74,8 +58,7 @@ function StandardUser(props) {
                 </Col>
 
             </Row>
-
-        </MsalAuthenticationTemplate >
+        </>
     );
 }
 

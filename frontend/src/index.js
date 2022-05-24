@@ -10,6 +10,7 @@ import { PublicClientApplication, EventType } from "@azure/msal-browser";
 import { msalConfig, azureConfig } from "./authConfig";
 
 import { AzureDevOpsApi } from "./azure-devops-api";
+import { MsalProvider } from "@azure/msal-react";
 
 export const azureConnection = new AzureDevOpsApi(azureConfig.organizationUrl, azureConfig.token);
 
@@ -71,7 +72,9 @@ msalInstance.addEventCallback((event) => {
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
     <BrowserRouter>
-        <AppPages pca={msalInstance} login={true} />
+        <MsalProvider instance={msalInstance}>
+            <AppPages />
+        </MsalProvider>
     </BrowserRouter>
 
 );

@@ -22,7 +22,7 @@ function NavBarButtons(props) {
     const toggleBlur = () => {if(toggle) {toggleFunc();}};
 
     function logout() {
-        instance.logoutRedirect({account: accounts[0]});
+        instance.logoutRedirect({account: accounts[0], postLogoutRedirectUri: window.location.origin});
     }
 
     return (
@@ -34,8 +34,8 @@ function NavBarButtons(props) {
                       Create Ticket
                     </Button>
                 </div>
-                {currLocation.pathname !== "/home" ?
-                    <NavLink to="/home" >
+                {currLocation.pathname !== "/" ?
+                    <NavLink to="/" >
                         <Button className={btnVertSpace +" btn btn-primary mx-3"}>USER PAGE</Button>
                     </NavLink>
                     : null
