@@ -75,7 +75,7 @@ function TSPlist(props) {
                             <Card.Body>
                                 <Card.Title>{devTix ? devTix.fields["System.Title"] : null}</Card.Title>
                                 <Card.Text>
-                                    {devTix ? (devTix.fields["System.Description"]).replace(/(<([^>]+)>)|(&nbsp;)/gi, "") : null}
+                                    {devTix ? (devTix.fields["System.Description"]) : null}
                                 </Card.Text>
                                 <Card.Text>
                                     Priority: {devTix ? devTix.fields["Microsoft.VSTS.Common.Priority"] : null}

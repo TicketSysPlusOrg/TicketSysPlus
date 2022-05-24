@@ -3,45 +3,6 @@ import { Buffer } from "buffer";
 
 const apiVersion = "7.1-preview.3";
 
-const thisDataBody = [
-    {
-        "op": "add",
-        "path": "/fields/System.IterationId",
-        "from": null,
-        "value": "f734876c-5645-4044-aa87-58ffe5d4461c"
-    },
-    {
-        "op": "add",
-        "path": "/fields/System.AreaId",
-        "from": null,
-        "value": "f734876c-5645-4044-aa87-58ffe5d4461c"
-    },
-    {
-        "op": "add",
-        "path": "/fields/System.State",
-        "from": null,
-        "value": "To Do"
-    },
-    {
-        "op": "add",
-        "path": "/fields/System.Title",
-        "from": null,
-        "value": "Sample Task Title"
-    },
-    {
-        "op": "add",
-        "path": "/fields/System.Description",
-        "from": null,
-        "value": "This is a basic description."
-    },
-    {
-        "op": "add",
-        "path": "/fields/System.Priority",
-        "from": null,
-        "value": 2
-    }
-];
-
 /**
  * This class is used to communicate with the Azure DevOps API
  * TODO: add data validation and input checks to every method
@@ -164,16 +125,15 @@ export class AzureDevOpsApi {
         }).catch(err => err);
     }
 
-    /*https://dev.azure.com/{organization}/{project}/_apis/wit/workitems/${type}?api-version=7.1-preview.3*/
-    //TODO: get create functioning and make it dynamic. so far getting 404 - bad request
+    //TODO: make this dynamic!
     /**
      * Creates a work item in devops. Currently in a simple test state.
      * @param {string} project Project ID or name
-     * @param {string }type work item type - i.e. task, issue, etc.
+     * @param {string } type work item type - i.e. task, issue, etc.
      * @returns {string} error if failed, work item info if successful
      */
     async createWorkItem(project, type) {
-        return this.instance.patch(`${project}/_apis/wit/workitems/${type}`,
+        return this.instance.post(`${project}/_apis/wit/workitems/$${type}`,
             [
                     {
                         "op": "add",
