@@ -114,9 +114,6 @@ export class AzureDevOpsApi {
     async getWorkItems(project, ids) {
         return this.instance.get(`${project}/_apis/wit/workitems?ids=${ids.join(",")}`,
             {
-                data : thisDataBody
-            },
-            {
                 params: {
                     "api-version": "7.1-preview.2"
                 },
@@ -132,17 +129,10 @@ export class AzureDevOpsApi {
      * @param {string } type work item type - i.e. task, issue, etc.
      * @returns {string} error if failed, work item info if successful
      */
-    async createWorkItem(project, type) {
+    async createWorkItem(project, type, thisData) {
         return this.instance.post(`${project}/_apis/wit/workitems/$${type}`,
-            [
-                    {
-                        "op": "add",
-                        "path": "/fields/System.Title",
-                        "from": null,
-                        "value": "Sample Task Title"
-                    }
-                ]
-            , {params: { "api-version": "7.1-preview.3" }, headers: { "content-type": "application/json-patch+json"}, }).then(response => {
+            thisData,
+            {params: { "api-version": "7.1-preview.3" }, headers: { "content-type": "application/json-patch+json"}, }).then(response => {
             return response.data;
         }).catch(error => error);
     }

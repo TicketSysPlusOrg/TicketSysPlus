@@ -12,6 +12,15 @@ function TSPlist(props) {
     };
     const [ticketArray, setTickets] = useState([]);
 
+    //TODO: check with Pavel if this is problematic. he suggested json-patch, but no luck with that so far.
+    //regex remove html entities from string if not null, undefined, or empty string
+    function checkAndRemove(stringInput) {
+        if (stringInput === undefined || stringInput == null || stringInput.trim() === "") {
+            return stringInput;
+        }
+        return stringInput.replace(/(<([^>]+)>)|(&nbsp;)/gi, "");
+    }
+
     /*axios database function calls*/
     function blockTicket(userID) {
         axios
@@ -56,8 +65,7 @@ function TSPlist(props) {
     //TODO: add api method that pulls all WIs by team only.
     //async calls to devops API
     async function run() {
-        console.log("triggering run");
-        console.log(props.projects);
+        // console.log(props.projects);
         const allWorkItems = await azureConnection.getAllWorkItems(props.projects[0], props.projects[1]);
         const listOfIds = allWorkItems.workItems.map(workItem => workItem.id);
         const ticketBatch = await azureConnection.getWorkItems(props.projects[0], listOfIds);
@@ -75,19 +83,20 @@ function TSPlist(props) {
                             <Card.Body>
                                 <Card.Title>{devTix ? devTix.fields["System.Title"] : null}</Card.Title>
                                 <Card.Text>
-                                    {devTix ? (devTix.fields["System.Description"]) : null}
+                                    Description: {devTix ? checkAndRemove(devTix.fields["System.Description"]) : null}
                                 </Card.Text>
                                 <Card.Text>
                                     Priority: {devTix ? devTix.fields["Microsoft.VSTS.Common.Priority"] : null}
                                 </Card.Text>
-                                <Button className="d-inline-block float-end" size="sm" type="submit" name="action">Cancel</Button>
+                                {/*TODO: make this button pull up each single ticket clicked on as modal for editing and answering*/}
+                                <Button className="d-inline-block float-end" size="sm" type="submit" name="action" value={devTix.fields.id}>See ticket</Button>
                             </Card.Body>
                         </Card>
                     </Col> ))
 
                 :   <Col xs={12}>
-                        <p>Click team to load tickets.</p>
-                    </Col>}
+                    <p>Loading tickets...</p>
+                </Col>}
 
             <h4 className="mt-4">Project Tickets from DB</h4>
 

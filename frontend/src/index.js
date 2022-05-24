@@ -41,7 +41,22 @@ async function run() {
     // const getTickTypes = await azureConnection.getWorkItemTypes(projects.value[0].id);
     // console.log(getTickTypes);
     //
-    // const createTicket = await azureConnection.createWorkItem(projects.value[0].id, "Task");
+    // const thisData = [
+    //     {
+    //         "op": "add",
+    //         "path": "/fields/System.State",
+    //         "from": null,
+    //         "value": "To Do"
+    //     },
+    //     {
+    //         "op": "add",
+    //         "path": "/fields/System.Title",
+    //         "from": null,
+    //         "value": "A Ticket Title"
+    //     },
+    // ]
+    // const createTicket = await azureConnection.createWorkItem(projects.value[0].id, "Task",
+    //     thisData);
     // console.log(createTicket);
 }
 run();

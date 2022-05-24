@@ -31,10 +31,10 @@ function StandardUser(props) {
     }, []);
 
     async function run() {
-            const prjs = await azureConnection.getProjects();
-            const teams = await azureConnection.getTeams(prjs.value[0].id);
-            setPrjList(prjs);
-            setTeamVal([teams.value[0].projectId, teams.value[0].id]);
+        const prjs = await azureConnection.getProjects();
+        const teams = await azureConnection.getTeams(prjs.value[0].id);
+        setPrjList(prjs);
+        setTeamVal([teams.value[0].projectId, teams.value[0].id]);
     }
 
     return(
@@ -50,17 +50,17 @@ function StandardUser(props) {
                     <Container className="d-flex flex-column justify-content-center ">
                         {projectList ?
                             projectList.value.map((thisPrj, index) => (
-                                    <Card key={index} className="mt-3 shadow-lg">
-                                        <Card.Title className="ms-2 mt-2">
-                                            {thisPrj ? thisPrj.name : "Loading..."}
-                                        </Card.Title>
-                                        <Card.Body>
-                                            <h5><u>Teams</u></h5>
-                                            {thisPrj ?
-                                                <SidebarTeams thisTeam={thisPrj.id} value={teamVal} onChange={teamValChange}/>
-                                                : "Loading..."}
-                                        </Card.Body>
-                                    </Card>
+                                <Card key={index} className="mt-3 shadow-lg">
+                                    <Card.Title className="ms-2 mt-2">
+                                        {thisPrj ? thisPrj.name : "Loading..."}
+                                    </Card.Title>
+                                    <Card.Body>
+                                        <h5><u>Teams</u></h5>
+                                        {thisPrj ?
+                                            <SidebarTeams thisTeam={thisPrj.id} value={teamVal} onChange={teamValChange}/>
+                                            : "Loading..."}
+                                    </Card.Body>
+                                </Card>
                             ))
                             : null}
                     </Container>

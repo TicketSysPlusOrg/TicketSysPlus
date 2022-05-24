@@ -17,7 +17,6 @@ function SidebarTeams(props) {
     function teamValChange(event) {
         const splitThis = event.target.value.split(",");
         props.onChange(splitThis);
-        console.log(splitThis);
     }
 
     return (
@@ -32,7 +31,7 @@ function SidebarTeams(props) {
                             {teamList ?
                                 <p>{thisTeam.description}</p> : "Loading..."}
                             <Button onClick={teamValChange} size={"sm"} className={" float-end"}
-                                    value={teamList ? ([teamList.value[index].projectId, teamList.value[index].id]) : null}
+                                value={teamList ? ([teamList.value[index].projectId, teamList.value[index].id]) : null}
                             >See Team Tickets</Button>
                         </Card.Body>
                     </Card>

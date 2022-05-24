@@ -1,13 +1,15 @@
 // forms to fill to create a new ticket
-import React, { createRef, useState } from "react";
+import React, {createRef, useEffect, useState} from "react";
 import axios from "axios";
 import { Button, Col, Form, Row } from "react-bootstrap";
 import ConditionalForms from "./ConditionalForms";
+import {azureConnection} from "../../index";
 
 //TODO: make react-bootstrap friendly.
 //TODO: make file uploads real
 function TicketForm() {
     const [show, setShow] = useState(false);
+    const [prjID, setprjID] = useState(null);
 
     const handleClose = () => setShow(false);
 
@@ -18,10 +20,18 @@ function TicketForm() {
     let inputMentions = createRef();
     let inputAttachment = createRef();
 
+    /*TODO: currently projects for createTicket call to devops. need to use this & teams methods for fields in form. */
+    useEffect(() => {
+        (async () => {
+            const projID = await azureConnection.getProjects();
+            setprjID(projID.value[0].id);
+        })();
+    }, []);
+
     /*get vals from ref, post to db*/
     function submitTicket(SubmitEvent) {
-        //TODO: stop reload of page but close out the modal
-        /*SubmitEvent.preventDefault();*/
+        //TODO: stop reload of page but reload modal...? or could JUST close modal and reload the visible tickets
+        // SubmitEvent.preventDefault();
 
         const ticketTitle = inputTitle.current.value;
         const ticketDesc = inputDesc.current.value;
@@ -31,6 +41,36 @@ function TicketForm() {
             return value.trim();
         });
         const tickAttachments = inputAttachment.current.value;
+
+        const descAndMentions = ticketDesc + " Mentions: " + tickMentions;
+
+
+        /*TODO: use due date, use attachments, what about iteration id/area id?*/
+        /*TODO: dynamically fill this...? can use array with path field names and another with the values collected above, or a map...?*/
+        const devOpsTickData = [
+            {
+                "op": "add",
+                "path": "/fields/System.State",
+                "from": null,
+                "value": "To Do"
+            },
+            {
+                "op": "add",
+                "path": "/fields/System.Title",
+                "from": null,
+                "value": ticketTitle
+            },
+            {
+                "op": "add",
+                "path": "/fields/System.Description",
+                "from": null,
+                "value": descAndMentions
+            },
+
+        ];
+
+        const createTicket = azureConnection.createWorkItem(prjID, "Task", devOpsTickData);
+        console.log(createTicket);
 
         axios
             .post("http://localhost:4001/tix", {
@@ -53,7 +93,7 @@ function TicketForm() {
         <>
             <Row>
                 <Col>
-
+                    {/*TODO: fields for project/teams, field for ticket type (task, epic, issue*/}
                     {/*TODO: validation  for all fields*/}
                     <Form className="col s12" onSubmit={submitTicket}>
                         <Row className="mb-2">
