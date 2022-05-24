@@ -1,8 +1,8 @@
 // specific ticket we want to examine
 import {Button, Col, Container, Form, Modal, Row} from "react-bootstrap";
 import React, {useEffect, useState} from "react";
-import userTickets from "./userTickets";
 import {azureConnection} from "../../index";
+import {checkAndRemove} from "../../AppPages";
 
 function singleTicketView(props) {
     const [thisTicketInfo, setThisTicketInfo] = useState(null);
@@ -19,13 +19,10 @@ function singleTicketView(props) {
     }, []);
 
     useEffect(() => {
-        if(thisTicketInfo !== null) {
-            (async() => {
-                const getTicketInfo = await azureConnection.getWorkItem(thisTicketInfo[0], thisTicketInfo[1]);
-                setAllTicketInfo(getTicketInfo);
-            })();
-        }
-
+        (async() => {
+            const getTicketInfo = await azureConnection.getWorkItem(thisTicketInfo[0], thisTicketInfo[1]);
+            setAllTicketInfo(getTicketInfo);
+        })();
     }, [thisTicketInfo]);
 
     /*
@@ -57,29 +54,35 @@ function singleTicketView(props) {
                         <Form className="col s12" onSubmit={updateTicket}>
 
                             {/*ticket title and work type*/}
-                            <Row className="mb-2">
-                                <h4>{allTicketInfo ? allTicketInfo.fields["System.Title"] : null}</h4>
-                                <h5>Ticket Type: {allTicketInfo ? allTicketInfo.fields["System.WorkItemType"] : null}</h5>
+                            <Row className="mb-4">
+                                <h4>{allTicketInfo.fields["System.Title"]}</h4>
+                                <hr/>
+                                <h5>Ticket Type: {allTicketInfo.fields["System.WorkItemType"]}</h5>
                             </Row>
                             {/*ticket state and priority*/}
-                            <Row className="mb-2">
-                                <Col>Ticket State: {allTicketInfo ? allTicketInfo.fields["System.State"] : null}</Col>
-                                <Col>Priority: {allTicketInfo ? allTicketInfo.fields["Microsoft.VSTS.Common.Priority"] : null}</Col>
+                            <Row className="my-4">
+                                <Col>Ticket State: {allTicketInfo.fields["System.State"]}</Col>
+                                <Col>Priority: {allTicketInfo.fields["Microsoft.VSTS.Common.Priority"]}</Col>
                             </Row>
 
                             {/*ticket description*/}
-                            <Row className="mb-2">
+                            <Row className="my-4">
                                 <Col>
                                     <h5>Ticket Description</h5>
                                     <article className={"border border-1 border-dark p-2"}>
-                                        {allTicketInfo ? allTicketInfo.fields["System.Description"] : null}
+                                        {checkAndRemove(allTicketInfo.fields["System.Description"])}
                                     </article>
                                 </Col>
                             </Row>
 
                             {/*ticket created date*/}
-                            <Row className="mb-2">
-                                <h5>Created Date: {allTicketInfo ? allTicketInfo.fields["System.CreatedDate"] : null}</h5>
+                            <Row className="my-4">
+                                <h5>Created Date: {allTicketInfo.fields["System.CreatedDate"]}</h5>
+                            </Row>
+
+                            {/*ticket created by*/}
+                            <Row className="my-4">
+                                <h5>Created Date: {allTicketInfo.fields["System.CreatedBy"]}</h5>
                             </Row>
 
                             {/*ticket attachments*/}

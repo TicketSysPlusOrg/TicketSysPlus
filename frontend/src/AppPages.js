@@ -7,6 +7,7 @@ import Error from "./Components/TicketSysPlusPages/ErrorPage";
 import Landing from "./Components/TicketSysPlusPages/Landing";
 import TSPAppFetched from "./Components/TicketSysPlusPages/TSPAppFetched";
 import PropTypes from "prop-types";
+import parse from "html-react-parser";
 
 export const Context = React.createContext();
 
@@ -26,3 +27,10 @@ function MainApp() {
 }
 
 export default MainApp;
+
+export function checkAndRemove(stringInput) {
+    if (stringInput === undefined || stringInput == null || stringInput.trim() === "") {
+        return stringInput;
+    }
+    return parse(stringInput);
+}

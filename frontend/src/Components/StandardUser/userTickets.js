@@ -7,6 +7,8 @@ import {loginRequest} from "../../authConfig";
 import parse from "html-react-parser";
 import NewTicketFetched from "../TicketSysPlusPages/NewTicketFetched";
 import SingleTicket from "./singleTicket";
+import {checkAndRemove} from "../../AppPages";
+
 
 //TODO: so far, the returned button values are useless due to no proper means of displaying only team-associated tickets
 function TSPlist(props) {
@@ -28,15 +30,14 @@ function TSPlist(props) {
 
     const [ticketArray, setTickets] = useState([]);
 
-    //TODO: Look into parsing the html entities instead of removing them. To Be Discussed/Decided (TBD) in Discord.
-    //regex remove html entities from string if not null, undefined, or empty string
-    function checkAndRemove(stringInput) {
-        if (stringInput === undefined || stringInput == null || stringInput.trim() === "") {
-            return stringInput;
-        }
-        return stringInput.replace(/(<([^>]+)>)|(&nbsp;)/gi, "");
-        // return parse(stringInput);
-    }
+    // //TODO: Look into parsing the html entities instead of removing them. To Be Discussed/Decided (TBD) in Discord.
+    // //regex remove html entities from string if not null, undefined, or empty string
+    // function checkAndRemove(stringInput) {
+    //     if (stringInput === undefined || stringInput == null || stringInput.trim() === "") {
+    //         return stringInput;
+    //     }
+    //     return parse(stringInput);
+    // }
 
     /*axios database function calls*/
     function blockTicket(userID) {
@@ -139,14 +140,8 @@ function TSPlist(props) {
 
             <Modal show={show} onHide={handleClose}>
                 <Modal.Dialog className="shadow-lg mx-3">
-
-                    <Modal.Header closeButton>
-                        <Modal.Title>Ticket Info</Modal.Title>
-                    </Modal.Header>
-
-                    <Modal.Body>
+                    <Modal.Body closeButton>
                         <SingleTicket ticketData={ticketInfo} />
-
                     </Modal.Body>
                 </Modal.Dialog>
             </Modal>
