@@ -1,5 +1,5 @@
 import React, {createRef, useCallback, useEffect, useState} from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import "./TicketSysPlusPages/TSPApp.css";
 import {Navbar, NavbarBrand, Nav, Offcanvas} from "react-bootstrap";
 
@@ -10,6 +10,7 @@ import NavBarButtons from "./NavBarButtons";
 
 function NavBarHeader(props) {
     const currLocation = useLocation();
+    const navigate = useNavigate();
 
     const { instance, accounts } = useMsal();
     const [graphData, setGraphData] = useState(null);
@@ -45,6 +46,11 @@ function NavBarHeader(props) {
         });
     }, []);
 
+    function navigateHome(event) {
+        event.preventDefault();
+        navigate("/");
+    }
+
     function logout() {
         instance.logoutRedirect({account: accounts[0]});
     }
@@ -53,7 +59,7 @@ function NavBarHeader(props) {
         <>
             <Navbar  sticky="top" expand="md" bg="light" variant="light" className="shadow ">
                 <NavbarBrand className="mx-4 mt-1">
-                    <a className="navbar-brand ms-3"  href="https://motorq.com/" rel="noreferrer" target="_blank">
+                    <a className="navbar-brand ms-3"  href={window.location.origin} onClick={navigateHome}>
                         {/*//TODO: replace with better quality motorq logo*/}
                         <img id="motorqLogo" src="/motorqLogo.png" alt="Orange Motorq Logo" className="img-fluid pe-2" />
                         <p className="ms-5" id="ts-color"><strong>TicketSystem+</strong></p>
