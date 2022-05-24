@@ -5,9 +5,11 @@ import "../TicketSysPlusPages/TSPApp.css";
 import NewJsonFetched from "../TicketSysPlusPages/NewJsonFetched";
 import { Modal, Button, Collapse } from "react-bootstrap";
 
+
 const fetchDataPromise = fetchData("ticketInfo");
 
 function AdminJson() {
+
     const dataDetails = fetchDataPromise.read();
     const json = JSON.stringify(dataDetails, null, 3);
     const [change, setChange] = useState(true);
@@ -16,6 +18,7 @@ function AdminJson() {
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+    
 
     function verify() {
         const jsonText = document.getElementById("jsonText").value;
@@ -29,18 +32,14 @@ function AdminJson() {
         }
     }
 
+    function saveData() {
+        {/*TODO: New Data -> Current Data, Current Data -> DB for storage*/ }
+
+    }
+
     function loadOld() {
-        axios
-            .get("http://localhost:4001/jsons")
-            .then((res) => {
-                //TODO: setCurrentJson should be the body of the db data from the get
-                console.log(res.data);
-                document.getElementById("jsonText").value = res.data[0].body;
-                verify();
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+        {/*TODO: Old DB Data -> Current Data, Current Data -> DB for storage*/ }
+
     }
 
     return (
@@ -48,9 +47,13 @@ function AdminJson() {
             <div className="row align-items-center justify-content-center mt-5">
                 <div className="col-7 d-flex mb-1">
 
+                    {/* old save button
+                    <button onClick={() => saveData()} className="btn btn-danger mx-3" id="savebtn" type="button" disabled={change}>Save</button>
+                    */}
+
                     <button onClick={handleShow} className="btn btn-danger mx-3" id="savebtn" type="button" disabled={change}>Save</button>
 
-                    <button onClick={() => loadOld()} className="btn btn-danger mx-3" id="oldbtn" type="button">Load Old Json Schema</button>
+                    <button onClick={() => loadOld()} className="btn btn-danger mx-3" id="oldbtn" type="button">Load Old Ticket Json</button>
                     <button className="btn btn-danger mx-3" id="importbtn" type="button">Import</button>
                     <button className="btn btn-danger mx-3" id="exportbtn" type="button">Export</button>
                 </div>
@@ -67,7 +70,7 @@ function AdminJson() {
                     <Modal.Dialog className="shadow-lg">
 
                         <Modal.Header closeButton>
-                            <Modal.Title>Save JSON</Modal.Title>
+                            <Modal.Title>save JSON</Modal.Title>
                         </Modal.Header>
 
                         <Modal.Body>
