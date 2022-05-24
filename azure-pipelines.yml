@@ -12,10 +12,10 @@ variables:
   azureSubscription: '82236e78-346f-447a-81ac-adf56e27f3bf'
 
   # Web app name
-  webAppName: ''
+  webAppName: 'TicketSysPlus'
 
   # Environment name
-  environmentName: ''
+  environmentName: 'TicketEnv'
 
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
