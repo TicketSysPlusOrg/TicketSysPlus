@@ -73,7 +73,7 @@ function TicketForm() {
         console.log(createTicket);
 
         axios
-            .post("https://backend.granny.dev/tix", {
+            .post("http://localhost:4001/tix", {
                 title: ticketTitle,
                 description: ticketDesc,
                 due_date: tickDate,
