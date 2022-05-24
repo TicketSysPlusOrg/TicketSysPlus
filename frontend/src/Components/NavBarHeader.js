@@ -3,18 +3,11 @@ import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import "./TicketSysPlusPages/TSPApp.css";
 import {Navbar, NavbarBrand, Nav, Offcanvas} from "react-bootstrap";
 
-import { useMsal } from "@azure/msal-react";
-import { loginRequest } from "../authConfig";
-import { callMsGraph } from "./graph";
 import NavBarButtons from "./NavBarButtons";
 
 function NavBarHeader(props) {
     const currLocation = useLocation();
     const navigate = useNavigate();
-
-    const { instance, accounts } = useMsal();
-    const [graphData, setGraphData] = useState(null);
-
 
     const classRef = createRef();
     const [vertOrNot, setVertOrNot] = useState("");
@@ -33,26 +26,9 @@ function NavBarHeader(props) {
         }
     }, []);
 
-    useEffect(() => {
-        // Silently acquires an access token which is then attached to a request for MS Graph data
-        instance.acquireTokenSilent({
-            ...loginRequest,
-            account: accounts[0]
-        }).then((response) => {
-            callMsGraph(response.accessToken).then(response => {
-                setGraphData(response);
-                console.log(response);
-            });
-        });
-    }, []);
-
     function navigateHome(event) {
         event.preventDefault();
         navigate("/");
-    }
-
-    function logout() {
-        instance.logoutRedirect({account: accounts[0]});
     }
 
     return (
@@ -73,7 +49,7 @@ function NavBarHeader(props) {
                     <Offcanvas.Body>
                         <Nav className="me-2 ms-auto">
 
-                            <NavBarButtons thisInstance={instance} thisAccount={accounts} thisLocation={currLocation} thisGraphData={graphData} btnVertOrNot={vertSpace} vertOrNot={vertOrNot} />
+                            <NavBarButtons thisLocation={currLocation} btnVertOrNot={vertSpace} vertOrNot={vertOrNot} />
 
                         </Nav>
 

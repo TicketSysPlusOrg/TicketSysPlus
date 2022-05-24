@@ -1,21 +1,38 @@
 import {Button, ButtonGroup, Collapse, Modal} from "react-bootstrap";
 import {NavLink} from "react-router-dom";
 import React from "react";
-import {useCallback, useState} from "react";
+import {useCallback, useState, useEffect} from "react";
 import NewTicketFetched from "./TicketSysPlusPages/NewTicketFetched";
+
+import { useMsal } from "@azure/msal-react";
+import { loginRequest } from "../authConfig";
+import { callMsGraph } from "./graph";
 
 function NavBarButtons(props) {
     const [show, setShow] = useState(false);
     const handleShow = () => setShow(true);
     const handleClose = () => setShow(false);
 
+    const { instance, accounts } = useMsal();
+    const [graphData, setGraphData] = useState(null);
 
     const vertOrNot = props.vertOrNot;
-    const graphData = props.thisGraphData;
     const currLocation = props.thisLocation;
-    const instance = props.thisInstance;
-    const accounts = props.thisAccount;
     const btnVertSpace = props.btnVertOrNot;
+
+    useEffect(() => {
+        // Silently acquires an access token which is then attached to a request for MS Graph data
+        instance.acquireTokenSilent({
+            ...loginRequest,
+            account: accounts[0]
+        }).then((response) => {
+            callMsGraph(response.accessToken).then(response => {
+                setGraphData(response);
+                console.log(response);
+            });
+        });
+    }, []);
+
 
     const [toggle, setToggle] = useState(false);
     const toggleFunc = useCallback(() => setToggle(!toggle));
