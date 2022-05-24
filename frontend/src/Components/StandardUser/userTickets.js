@@ -4,6 +4,7 @@ import axios from "axios";
 import {Button, Card, Col} from "react-bootstrap";
 import {azureConnection} from "../../index";
 import {loginRequest} from "../../authConfig";
+import parse from "html-react-parser";
 
 //TODO: so far, the returned button values are useless due to no proper means of displaying only team-associated tickets
 function TSPlist(props) {
@@ -12,13 +13,14 @@ function TSPlist(props) {
     };
     const [ticketArray, setTickets] = useState([]);
 
-    //TODO: check with Pavel if this is problematic. he suggested json-patch, but no luck with that so far.
+    //TODO: Look into parsing the html entities instead of removing them. To Be Discussed/Decided (TBD) in Discord.
     //regex remove html entities from string if not null, undefined, or empty string
     function checkAndRemove(stringInput) {
         if (stringInput === undefined || stringInput == null || stringInput.trim() === "") {
             return stringInput;
         }
         return stringInput.replace(/(<([^>]+)>)|(&nbsp;)/gi, "");
+        // return parse(stringInput);
     }
 
     /*axios database function calls*/
