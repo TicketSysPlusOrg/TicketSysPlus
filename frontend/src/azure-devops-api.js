@@ -1,5 +1,6 @@
 import axios from "axios";
 import { Buffer } from "buffer";
+import { createPatch } from "rfc6902";
 
 const apiVersion = "7.1-preview.3";
 
@@ -126,12 +127,13 @@ export class AzureDevOpsApi {
     /**
      * Creates a work item in devops. Currently in a simple test state.
      * @param {string} project Project ID or name
-     * @param {string } type work item type - i.e. task, issue, etc.
+     * @param {string} type work item type - i.e. task, issue, etc.
+     * @param {object} data the fields needed to create a new work item
      * @returns {string} error if failed, work item info if successful
      */
-    async createWorkItem(project, type, thisData) {
+    async createWorkItem(project, type, data) {
         return this.instance.post(`${project}/_apis/wit/workitems/$${type}`,
-            thisData,
+            createPatch({"fields": {}}, data),
             {params: { "api-version": "7.1-preview.3" }, headers: { "content-type": "application/json-patch+json"}, }).then(response => {
             return response.data;
         }).catch(error => error);
