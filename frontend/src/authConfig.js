@@ -16,7 +16,7 @@ export const msalConfig = {
     auth: {
         clientId: "42ced15c-1747-47e9-80e2-ac48ce121919",
         authority: "https://login.microsoftonline.com/common/",
-        redirectUri: "http://localhost:3000/",
+        redirectUri: "https://ticketsysplus.granny.dev//",
     },
     cache: {
         cacheLocation: "localStorage",

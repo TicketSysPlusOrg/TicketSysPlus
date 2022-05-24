@@ -31,7 +31,7 @@ function AdminJson() {
 
     function loadOld() {
         axios
-            .get("http://localhost:4001/jsons")
+            .get("https://backend.granny.dev/jsons")
             .then((res) => {
                 //TODO: setCurrentJson should be the body of the db data from the get
                 console.log(res.data);

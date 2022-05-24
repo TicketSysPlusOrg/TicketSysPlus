@@ -42,7 +42,7 @@ function TSPlist(props) {
     /*axios database function calls*/
     function blockTicket(userID) {
         axios
-            .put("http://localhost:4001/tix", {
+            .put("https://backend.granny.dev/tix", {
                 _id: userID
             })
             .then((res) => {
@@ -54,7 +54,7 @@ function TSPlist(props) {
     }
     function deleteTicket(userID) {
         axios
-            .delete("http://localhost:4001/tix", {
+            .delete("https://backend.granny.dev/tix", {
                 _id: userID
             })
             .then((res) => {
@@ -65,7 +65,7 @@ function TSPlist(props) {
             });
     }
     axios
-        .get("http://localhost:4001/tix")
+        .get("https://backend.granny.dev/tix")
         .then((res) => {
             setTickets(res.data);
         })

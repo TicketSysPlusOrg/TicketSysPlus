@@ -2,7 +2,7 @@ import wrapPromise from "./WrapPromise";
 
 function FetchData (fetchPage) {
     const apiDataPromise =
-            fetch("http://localhost:4001/" + fetchPage)
+            fetch("https://backend.granny.dev/" + fetchPage)
                 .then((res) => res.json());
 
     return wrapPromise(apiDataPromise);

@@ -13,7 +13,7 @@ function JsonForm({jsonModal}) {
 
         const jsonBody = inputBody.current.value;
 
-        axios.delete("http://localhost:4001/jsons")
+        axios.delete("https://backend.granny.dev/jsons")
             .then((res) => {
                 console.log(res);
 
@@ -22,7 +22,7 @@ function JsonForm({jsonModal}) {
                 console.log(err);
             });
 
-        axios.post("http://localhost:4001/jsons", {
+        axios.post("https://backend.granny.dev/jsons", {
             body: jsonBody
         })
             .then((res) => {
