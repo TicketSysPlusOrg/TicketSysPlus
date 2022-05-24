@@ -3,6 +3,45 @@ import { Buffer } from "buffer";
 
 const apiVersion = "7.1-preview.3";
 
+const thisDataBody = [
+    {
+        "op": "add",
+        "path": "/fields/System.IterationId",
+        "from": null,
+        "value": "f734876c-5645-4044-aa87-58ffe5d4461c"
+    },
+    {
+        "op": "add",
+        "path": "/fields/System.AreaId",
+        "from": null,
+        "value": "f734876c-5645-4044-aa87-58ffe5d4461c"
+    },
+    {
+        "op": "add",
+        "path": "/fields/System.State",
+        "from": null,
+        "value": "To Do"
+    },
+    {
+        "op": "add",
+        "path": "/fields/System.Title",
+        "from": null,
+        "value": "Sample Task Title"
+    },
+    {
+        "op": "add",
+        "path": "/fields/System.Description",
+        "from": null,
+        "value": "This is a basic description."
+    },
+    {
+        "op": "add",
+        "path": "/fields/System.Priority",
+        "from": null,
+        "value": 2
+    }
+];
+
 /**
  * This class is used to communicate with the Azure DevOps API
  * TODO: add data validation and input checks to every method
@@ -114,6 +153,9 @@ export class AzureDevOpsApi {
     async getWorkItems(project, ids) {
         return this.instance.get(`${project}/_apis/wit/workitems?ids=${ids.join(",")}`,
             {
+                data : thisDataBody
+            },
+            {
                 params: {
                     "api-version": "7.1-preview.2"
                 },
@@ -128,37 +170,37 @@ export class AzureDevOpsApi {
      * Creates a work item in devops. Currently in a simple test state.
      * @param {string} project Project ID or name
      * @param {string }type work item type - i.e. task, issue, etc.
-     * @returns {string} error if failed, work item info is successful
+     * @returns {string} error if failed, work item info if successful
      */
     async createWorkItem(project, type) {
-        return this.instance.post(`${project}/_apis/wit/workitems/${type}`, {
-            "query": [
-                {
-                    "op": "add",
-                    "path": "/fields/System.Title",
-                    "from": null,
-                    "value": "Sample task"
-                },
-                {
-                    "op": "add",
-                    "path": "/fields/System.Description",
-                    "from": null,
-                    "value": "Sample sample description."
-                },
-                {
-                    "op": "add",
-                    "path": "/fields/System.Priority",
-                    "from": null,
-                    "value": 2
-                },
-            ]
-            },
-            {
-            params: {
-                "api-version": "7.1-preview.2"},
-            }).then(response => {
+        return this.instance.patch(`${project}/_apis/wit/workitems/${type}`,
+            [
+                    {
+                        "op": "add",
+                        "path": "/fields/System.Title",
+                        "from": null,
+                        "value": "Sample Task Title"
+                    }
+                ]
+            , {params: { "api-version": "7.1-preview.3" }, headers: { "content-type": "application/json-patch+json"}, }).then(response => {
             return response.data;
         }).catch(error => error);
+    }
+
+    /**
+     * Return work item types for testing and development purposes. Helpful display of what fields are required for ticket creation
+     * @param {string} project Project ID or name
+     * @returns {string} error if failed, work item info if successful
+     */
+    async getWorkItemTypes(project) {
+        return this.instance.get(`${project}/_apis/wit/workitemtypes`,
+            {
+                params: {
+                    "api-version": "7.1-preview.2"
+                },
+            }).then (res => {
+            return res.data;
+        }).catch(err => err);
     }
 
     /**

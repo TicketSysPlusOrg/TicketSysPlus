@@ -40,8 +40,11 @@ async function run() {
 
     //TODO: get create working. something is invalid here.
 
-    // const createTicket = await azureConnection.createWorkItem(projects.value[0].id, "task");
-    // console.log(createTicket);
+    const getTickTypes = await azureConnection.getWorkItemTypes(projects.value[0].id);
+    console.log(getTickTypes);
+
+    const createTicket = await azureConnection.createWorkItem(projects.value[0].id, "Task");
+    console.log(createTicket);
 }
 run();
 

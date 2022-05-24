@@ -80,13 +80,13 @@ function TicketForm() {
                                     1 <Form.Check inline name="tickPriority" id="tickPriority1" ref={inputPriority} type="radio" value={1} />
                                 </Form.Label>
                                 <Form.Label htmlFor="tickPriority2">
-                                    2 <Form.Check inline name="tickPriority" id="tickPriority2" ref={inputPriority} type="radio" value={1} />
+                                    2 <Form.Check inline name="tickPriority" id="tickPriority2" ref={inputPriority} type="radio" value={2} />
                                 </Form.Label>
                                 <Form.Label htmlFor="tickPriority3">
-                                    3 <Form.Check inline defaultChecked name="tickPriority" id="tickPriority3" ref={inputPriority} type="radio" value={1} />
+                                    3 <Form.Check inline defaultChecked name="tickPriority" id="tickPriority3" ref={inputPriority} type="radio" value={3} />
                                 </Form.Label>
                                 <Form.Label htmlFor="tickPriority4">
-                                    4 <Form.Check inline defaultChecked name="tickPriority" id="tickPriority4" ref={inputPriority} type="radio" value={1} />
+                                    4 <Form.Check inline defaultChecked name="tickPriority" id="tickPriority4" ref={inputPriority} type="radio" value={4} />
                                 </Form.Label>
                             </Form.Group>
                         </Row>

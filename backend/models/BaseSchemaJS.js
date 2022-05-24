@@ -19,7 +19,7 @@ export const TicketSchema = new Schema({
     },
     priority: {
         type: Number,
-        maximum: 3,
+        maximum: 4,
         title: "Priority",
         default: 2,
         description: "Task priority for completion on the specified due date",
