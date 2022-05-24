@@ -1,16 +1,31 @@
 //list of all the current standard user's tickets
 import React, {useEffect, useState} from "react";
 import axios from "axios";
-import {Button, Card, Col} from "react-bootstrap";
+import {Button, Card, Col, Modal} from "react-bootstrap";
 import {azureConnection} from "../../index";
 import {loginRequest} from "../../authConfig";
 import parse from "html-react-parser";
+import NewTicketFetched from "../TicketSysPlusPages/NewTicketFetched";
+import SingleTicket from "./singleTicket";
 
 //TODO: so far, the returned button values are useless due to no proper means of displaying only team-associated tickets
 function TSPlist(props) {
     const authRequest = {
         ...loginRequest
     };
+
+    /*modal show and hide*/
+    const [show, setShow] = useState(false);
+    const handleShow = () => setShow(true);
+    const handleClose = () => setShow(false);
+    const [ticketInfo, setTicketInfo] = useState(null);
+
+    function showTicketModal(event){
+        setTicketInfo(event.target.value.split("|"));
+        handleShow();
+        console.log(event.target.value);
+    }
+
     const [ticketArray, setTickets] = useState([]);
 
     //TODO: Look into parsing the html entities instead of removing them. To Be Discussed/Decided (TBD) in Discord.
@@ -91,7 +106,8 @@ function TSPlist(props) {
                                     Priority: {devTix ? devTix.fields["Microsoft.VSTS.Common.Priority"] : null}
                                 </Card.Text>
                                 {/*TODO: make this button pull up each single ticket clicked on as modal for editing and answering*/}
-                                <Button className="d-inline-block float-end" size="sm" type="submit" name="action" value={devTix.fields.id}>See ticket</Button>
+                                {/*TODO: double check that areapath will always be filled*/}
+                                <Button className="d-inline-block float-end" size="sm" name="action" value={devTix ? (devTix.fields["System.AreaPath"] + "|" + devTix.id) : null} onClick={showTicketModal}>See ticket</Button>
                             </Card.Body>
                         </Card>
                     </Col> ))
@@ -120,6 +136,20 @@ function TSPlist(props) {
                     </Card>
                 </Col>
             ))}
+
+            <Modal show={show} onHide={handleClose}>
+                <Modal.Dialog className="shadow-lg mx-3">
+
+                    <Modal.Header closeButton>
+                        <Modal.Title>Ticket Info</Modal.Title>
+                    </Modal.Header>
+
+                    <Modal.Body>
+                        <SingleTicket ticketData={ticketInfo} />
+
+                    </Modal.Body>
+                </Modal.Dialog>
+            </Modal>
         </>
     );
 }
