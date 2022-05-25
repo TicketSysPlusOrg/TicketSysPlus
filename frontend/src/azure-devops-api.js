@@ -156,6 +156,25 @@ export class AzureDevOpsApi {
     }
 
     /**
+     *
+     * @param project
+     * @param workItemID
+     * @param data
+     * @returns {Promise<void>}
+     */
+    async updateWorkItem(project, workItemID, data) {
+        const workItem = await this.getWorkItem(project, workItemID);
+        const { fields } = workItem;
+
+        return this.instance.put(`${project}/_apis/wit/workitems/$${workItemID}`,
+            createPatch({"fields": fields}, data),
+            {params: { "api-version": "7.1-preview.3" }, headers: { "content-type": "application/json-patch+json"}, }).then(response => {
+            return response.data;
+        }).catch(error => error);
+        
+    }
+
+    /**
      * Gets the results of the query given its WIQL.
      * @param {string} query The statement to pass through WIQL
      * @param {string} project The project ID or name

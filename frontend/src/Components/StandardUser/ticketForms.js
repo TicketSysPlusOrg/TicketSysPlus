@@ -46,7 +46,6 @@ function TicketForm() {
 
 
         /*TODO: use due date, use attachments, what about iteration id/area id?*/
-        /*TODO: dynamically fill this...? can use array with path field names and another with the values collected above, or a map...?*/
         const devOpsTickData = {"fields": {"System.State": "To Do", "System.Title": ticketTitle, "System.Description": descAndMentions}};
 
         const createTicket = await azureConnection.createWorkItem(prjID, "Task", devOpsTickData);
