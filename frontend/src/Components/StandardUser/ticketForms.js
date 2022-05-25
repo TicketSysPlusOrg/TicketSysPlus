@@ -155,7 +155,7 @@ function TicketForm(props) {
                         </Row>
 
                         {/*TODO: make button stay 'submit changes' if in 'edit ticket' version, apply put method to do so.*/}
-                        <Button onClick={handleClose} type="submit" name="action" className="float-end mt-2">
+                        <Button onClick={handleClose} type="submit" name="action" className="float-end mt-2" disabled={props.editTicket}>
                             Submit
                         </Button>
                     </Form>
