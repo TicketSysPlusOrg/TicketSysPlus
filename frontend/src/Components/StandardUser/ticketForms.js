@@ -69,10 +69,8 @@ function TicketForm(props) {
             });
     }
 
-    /*editTicket state*/
+    /*editTicket state.*/
     const [editTicket, getEditTicketState] = useState(null);
-    const [thisTicketInfo, getTicketInfo] = useState(null);
-    const [fieldsReady, setFieldsReady] = useState(null);
 
     useEffect(() => {
         getEditTicketState(props.editTicket);
@@ -92,7 +90,6 @@ function TicketForm(props) {
             //TODO: attachments stuff
             /*inputAttachment.current.value = createRef();*/
         }
-
     }, [editTicket]);
 
     return (
@@ -157,6 +154,7 @@ function TicketForm(props) {
                             <ConditionalForms />
                         </Row>
 
+                        {/*TODO: make button stay 'submit changes' if in 'edit ticket' version, apply put method to do so.*/}
                         <Button onClick={handleClose} type="submit" name="action" className="float-end mt-2">
                             Submit
                         </Button>
