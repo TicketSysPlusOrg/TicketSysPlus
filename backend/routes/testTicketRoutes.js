@@ -11,6 +11,12 @@ import {
     deleteJson,
     getJson
 } from "../controllers/jsonController";
+import {
+    addResponder,
+    changeResponder,
+    deleteResponder,
+    getResponder
+} from "../controllers/responderController";
 
 
 const mongoTicketRoutes = (app) => {
@@ -31,6 +37,13 @@ const mongoTicketRoutes = (app) => {
         .post(addJson)
         .put(changeJson)
         .delete(deleteJson);
+
+    app
+        .route("/responders")
+        .get(getResponder)
+        .post(addResponder)
+        .put(changeResponder)
+        .delete(deleteResponder);
 
 
 };
