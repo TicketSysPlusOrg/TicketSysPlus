@@ -3,6 +3,7 @@ import React from "react";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import { loginRequest } from "../../authConfig";
 
+
 export const Landing = () => {
     const authRequest = {
         ...loginRequest
