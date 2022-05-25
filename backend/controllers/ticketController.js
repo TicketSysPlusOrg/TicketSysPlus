@@ -1,9 +1,9 @@
 import mongoose from "mongoose";
 import { TicketSchema } from "../models/BaseSchemaJS.js";
-import { jsonSchema } from "../models/jsonSchema";
+
 
 const Ticket = mongoose.model("Ticket", TicketSchema);
-const Json = mongoose.model("Json", jsonSchema);
+
 
 //functions that interact w/ db when sending request to api. request to api w/ route, controller executes func in db
 
@@ -74,5 +74,5 @@ export const deleteTicket = (req, res) => {
 //CHANGE TICKET PRIORITY 
 
 
-//JSON TICKET/TEMPLATE FUNCTIONS
+
 
