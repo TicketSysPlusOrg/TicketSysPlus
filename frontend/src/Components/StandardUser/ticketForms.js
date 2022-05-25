@@ -29,7 +29,7 @@ function TicketForm() {
     }, []);
 
     /*get vals from ref, post to db*/
-    function submitTicket(SubmitEvent) {
+    async function submitTicket(SubmitEvent) {
         //TODO: stop reload of page but reload modal...? or could JUST close modal and reload the visible tickets
         // SubmitEvent.preventDefault();
 
@@ -47,29 +47,9 @@ function TicketForm() {
 
         /*TODO: use due date, use attachments, what about iteration id/area id?*/
         /*TODO: dynamically fill this...? can use array with path field names and another with the values collected above, or a map...?*/
-        const devOpsTickData = [
-            {
-                "op": "add",
-                "path": "/fields/System.State",
-                "from": null,
-                "value": "To Do"
-            },
-            {
-                "op": "add",
-                "path": "/fields/System.Title",
-                "from": null,
-                "value": ticketTitle
-            },
-            {
-                "op": "add",
-                "path": "/fields/System.Description",
-                "from": null,
-                "value": descAndMentions
-            },
+        const devOpsTickData = {"fields": {"System.State": "To Do", "System.Title": ticketTitle, "System.Description": descAndMentions}};
 
-        ];
-
-        const createTicket = azureConnection.createWorkItem(prjID, "Task", devOpsTickData);
+        const createTicket = await azureConnection.createWorkItem(prjID, "Task", devOpsTickData);
         console.log(createTicket);
 
         axios
