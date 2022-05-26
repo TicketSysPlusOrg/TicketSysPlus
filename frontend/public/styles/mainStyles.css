@@ -24,6 +24,11 @@
     background-color: white;
     border-right: 3px solid rgba(184, 134, 11, 0.3);
 }
+#sidebar-right {
+    min-height: 100vh;
+    background-color: white;
+    border-left: 3px solid rgba(184, 134, 11, 0.3);
+}
 
 .bootstrapOverride .makeTicket {
     border-radius: 25px;

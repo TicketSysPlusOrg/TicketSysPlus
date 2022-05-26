@@ -4,10 +4,11 @@ import axios from "axios";
 import { Button, Col, Form, Row } from "react-bootstrap";
 import ConditionalForms from "./ConditionalForms";
 import {azureConnection} from "../../index";
+import {checkAndRemove} from "../../AppPages";
 
 //TODO: make react-bootstrap friendly.
 //TODO: make file uploads real
-function TicketForm() {
+function TicketForm(props) {
     const [show, setShow] = useState(false);
     const [prjID, setprjID] = useState(null);
 
@@ -46,7 +47,6 @@ function TicketForm() {
 
 
         /*TODO: use due date, use attachments, what about iteration id/area id?*/
-        /*TODO: dynamically fill this...? can use array with path field names and another with the values collected above, or a map...?*/
         const devOpsTickData = {"fields": {"System.State": "To Do", "System.Title": ticketTitle, "System.Description": descAndMentions}};
 
         const createTicket = await azureConnection.createWorkItem(prjID, "Task", devOpsTickData);
@@ -68,6 +68,29 @@ function TicketForm() {
                 console.log(err);
             });
     }
+
+    /*editTicket state.*/
+    const [editTicket, getEditTicketState] = useState(null);
+
+    useEffect(() => {
+        getEditTicketState(props.editTicket);
+    }, []);
+
+    useEffect(() => {
+        if(editTicket === true) {
+            inputTitle.current.value = props.ticketInfo.fields["System.Title"];
+            //TODO: check/validate info in here to remove html string
+            inputDesc.current.value = props.ticketInfo.fields["System.Description"];
+            document.getElementById("tickPriority" + props.ticketInfo.fields["Microsoft.VSTS.Common.Priority"]).checked = true;
+
+            //TODO: add due date field to devops
+            /*inputDate.current.value = props.ticketInfo.fields["System.DueDate"];*/
+            //TODO: figure out how to fill mentions from comments section of DevOps. not a field I've seen in the work item.
+            /*inputMentions.current.value = props.ticketInfo.fields["System.Mentions"];*/
+            //TODO: attachments stuff
+            /*inputAttachment.current.value = createRef();*/
+        }
+    }, [editTicket]);
 
     return (
         <>
@@ -97,16 +120,16 @@ function TicketForm() {
                             <Form.Group className="col s6">
                                 <Form.Label className="d-block">Priority</Form.Label>
                                 <Form.Label htmlFor="tickPriority1" className="ms-3">
-                                    1 <Form.Check inline name="tickPriority" id="tickPriority1" ref={inputPriority} type="radio" value={1} />
+                                    1 <Form.Check inline name="tickPriority" id="tickPriority1" ref={inputPriority} type="radio" value={1} checked={null} />
                                 </Form.Label>
                                 <Form.Label htmlFor="tickPriority2">
-                                    2 <Form.Check inline name="tickPriority" id="tickPriority2" ref={inputPriority} type="radio" value={2} />
+                                    2 <Form.Check inline name="tickPriority" id="tickPriority2" ref={inputPriority} type="radio" value={2} checked={null}/>
                                 </Form.Label>
                                 <Form.Label htmlFor="tickPriority3">
-                                    3 <Form.Check inline defaultChecked name="tickPriority" id="tickPriority3" ref={inputPriority} type="radio" value={3} />
+                                    3 <Form.Check inline name="tickPriority" id="tickPriority3" ref={inputPriority} type="radio" value={3} checked={false}/>
                                 </Form.Label>
                                 <Form.Label htmlFor="tickPriority4">
-                                    4 <Form.Check inline defaultChecked name="tickPriority" id="tickPriority4" ref={inputPriority} type="radio" value={4} />
+                                    4 <Form.Check inline name="tickPriority" id="tickPriority4" ref={inputPriority} type="radio" value={4} checked={null}/>
                                 </Form.Label>
                             </Form.Group>
                         </Row>
@@ -131,7 +154,8 @@ function TicketForm() {
                             <ConditionalForms />
                         </Row>
 
-                        <Button onClick={handleClose} type="submit" name="action" className="float-end mt-2">
+                        {/*TODO: make button stay 'submit changes' if in 'edit ticket' version, apply put method to do so.*/}
+                        <Button onClick={handleClose} type="submit" name="action" className="float-end mt-2" disabled={props.editTicket}>
                             Submit
                         </Button>
                     </Form>
