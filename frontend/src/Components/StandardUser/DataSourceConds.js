@@ -6,6 +6,8 @@ export const ConditionalExample = {
             "description": "What source(s) do we need to enable enrollment?",
             "type": "array",
             "items": {
+                //leads to sources
+                //need to be able to add several sources to any ticket (non-functional so far)
                 "type": "object",
                 "anyOf": [
                     {

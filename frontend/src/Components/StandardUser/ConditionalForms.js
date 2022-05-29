@@ -19,8 +19,8 @@ function ConditionalForms() {
             <h5>{conJSON.properties.enrollment_items.title}</h5>
 
             <label>{conJSON.properties.enrollment_items.description}</label>
-            <Form.Select onChange={(e) => catchItemStuff(e.currentTarget.value)}>
-                <option selected disabled>Select a Customer</option>
+            <Form.Select defaultValue={"selectOne"} onChange={(e) => catchItemStuff(e.currentTarget.value)}>
+                <option value={"selectOne"} disabled>Select a Customer</option>
                 {conJSON.properties.enrollment_items.items.anyOf.map((thisItem, index) => (
                     <option key={index} className="mx-1" value={JSON.stringify(thisItem)}>{thisItem.title}</option>
                 )

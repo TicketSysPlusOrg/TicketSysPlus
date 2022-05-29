@@ -30,6 +30,18 @@
     border-left: 3px solid rgba(184, 134, 11, 0.3);
 }
 
+.projectSelect .card {
+    border-width: 0.2rem;
+}
+
+.projectSelect .card:hover, .projectSelect .card:focus {
+    border-color: rgb(68, 179, 183);
+}
+
+.projectSelect .activeProjectCard {
+    border-color: rgba(50, 44, 147, 1);
+}
+
 .bootstrapOverride .makeTicket {
     border-radius: 25px;
     border: 4px double #ec7a6f;
@@ -62,6 +74,12 @@
 
 .bootstrapOverride .navbar {
     padding-bottom: 0;
+}
+
+.bootstrapOverride .cardOneLine {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
 body {

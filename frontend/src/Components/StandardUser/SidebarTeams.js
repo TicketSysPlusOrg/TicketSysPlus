@@ -14,30 +14,31 @@ function SidebarTeams(props) {
     }, []);
 
     /*send updated project val + team ID val to parent*/
-    function teamValChange(event) {
-        const splitThis = event.target.value.split(",");
-        props.onChange(splitThis);
-    }
+    // function teamValChange(event) {
+    //     const splitThis = event.target.value.split(",");
+    //     props.onChange(splitThis);
+    // }
 
     return (
         <>
             {teamList ?
                 teamList.value.map((thisTeam, index) => (
-                    <Card key={index} className="m-2 mt-3 shadow-lg">
-                        <Card.Title className="m-2">
-                            {teamList ? thisTeam.name : "Loading..."}
-                        </Card.Title>
-                        <Card.Body>
-                            {teamList ?
-                                <p>{thisTeam.description}</p> : "Loading..."}
-                            <Button onClick={teamValChange} size={"sm"} className={" float-end"}
-                                value={teamList ? ([teamList.value[index].projectId, teamList.value[index].id]) : null}
-                            >See Team Tickets</Button>
-                        </Card.Body>
-                    </Card>
+                    <p key={index} className="m-2 mt-3">{teamList ? thisTeam.name : "Loading..."}</p>
+                    // <Card key={index} className="m-2 mt-3">
+                    //     <Card.Title className="m-2">
+                    //         {teamList ? thisTeam.name : "Loading..."}
+                    //     </Card.Title>
+                    //     <Card.Body>
+                    //         {teamList ?
+                    //             <p>{thisTeam.description}</p> : "Loading..."}
+                    //         <Button onClick={teamValChange} size={"sm"} className={" float-end"}
+                    //             value={teamList ? ([teamList.value[index].projectId, teamList.value[index].id]) : null}
+                    //         >See Team Tickets</Button>
+                    //     </Card.Body>
+                    // </Card>
                 )) :
                 <Container>
-                    <p>Loading Projects List...</p>
+                    <p>Loading Teams...</p>
                 </Container>}
 
         </>
