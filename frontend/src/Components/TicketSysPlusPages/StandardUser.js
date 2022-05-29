@@ -2,7 +2,7 @@ import React, {useState, useEffect} from "react";
 
 import NavBarHeader from "../NavBarHeader";
 import UserTickets from "../StandardUser/userTickets";
-import {Card, Col, Container, Row} from "react-bootstrap";
+import {Button, Card, Col, Container, Row} from "react-bootstrap";
 import SidebarTeams from "../StandardUser/SidebarTeams";
 import {azureConnection} from "../../index";
 
@@ -10,20 +10,28 @@ function StandardUser(props) {
     const [projectList, setPrjList] = useState(null);
     const [teamVal, setTeamVal] = useState(null);
 
-    function teamValChange(newSortingTeam) {
-        setTeamVal(newSortingTeam);
-    }
+    // function teamValChange(newSortingTeam) {
+    //     setTeamVal(newSortingTeam);
+    // }
 
     /*when team val change is called and teamval is altered, run azure calls, which should (once we have a method to do so) render tickets based on teams (or diff projects once we get that far)*/
     useEffect(() => {
-        run();
+        initRun();
     }, []);
 
-    async function run() {
+    async function initRun() {
         const prjs = await azureConnection.getProjects();
-        const teams = await azureConnection.getTeams(prjs.value[0].id);
+        const teams = await azureConnection.getTeams();
+        console.log(prjs);
+        console.log(teams);
         setPrjList(prjs);
         setTeamVal([teams.value[0].projectId, teams.value[0].id]);
+    }
+
+    async function prjTickets (prjID) {
+        console.log(prjID);
+        const teams = await azureConnection.getTeams(prjID);
+        setTeamVal([prjID, teams.value[0].id]);
     }
 
     return(
@@ -31,20 +39,25 @@ function StandardUser(props) {
             <NavBarHeader />
             <Row>
                 <Col xs={5} sm={4} md={3} id="sidebar">
+                    <h6 className={"text-center mt-3"}><u>Select a Project</u></h6>
                     <Container className="d-flex flex-column justify-content-center ">
                         {projectList ?
                             projectList.value.map((thisPrj, index) => (
-                                <Card key={index} className="mt-3 shadow-lg">
-                                    <Card.Title className="ms-2 mt-2">
-                                        {thisPrj ? thisPrj.name : "Loading..."}
-                                    </Card.Title>
-                                    <Card.Body>
-                                        <h5><u>Teams</u></h5>
-                                        {thisPrj ?
-                                            <SidebarTeams thisTeam={thisPrj.id} value={teamVal} onChange={teamValChange}/>
-                                            : "Loading..."}
-                                    </Card.Body>
-                                </Card>
+                                <div key={index} onClick={() => prjTickets(thisPrj.id)} className={"projectSelect"}>
+                                    <Card className={teamVal[0] === thisPrj.id ? "mt-3 activeProjectCard shadow-lg" : "mt-3 shadow-sm"}>
+                                        <Card.Title className={"ms-2 mt-2"}>
+                                            {thisPrj ? thisPrj.name : "Loading..."}
+                                        </Card.Title>
+                                        <Card.Body>
+                                            <h6><u>Teams</u></h6>
+                                            {thisPrj ?
+                                                <SidebarTeams thisTeam={thisPrj.id} />
+                                                : "Loading..."}
+
+                                        </Card.Body>
+                                    </Card>
+                                </div>
+
                             ))
                             : null}
                     </Container>
@@ -52,7 +65,7 @@ function StandardUser(props) {
                 <Col xs={6} sm={7} md={8}>
                     <Container>
                         <Row>
-                            {teamVal ? <UserTickets key={teamVal} projects={teamVal} /> : null}
+                            {teamVal ? <UserTickets projects={teamVal} key={teamVal}/> : null}
                         </Row>
                     </Container>
                 </Col>

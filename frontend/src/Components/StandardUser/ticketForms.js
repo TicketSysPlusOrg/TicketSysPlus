@@ -47,7 +47,7 @@ function TicketForm(props) {
 
 
         /*TODO: use due date, use attachments, what about iteration id/area id?*/
-        const devOpsTickData = {"fields": {"System.State": "To Do", "System.Title": ticketTitle, "System.Description": descAndMentions}};
+        const devOpsTickData = {"fields": {"System.State": "To Do", "System.Title": ticketTitle, "System.Description": descAndMentions, "System.DueDate": tickDate, "Microsoft.VSTS.Common.Priority": tickPriority}};
 
         const createTicket = await azureConnection.createWorkItem(prjID, "Task", devOpsTickData);
         console.log(createTicket);
@@ -79,12 +79,14 @@ function TicketForm(props) {
     useEffect(() => {
         if(editTicket === true) {
             inputTitle.current.value = props.ticketInfo.fields["System.Title"];
+
             //TODO: check/validate info in here to remove html string
-            inputDesc.current.value = props.ticketInfo.fields["System.Description"];
+            inputDesc.current.value = checkAndRemove(props.ticketInfo.fields["System.Description"]);
             document.getElementById("tickPriority" + props.ticketInfo.fields["Microsoft.VSTS.Common.Priority"]).checked = true;
 
-            //TODO: add due date field to devops
-            /*inputDate.current.value = props.ticketInfo.fields["System.DueDate"];*/
+            //TODO: CHECK DUE DATE FIELD SLICE. this is likely a lazy method, and might be shaving time if done improperly
+            inputDate.current.value = props.ticketInfo.fields["Microsoft.VSTS.Scheduling.DueDate"].slice(0, 10);
+
             //TODO: figure out how to fill mentions from comments section of DevOps. not a field I've seen in the work item.
             /*inputMentions.current.value = props.ticketInfo.fields["System.Mentions"];*/
             //TODO: attachments stuff
@@ -100,18 +102,14 @@ function TicketForm(props) {
                     {/*TODO: validation  for all fields*/}
                     <Form className="col s12" onSubmit={submitTicket}>
                         <Row className="mb-2">
-                            <Form.Group className="col s6">
+                            <Form.Group className="col s12">
                                 <Form.Label htmlFor="ticketTitle">Ticket Title</Form.Label>
                                 <Form.Control type="text" placeholder="Enter title" ref={inputTitle} />
                                 <Form.Text id="ticketTitle" name="ticketTitle" />
                             </Form.Group>
                             {/*TODO: make this mentions section autofill...? at least mention if we need to insert emails or what*/}
-                            <Form.Group className="col s6">
-                                <Form.Label htmlFor="tickMentions">Mentions</Form.Label>
-                                <Form.Control type="text" placeholder="Enter associates" ref={inputMentions} />
-                                <Form.Text id="tickMentions" name="tickMentions" />
-                            </Form.Group>
                         </Row>
+
                         <Row className="mb-2">
                             <Form.Group className="col s6">
                                 <Form.Label htmlFor="tickDate">Due Date</Form.Label>
@@ -120,22 +118,31 @@ function TicketForm(props) {
                             <Form.Group className="col s6">
                                 <Form.Label className="d-block">Priority</Form.Label>
                                 <Form.Label htmlFor="tickPriority1" className="ms-3">
-                                    1 <Form.Check inline name="tickPriority" id="tickPriority1" ref={inputPriority} type="radio" value={1} checked={null} />
+                                    1 <Form.Check inline name="tickPriority" id="tickPriority1" ref={inputPriority} type="radio" value={1} defaultChecked={null} />
                                 </Form.Label>
                                 <Form.Label htmlFor="tickPriority2">
-                                    2 <Form.Check inline name="tickPriority" id="tickPriority2" ref={inputPriority} type="radio" value={2} checked={null}/>
+                                    2 <Form.Check inline name="tickPriority" id="tickPriority2" ref={inputPriority} type="radio" value={2} defaultChecked={null}/>
                                 </Form.Label>
                                 <Form.Label htmlFor="tickPriority3">
-                                    3 <Form.Check inline name="tickPriority" id="tickPriority3" ref={inputPriority} type="radio" value={3} checked={false}/>
+                                    3 <Form.Check inline name="tickPriority" id="tickPriority3" ref={inputPriority} type="radio" value={3} defaultChecked={false}/>
                                 </Form.Label>
                                 <Form.Label htmlFor="tickPriority4">
-                                    4 <Form.Check inline name="tickPriority" id="tickPriority4" ref={inputPriority} type="radio" value={4} checked={null}/>
+                                    4 <Form.Check inline name="tickPriority" id="tickPriority4" ref={inputPriority} type="radio" value={4} defaultChecked={null}/>
                                 </Form.Label>
                             </Form.Group>
                         </Row>
 
                         <Row className="mb-2">
-                            <Form.Group className="col s6">
+                            <Form.Group className="col s12">
+                                <Form.Label htmlFor="tickMentions">Mentions</Form.Label>
+                                <Form.Control type="text" placeholder="Enter associates" ref={inputMentions} />
+                                <Form.Text id="tickMentions" name="tickMentions" />
+                            </Form.Group>
+                        </Row>
+
+
+                        <Row className="mb-2">
+                            <Form.Group className="col s12">
                                 <Form.Label htmlFor="ticketDesc">Ticket Description</Form.Label>
                                 <Form.Control as="textarea" rows="2" type="text" placeholder="Enter description" ref={inputDesc} />
                                 <Form.Text id="ticketDesc" name="ticketDesc" />
@@ -144,7 +151,7 @@ function TicketForm(props) {
 
                         <Row className="mb-2">
                             {/*TODO: make this attachment form real*/}
-                            <Form.Group className="col s6">
+                            <Form.Group className="col s12">
                                 <Form.Label htmlFor="tickAttachments">Attachments</Form.Label>
                                 <Form.Control id="tickAttachments" name="tickAttachments" ref={inputAttachment} type="file" />
                             </Form.Group>

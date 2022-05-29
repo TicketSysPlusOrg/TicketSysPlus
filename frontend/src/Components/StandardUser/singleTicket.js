@@ -20,10 +20,12 @@ function singleTicketView(props) {
     }, []);
 
     useEffect(() => {
-        (async() => {
-            const getTicketInfo = await azureConnection.getWorkItem(thisTicketInfo[0], thisTicketInfo[1]);
-            setAllTicketInfo(getTicketInfo);
-        })();
+        if(thisTicketInfo !== null) {
+            (async() => {
+                const getTicketInfo = await azureConnection.getWorkItem(thisTicketInfo[0], thisTicketInfo[1]);
+                setAllTicketInfo(getTicketInfo);
+            })();
+        }
     }, [thisTicketInfo]);
 
     const [renderEdit, setRenderEdit] = useState(null);

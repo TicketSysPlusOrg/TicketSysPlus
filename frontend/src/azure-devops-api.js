@@ -80,6 +80,8 @@ export class AzureDevOpsApi {
         return this.queryWIQL("Select [System.Id], [System.Title], [System.State] From WorkItems Where [System.WorkItemType] = 'Task'", project, team);
     }
 
+    //TODO: think about removing requirement for team, considering we will not be pulling data related directly to them.
+    // should we leave this potential function for future devs, or is that messy?
     /**
      * Gets ALL work items (Maximum 20000)
      * @param {string} project Project ID or project name
@@ -88,8 +90,6 @@ export class AzureDevOpsApi {
     async getAllWorkItems(project, team) {
         return this.queryWIQL("Select [System.Id], [System.Title], [System.State] From WorkItems", project, team);
     }
-
-    //TODO: add method that retrieves work items by team only for use in usertickets. so far only have ability to pull all by project.
 
     /**
      * Returns a single work item.
@@ -123,7 +123,6 @@ export class AzureDevOpsApi {
         }).catch(err => err);
     }
 
-    //TODO: make this dynamic!
     /**
      * Creates a work item in devops. Currently in a simple test state.
      * @param {string} project Project ID or name
@@ -156,11 +155,11 @@ export class AzureDevOpsApi {
     }
 
     /**
-     *
-     * @param project
-     * @param workItemID
-     * @param data
-     * @returns {Promise<void>}
+     * Update existing work item.
+     * @param {string} project Project ID or name
+     * @param {string} workItemID single work item ID
+     * @param {object} data the fields needed to create a new work item
+     * @returns {string} error if failed, work item info if successful
      */
     async updateWorkItem(project, workItemID, data) {
         const workItem = await this.getWorkItem(project, workItemID);
