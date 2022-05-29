@@ -197,4 +197,51 @@ export class AzureDevOpsApi {
             return res.data;
         }).catch(err => err);
     }
+
+    /**
+     * Get a list of members for a specific team.
+     * @param {string} project The name or ID (GUID) of the team project the team belongs to.
+     * @param {string} team The name or ID (GUID) of the team.
+     */
+    async getTeamMembers(project, team) {
+        return this.instance.get(`_apis/projects/${project}/teams/${team}/members`,
+            {
+                params: {
+                    "api-version": "7.1-preview.2"
+                },
+            }).then (res => {
+            return res.data;
+        }).catch(err => err);
+    }
+
+    /**
+     * Get a list of all members that are a part of a project.
+     * @param {string} project The name or ID (GUID) of the project.
+     */
+    async getAllTeamMembers(project) {
+        // map the teams into an array of IDs
+        // [id, id, id]
+        const teams = await this.getTeams().then(val => val.value.map(item => item.id));
+
+        // loop through all the teams in the project and merge them into a single object
+        const temp = {count: 0, value: []};
+        for (let i = 0; i < teams.length; i++) {
+            const team = teams[i];
+            
+            await this.getTeamMembers(project, team).then(val => {
+                val.value.forEach(member => {
+                    if (temp.value.every(tempMember => tempMember.identity.id !== member.identity.id)) {
+                        temp.count++;
+                        temp.value.push(member);
+                    }
+                });
+            });
+
+            return temp;
+        }
+    }
+
+    // const membersObject = await azureConnection.getAllTeamMembers(projectId);
+    // const members = membersObject.value.map(member => {name: member.identity.displayName, icon: member.identity.imageUrl, email: member.identity.uniqueName});
+    // [{"name": "", "icon": "", "email": ""}, ...];
 }

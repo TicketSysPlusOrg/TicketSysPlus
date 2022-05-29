@@ -40,6 +40,12 @@ async function run() {
     const ticketBatch = await azureConnection.getWorkItems(projects.value[1].id, listOfIds);
     console.log(ticketBatch);
 
+    const teamMembers = await azureConnection.getTeamMembers(teams.value[1].projectId, teams.value[1].id);
+    console.log(teamMembers);
+
+    const allTeamMembers = await azureConnection.getAllTeamMembers(projects.value[1].id);
+    console.log(allTeamMembers);
+
 //    const getTickTypes = await azureConnection.getWorkItemTypes(projects.value[0].id);
 //    console.log(getTickTypes);
 //
