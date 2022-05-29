@@ -7,6 +7,7 @@ const apiVersion = "7.1-preview.3";
 /**
  * This class is used to communicate with the Azure DevOps API
  * TODO: add data validation and input checks to every method
+ * TODO: team object already has a project ID.. use that instead of requesting project ID
  */
 export class AzureDevOpsApi {
     constructor(url, token) {
