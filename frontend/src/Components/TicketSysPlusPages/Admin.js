@@ -10,6 +10,7 @@ import { loginRequest } from "../../authConfig";
 
 import { ErrorComponent } from "./ErrorComponent";
 import { Loading } from "./Loading";
+import Responders from "../AdminUser/TicketRespondersDisplay";
 
 function Admin() {
     const authRequest = {
@@ -27,7 +28,7 @@ function Admin() {
 
             <Row>
                 <Col>
-
+                    <Responders/>
                 </Col>
             </Row>
             <Row>
