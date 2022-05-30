@@ -29,7 +29,6 @@ function TSPlist(props) {
 
     const [ticketArray, setTickets] = useState([]);
 
-    // //TODO: Look into parsing the html entities instead of removing them. To Be Discussed/Decided (TBD) in Discord.
     //regex remove html entities from string if not null, undefined, or empty string
     function checkAndRemoveNoFormat(stringInput) {
         if (stringInput === undefined || stringInput == null || stringInput.trim() === "") {
@@ -108,7 +107,7 @@ function TSPlist(props) {
                 </Col> :
                 devOpsTix ?
                     devOpsTix.value.map((devTix, index) => (
-                        <Col xs={12} md={6} xl={3} key={index}>
+                        <Col xs={12} md={6} xl={4} key={index}>
                             {/*TODO: double check that areapath will always be filled*/}
                             <div onClick={() => showTicketModal(devTix.fields["System.AreaPath"] + "|" + devTix.id)} className={"projectSelect"}>
                                 <Card className={"my-1 mt-1 mb-3"} >

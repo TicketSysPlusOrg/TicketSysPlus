@@ -163,12 +163,8 @@ export class AzureDevOpsApi {
      * @returns {string} error if failed, work item info if successful
      */
     async updateWorkItem(project, workItemID, data) {
-        const workItem = await this.getWorkItem(project, workItemID);
-        const { fields } = workItem;
-        console.log({fields});
-
         return this.instance.patch(`${project}/_apis/wit/workitems/${workItemID}`,
-            createPatch({"fields": fields}, data),
+            createPatch({"fields": {}}, data),
             {params: { "api-version": "7.1-preview.3" }, headers: { "content-type": "application/json-patch+json"}, }).then(response => {
             return response.data;
         }).catch(error => error);

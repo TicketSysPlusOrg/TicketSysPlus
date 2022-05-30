@@ -7,7 +7,6 @@ import {azureConnection} from "../../index";
 import {checkAndRemove} from "../../AppPages";
 import parse from "html-react-parser";
 
-//TODO: make react-bootstrap friendly.
 //TODO: make file uploads real
 function TicketForm(props) {
     const [show, setShow] = useState(false);
@@ -24,6 +23,7 @@ function TicketForm(props) {
     let inputAttachment = createRef();
     let divDesc = createRef();
 
+    /*currently set up just to speak with MotorqProject board.*/
     useEffect(() => {
         (async () => {
             const projID = await azureConnection.getProjects();
@@ -31,7 +31,7 @@ function TicketForm(props) {
         })();
     }, []);
 
-    /*get vals from ref, post to db*/
+
     async function submitTicket(SubmitEvent) {
         //TODO: stop reload of page but reload modal...? or could JUST close modal and reload the visible tickets
         SubmitEvent.preventDefault();
@@ -74,28 +74,24 @@ function TicketForm(props) {
                 });
         } else {
             let ticketUpdates = {};
-            const devOpsTickData = {"fields": null};
-            /*update existing ticket stuff*/
+
             /*check title, type, description, priority, due date, mentions, attachments when it works */
             if(inputTitle.current.value !== props.ticketInfo.fields["System.Title"]) {
-                // ticketUpdates.put({"System.Title": inputTitle.current.value});
-                ticketUpdates = ({"System.Title": inputTitle.current.value});
+                ticketUpdates["System.Title"] = ticketTitle;
             }
-            // if(inputType.current.value !== props.ticketInfo.fields["System.WorkItemType"]) {
-            //
-            // }
-            // if(inputPriority.current.value !== props.ticketInfo.fields["Microsoft.VSTS.Common.Priority"]) {
-            //
-            // }
-            // if(inputDate.current.value !== props.ticketInfo.fields["Microsoft.VSTS.Scheduling.DueDate"].slice(0, 10)) {
-            //
-            // }
+            if(priorityVal !== null) {
+                ticketUpdates["Microsoft.VSTS.Common.Priority"] = priorityVal;
+            }
+            if(typeVal !== null) {
+                ticketUpdates["System.WorkItemType"] = typeVal;
+            }
+            if(inputDate.current.value !== props.ticketInfo.fields["Microsoft.VSTS.Scheduling.DueDate"]) {
+                ticketUpdates["Microsoft.VSTS.Scheduling.DueDate"] = inputDate.current.value;
+            }
+
+
             const updateDevopsTickets = {"fields": ticketUpdates};
-            console.log(updateDevopsTickets);
-
-
             const updateTicket = await azureConnection.updateWorkItem(prjID, props.ticketInfo.id, updateDevopsTickets);
-            console.log(updateTicket);
         }
     }
 
@@ -110,10 +106,8 @@ function TicketForm(props) {
         if(editTicket === true) {
             /*ticket title*/
             inputTitle.current.value = props.ticketInfo.fields["System.Title"];
-
             /*ticket type*/
             document.getElementById("tick" + props.ticketInfo.fields["System.WorkItemType"]).checked = true;
-
             /*description*/
             const divDescObjects = props.ticketInfo.fields["System.Description"];
             if(divDescObjects === undefined) {
@@ -123,13 +117,12 @@ function TicketForm(props) {
             } else {
                 divDesc.current.innerHTML += checkAndRemove(divDescObjects.props.children);
             }
-
             /*priority*/
             document.getElementById("tickPriority" + props.ticketInfo.fields["Microsoft.VSTS.Common.Priority"]).checked = true;
 
             //TODO: CHECK DUE DATE FIELD SLICE. this is likely a lazy method and could be shaving time if done improperly
             /*due date*/
-            inputDate.current.value = props.ticketInfo.fields["Microsoft.VSTS.Scheduling.DueDate"];
+            inputDate.current.value = props.ticketInfo.fields["Microsoft.VSTS.Scheduling.DueDate"].slice(0,10);
 
             //TODO: figure out how to fill mentions from comments section of DevOps. not a field I've seen in the work item.
             /*inputMentions.current.value = props.ticketInfo.fields["System.Mentions"];*/
@@ -143,6 +136,10 @@ function TicketForm(props) {
     function moreDataSources() {
         setAnotherDataSource([...anotherDataSource, "dataSources"]);
     }
+
+    /*update typevals and priorityval onchange. overriding hard set from edit ticket data*/
+    const [priorityVal, changePriorityVal] = useState(null);
+    const [typeVal, changeTypeVal] = useState(null);
 
     return (
         <>
@@ -176,13 +173,13 @@ function TicketForm(props) {
                                 {/*TODO: add the epic, issue, and task logos*/}
                                 <div className={"d-flex justify-content-center"}>
                                     <Form.Label htmlFor={"tickEpic"} className={"ms-3"}>
-                                        Epic <Form.Check className={"ms-2"} inline name={"tickType"} id={"tickEpic"} ref={inputType} type={"radio"} value={"Epic"} defaultChecked={null} />
+                                        Epic <Form.Check className={"ms-2"} inline name={"tickType"} id={"tickEpic"} ref={inputType} type={"radio"} onChange={() => changeTypeVal("Epic")} value={"Epic"} defaultChecked={null} />
                                     </Form.Label>
                                     <Form.Label htmlFor={"tickIssue"} className={"ms-3"}>
-                                        Issue <Form.Check className={"ms-2"} inline name={"tickType"} id={"tickIssue"} ref={inputType} type={"radio"} value={"Issue"} defaultChecked={null} />
+                                        Issue <Form.Check className={"ms-2"} inline name={"tickType"} id={"tickIssue"} ref={inputType} type={"radio"} onChange={() => changeTypeVal("Issue")} value={"Issue"} defaultChecked={null} />
                                     </Form.Label>
                                     <Form.Label htmlFor={"tickTask"} className={"ms-3"}>
-                                        Task <Form.Check className={"ms-2"} inline name={"tickType"} id={"tickTask"} ref={inputType} type={"radio"} value={"Task"} defaultChecked={null} />
+                                        Task <Form.Check className={"ms-2"} inline name={"tickType"} id={"tickTask"} ref={inputType} type={"radio"} onChange={() => changeTypeVal("Task")} value={"Task"} defaultChecked={null} />
                                     </Form.Label>
                                 </div>
 
@@ -206,16 +203,16 @@ function TicketForm(props) {
                                 <Form.Label className={"fw-bold"}>Priority</Form.Label>
                                 <div className={"d-flex justify-content-center"}>
                                     <Form.Label htmlFor={"tickPriority1"} className={"mx-2"}>
-                                        1 <Form.Check className={"ms-2"} inline name={"tickPriority"} id={"tickPriority1"} ref={inputPriority} type={"radio"} value={1} defaultChecked={null} />
+                                        1 <Form.Check className={"ms-2"} inline name={"tickPriority"} id={"tickPriority1"} ref={inputPriority} type={"radio"} onChange={() => changePriorityVal(1)} value={1} defaultChecked={null} />
                                     </Form.Label>
                                     <Form.Label htmlFor={"tickPriority2"} className={"mx-2"}>
-                                        2 <Form.Check className={"ms-2"} inline name={"tickPriority"} id={"tickPriority2"} ref={inputPriority} type={"radio"} value={2} defaultChecked={null}/>
+                                        2 <Form.Check className={"ms-2"} inline name={"tickPriority"} id={"tickPriority2"} ref={inputPriority} type={"radio"} onChange={() => changePriorityVal(2)} value={2} defaultChecked={null}/>
                                     </Form.Label>
                                     <Form.Label htmlFor={"tickPriority3"} className={"mx-2"}>
-                                        3 <Form.Check className={"ms-2"} inline name={"tickPriority"} id={"tickPriority3"} ref={inputPriority} type={"radio"} value={3} defaultChecked={false}/>
+                                        3 <Form.Check className={"ms-2"} inline name={"tickPriority"} id={"tickPriority3"} ref={inputPriority} type={"radio"} onChange={() => changePriorityVal(3)} value={3} defaultChecked={false}/>
                                     </Form.Label>
                                     <Form.Label htmlFor={"tickPriority4"} className={"mx-2"}>
-                                        4 <Form.Check className={"ms-2"} inline name={"tickPriority"} id={"tickPriority4"} ref={inputPriority} type={"radio"} value={4} defaultChecked={null}/>
+                                        4 <Form.Check className={"ms-2"} inline name={"tickPriority"} id={"tickPriority4"} ref={inputPriority} type={"radio"} onChange={() => changePriorityVal(4)} value={4} defaultChecked={null}/>
                                     </Form.Label>
                                 </div>
                             </Form.Group>
