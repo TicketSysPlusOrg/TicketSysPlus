@@ -165,8 +165,9 @@ export class AzureDevOpsApi {
     async updateWorkItem(project, workItemID, data) {
         const workItem = await this.getWorkItem(project, workItemID);
         const { fields } = workItem;
+        console.log({fields});
 
-        return this.instance.put(`${project}/_apis/wit/workitems/$${workItemID}`,
+        return this.instance.patch(`${project}/_apis/wit/workitems/${workItemID}`,
             createPatch({"fields": fields}, data),
             {params: { "api-version": "7.1-preview.3" }, headers: { "content-type": "application/json-patch+json"}, }).then(response => {
             return response.data;

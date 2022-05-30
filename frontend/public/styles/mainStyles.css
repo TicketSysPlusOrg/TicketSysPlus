@@ -30,6 +30,7 @@
     border-left: 3px solid rgba(184, 134, 11, 0.3);
 }
 
+/*overrides for project selection cards*/
 .projectSelect .card {
     border-width: 0.2rem;
 }
@@ -42,6 +43,13 @@
     border-color: rgba(50, 44, 147, 1);
 }
 
+/*override for contenteditdiv. grows with more text, no scrollbar*/
+.bootstrapOverride #contentEditDiv {
+    min-height: 5rem;
+    overflow:auto;
+}
+
+/*style overrides for create ticket button*/
 .bootstrapOverride .makeTicket {
     border-radius: 25px;
     border: 4px double #ec7a6f;
@@ -82,12 +90,20 @@
     white-space: nowrap;
 }
 
+.bootstrapOverride .modal-dialog {
+    max-width: 600px;
+}
+
 body {
     background-image: linear-gradient(to right, white, #ffe6d9);
 }
 
 li:hover {
     background-color: #b7e7e7;
+}
+
+input[type=radio]{
+    transform:scale(1.5);
 }
 
 @media only screen and (max-width: 768px) {

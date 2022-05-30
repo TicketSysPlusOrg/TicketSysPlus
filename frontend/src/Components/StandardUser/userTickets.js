@@ -101,7 +101,7 @@ function TSPlist(props) {
 
     return (
         <>
-            <h4 className="mt-4">Displaying Tickets for: {activeProj}</h4>
+            <h4 className={"mt-4"}>Displaying Tickets for: {activeProj}</h4>
             {noTickets ?
                 <Col xs={12}>
                     <p>{noTickets}</p>
@@ -111,7 +111,7 @@ function TSPlist(props) {
                         <Col xs={12} md={6} xl={3} key={index}>
                             {/*TODO: double check that areapath will always be filled*/}
                             <div onClick={() => showTicketModal(devTix.fields["System.AreaPath"] + "|" + devTix.id)} className={"projectSelect"}>
-                                <Card className="my-1 mt-1 mb-3" >
+                                <Card className={"my-1 mt-1 mb-3"} >
                                     <Card.Body>
                                         <Card.Title
                                             className={"cardOneLine mb-2"}>{devTix ? devTix.fields["System.Title"] : null}</Card.Title>
@@ -122,7 +122,8 @@ function TSPlist(props) {
                                             <u>Priority</u>: {devTix ? devTix.fields["Microsoft.VSTS.Common.Priority"] : null}
                                         </Card.Text>
                                         <Card.Text className={"cardOneLine"}>
-                                            <u>Due Date</u>: {devTix ? devTix.fields["Microsoft.VSTS.Scheduling.DueDate"].slice(0, 10) : null}
+                                            {/*TODO: remove the extra ternary check for no due date present once we require due date for ticket creation*/}
+                                            <u>Due Date</u>: {devTix ? (devTix.fields["Microsoft.VSTS.Scheduling.DueDate"] ? devTix.fields["Microsoft.VSTS.Scheduling.DueDate"].slice(0, 10) : null) : null}
                                         </Card.Text>
                                     </Card.Body>
                                 </Card>
@@ -135,7 +136,7 @@ function TSPlist(props) {
                     </Col>
             }
 
-            <h4 className="mt-4">Project Tickets from DB</h4>
+            <h4 className={"mt-4"}>Project Tickets from DB</h4>
 
             {ticketArray.map((thisTicket) => (
                 <Col xs={12} md={6} xl={3} key={thisTicket._id} >

@@ -97,7 +97,7 @@ function singleTicketView(props) {
 
                                 {/*</Row>*/}
 
-                                <Button onClick={e => setRenderEdit(true)} type={"button"} name={"action"} className={"mt-2"}>
+                                <Button onClick={() => setRenderEdit(true)} type={"button"} name={"action"} className={"mt-2"}>
                                     Edit Ticket
                                 </Button>
 
