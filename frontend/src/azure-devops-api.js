@@ -93,6 +93,15 @@ export class AzureDevOpsApi {
     }
 
     /**
+     * Gets project-specific work items (Maximum 20000)
+     * @param {string} project Project ID or project name
+     * @param {string} team Team ID or team name
+     */
+    async getPrjWorkItems(project, team) {
+        return this.queryWIQL(`Select [System.Id], [System.Title], [System.State], [System.AreaPath] From WorkItems Where [System.AreaPath] = '${project}'`, project, team);
+    }
+
+    /**
      * Returns a single work item.
      * @param {string} project Project ID or project name
      * @param {string} id The work item id
