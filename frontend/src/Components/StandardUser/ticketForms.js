@@ -34,7 +34,7 @@ function TicketForm(props) {
 
     async function submitTicket(SubmitEvent) {
         //TODO: stop reload of page but reload modal...? or could JUST close modal and reload the visible tickets
-        SubmitEvent.preventDefault();
+        /*SubmitEvent.preventDefault();*/
 
         //TODO: get system states for ticket creation and edit, make form in render, make devops method to get all possible states for dynamic generation
         /*const ticketState = ???*/
@@ -274,7 +274,7 @@ function TicketForm(props) {
                         {/*TODO: make button stay 'submit changes' if in 'edit ticket' version, apply put method to do so.*/}
                         {props.editTicket === true ?
                             <Button onClick={handleClose} type={"submit"} name={"updateAction"} className={"float-end mt-2"}>
-                                Submit
+                                Update
                             </Button>
                             :
                             <Button onClick={handleClose} type={"submit"} name={"action"} className={"float-end mt-2"}>
