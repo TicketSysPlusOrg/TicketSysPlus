@@ -20,10 +20,12 @@ function singleTicketView(props) {
     }, []);
 
     useEffect(() => {
-        (async() => {
-            const getTicketInfo = await azureConnection.getWorkItem(thisTicketInfo[0], thisTicketInfo[1]);
-            setAllTicketInfo(getTicketInfo);
-        })();
+        if(thisTicketInfo !== null) {
+            (async() => {
+                const getTicketInfo = await azureConnection.getWorkItem(thisTicketInfo[0], thisTicketInfo[1]);
+                setAllTicketInfo(getTicketInfo);
+            })();
+        }
     }, [thisTicketInfo]);
 
     const [renderEdit, setRenderEdit] = useState(null);
@@ -95,7 +97,7 @@ function singleTicketView(props) {
 
                                 {/*</Row>*/}
 
-                                <Button onClick={e => setRenderEdit(true)} type={"button"} name={"action"} className={"mt-2"}>
+                                <Button onClick={() => setRenderEdit(true)} type={"button"} name={"action"} className={"mt-2"}>
                                     Edit Ticket
                                 </Button>
 

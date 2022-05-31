@@ -24,21 +24,15 @@ function Admin() {
             loadingComponent={Loading}
         >
             <NavBarHeader />
-            <Row>
-                <Col xs={4} sm={3} md={3} id="sidebar">
-                    <Container className="d-flex flex-column justify-content-center ">
-                        <AdminPrio />
-                    </Container>
-                </Col>
-                <Col xs={5} sm={6} md={6}>
-                    <Container>
-                        <AdminJson />
-                    </Container>
-                </Col>
-                <Col xs={3} sm={3} md={3} id="sidebar-right">
-                    <Container className="d-flex flex-column justify-content-center ">
 
-                    </Container>
+            <Row>
+                <Col>
+
+                </Col>
+            </Row>
+            <Row>
+                <Col>
+                    <AdminJson />
                 </Col>
             </Row>
 
