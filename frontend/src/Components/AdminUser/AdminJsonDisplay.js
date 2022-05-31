@@ -1,7 +1,6 @@
 import React, { useInsertionEffect, useState } from "react";
 import axios from "axios";
 import fetchData from "../APIActions/FetchData";
-import "../TicketSysPlusPages/TSPApp.css";
 import NewJsonFetched from "../TicketSysPlusPages/NewJsonFetched";
 import { Modal, Button, Collapse } from "react-bootstrap";
 

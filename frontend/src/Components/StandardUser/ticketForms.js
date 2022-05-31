@@ -122,7 +122,12 @@ function TicketForm(props) {
 
             //TODO: CHECK DUE DATE FIELD SLICE. this is likely a lazy method and could be shaving time if done improperly
             /*due date*/
-            inputDate.current.value = props.ticketInfo.fields["Microsoft.VSTS.Scheduling.DueDate"].slice(0,10);
+            if(props.ticketInfo.fields["Microsoft.VSTS.Scheduling.DueDate"] !== undefined) {
+                inputDate.current.value = props.ticketInfo.fields["Microsoft.VSTS.Scheduling.DueDate"].slice(0,10);
+            } else {
+                props.ticketInfo.fields = "";
+            }
+
 
             //TODO: figure out how to fill mentions from comments section of DevOps. not a field I've seen in the work item.
             /*inputMentions.current.value = props.ticketInfo.fields["System.Mentions"];*/

@@ -3,12 +3,10 @@ import axios from "axios";
 import {Button, Card, Col, Container, Row} from "react-bootstrap";
 import {azureConnection} from "../../index";
 import fetchData from "../APIActions/FetchData";
-import "../TicketSysPlusPages/TSPApp.css";
 import UserTickets from "../StandardUser/userTickets";
 import {checkAndRemove} from "../../AppPages";
 import SidebarTeams from "../StandardUser/SidebarTeams";
 import PrioList from "./PrioList";
-
 
 function AdminPrio(props) {
     const [projectList, setPrjList] = useState(null);

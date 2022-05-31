@@ -5,7 +5,6 @@ import StandardUser from "./Components/TicketSysPlusPages/StandardUser";
 import Admin from "./Components/TicketSysPlusPages/Admin";
 import Error from "./Components/TicketSysPlusPages/ErrorPage";
 import Landing from "./Components/TicketSysPlusPages/Landing";
-import TSPAppFetched from "./Components/TicketSysPlusPages/TSPAppFetched";
 import PropTypes from "prop-types";
 import parse from "html-react-parser";
 
@@ -20,7 +19,6 @@ function MainApp() {
             { isAuthenticated && (<Route path="/" element={<StandardUser />} exact />) }
             { !isAuthenticated && (<Route path="/" element={<Landing />} exact/>) }
             <Route path="/admin" element={<Admin />} />
-            <Route path="/test" element={<TSPAppFetched />} />
             <Route path="*" element={<Error />} />
         </Routes>
     );
