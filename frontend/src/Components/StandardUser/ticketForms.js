@@ -53,8 +53,8 @@ function TicketForm(props) {
         if(!editTicket) {
             /*create new devops ticket*/
             const devOpsTickData = {"fields": {"System.State": "To Do", "System.Title": ticketTitle, "System.Description": descAndMentions,
-                "System.DueDate": tickDate, "Microsoft.VSTS.Common.Priority": tickPriority, "System.WorkItemType": ticketType}};
-            const createTicket = await azureConnection.createWorkItem(prjID, "Task", devOpsTickData);
+                "Microsoft.VSTS.Scheduling.DueDate": tickDate, "Microsoft.VSTS.Common.Priority": tickPriority, "System.WorkItemType": ticketType}};
+            const createTicket = await azureConnection.createWorkItem(prjID, ticketType, devOpsTickData);
 
             /*post to mongodb*/
             axios
@@ -273,7 +273,7 @@ function TicketForm(props) {
                         {/*SUBMIT BUTTONS*/}
                         {/*TODO: make button stay 'submit changes' if in 'edit ticket' version, apply put method to do so.*/}
                         {props.editTicket === true ?
-                            <Button onClick={handleClose} type={"submit"} name={"updateAction"} className={"float-end mt-2"}>
+                            <Button onClick={handleClose} type={"submit"} name={"action"} className={"float-end mt-2"}>
                                 Update
                             </Button>
                             :
