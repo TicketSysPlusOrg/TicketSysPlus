@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useInsertionEffect, useState } from "react";
 import axios from "axios";
 import fetchData from "../APIActions/FetchData";
 import "../TicketSysPlusPages/TSPApp.css";
@@ -24,8 +24,10 @@ function AdminJson() {
         try {
             const tempJSON = JSON.parse(jsonToValidate);
             isValid = true;
+            document.getElementById("error").innerHTML = " ";
         } catch (e) {
             console.log("Invalid JSON Format");
+            document.getElementById("error").innerHTML = "Invalid JSON Format";
         }
         return isValid;
     }
@@ -44,6 +46,7 @@ function AdminJson() {
         }
         else {
             setChange(true);
+            document.getElementById("error").innerHTML = " ";
         }
     }
 
@@ -65,7 +68,7 @@ function AdminJson() {
         <>
             <div className="row">
                 <div className="col-12 text-center mt-2">
-                    <p> Invalid JSON Format </p>
+                    <p className="text-danger error" id="error">  </p>
                 </div>
             </div>
 
