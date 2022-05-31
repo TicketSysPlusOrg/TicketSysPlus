@@ -23,21 +23,28 @@ async function run() {
     console.log(projects);
 
     if ((projects.count !== undefined && projects.count > 0) && (projects.count !== undefined && teams.count > 0)) {
-        const workItems = await azureConnection.getWorkItemTasks(projects.value[0].id, teams.value[0].id);
+        const workItems = await azureConnection.getWorkItemTasks(teams.value[0].projectId, teams.value[0].id);
         console.log(workItems);
     }
 
-    const allWorkItems = await azureConnection.getAllWorkItems(projects.value[0].id, teams.value[0].id);
+    const allWorkItems = await azureConnection.getAllWorkItems(teams.value[0].projectId, teams.value[0].id);
     console.log(allWorkItems);
 
     const listOfIds = allWorkItems.workItems.map(workItem => workItem.id);
     console.log("Array of IDs: " + listOfIds);
 
-    const singleTicket = await azureConnection.getWorkItem(projects.value[0].id, allWorkItems.workItems[0].id);
+
+    const singleTicket = await azureConnection.getWorkItem(projects.value[1].id, allWorkItems.workItems[0].id);
     console.log(singleTicket);
 
-    const ticketBatch = await azureConnection.getWorkItems(projects.value[0].id, listOfIds);
+    const ticketBatch = await azureConnection.getWorkItems(projects.value[1].id, listOfIds);
     console.log(ticketBatch);
+
+    const teamMembers = await azureConnection.getTeamMembers(teams.value[1].projectId, teams.value[1].id);
+    console.log(teamMembers);
+
+    const allTeamMembers = await azureConnection.getAllTeamMembers(projects.value[1].id);
+    console.log(allTeamMembers);
 
 //    const getTickTypes = await azureConnection.getWorkItemTypes(projects.value[0].id);
 //    console.log(getTickTypes);

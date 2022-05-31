@@ -7,6 +7,7 @@ const apiVersion = "7.1-preview.3";
 /**
  * This class is used to communicate with the Azure DevOps API
  * TODO: add data validation and input checks to every method
+ * TODO: team object already has a project ID.. use that instead of requesting project ID
  */
 export class AzureDevOpsApi {
     constructor(url, token) {
@@ -80,6 +81,8 @@ export class AzureDevOpsApi {
         return this.queryWIQL("Select [System.Id], [System.Title], [System.State] From WorkItems Where [System.WorkItemType] = 'Task'", project, team);
     }
 
+    //TODO: think about removing requirement for team, considering we will not be pulling data related directly to them.
+    // should we leave this potential function for future devs, or is that messy?
     /**
      * Gets ALL work items (Maximum 20000)
      * @param {string} project Project ID or project name
@@ -89,7 +92,14 @@ export class AzureDevOpsApi {
         return this.queryWIQL("Select [System.Id], [System.Title], [System.State] From WorkItems", project, team);
     }
 
-    //TODO: add method that retrieves work items by team only for use in usertickets. so far only have ability to pull all by project.
+    /**
+     * Gets project-specific work items (Maximum 20000)
+     * @param {string} project Project ID or project name
+     * @param {string} team Team ID or team name
+     */
+    async getPrjWorkItems(project, team) {
+        return this.queryWIQL(`Select [System.Id], [System.Title], [System.State], [System.AreaPath] From WorkItems Where [System.AreaPath] = '${project}'`, project, team);
+    }
 
     /**
      * Returns a single work item.
@@ -123,7 +133,6 @@ export class AzureDevOpsApi {
         }).catch(err => err);
     }
 
-    //TODO: make this dynamic!
     /**
      * Creates a work item in devops. Currently in a simple test state.
      * @param {string} project Project ID or name
@@ -156,18 +165,15 @@ export class AzureDevOpsApi {
     }
 
     /**
-     *
-     * @param project
-     * @param workItemID
-     * @param data
-     * @returns {Promise<void>}
+     * Update existing work item.
+     * @param {string} project Project ID or name
+     * @param {string} workItemID single work item ID
+     * @param {object} data the fields needed to create a new work item
+     * @returns {string} error if failed, work item info if successful
      */
     async updateWorkItem(project, workItemID, data) {
-        const workItem = await this.getWorkItem(project, workItemID);
-        const { fields } = workItem;
-
-        return this.instance.put(`${project}/_apis/wit/workitems/$${workItemID}`,
-            createPatch({"fields": fields}, data),
+        return this.instance.patch(`${project}/_apis/wit/workitems/${workItemID}`,
+            createPatch({"fields": {}}, data),
             {params: { "api-version": "7.1-preview.3" }, headers: { "content-type": "application/json-patch+json"}, }).then(response => {
             return response.data;
         }).catch(error => error);
@@ -197,4 +203,51 @@ export class AzureDevOpsApi {
             return res.data;
         }).catch(err => err);
     }
+
+    /**
+     * Get a list of members for a specific team.
+     * @param {string} project The name or ID (GUID) of the team project the team belongs to.
+     * @param {string} team The name or ID (GUID) of the team.
+     */
+    async getTeamMembers(project, team) {
+        return this.instance.get(`_apis/projects/${project}/teams/${team}/members`,
+            {
+                params: {
+                    "api-version": "7.1-preview.2"
+                },
+            }).then (res => {
+            return res.data;
+        }).catch(err => err);
+    }
+
+    /**
+     * Get a list of all members that are a part of a project.
+     * @param {string} project The name or ID (GUID) of the project.
+     */
+    async getAllTeamMembers(project) {
+        // map the teams into an array of IDs
+        // [id, id, id]
+        const teams = await this.getTeams().then(val => val.value.map(item => item.id));
+
+        // loop through all the teams in the project and merge them into a single object
+        const temp = {count: 0, value: []};
+        for (let i = 0; i < teams.length; i++) {
+            const team = teams[i];
+            
+            await this.getTeamMembers(project, team).then(val => {
+                val.value.forEach(member => {
+                    if (temp.value.every(tempMember => tempMember.identity.id !== member.identity.id)) {
+                        temp.count++;
+                        temp.value.push(member);
+                    }
+                });
+            });
+
+            return temp;
+        }
+    }
+
+    // const membersObject = await azureConnection.getAllTeamMembers(projectId);
+    // const members = membersObject.value.map(member => {name: member.identity.displayName, icon: member.identity.imageUrl, email: member.identity.uniqueName});
+    // [{"name": "", "icon": "", "email": ""}, ...];
 }

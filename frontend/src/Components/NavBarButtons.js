@@ -53,7 +53,7 @@ function NavBarButtons(props) {
                 </div>
                 {currLocation.pathname !== "/" ?
                     <NavLink to="/" >
-                        <Button className={btnVertSpace +" btn btn-primary mx-3"}>USER PAGE</Button>
+                        <Button className={btnVertSpace +" btn btn-primary mx-3"}>TICKETS</Button>
                     </NavLink>
                     : null
                 }

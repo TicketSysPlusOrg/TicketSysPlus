@@ -1,6 +1,5 @@
 import React, {createRef, useCallback, useEffect, useState} from "react";
-import { NavLink, useLocation, useNavigate } from "react-router-dom";
-import "./TicketSysPlusPages/TSPApp.css";
+import { useLocation, useNavigate } from "react-router-dom";
 import {Navbar, NavbarBrand, Nav, Offcanvas} from "react-bootstrap";
 
 import NavBarButtons from "./NavBarButtons";
@@ -45,7 +44,6 @@ function NavBarHeader(props) {
 
                 <Navbar.Offcanvas  ref={classRef}  id={"offcanvasNavbar-expand-tickets"} aria-labelledby={"offcanvasNavbarLabel-expand-tickets"} placement="end" className={" justify-content-end "} >
                     <Offcanvas.Header closeButton />
-
                     <Offcanvas.Body>
                         <Nav className="me-2 ms-auto">
 
@@ -54,7 +52,6 @@ function NavBarHeader(props) {
                         </Nav>
 
                     </Offcanvas.Body>
-
                 </Navbar.Offcanvas>
 
             </Navbar>

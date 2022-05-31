@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React, { useInsertionEffect, useState } from "react";
 import axios from "axios";
 import fetchData from "../APIActions/FetchData";
-import "../TicketSysPlusPages/TSPApp.css";
 import NewJsonFetched from "../TicketSysPlusPages/NewJsonFetched";
 import { Modal, Button, Collapse } from "react-bootstrap";
 
@@ -14,18 +13,39 @@ function AdminJson() {
     const [data, setData] = useState("");
     const [show, setShow] = useState(false);
 
+
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
+    function validate(jsonToValidate) {
+        let isValid = false;
+        //check for valid JSON format
+        try {
+            const tempJSON = JSON.parse(jsonToValidate);
+            isValid = true;
+            document.getElementById("error").innerHTML = " ";
+        } catch (e) {
+            console.log("Invalid JSON Format");
+            document.getElementById("error").innerHTML = "Invalid JSON Format";
+        }
+        return isValid;
+    }
+
     function verify() {
         const jsonText = document.getElementById("jsonText").value;
+
         {/*TODO: && if schema is valid*/ }
         if (jsonText !== json) {
-            setChange(false);
-            setData(jsonText);
+
+            if (validate(jsonText)) {
+                setChange(false);
+                setData(jsonText);
+            }
+
         }
         else {
             setChange(true);
+            document.getElementById("error").innerHTML = " ";
         }
     }
 
@@ -45,7 +65,13 @@ function AdminJson() {
 
     return (
         <>
-            <div className="row align-items-center justify-content-center mt-5">
+            <div className="row">
+                <div className="col-12 text-center mt-2">
+                    <p className="text-danger error" id="error">  </p>
+                </div>
+            </div>
+
+            <div className="row align-items-center justify-content-center mt-2">
                 <div className="col-7 d-flex mb-1">
 
                     <button onClick={handleShow} className="btn btn-danger mx-3" id="savebtn" type="button" disabled={change}>Save</button>
@@ -71,7 +97,7 @@ function AdminJson() {
                         </Modal.Header>
 
                         <Modal.Body>
-                            <NewJsonFetched  adminDisplay={data}/>
+                            <NewJsonFetched adminDisplay={data} />
                         </Modal.Body>
                     </Modal.Dialog>
                 </div>
