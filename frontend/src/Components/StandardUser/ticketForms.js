@@ -34,7 +34,7 @@ function TicketForm(props) {
 
     async function submitTicket(SubmitEvent) {
         //TODO: stop reload of page but reload modal...? or could JUST close modal and reload the visible tickets
-        SubmitEvent.preventDefault();
+        /*SubmitEvent.preventDefault();*/
 
         //TODO: get system states for ticket creation and edit, make form in render, make devops method to get all possible states for dynamic generation
         /*const ticketState = ???*/
@@ -53,8 +53,8 @@ function TicketForm(props) {
         if(!editTicket) {
             /*create new devops ticket*/
             const devOpsTickData = {"fields": {"System.State": "To Do", "System.Title": ticketTitle, "System.Description": descAndMentions,
-                "System.DueDate": tickDate, "Microsoft.VSTS.Common.Priority": tickPriority, "System.WorkItemType": ticketType}};
-            const createTicket = await azureConnection.createWorkItem(prjID, "Task", devOpsTickData);
+                "Microsoft.VSTS.Scheduling.DueDate": tickDate, "Microsoft.VSTS.Common.Priority": tickPriority, "System.WorkItemType": ticketType}};
+            const createTicket = await azureConnection.createWorkItem(prjID, ticketType, devOpsTickData);
 
             /*post to mongodb*/
             axios
@@ -122,7 +122,12 @@ function TicketForm(props) {
 
             //TODO: CHECK DUE DATE FIELD SLICE. this is likely a lazy method and could be shaving time if done improperly
             /*due date*/
-            inputDate.current.value = props.ticketInfo.fields["Microsoft.VSTS.Scheduling.DueDate"].slice(0,10);
+            if(props.ticketInfo.fields["Microsoft.VSTS.Scheduling.DueDate"] !== undefined) {
+                inputDate.current.value = props.ticketInfo.fields["Microsoft.VSTS.Scheduling.DueDate"].slice(0,10);
+            } else {
+                props.ticketInfo.fields = "";
+            }
+
 
             //TODO: figure out how to fill mentions from comments section of DevOps. not a field I've seen in the work item.
             /*inputMentions.current.value = props.ticketInfo.fields["System.Mentions"];*/
@@ -255,21 +260,24 @@ function TicketForm(props) {
                         </Row>
 
                         {/*CONDITIONAL FORMS*/}
-                        <Row>
-                            {anotherDataSource.map((thisSource, index) => ( <ConditionalForms key={index} /> ))}
+                        {props.editTicket !== true?
+                            <Row>
+                                {anotherDataSource.map((thisSource, index) => ( <ConditionalForms key={index} /> ))}
 
-                            <Col xs={4}>
-                                <Button onClick={moreDataSources} className={"btn-sm mt-2"}>
-                                    Choose Another Source
-                                </Button>
-                            </Col>
-                        </Row>
+                                <Col xs={4}>
+                                    <Button onClick={moreDataSources} className={"btn-sm mt-2"}>
+                                        Choose Another Source
+                                    </Button>
+                                </Col>
+                            </Row>
+                            : null
+                        }
 
                         {/*SUBMIT BUTTONS*/}
                         {/*TODO: make button stay 'submit changes' if in 'edit ticket' version, apply put method to do so.*/}
                         {props.editTicket === true ?
-                            <Button onClick={handleClose} type={"submit"} name={"updateAction"} className={"float-end mt-2"}>
-                                Submit
+                            <Button onClick={handleClose} type={"submit"} name={"action"} className={"float-end mt-2"}>
+                                Update
                             </Button>
                             :
                             <Button onClick={handleClose} type={"submit"} name={"action"} className={"float-end mt-2"}>

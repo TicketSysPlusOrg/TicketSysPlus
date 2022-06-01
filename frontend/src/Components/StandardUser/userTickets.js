@@ -85,9 +85,11 @@ function TSPlist(props) {
     async function run() {
 
         const getProj = await azureConnection.getProject(props.projects[0]);
+        console.log(getProj);
         setActiveProj(getProj.name);
 
-        const allWorkItems = await azureConnection.getAllWorkItems(props.projects[0], props.projects[1]);
+        const allWorkItems = await azureConnection.getPrjWorkItems(getProj.name, getProj.defaultTeam.id);
+        console.log(allWorkItems);
         if(allWorkItems.workItems !== undefined) {
             const listOfIds = allWorkItems.workItems.map(workItem => workItem.id);
             const ticketBatch = await azureConnection.getWorkItems(props.projects[0], listOfIds);
@@ -159,7 +161,7 @@ function TSPlist(props) {
             <Modal show={show} onHide={handleClose} >
                 <Modal.Dialog className="shadow-lg mx-3">
                     <Modal.Body>
-                        <SingleTicket ticketData={ticketInfo} />
+                        <SingleTicket ticketData={ticketInfo} clickClose={handleClose}/>
                     </Modal.Body>
                 </Modal.Dialog>
             </Modal>

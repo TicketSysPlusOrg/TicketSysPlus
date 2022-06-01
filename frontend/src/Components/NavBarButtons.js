@@ -47,13 +47,13 @@ function NavBarButtons(props) {
             <ButtonGroup className={vertOrNot}>
 
                 <div>
-                    <Button className={btnVertSpace + " makeTicket mx-3"} onClick={handleShow}>
+                    <Button className={btnVertSpace + " makeTicket mx-3"} onClick={handleShow} ticketInfo={null}>
                       Create Ticket
                     </Button>
                 </div>
                 {currLocation.pathname !== "/" ?
                     <NavLink to="/" >
-                        <Button className={btnVertSpace +" btn btn-primary mx-3"}>USER PAGE</Button>
+                        <Button className={btnVertSpace +" btn btn-primary mx-3"}>TICKETS</Button>
                     </NavLink>
                     : null
                 }
