@@ -149,22 +149,6 @@ export class AzureDevOpsApi {
     }
 
     /**
-     * Return work item types for testing and development purposes. Helpful display of what fields are required for ticket creation
-     * @param {string} project Project ID or name
-     * @returns {string} error if failed, work item info if successful
-     */
-    async getWorkItemTypes(project) {
-        return this.instance.get(`${project}/_apis/wit/workitemtypes`,
-            {
-                params: {
-                    "api-version": "7.1-preview.2"
-                },
-            }).then (res => {
-            return res.data;
-        }).catch(err => err);
-    }
-
-    /**
      * Update existing work item.
      * @param {string} project Project ID or name
      * @param {string} workItemID single work item ID
@@ -177,7 +161,73 @@ export class AzureDevOpsApi {
             {params: { "api-version": "7.1-preview.3" }, headers: { "content-type": "application/json-patch+json"}, }).then(response => {
             return response.data;
         }).catch(error => error);
-        
+    }
+
+
+    /*api version 4 needed. not updated for newer versions.*/
+    /**
+     * Return work item types for testing and development purposes. Helpful display of what fields are required for ticket creation
+     * @param {string} processId process to pull work item types from
+     * @returns {string} error if failed, work item type info if successful
+     */
+    async getWorkItemTypes(processId) {
+        return this.instance.get(`_apis/work/processdefinitions/${processId}/workitemtypes`,
+            {
+                params: {
+                    "api-version": "4.0-preview.1"
+                },
+            }).then (res => {
+            return res.data;
+        }).catch(err => err);
+    }
+
+    /*api version 4 needed. not updated for newer versions.*/
+    /**
+     * Get a list of all work item states associated with ticket type.
+     * @param {string} processId process ID
+     * @param {string} witRefID work item type ID
+     * @returns {string} error if failed, list of state definitions if successful
+     */
+    async getWorkItemStates(processId, witRefID) {
+        return this.instance.get(`_apis/work/processdefinitions/${processId}/workItemTypes/${witRefID}/states`,
+            {
+                params: {
+                    "api-version": "4.1-preview.1"
+                },
+            }).then (res => {
+            return res.data;
+        }).catch(err => err);
+    }
+
+    /*GETTING CORS ERROR WHEN TESTING WITH LOCALHOST but still getting vals*/
+    /*default (basic) process ID for dev team: b8a3a935-7e91-48b8-a94c-606d37c3e9f2 */
+    /**
+     * This method returns a list of processes associated with an organization.
+     * @returns {string} error if failed, all processes if
+     */
+    async getProcessesList() {
+        return this.instance.get("_apis/process/processes",
+            {
+                params: { "api-version": "6.0"}
+            }).then (res => {
+            return res.data;
+        }).catch(err => err);
+    }
+
+    /**
+     * Get project properties. Helpful for retrieving process ID.
+     * @param {string} project Project ID or name
+     * @returns {string} error if failed, all project properties if successful
+     */
+    async getProjectProperties(project) {
+        return this.instance.get(`_apis/projects/${project}/properties`,
+            {
+                params: {
+                    "api-version": "6.0-preview.1"
+                },
+            }).then (res => {
+            return res.data;
+        }).catch(err => err);
     }
 
     /**
