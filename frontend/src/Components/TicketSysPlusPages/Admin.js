@@ -1,7 +1,6 @@
 import React from "react";
 import NavBarHeader from "../NavBarHeader";
 import AdminJson from "../AdminUser/AdminJsonDisplay";
-import AdminPrio from "../AdminUser/AdminTicketPrioDisplay";
 import {Card, Col, Container, Row} from "react-bootstrap";
 
 import { MsalAuthenticationTemplate } from "@azure/msal-react";
@@ -28,7 +27,9 @@ function Admin() {
 
             <Row>
                 <Col>
-                    <Responders/>
+                    <Row className={"m-2 justify-content-center"}>
+                        <Responders/>
+                    </Row>
                 </Col>
             </Row>
             <Row>
