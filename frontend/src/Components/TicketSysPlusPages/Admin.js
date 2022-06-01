@@ -1,7 +1,6 @@
 import React from "react";
 import NavBarHeader from "../NavBarHeader";
 import AdminJson from "../AdminUser/AdminJsonDisplay";
-import AdminPrio from "../AdminUser/AdminTicketPrioDisplay";
 import {Card, Col, Container, Row} from "react-bootstrap";
 
 import { MsalAuthenticationTemplate } from "@azure/msal-react";
@@ -10,6 +9,7 @@ import { loginRequest } from "../../authConfig";
 
 import { ErrorComponent } from "./ErrorComponent";
 import { Loading } from "./Loading";
+import Responders from "../AdminUser/TicketRespondersDisplay";
 
 function Admin() {
     const authRequest = {
@@ -27,7 +27,9 @@ function Admin() {
 
             <Row>
                 <Col>
-
+                    <Row className={"m-2 justify-content-center"}>
+                        <Responders/>
+                    </Row>
                 </Col>
             </Row>
             <Row>

@@ -1,21 +1,37 @@
-import React, { useInsertionEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import axios from "axios";
 import fetchData from "../APIActions/FetchData";
 import NewJsonFetched from "../TicketSysPlusPages/NewJsonFetched";
 import { Modal, Button, Collapse } from "react-bootstrap";
 
+
 const fetchDataPromise = fetchData("ticketInfo");
 
 function AdminJson() {
-    const dataDetails = fetchDataPromise.read();
-    const json = JSON.stringify(dataDetails, null, 3);
+    //const dataDetails = fetchDataPromise.read();
+    //const json = JSON.stringify(dataDetails, null, 3);
+    const [json, setJson] = useState("");
     const [change, setChange] = useState(true);
     const [data, setData] = useState("");
     const [show, setShow] = useState(false);
 
-
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+    useEffect(() => {
+        run();
+    }, []);
+
+    function run(){
+        axios.get("http://localhost:4001/jsons")
+            .then((res) => {
+                const dbJson = res.data[0].body;
+                document.getElementById("jsonText").value = dbJson;
+                setJson(dbJson);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
 
     function validate(jsonToValidate) {
         let isValid = false;
@@ -84,7 +100,6 @@ function AdminJson() {
 
                 <div className="col-7 text-center border border-3 border-info p-3 bg-white shadow-lg mb-5">
                     <textarea onChange={() => verify()} style={{ height: "400px" }} name="ticketData" id={"jsonText"} className="text-wrap text-break w-100">
-                        {json}
                     </textarea>
                 </div>
             </div>
