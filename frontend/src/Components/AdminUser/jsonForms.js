@@ -3,7 +3,7 @@ import React, { createRef, useState } from "react";
 import axios from "axios";
 import { Button, Form } from "react-bootstrap";
 
-function JsonForm({jsonModal}) {
+function JsonForm({ jsonModal }) {
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
 
@@ -45,7 +45,7 @@ function JsonForm({jsonModal}) {
                         <div className="row mb-2">
                             <Form.Group className="col 6">
                                 <Form.Label htmlFor="jsonBody">JSON body</Form.Label>
-                                <Form.Control as="textarea" type="text" value={jsonModal} ref={inputBody} readOnly={true} />
+                                <Form.Control as="textarea" rows={14} type="text" value={jsonModal} ref={inputBody} readOnly={true} />
                                 <Form.Text id="jsonBody" name="jsonBody" />
                             </Form.Group>
                         </div>
