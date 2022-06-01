@@ -5,7 +5,7 @@ import {Button, Col, Container, Form, Row} from "react-bootstrap";
 import ConditionalForms from "./ConditionalForms";
 import {azureConnection} from "../../index";
 import {checkAndRemove} from "../../AppPages";
-import parse from "html-react-parser";
+import {ConditionalExample} from "./DataSourceConds";
 
 //TODO: make file uploads real
 function TicketForm(props) {
@@ -262,7 +262,8 @@ function TicketForm(props) {
                         {/*CONDITIONAL FORMS*/}
                         {props.editTicket !== true?
                             <Row>
-                                {anotherDataSource.map((thisSource, index) => ( <ConditionalForms key={index} /> ))}
+                                {/*TODO: set this to input JSON that we're pulling from database*/}
+                                {anotherDataSource.map((thisSource, index) => ( <ConditionalForms key={index} jsonObj={ConditionalExample} /> ))}
 
                                 <Col xs={4}>
                                     <Button onClick={moreDataSources} className={"btn-sm mt-2"}>
