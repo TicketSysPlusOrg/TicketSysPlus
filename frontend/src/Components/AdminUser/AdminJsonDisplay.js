@@ -82,7 +82,7 @@ function AdminJson() {
                 </div>
 
 
-                <div className="col-7 text-center border border-3 border-info p-3 bg-white shadow-lg">
+                <div className="col-7 text-center border border-3 border-info p-3 bg-white shadow-lg mb-5">
                     <textarea onChange={() => verify()} style={{ height: "400px" }} name="ticketData" id={"jsonText"} className="text-wrap text-break w-100">
                         {json}
                     </textarea>
@@ -90,10 +90,10 @@ function AdminJson() {
             </div>
             <Modal show={show} onHide={handleClose} className="row">
                 <div className="col-12">
-                    <Modal.Dialog className="shadow-lg">
+                    <Modal.Dialog className="shadow-lg my-0">
 
                         <Modal.Header closeButton>
-                            <Modal.Title>Save JSON</Modal.Title>
+                            <Modal.Title className="text-success">Save JSON</Modal.Title>
                         </Modal.Header>
 
                         <Modal.Body>
