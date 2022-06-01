@@ -22,7 +22,7 @@ function AdminJson() {
     }, []);
 
     function run(){
-        axios.get("http://backend.granny.dev/jsons")
+        axios.get("https://backend.granny.dev/jsons")
             .then((res) => {
                 const dbJson = res.data[0].body;
                 document.getElementById("jsonText").value = dbJson;
