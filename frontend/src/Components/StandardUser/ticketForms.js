@@ -260,15 +260,18 @@ function TicketForm(props) {
                         </Row>
 
                         {/*CONDITIONAL FORMS*/}
-                        <Row>
-                            {anotherDataSource.map((thisSource, index) => ( <ConditionalForms key={index} /> ))}
+                        {props.editTicket !== true?
+                            <Row>
+                                {anotherDataSource.map((thisSource, index) => ( <ConditionalForms key={index} /> ))}
 
-                            <Col xs={4}>
-                                <Button onClick={moreDataSources} className={"btn-sm mt-2"}>
-                                    Choose Another Source
-                                </Button>
-                            </Col>
-                        </Row>
+                                <Col xs={4}>
+                                    <Button onClick={moreDataSources} className={"btn-sm mt-2"}>
+                                        Choose Another Source
+                                    </Button>
+                                </Col>
+                            </Row>
+                            : null
+                        }
 
                         {/*SUBMIT BUTTONS*/}
                         {/*TODO: make button stay 'submit changes' if in 'edit ticket' version, apply put method to do so.*/}
