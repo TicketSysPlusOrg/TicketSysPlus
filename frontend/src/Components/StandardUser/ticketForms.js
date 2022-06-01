@@ -58,7 +58,7 @@ function TicketForm(props) {
 
             /*post to mongodb*/
             axios
-                .post("http://localhost:4001/tix", {
+                .post("http://backend.granny.dev/tix", {
                     title: ticketTitle,
                     description: ticketDesc,
                     due_date: tickDate,
