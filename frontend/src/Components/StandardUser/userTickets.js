@@ -161,7 +161,7 @@ function TSPlist(props) {
             <Modal show={show} onHide={handleClose} >
                 <Modal.Dialog className="shadow-lg mx-3">
                     <Modal.Body>
-                        <SingleTicket ticketData={ticketInfo} />
+                        <SingleTicket ticketData={ticketInfo} clickClose={handleClose}/>
                     </Modal.Body>
                 </Modal.Dialog>
             </Modal>

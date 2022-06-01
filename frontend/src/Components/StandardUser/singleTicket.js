@@ -8,12 +8,6 @@ import TicketForm from "./ticketForms";
 function singleTicketView(props) {
     const [thisTicketInfo, setThisTicketInfo] = useState(null);
     const [allTicketInfo, setAllTicketInfo] = useState(null);
-    const [show, setShow] = useState(false);
-    const handleClose = () => setShow(false);
-
-    function updateTicket() {
-        return null;
-    }
 
     useEffect(() => {
         setThisTicketInfo(props.ticketData);
@@ -57,7 +51,7 @@ function singleTicketView(props) {
                         <Col>
                             {/*TODO: fields for project/teams, field for ticket type (task, epic, issue*/}
                             {/*TODO: validation  for all fields*/}
-                            <Form className="col s12" onSubmit={updateTicket}>
+                            <Form className="col s12">
 
                                 {/*ticket title and work type*/}
                                 <Row className="mb-4">
@@ -101,7 +95,7 @@ function singleTicketView(props) {
                                     Edit Ticket
                                 </Button>
 
-                                <Button onClick={handleClose} type={"submit"} name={"action"} className={"float-end mt-2"}>
+                                <Button onClick={props.clickClose} type={"button"} name={"action"} className={"float-end mt-2"}>
                                     Close
                                 </Button>
                             </Form>
