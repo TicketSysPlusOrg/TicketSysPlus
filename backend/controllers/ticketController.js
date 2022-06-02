@@ -72,7 +72,3 @@ export const deleteTicket = (req, res) => {
 };
 
 //CHANGE TICKET PRIORITY 
-
-
-
-
