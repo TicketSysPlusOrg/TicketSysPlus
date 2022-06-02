@@ -40,9 +40,10 @@ function AdminJson() {
             const tempJSON = JSON.parse(jsonToValidate);
             isValid = true;
             document.getElementById("error").innerHTML = " ";
-        } catch (e) {
+        } catch (error) {
             console.log("Invalid JSON Format");
-            document.getElementById("error").innerHTML = "Invalid JSON Format";
+            console.log();
+            document.getElementById("error").innerHTML = error.message;
         }
         return isValid;
     }
