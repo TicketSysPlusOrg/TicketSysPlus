@@ -10,10 +10,6 @@ function StandardUser(props) {
     const [projectList, setPrjList] = useState(null);
     const [teamVal, setTeamVal] = useState(null);
 
-    // function teamValChange(newSortingTeam) {
-    //     setTeamVal(newSortingTeam);
-    // }
-
     /*when team val change is called and teamval is altered, run azure calls, which should (once we have a method to do so) render tickets based on teams (or diff projects once we get that far)*/
     useEffect(() => {
         initRun();
@@ -41,6 +37,7 @@ function StandardUser(props) {
                 <Col xs={5} sm={4} md={3} id="sidebar">
                     <h6 className={"text-center mt-3"}><u>Select a Project</u></h6>
                     <Container className="d-flex flex-column justify-content-center ">
+
                         {projectList ?
                             projectList.value.map((thisPrj, index) => (
                                 <div key={index} onClick={() => prjTickets(thisPrj.id)} className={"projectSelect"}>
@@ -57,7 +54,6 @@ function StandardUser(props) {
                                         </Card.Body>
                                     </Card>
                                 </div>
-
                             ))
                             : null}
                     </Container>

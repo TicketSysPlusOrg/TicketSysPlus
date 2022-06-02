@@ -9,11 +9,11 @@ import parse from "html-react-parser";
 
 //TODO: make file uploads real
 function TicketForm(props) {
+    /*show and close vars for modal*/
     const [show, setShow] = useState(false);
-    const [prjID, setprjID] = useState(null);
-
     const handleClose = () => setShow(false);
 
+    let inputState = createRef();
     let inputTitle = createRef();
     let inputType = createRef();
     let inputDesc = createRef();
@@ -23,6 +23,8 @@ function TicketForm(props) {
     let inputAttachment = createRef();
     let divDesc = createRef();
 
+    /*prj ID state variable*/
+    const [prjID, setprjID] = useState(null);
     /*currently set up just to speak with MotorqProject board.*/
     useEffect(() => {
         (async () => {
@@ -31,15 +33,32 @@ function TicketForm(props) {
         })();
     }, []);
 
+    /*ticket states*/
+    const [tickStates, setTickStates] = useState(null);
+
+    useEffect(() => {
+        /*get all available ticket states*/
+        (async () => {
+            /*currently hardcoded for particular inherited process with custom states*/
+            const getProcesses = await azureConnection.getProcessesList();
+            /*console.log(getProcesses);*/
+
+            const getTickTypes = await azureConnection.getWorkItemTypes(getProcesses.value[4].id);
+            /*console.log(getTickTypes);*/
+
+            const allTickStates = await azureConnection.getWorkItemStates(getProcesses.value[4].id, getTickTypes.value[0].id);
+            setTickStates(allTickStates);
+        })();
+    }, []);
 
     async function submitTicket(SubmitEvent) {
         //TODO: stop reload of page but reload modal...? or could JUST close modal and reload the visible tickets
         /*SubmitEvent.preventDefault();*/
 
         //TODO: get system states for ticket creation and edit, make form in render, make devops method to get all possible states for dynamic generation
-        /*const ticketState = ???*/
+        const ticketState = stateVal;
         const ticketTitle = inputTitle.current.value;
-        const ticketType = inputType.current.value;
+        const ticketType = typeVal;
         const ticketDesc = inputDesc.current.value;
         const tickDate = inputDate.current.value;
         const tickPriority = inputPriority.current.value;
@@ -54,6 +73,7 @@ function TicketForm(props) {
             /*create new devops ticket*/
             const devOpsTickData = {"fields": {"System.State": "To Do", "System.Title": ticketTitle, "System.Description": descAndMentions,
                 "Microsoft.VSTS.Scheduling.DueDate": tickDate, "Microsoft.VSTS.Common.Priority": tickPriority, "System.WorkItemType": ticketType}};
+
             const createTicket = await azureConnection.createWorkItem(prjID, ticketType, devOpsTickData);
 
             /*post to mongodb*/
@@ -82,6 +102,11 @@ function TicketForm(props) {
             if(priorityVal !== null) {
                 ticketUpdates["Microsoft.VSTS.Common.Priority"] = priorityVal;
             }
+
+            if(stateVal !== props.ticketInfo.fields["System.State"]) {
+                ticketUpdates["System.State"] = stateVal;
+            }
+
             if(typeVal !== null) {
                 ticketUpdates["System.WorkItemType"] = typeVal;
             }
@@ -102,12 +127,22 @@ function TicketForm(props) {
         getEditTicketState(props.editTicket);
     }, []);
 
+    /*set initial states for forms in edit ticket view*/
     useEffect(() => {
         if(editTicket === true) {
+            console.log(props.ticketInfo);
+            console.log(inputState.current.selected);
+
             /*ticket title*/
             inputTitle.current.value = props.ticketInfo.fields["System.Title"];
+
             /*ticket type*/
             document.getElementById("tick" + props.ticketInfo.fields["System.WorkItemType"]).checked = true;
+
+            /*ticket state*/
+            document.getElementById("StateSelect").value = props.ticketInfo.fields["System.State"];
+
+
             /*description*/
             const divDescObjects = props.ticketInfo.fields["System.Description"];
             if(divDescObjects === undefined) {
@@ -117,6 +152,7 @@ function TicketForm(props) {
             } else {
                 divDesc.current.innerHTML += checkAndRemove(divDescObjects.props.children);
             }
+
             /*priority*/
             document.getElementById("tickPriority" + props.ticketInfo.fields["Microsoft.VSTS.Common.Priority"]).checked = true;
 
@@ -127,7 +163,6 @@ function TicketForm(props) {
             } else {
                 props.ticketInfo.fields = "";
             }
-
 
             //TODO: figure out how to fill mentions from comments section of DevOps. not a field I've seen in the work item.
             /*inputMentions.current.value = props.ticketInfo.fields["System.Mentions"];*/
@@ -142,9 +177,10 @@ function TicketForm(props) {
         setAnotherDataSource([...anotherDataSource, "dataSources"]);
     }
 
-    /*update typevals and priorityval onchange. overriding hard set from edit ticket data*/
+    /*update statevals, typevals, and priorityval onchange. overriding hard set from edit ticket data*/
     const [priorityVal, changePriorityVal] = useState(null);
     const [typeVal, changeTypeVal] = useState(null);
+    const [stateVal, changeStateVal] = useState(null);
 
     return (
         <>
@@ -190,6 +226,32 @@ function TicketForm(props) {
 
                             </Form.Group>
                         </Row>
+
+                        {/*TICKET STATE*/}
+                        {editTicket === true ?
+
+                            <Row className={"mb-2"}>
+                                <Form.Group className={"col s12"}>
+
+                                    <Form.Label className={"d-block fw-bold"}>Ticket State</Form.Label>
+
+                                    <div className={"d-flex justify-content-center"}>
+                                        <Form.Select id={"StateSelect"} className={"w-75"} ref={inputState} onChange={e => {changeStateVal(e.currentTarget.value); console.log(e.currentTarget.value);}}>
+                                            <option value={"SELECTONE"} >select an option...</option>
+                                            <option value={"To Do"}>To Do</option>
+                                            {tickStates !== null ?
+                                                tickStates.value.map(function (thisState, index) {
+                                                    return (
+                                                        <option key={index} id={thisState.name + "OPTION"}  value={thisState.name}>{thisState.name}</option> );
+                                                })
+                                                : null}
+                                        </Form.Select>
+                                    </div>
+
+                                </Form.Group>
+                            </Row>
+                            : null}
+
 
                         {/*DUE DATE*/}
                         <Row className={"mb-2"}>
