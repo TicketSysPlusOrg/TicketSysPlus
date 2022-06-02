@@ -155,10 +155,21 @@ function TicketForm(props) {
     }, [editTicket]);
 
     /*trigger more data source forms*/
-    const [anotherDataSource, setAnotherDataSource] = useState(["dataSources"]);
+    let [anotherDataSource, setAnotherDataSource] = useState([0]);
     function moreDataSources() {
-        setAnotherDataSource([...anotherDataSource, "dataSources"]);
+        setAnotherDataSource([...anotherDataSource, anotherDataSource.length]);
     }
+    function lessDataSources() {
+        if(anotherDataSource.length !== 1) {
+            let sourceArr = [...anotherDataSource];
+            sourceArr.pop();
+            setAnotherDataSource(sourceArr);
+        }
+    }
+
+    useEffect(() => {
+
+    }, [anotherDataSource]);
 
     /*update statevals, typevals, and priorityval onchange. overriding hard set from edit ticket data*/
     const [priorityVal, changePriorityVal] = useState(null);
@@ -187,7 +198,6 @@ function TicketForm(props) {
                                 <Form.Control type={"text"} placeholder={"Enter title"} ref={inputTitle} />
                                 <Form.Text id={"ticketTitle"} name={"ticketTitle"} />
                             </Form.Group>
-                            {/*TODO: make this mentions section autofill...? at least mention if we need to insert emails or what*/}
                         </Row>
 
                         {/*TICKET TYPE*/}
@@ -275,7 +285,7 @@ function TicketForm(props) {
                                 <>
                                     <Container>
                                         <div className={"form-label fw-bold"}>Ticket Description</div>
-                                        <div id={"contentEditDiv"} contentEditable={"true"} ref={divDesc} className={"form-control form"}></div>
+                                        <div id={"contentEditDiv"} ref={divDesc} className={"form-control form"}></div>
                                     </Container>
                                 </>
                                 : null}
@@ -287,7 +297,7 @@ function TicketForm(props) {
                         </Row>
 
                         {/*ATTACHMENTS*/}
-                        <Row className={"mb-2"}>
+                        <Row className={"mb-3"}>
                             {/*TODO: make this attachment form real*/}
                             <Form.Group className={"col s12"}>
                                 <Form.Label htmlFor={"tickAttachments"} className={"fw-bold"}>Attachments</Form.Label>
@@ -298,25 +308,38 @@ function TicketForm(props) {
                         {/*CONDITIONAL FORMS*/}
                         {props.editTicket !== true?
                             <Row>
-                                {anotherDataSource.map((thisSource, index) => ( <ConditionalForms key={index} /> ))}
+                                {anotherDataSource.map((thisSource, index) => (
+                                    <div key={index}>
+                                        <ConditionalForms />
+                                    </div>
+                                ))}
+                                <Row className={"justify-content-between"}>
+                                    <Col xs={6}>
+                                        {anotherDataSource.length !== 1 ?
+                                            <Button size={"sm"} onClick={lessDataSources} className={"mt-2 ms-3"}>
+                                                Remove Source
+                                            </Button>
+                                            : null}
+                                    </Col>
+                                    <Col xs={6}>
+                                        <Button size={"sm"} onClick={moreDataSources} className={"mt-2 float-end"}>
+                                            Add Another Source
+                                        </Button>
+                                    </Col>
+                                </Row>
 
-                                <Col xs={4}>
-                                    <Button onClick={moreDataSources} className={"btn-sm mt-2"}>
-                                        Choose Another Source
-                                    </Button>
-                                </Col>
                             </Row>
                             : null
                         }
 
                         {/*SUBMIT BUTTONS*/}
-                        {/*TODO: make button stay 'submit changes' if in 'edit ticket' version, apply put method to do so.*/}
+                        {/*TODO: make button say 'submit changes' if in 'edit ticket' version, apply put method to do so.*/}
                         {props.editTicket === true ?
                             <Button onClick={handleClose} type={"submit"} name={"action"} className={"float-end mt-2"}>
                                 Update
                             </Button>
                             :
-                            <Button onClick={handleClose} type={"submit"} name={"action"} className={"float-end mt-2"}>
+                            <Button onClick={handleClose} type={"submit"} name={"action"} className={"float-end mt-3"}>
                                 Submit
                             </Button>
                         }

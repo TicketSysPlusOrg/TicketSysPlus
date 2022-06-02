@@ -22,8 +22,6 @@ function TSPlist(props) {
         handleShow();
     }
 
-    const [ticketArray, setTickets] = useState([]);
-
     //regex remove html entities from string if not null, undefined, or empty string
     function checkAndRemoveNoFormat(stringInput) {
         if (stringInput === undefined || stringInput == null || stringInput.trim() === "") {
@@ -41,7 +39,6 @@ function TSPlist(props) {
         run();
     }, []);
 
-    //TODO: can I see if tickets related to project exist prior to running the getAllWorkItems function?
     //async calls to devops API
     async function run() {
 
@@ -73,13 +70,10 @@ function TSPlist(props) {
                         <Col xs={12} key={index}>
                             {/*TODO: double check that areapath will always be filled*/}
                             <div onClick={() => showTicketModal(devTix.fields["System.AreaPath"] + "|" + devTix.id)} className={"projectSelect"}>
-                                <Card className={"my-1 mt-1 mb-3"} >
+                                <Card className={"my-1"} >
                                     <Card.Body>
                                         <Card.Title
                                             className={"cardOneLine mb-2"}>{devTix ? devTix.fields["System.Title"] : null}</Card.Title>
-                                        <Card.Text className={"cardOneLine"}>
-                                            <u>Description</u>: {devTix ? checkAndRemoveNoFormat(devTix.fields["System.Description"]) : null}
-                                        </Card.Text>
                                         <Card.Text className={"cardOneLine"}>
                                             <u>Priority</u>: {devTix ? devTix.fields["Microsoft.VSTS.Common.Priority"] : null}
                                         </Card.Text>

@@ -58,7 +58,7 @@ function StandardUser(props) {
                             : null}
                     </Container>
                 </Col>
-                <Col xs={6} sm={7} md={8}>
+                <Col xs={8} sm={7} md={9}>
                     <Container>
                         <Row>
                             {teamVal ? <UserTickets projects={teamVal} key={teamVal}/> : null}
