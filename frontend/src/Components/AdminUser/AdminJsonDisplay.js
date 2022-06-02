@@ -42,7 +42,6 @@ function AdminJson() {
             document.getElementById("error").innerHTML = " ";
         } catch (error) {
             console.log("Invalid JSON Format");
-            console.log();
             document.getElementById("error").innerHTML = error.message;
         }
         return isValid;
