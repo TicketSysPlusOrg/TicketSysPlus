@@ -1,14 +1,13 @@
 // forms to fill to create a new ticket
 import React, {createRef, useEffect, useState} from "react";
-import axios from "axios";
 import {Button, Col, Container, Form, Row} from "react-bootstrap";
 import ConditionalForms from "./ConditionalForms";
 import {azureConnection} from "../../index";
 import {checkAndRemove} from "../../AppPages";
-import parse from "html-react-parser";
 
 //TODO: make file uploads real
 function TicketForm(props) {
+
     /*show and close vars for modal*/
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
@@ -25,6 +24,7 @@ function TicketForm(props) {
 
     /*prj ID state variable*/
     const [prjID, setprjID] = useState(null);
+
     /*currently set up just to speak with MotorqProject board.*/
     useEffect(() => {
         (async () => {
@@ -75,23 +75,6 @@ function TicketForm(props) {
                 "Microsoft.VSTS.Scheduling.DueDate": tickDate, "Microsoft.VSTS.Common.Priority": tickPriority, "System.WorkItemType": ticketType}};
 
             const createTicket = await azureConnection.createWorkItem(prjID, ticketType, devOpsTickData);
-
-            /*post to mongodb*/
-            axios
-                .post("http://localhost:4001/tix", {
-                    title: ticketTitle,
-                    description: ticketDesc,
-                    due_date: tickDate,
-                    priority: tickPriority,
-                    mentions: tickMentions,
-                    attachments: tickAttachments
-                })
-                .then((res) => {
-                    console.log(res);
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
         } else {
             let ticketUpdates = {};
 
@@ -209,21 +192,19 @@ function TicketForm(props) {
 
                         {/*TICKET TYPE*/}
                         <Row className={"mb-2"}>
+
                             <Form.Group className={"col s12"}>
                                 <Form.Label className={"d-block fw-bold"}>Ticket Type</Form.Label>
                                 {/*TODO: add the epic, issue, and task logos*/}
-                                <div className={"d-flex justify-content-center"}>
-                                    <Form.Label htmlFor={"tickEpic"} className={"ms-3"}>
-                                        Epic <Form.Check className={"ms-2"} inline name={"tickType"} id={"tickEpic"} ref={inputType} type={"radio"} onChange={() => changeTypeVal("Epic")} value={"Epic"} defaultChecked={null} />
-                                    </Form.Label>
-                                    <Form.Label htmlFor={"tickIssue"} className={"ms-3"}>
-                                        Issue <Form.Check className={"ms-2"} inline name={"tickType"} id={"tickIssue"} ref={inputType} type={"radio"} onChange={() => changeTypeVal("Issue")} value={"Issue"} defaultChecked={null} />
-                                    </Form.Label>
-                                    <Form.Label htmlFor={"tickTask"} className={"ms-3"}>
-                                        Task <Form.Check className={"ms-2"} inline name={"tickType"} id={"tickTask"} ref={inputType} type={"radio"} onChange={() => changeTypeVal("Task")} value={"Task"} defaultChecked={null} />
-                                    </Form.Label>
-                                </div>
-
+                                <Form.Label htmlFor={"tickEpic"} className={"ms-3"}>
+                                    Epic <Form.Check className={"ms-3"} inline name={"tickType"} id={"tickEpic"} ref={inputType} type={"radio"} onChange={() => changeTypeVal("Epic")} value={"Epic"} defaultChecked={null} />
+                                </Form.Label>
+                                <Form.Label htmlFor={"tickIssue"} className={"ms-3"}>
+                                    Issue <Form.Check className={"ms-3"} inline name={"tickType"} id={"tickIssue"} ref={inputType} type={"radio"} onChange={() => changeTypeVal("Issue")} value={"Issue"} defaultChecked={null} />
+                                </Form.Label>
+                                <Form.Label htmlFor={"tickTask"} className={"ms-3"}>
+                                    Task <Form.Check className={"ms-3"} inline name={"tickType"} id={"tickTask"} ref={inputType} type={"radio"} onChange={() => changeTypeVal("Task")} value={"Task"} defaultChecked={null} />
+                                </Form.Label>
                             </Form.Group>
                         </Row>
 
@@ -235,32 +216,26 @@ function TicketForm(props) {
 
                                     <Form.Label className={"d-block fw-bold"}>Ticket State</Form.Label>
 
-                                    <div className={"d-flex justify-content-center"}>
-                                        <Form.Select id={"StateSelect"} className={"w-75"} ref={inputState} onChange={e => {changeStateVal(e.currentTarget.value); console.log(e.currentTarget.value);}}>
-                                            <option value={"SELECTONE"} >select an option...</option>
-                                            <option value={"To Do"}>To Do</option>
-                                            {tickStates !== null ?
-                                                tickStates.value.map(function (thisState, index) {
-                                                    return (
-                                                        <option key={index} id={thisState.name + "OPTION"}  value={thisState.name}>{thisState.name}</option> );
-                                                })
-                                                : null}
-                                        </Form.Select>
-                                    </div>
+                                    <Form.Select id={"StateSelect"} ref={inputState} onChange={e => {changeStateVal(e.currentTarget.value); console.log(e.currentTarget.value);}}>
+                                        <option value={"SELECTONE"} >select an option...</option>
+                                        <option value={"To Do"}>To Do</option>
+                                        {tickStates !== null ?
+                                            tickStates.value.map(function (thisState, index) {
+                                                return (
+                                                    <option key={index} id={thisState.name + "OPTION"}  value={thisState.name}>{thisState.name}</option> );
+                                            })
+                                            : null}
+                                    </Form.Select>
 
                                 </Form.Group>
                             </Row>
                             : null}
 
-
                         {/*DUE DATE*/}
                         <Row className={"mb-2"}>
                             <Form.Group className={"col s12"}>
                                 <Form.Label  htmlFor={"tickDate"} className={"fw-bold d-inline-block"}>Due Date</Form.Label>
-                                <div className={"d-flex justify-content-center"}>
-                                    <Form.Control className={"w-75"} id={"tickDate"} name={"tickDate"} ref={inputDate} type={"date"} />
-                                </div>
-
+                                <Form.Control id={"tickDate"} name={"tickDate"} ref={inputDate} type={"date"} />
                             </Form.Group>
                         </Row>
 
@@ -268,8 +243,8 @@ function TicketForm(props) {
                         <Row className={"mb-2"}>
                             <Form.Group className={"col s12"}>
                                 <Form.Label className={"fw-bold"}>Priority</Form.Label>
-                                <div className={"d-flex justify-content-center"}>
-                                    <Form.Label htmlFor={"tickPriority1"} className={"mx-2"}>
+                                <div className={"d-flex justify-content-start"}>
+                                    <Form.Label htmlFor={"tickPriority1"} className={"ms-4 me-2"}>
                                         1 <Form.Check className={"ms-2"} inline name={"tickPriority"} id={"tickPriority1"} ref={inputPriority} type={"radio"} onChange={() => changePriorityVal(1)} value={1} defaultChecked={null} />
                                     </Form.Label>
                                     <Form.Label htmlFor={"tickPriority2"} className={"mx-2"}>
@@ -293,7 +268,6 @@ function TicketForm(props) {
                                 <Form.Text id={"tickMentions"} name={"tickMentions"} />
                             </Form.Group>
                         </Row>
-
 
                         {/*DESCRIPTION*/}
                         <Row className={"mb-2"}>
