@@ -55,8 +55,6 @@ function TicketForm(props) {
         //TODO: stop reload of page but reload modal...? or could JUST close modal and reload the visible tickets
         /*SubmitEvent.preventDefault();*/
 
-        //TODO: get system states for ticket creation and edit, make form in render, make devops method to get all possible states for dynamic generation
-        const ticketState = stateVal;
         const ticketTitle = inputTitle.current.value;
         const ticketType = typeVal;
         const ticketDesc = inputDesc.current.value;
@@ -124,7 +122,6 @@ function TicketForm(props) {
 
             /*ticket state*/
             document.getElementById("StateSelect").value = props.ticketInfo.fields["System.State"];
-
 
             /*description*/
             const divDescObjects = props.ticketInfo.fields["System.Description"];
