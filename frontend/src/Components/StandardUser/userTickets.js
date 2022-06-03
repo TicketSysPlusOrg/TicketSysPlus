@@ -1,12 +1,14 @@
 //list of all the current standard user's tickets
 import React, {useEffect, useState} from "react";
-import {Button, Card, Col, Modal} from "react-bootstrap";
+import {Card, Col, Modal} from "react-bootstrap";
 import {azureConnection} from "../../index";
 import {loginRequest} from "../../authConfig";
 import SingleTicket from "./singleTicket";
+import { AiFillEye } from "react-icons/ai";
+import { FaPencilAlt } from "react-icons/fa";
+import { TiArrowForwardOutline } from "react-icons/ti";
 
-//TODO: so far, the returned button values are useless due to no proper means of displaying only team-associated tickets
-function TSPlist(props) {
+function UserTickets(props) {
     const authRequest = {
         ...loginRequest
     };
@@ -20,14 +22,6 @@ function TSPlist(props) {
     function showTicketModal(ticketData){
         setTicketInfo(ticketData.split("|"));
         handleShow();
-    }
-
-    //regex remove html entities from string if not null, undefined, or empty string
-    function checkAndRemoveNoFormat(stringInput) {
-        if (stringInput === undefined || stringInput == null || stringInput.trim() === "") {
-            return stringInput;
-        }
-        return stringInput.replace(/(<([^>]+)>)|(&nbsp;)/gi, "");
     }
 
     /*devops api data retrieval*/
@@ -47,7 +41,7 @@ function TSPlist(props) {
         setActiveProj(getProj.name);
 
         const allWorkItems = await azureConnection.getPrjWorkItems(getProj.name, getProj.defaultTeam.id);
-        console.log(allWorkItems);
+
         if(allWorkItems.workItems !== undefined) {
             const listOfIds = allWorkItems.workItems.map(workItem => workItem.id);
             const ticketBatch = await azureConnection.getWorkItems(props.projects[0], listOfIds);
@@ -69,18 +63,33 @@ function TSPlist(props) {
                     devOpsTix.value.map((devTix, index) => (
                         <Col xs={12} key={index}>
                             {/*TODO: double check that areapath will always be filled*/}
-                            <div onClick={() => showTicketModal(devTix.fields["System.AreaPath"] + "|" + devTix.id)} className={"projectSelect"}>
+                            <div className={"projectSelect"}>
                                 <Card className={"my-1"} >
-                                    <Card.Body>
-                                        <Card.Title
-                                            className={"cardOneLine mb-2"}>{devTix ? devTix.fields["System.Title"] : null}</Card.Title>
-                                        <Card.Text className={"cardOneLine"}>
-                                            <u>Priority</u>: {devTix ? devTix.fields["Microsoft.VSTS.Common.Priority"] : null}
-                                        </Card.Text>
-                                        <Card.Text className={"cardOneLine"}>
-                                            {/*TODO: remove the extra ternary check for no due date present once we require due date for ticket creation*/}
-                                            <u>Due Date</u>: {devTix ? (devTix.fields["Microsoft.VSTS.Scheduling.DueDate"] ? devTix.fields["Microsoft.VSTS.Scheduling.DueDate"].slice(0, 10) : null) : null}
-                                        </Card.Text>
+                                    <Card.Body className={"row"}>
+                                        <Col xs={11}>
+                                            <Card.Title className={"cardOneLine "}>{devTix.fields["System.Title"]}</Card.Title>
+                                            <Card.Text className={"mx-3 d-inline-block"}><u>ID</u>: {devTix.id}</Card.Text>
+                                            <Card.Text  className={"mx-3 d-inline-block"}>
+                                                <u>Priority</u>: {devTix.fields["Microsoft.VSTS.Common.Priority"]}
+                                            </Card.Text>
+                                            <Card.Text  className={"mx-3 d-inline-block"}>
+                                                <u>State</u>: {devTix.fields["System.State"]}
+                                            </Card.Text>
+                                            <Card.Text  className={"mx-3 d-inline-block"}>
+                                                {/*TODO: remove the extra ternary check for no due date present once we require due date for ticket creation*/}
+                                                <u>Due Date</u>: {devTix ? (devTix.fields["Microsoft.VSTS.Scheduling.DueDate"] ? devTix.fields["Microsoft.VSTS.Scheduling.DueDate"].slice(0, 10) : null) : null}
+                                            </Card.Text>
+                                            <Card.Text  className={"mx-3 d-inline-block"}>
+                                                <u>Assigned To</u>: {devTix.fields["System.AssignedTo"]}
+                                            </Card.Text>
+                                        </Col>
+                                        <Col xs={1} className={"d-flex flex-column-reverse"}>
+                                            <a onClick={() => showTicketModal(devTix.fields["System.AreaPath"] + "|" + devTix.id)}><AiFillEye size={"2rem"} /></a>
+                                            {/*<a><FaPencilAlt size={"2rem"}/></a>*/}
+                                            <br/>
+                                            <a href={`https://dev.azure.com/KrokhalevPavel/MotorQ%20Project/_workitems/edit/${devTix.id}`}><TiArrowForwardOutline size={"2rem"}/></a>
+                                        </Col>
+
                                     </Card.Body>
                                 </Card>
                             </div>
@@ -103,4 +112,4 @@ function TSPlist(props) {
     );
 }
 
-export default TSPlist;
+export default UserTickets;
