@@ -7,6 +7,7 @@ import SingleTicket from "./singleTicket";
 import { AiFillEye } from "react-icons/ai";
 import { FaPencilAlt } from "react-icons/fa";
 import { TiArrowForwardOutline } from "react-icons/ti";
+import TicketForm from "./ticketForms";
 
 function UserTickets(props) {
     const authRequest = {
@@ -52,14 +53,16 @@ function UserTickets(props) {
         }
     }
 
+    /*get only name from username + email string*/
     function getNameBeforeEmail(thisString) {
         if(thisString !== undefined) {
             let findName = thisString;
-            console.log(findName);
-
             return findName.substring(0, findName.indexOf("<"));
         }
     }
+
+    const [renderEdit, setRenderEdit] = useState(null);
+    const [allTicketInfo, setAllTicketInfo] = useState(null);
 
     return (
         <>
@@ -102,7 +105,7 @@ function UserTickets(props) {
                                     </Col>
                                     <Col xs={1} className={"align-self-center d-flex flex-row-reverse"}>
                                         <a href={`https://dev.azure.com/KrokhalevPavel/MotorQ%20Project/_workitems/edit/${devTix.id}`} rel={"noreferrer"} target={"_blank"} ><TiArrowForwardOutline size={"1.5rem"}/></a>
-                                        <a className={"mx-1"}><FaPencilAlt size={"1.5rem"}/></a>
+                                        <a className={"mx-1"} onClick={() => {setRenderEdit(true); setAllTicketInfo(devTix); showTicketModal(devTix.fields["System.AreaPath"] + "|" + devTix.id);}}><FaPencilAlt size={"1.5rem"}/></a>
                                     </Col>
                                 </Container>
                             </div>
@@ -117,10 +120,16 @@ function UserTickets(props) {
             <Modal show={show} onHide={handleClose} >
                 <Modal.Dialog className="shadow-lg mx-3">
                     <Modal.Body>
-                        <SingleTicket ticketData={ticketInfo} clickClose={handleClose}/>
+                        {renderEdit === true ?
+                            <TicketForm editTicket={true} ticketInfo={allTicketInfo}  />
+                            :
+                            <SingleTicket ticketData={ticketInfo} clickClose={handleClose} renderTicket={renderEdit} ticketInfo={allTicketInfo}/>
+                        }
                     </Modal.Body>
                 </Modal.Dialog>
             </Modal>
+
+
         </>
     );
 }
