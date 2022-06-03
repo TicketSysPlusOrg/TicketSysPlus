@@ -104,7 +104,7 @@ function singleTicketView(props) {
                     : <Container>Loading Ticket Info...</Container>
                 : null}
 
-            {renderEdit ? <TicketForm editTicket={true} ticketInfo={allTicketInfo}  /> : null}
+            {renderEdit === true ? <TicketForm editTicket={true} ticketInfo={allTicketInfo}  /> : null}
         </>
     );
 }
