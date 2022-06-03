@@ -27,14 +27,12 @@ function Admin() {
 
             <Row>
                 <Col>
+                    <AdminJson />
+                </Col>
+                <Col xs={3} id="sidebar">
                     <Row className={"m-2 justify-content-center"}>
                         <Responders/>
                     </Row>
-                </Col>
-            </Row>
-            <Row>
-                <Col>
-                    <AdminJson />
                 </Col>
             </Row>
 

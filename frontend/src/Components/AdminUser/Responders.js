@@ -1,46 +1,83 @@
 import React, {useEffect, useState} from "react";
-import {Card, Col, Row} from "react-bootstrap";
+import {Card, Col, Dropdown, Row} from "react-bootstrap";
 import {azureConnection} from "../../index";
+import axios from "axios";
 
 function Responders() {
     /*devops api data retrieval*/
     const [responders, setResponders] = useState(null);
-
-    const [noResponders, setNoResponders] = useState(false);
-    const [bypass, setBypass] = useState(true);
+    const [card, setCard] = useState(null);
 
     useEffect(() => {
         run();
+    }, []);
+    useEffect(() => {
+        loadResponders();
     }, []);
 
     async function run() {
         const projects = await azureConnection.getProjects();
         const membersObject = await azureConnection.getAllTeamMembers(projects.value[1].id);
 
-
-        const member = membersObject.value.map(member => ({name: member.identity.displayName, icon: member.identity.imageUrl, email: member.identity.uniqueName}));
         setResponders(membersObject);
     }
 
+    function APIDropDownToDB(Image, Name, Email){
+        axios.post("http://localhost:4001/responders", {
+            image: Image,
+            name: Name,
+            email: Email
+        })
+            .then((res) => {
+                console.log(res);
+                loadResponders();
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
 
-    console.log(responders);
+    function loadResponders(){
+        axios.get("http://localhost:4001/responders")
+            .then((res) => {
+                console.log(res.data);
+                setCard(res.data);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+    //console.log(responders);
     return (
         <>
 
             <h4 className={"mt-4 text-center"}>On-Call Responders</h4>
 
+            <Dropdown className="d-inline mx-2" autoClose="outside">
+                <Dropdown.Toggle id="dropdown-autoclose-outside">
+                    On-Call Responders
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                    {responders ?
+                        responders.value.map((responder, index) => (
+                            <Dropdown.Item key={index} onClick={() => APIDropDownToDB(
+                                responder.identity.imageUrl, responder.identity.displayName, responder.identity.uniqueName
+                            )}>{responder ? responder.identity.displayName : null}</Dropdown.Item>
+                        ))
+                        : null
+                    }
+                </Dropdown.Menu>
+            </Dropdown>
 
-            {responders ?
-                responders.value.map((responder, index) => (
-                    <Col key={index} className={"col-4"} style={{ width: "20%" }}>
-                        <Card style={{ width: "100%" }} key={index}>
-                            <Card.Body>
-                                <Card.Img variant="top" src={responder.identity.imageUrl} style={{width: "fit-content", borderRadius: 60/ 2}}/>
+            {card ?
+                card.map((card, index) => (
+                    <Col key={index} className={"col-12 mb-1"}>
+                        <Card key={index}>
+                            <Card.Body className={"text-center"}>
+                                <Card.Text className={"text-end"}><button style={{backgroundColor: "white", border: "none", color: "grey"}}>x</button></Card.Text>
+                                <Card.Img variant="top" src={card.image} style={{width: "fit-content", borderRadius: 60/ 2}}/>
                                 <Card.Text>
-                                    {responder ? responder.identity.displayName : null}
-                                </Card.Text>
-                                <Card.Text>
-                                    {responder ? responder.identity.uniqueName : null}
+                                    {card ? card.name : null}
                                 </Card.Text>
                             </Card.Body>
                         </Card>
