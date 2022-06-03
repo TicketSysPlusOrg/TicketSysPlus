@@ -50,7 +50,7 @@ function Responders() {
 
     function deleteResponder(id){
         console.log(id);
-        axios.delete("http://localhost:4001/responders", {"id": id})
+        axios.delete("http://localhost:4001/responders", {data: {"id" : id}})
             .then((res) => {
                 console.log(res);
                 loadResponders();
