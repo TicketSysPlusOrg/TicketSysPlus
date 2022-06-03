@@ -1,8 +1,9 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import fetchData from "../APIActions/FetchData";
 import NewJsonFetched from "../TicketSysPlusPages/NewJsonFetched";
 import { Modal, Button, Collapse } from "react-bootstrap";
+import codeMirror from "./codeMirror";
 
 
 const fetchDataPromise = fetchData("ticketInfo");
@@ -21,7 +22,7 @@ function AdminJson() {
         run();
     }, []);
 
-    function run(){
+    function run() {
         axios.get("http://localhost:4001/jsons")
             .then((res) => {
                 const dbJson = res.data[0].body;
@@ -103,6 +104,12 @@ function AdminJson() {
                     </textarea>
                 </div>
             </div>
+
+            <div className="container">
+                <p>code mirror below...</p>
+                <codeMirror />
+            </div>
+
             <Modal show={show} onHide={handleClose} className="row">
                 <div className="col-12">
                     <Modal.Dialog className="shadow-lg my-0">

@@ -17,5 +17,9 @@
   "bugs": {
     "url": "https://github.com/conorep/TicketSysPlus/issues"
   },
-  "homepage": "https://github.com/conorep/TicketSysPlus#readme"
+  "homepage": "https://github.com/conorep/TicketSysPlus#readme",
+  "dependencies": {
+    "@codemirror/lang-json": "^0.20.0",
+    "@uiw/react-codemirror": "^4.7.0"
+  }
 }

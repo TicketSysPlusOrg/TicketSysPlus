@@ -1,6 +1,6 @@
-import React, {createRef, useCallback, useEffect, useState} from "react";
+import React, { createRef, useCallback, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import {Navbar, NavbarBrand, Nav, Offcanvas} from "react-bootstrap";
+import { Navbar, NavbarBrand, Nav, Offcanvas, Container } from "react-bootstrap";
 
 import NavBarButtons from "./NavBarButtons";
 
@@ -15,8 +15,7 @@ function NavBarHeader(props) {
     const breakpoint = 768;
 
     useEffect(() => {
-        if(width < breakpoint)
-        {
+        if (width < breakpoint) {
             setVertOrNot("mt-md-2 btn-group-vertical");
             setVertSpace("mt-3");
         } else {
@@ -32,17 +31,18 @@ function NavBarHeader(props) {
 
     return (
         <>
-            <Navbar  sticky="top" expand="md" bg="light" variant="light" className="shadow ">
+            <Navbar sticky="top" expand="md" bg="light" variant="light" className="shadow p-0 m-0">
+
                 <NavbarBrand className="mx-4 mt-1">
-                    <a className="navbar-brand ms-3"  href={window.location.origin} onClick={navigateHome}>
+                    <a className="navbar-brand ms-3" href={window.location.origin} onClick={navigateHome}>
                         {/*//TODO: replace with better quality motorq logo*/}
                         <img id="motorqLogo" src="/motorqLogo.png" alt="Orange Motorq Logo" className="img-fluid pe-2" />
                         <p className="ms-5" id="ts-color"><strong>TicketSystem+</strong></p>
                     </a>
                 </NavbarBrand>
-                <Navbar.Toggle aria-controls={"offcanvasNavbar-expand-tickets"}  />
+                <Navbar.Toggle aria-controls={"offcanvasNavbar-expand-tickets"} />
 
-                <Navbar.Offcanvas  ref={classRef}  id={"offcanvasNavbar-expand-tickets"} aria-labelledby={"offcanvasNavbarLabel-expand-tickets"} placement="end" className={" justify-content-end "} >
+                <Navbar.Offcanvas ref={classRef} id={"offcanvasNavbar-expand-tickets"} aria-labelledby={"offcanvasNavbarLabel-expand-tickets"} placement="end" className={" justify-content-end "} >
                     <Offcanvas.Header closeButton />
                     <Offcanvas.Body>
                         <Nav className="me-2 ms-auto">

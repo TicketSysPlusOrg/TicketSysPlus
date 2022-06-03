@@ -24,6 +24,7 @@
     background-color: white;
     border-right: 3px solid rgba(184, 134, 11, 0.3);
 }
+
 #sidebar-right {
     min-height: 100vh;
     background-color: white;
@@ -35,7 +36,8 @@
     border-width: 0.2rem;
 }
 
-.projectSelect .card:hover, .projectSelect .card:focus {
+.projectSelect .card:hover,
+.projectSelect .card:focus {
     border-color: rgb(68, 179, 183);
 }
 
@@ -46,14 +48,14 @@
 /*override for contenteditdiv. grows with more text, no scrollbar*/
 .bootstrapOverride #contentEditDiv {
     min-height: 5rem;
-    overflow:auto;
+    overflow: auto;
 }
 
 /*style overrides for create ticket button*/
 .bootstrapOverride .makeTicket {
-    border-radius: 25px;
-    border: 4px double #ec7a6f;
-    background-color: rgb(252,120,54);
+    border-radius: 5px;
+    border: 2px double #ec7a6f;
+    background-color: rgb(252, 120, 54);
     color: white;
 }
 
@@ -61,17 +63,19 @@
     background-color: rgb(232, 99, 35);
 }
 
-.bootstrapOverride .makeTicket:active, .bootstrapOverride .makeTicket:focus {
+.bootstrapOverride .makeTicket:active,
+.bootstrapOverride .makeTicket:focus {
     background-color: rgb(245, 98, 28);
     border-color: orange;
 }
 
 /*override colors for user info button*/
 .bootstrapOverride #userBtn {
-    background-color: rgb(252,120,54);
+    background-color: rgb(252, 120, 54);
     border: rgb(255, 89, 0);
     color: white;
 }
+
 .bootstrapOverride #userBtn:hover {
     background-color: rgb(232, 99, 35);
 }
@@ -95,15 +99,16 @@
 }
 
 body {
-    background-image: linear-gradient(to right, white, #ffe6d9);
+    background-color: #e7ecf1 !important;
+    /*background-image: linear-gradient(to right, white, #ffe6d9);*/
 }
 
 li:hover {
     background-color: #b7e7e7;
 }
 
-input[type=radio]{
-    transform:scale(1.5);
+input[type=radio] {
+    transform: scale(1.5);
 }
 
 @media only screen and (max-width: 768px) {
