@@ -47,6 +47,17 @@ function Responders() {
                 console.log(err);
             });
     }
+
+    function deleteResponder(id){
+        axios.delete("http://localhost:4001/responders", {"id": id})
+            .then((res) => {
+                console.log(res);
+                loadResponders();
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
     //console.log(responders);
     return (
         <>
@@ -74,7 +85,7 @@ function Responders() {
                     <Col key={index} className={"col-12 mb-1"}>
                         <Card key={index}>
                             <Card.Body className={"text-center"}>
-                                <Card.Text className={"text-end"}><button style={{backgroundColor: "white", border: "none", color: "grey"}}>x</button></Card.Text>
+                                <Card.Text className={"text-end"}><button onClick={() => deleteResponder(card._id)} style={{backgroundColor: "white", border: "none", color: "grey"}}>x</button></Card.Text>
                                 <Card.Img variant="top" src={card.image} style={{width: "fit-content", borderRadius: 60/ 2}}/>
                                 <Card.Text>
                                     {card ? card.name : null}

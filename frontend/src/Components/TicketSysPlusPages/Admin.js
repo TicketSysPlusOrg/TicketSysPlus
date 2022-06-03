@@ -29,7 +29,7 @@ function Admin() {
                 <Col>
                     <AdminJson />
                 </Col>
-                <Col xs={3} id="sidebar">
+                <Col xs={3} id="sidebar-right">
                     <Row className={"m-2 justify-content-center"}>
                         <Responders/>
                     </Row>
