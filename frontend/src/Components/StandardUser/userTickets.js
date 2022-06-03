@@ -1,6 +1,6 @@
 //list of all the current standard user's tickets
 import React, {useEffect, useState} from "react";
-import {Card, Col, Modal} from "react-bootstrap";
+import {Col, Container, Modal} from "react-bootstrap";
 import {azureConnection} from "../../index";
 import {loginRequest} from "../../authConfig";
 import SingleTicket from "./singleTicket";
@@ -52,6 +52,15 @@ function UserTickets(props) {
         }
     }
 
+    function getNameBeforeEmail(thisString) {
+        if(thisString !== undefined) {
+            let findName = thisString;
+            console.log(findName);
+
+            return findName.substring(0, findName.indexOf("<"));
+        }
+    }
+
     return (
         <>
             <h4 className={"mt-4"}>Displaying Tickets for: {activeProj}</h4>
@@ -64,34 +73,38 @@ function UserTickets(props) {
                         <Col xs={12} key={index}>
                             {/*TODO: double check that areapath will always be filled*/}
                             <div className={"projectSelect"}>
-                                <Card className={"my-1"} >
-                                    <Card.Body className={"row"}>
-                                        <Col xs={11}>
-                                            <Card.Title className={"cardOneLine "}>{devTix.fields["System.Title"]}</Card.Title>
-                                            <Card.Text className={"mx-3 d-inline-block"}><u>ID</u>: {devTix.id}</Card.Text>
-                                            <Card.Text  className={"mx-3 d-inline-block"}>
-                                                <u>Priority</u>: {devTix.fields["Microsoft.VSTS.Common.Priority"]}
-                                            </Card.Text>
-                                            <Card.Text  className={"mx-3 d-inline-block"}>
-                                                <u>State</u>: {devTix.fields["System.State"]}
-                                            </Card.Text>
-                                            <Card.Text  className={"mx-3 d-inline-block"}>
-                                                {/*TODO: remove the extra ternary check for no due date present once we require due date for ticket creation*/}
-                                                <u>Due Date</u>: {devTix ? (devTix.fields["Microsoft.VSTS.Scheduling.DueDate"] ? devTix.fields["Microsoft.VSTS.Scheduling.DueDate"].slice(0, 10) : null) : null}
-                                            </Card.Text>
-                                            <Card.Text  className={"mx-3 d-inline-block"}>
-                                                <u>Assigned To</u>: {devTix.fields["System.AssignedTo"]}
-                                            </Card.Text>
-                                        </Col>
-                                        <Col xs={1} className={"d-flex flex-column-reverse"}>
-                                            <a onClick={() => showTicketModal(devTix.fields["System.AreaPath"] + "|" + devTix.id)}><AiFillEye size={"2rem"} /></a>
-                                            {/*<a><FaPencilAlt size={"2rem"}/></a>*/}
-                                            <br/>
-                                            <a href={`https://dev.azure.com/KrokhalevPavel/MotorQ%20Project/_workitems/edit/${devTix.id}`}><TiArrowForwardOutline size={"2rem"}/></a>
-                                        </Col>
-
-                                    </Card.Body>
-                                </Card>
+                                <Container className={"my-1 py-1 px-0 row bg-white"} >
+                                    <Col xs={1} className={"align-self-center"}>
+                                        <div>
+                                            <a onClick={() => showTicketModal(devTix.fields["System.AreaPath"] + "|" + devTix.id)} className={"eyeSee"}><AiFillEye size={"2rem"} /></a>
+                                        </div>
+                                    </Col>
+                                    <Col xs={3}>
+                                        <div className={"mx-2 d-inline-block "}>
+                                            <strong >{devTix.fields["System.Title"]}</strong>
+                                        </div>
+                                    </Col>
+                                    <Col xs={7}>
+                                        <div className={"mx-2 d-inline-block"}><strong>ID</strong>: {devTix.id}</div>
+                                        <div  className={"mx-2 d-inline-block"}>
+                                            <strong>Priority</strong>: {devTix.fields["Microsoft.VSTS.Common.Priority"]}
+                                        </div>
+                                        <div className={"mx-2 d-inline-block"}>
+                                            <strong>State</strong>: {devTix.fields["System.State"]}
+                                        </div>
+                                        <div  className={"mx-2 d-inline-block"}>
+                                            {/*TODO: remove the extra ternary check for no due date present once we require due date for ticket creation*/}
+                                            <strong>Due Date</strong>: {devTix ? (devTix.fields["Microsoft.VSTS.Scheduling.DueDate"] ? devTix.fields["Microsoft.VSTS.Scheduling.DueDate"].slice(0, 10) : null) : null}
+                                        </div>
+                                        <div  className={"mx-3 "}>
+                                            <strong>Assigned To</strong>: {getNameBeforeEmail(devTix.fields["System.AssignedTo"])}
+                                        </div>
+                                    </Col>
+                                    <Col xs={1} className={"align-self-center d-flex flex-row-reverse"}>
+                                        <a href={`https://dev.azure.com/KrokhalevPavel/MotorQ%20Project/_workitems/edit/${devTix.id}`} rel={"noreferrer"} target={"_blank"} ><TiArrowForwardOutline size={"1.5rem"}/></a>
+                                        <a className={"mx-1"}><FaPencilAlt size={"1.5rem"}/></a>
+                                    </Col>
+                                </Container>
                             </div>
 
                         </Col>))

@@ -30,14 +30,23 @@
     background-color: white;
     border-left: 3px solid rgba(184, 134, 11, 0.3);
 }
+.bootstrapOverride .eyeSee {
+    cursor: pointer;
+    color: #181818;
+}
 
 /*overrides for project selection cards*/
-.projectSelect .card {
+.projectSelect .card,
+.projectSelect .container
+{
     border-width: 0.2rem;
 }
 
 .projectSelect .card:hover,
-.projectSelect .card:focus {
+.projectSelect .card:focus,
+.projectSelect .container:focus,
+.projectSelect .container:focus
+{
     border-color: rgb(68, 179, 183);
 }
 
