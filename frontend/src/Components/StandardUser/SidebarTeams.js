@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {azureConnection} from "../../index";
-import {Button, Card, Container} from "react-bootstrap";
+import {Container} from "react-bootstrap";
 
 function SidebarTeams(props) {
     const [teamList, setTeamList] = useState(null);

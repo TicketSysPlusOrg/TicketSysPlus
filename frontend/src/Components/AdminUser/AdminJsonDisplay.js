@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import NewJsonFetched from "../TicketSysPlusPages/NewJsonFetched";
-import { Modal, Button, Collapse } from "react-bootstrap";
+import { Modal} from "react-bootstrap";
 
 function AdminJson() {
     const [json, setJson] = useState("");

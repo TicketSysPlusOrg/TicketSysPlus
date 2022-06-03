@@ -1,9 +1,7 @@
-import React, {useEffect, useState} from "react";
-import {Button, Card, Col, Container, Row} from "react-bootstrap";
-import fetchData from "../APIActions/FetchData";
+import React from "react";
 import Responders from "./Responders";
 
-function TicketResponders(props) {
+function TicketResponders() {
 
     return (
         <>

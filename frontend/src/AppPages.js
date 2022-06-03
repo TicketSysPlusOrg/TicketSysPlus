@@ -6,9 +6,6 @@ import Admin from "./Components/TicketSysPlusPages/Admin";
 import Error from "./Components/TicketSysPlusPages/ErrorPage";
 import Landing from "./Components/TicketSysPlusPages/Landing";
 import parse from "html-react-parser";
-import {azureConnection} from "./index";
-
-export const Context = React.createContext();
 
 function MainApp() {
     const isAuthenticated = useIsAuthenticated();

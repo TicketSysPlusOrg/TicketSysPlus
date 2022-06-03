@@ -1,8 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {Card, Col, Row} from "react-bootstrap";
 import {azureConnection} from "../../index";
-import {checkAndRemove} from "../../AppPages";
-import axios from "axios";
 
 function Responders() {
     /*devops api data retrieval*/

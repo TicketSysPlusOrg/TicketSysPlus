@@ -1,12 +1,11 @@
 import React, {useState, useEffect} from "react";
-
 import NavBarHeader from "../NavBarHeader";
 import UserTickets from "../StandardUser/userTickets";
-import {Button, Card, Col, Container, Row} from "react-bootstrap";
+import {Card, Col, Container, Row} from "react-bootstrap";
 import SidebarTeams from "../StandardUser/SidebarTeams";
 import {azureConnection} from "../../index";
 
-function StandardUser(props) {
+function StandardUser() {
     const [projectList, setPrjList] = useState(null);
     const [teamVal, setTeamVal] = useState(null);
 

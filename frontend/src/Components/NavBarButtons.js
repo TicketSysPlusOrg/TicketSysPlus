@@ -2,11 +2,11 @@ import {Button, ButtonGroup, Collapse, Modal} from "react-bootstrap";
 import {NavLink} from "react-router-dom";
 import React from "react";
 import {useCallback, useState, useEffect} from "react";
-import NewTicketFetched from "./TicketSysPlusPages/NewTicketFetched";
 
 import { useMsal } from "@azure/msal-react";
 import { loginRequest } from "../authConfig";
 import { callMsGraph } from "./graph";
+import TicketForms from "./StandardUser/ticketForms";
 
 function NavBarButtons(props) {
     const [show, setShow] = useState(false);
@@ -85,7 +85,7 @@ function NavBarButtons(props) {
                     </Modal.Header>
 
                     <Modal.Body>
-                        <NewTicketFetched />
+                        <TicketForms />
                     </Modal.Body>
                 </Modal.Dialog>
             </Modal>
