@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import NewJsonFetched from "../TicketSysPlusPages/NewJsonFetched";
 import { Modal } from "react-bootstrap";
+import JsonForm from "./jsonForms";
 
 function AdminJson() {
     const [json, setJson] = useState("");
@@ -112,7 +112,7 @@ function AdminJson() {
                         </Modal.Header>
 
                         <Modal.Body>
-                            <NewJsonFetched adminDisplay={data} />
+                            <JsonForm jsonModal={data}/>
                         </Modal.Body>
                     </Modal.Dialog>
                 </div>
