@@ -1,10 +1,10 @@
-import React, { createRef, useCallback, useEffect, useState } from "react";
+import React, { createRef, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Navbar, NavbarBrand, Nav, Offcanvas, Container } from "react-bootstrap";
 
 import NavBarButtons from "./NavBarButtons";
 
-function NavBarHeader(props) {
+function NavBarHeader() {
     const currLocation = useLocation();
     const navigate = useNavigate();
 

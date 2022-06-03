@@ -1,16 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import fetchData from "../APIActions/FetchData";
 import NewJsonFetched from "../TicketSysPlusPages/NewJsonFetched";
-import { Modal, Button, Collapse } from "react-bootstrap";
-import codeMirror from "./codeMirror";
-
-
-const fetchDataPromise = fetchData("ticketInfo");
+import { Modal } from "react-bootstrap";
 
 function AdminJson() {
-    //const dataDetails = fetchDataPromise.read();
-    //const json = JSON.stringify(dataDetails, null, 3);
     const [json, setJson] = useState("");
     const [change, setChange] = useState(true);
     const [data, setData] = useState("");
@@ -41,9 +34,9 @@ function AdminJson() {
             const tempJSON = JSON.parse(jsonToValidate);
             isValid = true;
             document.getElementById("error").innerHTML = " ";
-        } catch (e) {
+        } catch (error) {
             console.log("Invalid JSON Format");
-            document.getElementById("error").innerHTML = "Invalid JSON Format";
+            document.getElementById("error").innerHTML = error.message;
         }
         return isValid;
     }

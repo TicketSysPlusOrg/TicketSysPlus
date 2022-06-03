@@ -1,15 +1,11 @@
 import React from "react";
-import { Routes, Route } from "react-router";
-import { useIsAuthenticated } from "@azure/msal-react";
+import {Route, Routes} from "react-router";
+import {useIsAuthenticated} from "@azure/msal-react";
 import StandardUser from "./Components/TicketSysPlusPages/StandardUser";
 import Admin from "./Components/TicketSysPlusPages/Admin";
 import Error from "./Components/TicketSysPlusPages/ErrorPage";
 import Landing from "./Components/TicketSysPlusPages/Landing";
-import PropTypes from "prop-types";
 import parse from "html-react-parser";
-
-export const Context = React.createContext();
-
 
 function MainApp() {
     const isAuthenticated = useIsAuthenticated();

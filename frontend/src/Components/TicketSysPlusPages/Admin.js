@@ -1,7 +1,7 @@
 import React from "react";
 import NavBarHeader from "../NavBarHeader";
 import AdminJson from "../AdminUser/AdminJsonDisplay";
-import {Card, Col, Container, Row} from "react-bootstrap";
+import {Col, Row} from "react-bootstrap";
 
 import { MsalAuthenticationTemplate } from "@azure/msal-react";
 import { InteractionType } from "@azure/msal-browser";

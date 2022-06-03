@@ -1,7 +1,6 @@
 import React, { Suspense } from "react";
 import NewJsonModal from "./NewJsonModal";
 
-
 function NewJsonFetched({adminDisplay}) {
     const waitingMessage =
         <div className="container">

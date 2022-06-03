@@ -4,7 +4,6 @@ import bodyparser from "body-parser";
 import cors from "cors";
 // import routes from './routes/testTicketRoutes';
 import mongoTicketRoutes from "./routes/testTicketRoutes";
-import ticketRouter from "./routes/ticketRoutes";
 import tickSchemaRoute from "./routes/tickSchemaRoute";
 
 const app = express();
@@ -17,7 +16,7 @@ mongoose.connect("mongodb://127.0.0.1:27017", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 }).then(() => console.log("Successfully connected to MongoDB Database"))
-.catch(error => console.log("Could not connect to MongoDB Database"));
+    .catch(error => console.log("Could not connect to MongoDB Database"));
 
 //bodyparser setup
 app.use(bodyparser.urlencoded({ extended: true }));
@@ -30,7 +29,6 @@ app.use(cors());
 mongoTicketRoutes(app);
 
 //pass ticket route(s) to express app
-app.use("/ticketInfo", ticketRouter);
 app.use("/ticketSchema", tickSchemaRoute);
 
 
