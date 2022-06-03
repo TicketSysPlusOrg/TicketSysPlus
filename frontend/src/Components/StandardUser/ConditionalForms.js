@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {Form} from "react-bootstrap";
 import {ConditionalExample} from "./DataSourceConds";
+import parse from "html-react-parser";
 
 function ConditionalForms(props) {
     const conJSON = ConditionalExample;
@@ -17,6 +18,7 @@ function ConditionalForms(props) {
     const keywordList = ["type", "properties", "detail", "choices", "title", "description", "type", "items", "anyOf", "required",
         "uniqueItems", "minItems", "enum"];
 
+    // const getKeywordsList = ["properties", ]
 
     /*conditional object state. variable set to react component (html-to-react parsing)*/
     /*const [condObject, setCondObject] = useState([]);*/
@@ -27,7 +29,7 @@ function ConditionalForms(props) {
     }, []);
 
     function checkJSON() {
-
+        /*if undefined, use json import. otherwise using props sent by component self calls.*/
         if(props.jsonObj !== undefined) {
             if(props.jsonObj === null) {
                 console.log("null for now");
@@ -41,7 +43,6 @@ function ConditionalForms(props) {
         else {
             setCondObject(new Map(Object.entries(conJSON)));
         }
-
     }
 
     const [renderCondObj, setRenderCondObj] = useState(null);
@@ -50,31 +51,8 @@ function ConditionalForms(props) {
         console.log(renderCondObj);
     }, [renderCondObj]);
 
-
     return (
         <>
-            {/*<h5>{conJSON.properties.enrollment_items.title}</h5>
-            <label>{conJSON.properties.enrollment_items.description}</label>
-            <Form.Select defaultValue={"selectOne"} onChange={(e) => catchItemStuff(e.currentTarget.value)}>
-                <option value={"selectOne"} disabled>Select a Customer</option>
-                {conJSON.properties.enrollment_items.items.anyOf.map((thisItem, index) => (
-                    <option key={index} className="mx-1" value={JSON.stringify(thisItem)}>{thisItem.title}</option>)
-                )}
-            </Form.Select>
-            {showChoices !== "" ? <label>{showChoices.properties.choices.description}</label> : null }
-            {showChoices !== "" ?
-                <select>
-                    {showChoices.properties.choices.items.enum.map((thisItem, index) => (
-                        <option key={index} className="mx-1">{thisItem}</option>
-                    ))
-                    }
-                </select> : null}*/}
-
-            {/*            {condObject !== null ?
-                condObject.map(thisObj => {
-                    thisObj;
-                })
-                : <p>Nothing here yet.</p>}*/}
             <div key={props.index}>
                 {condObject !== null ?
                     <div>
@@ -110,7 +88,7 @@ function ConditionalForms(props) {
                             /*when get returns array, map array object. otherwise call this component again to return the items key's values*/
                             Array.isArray(condObject.get("items")) ?
                                 <div>
-                                    <Form.Select key={renderCondObj} defaultValue={"CHECKITEM"} onChange={e => {setRenderCondObj(e.currentTarget.value); console.log(e.currentTarget.value);}}>
+                                    <Form.Select key={renderCondObj} defaultValue={"CHECKITEM"} onChange={e => {setRenderCondObj(e.target.value); console.log(e.target.value);}}>
                                         <option value={"CHECKITEM"} disabled>select one...</option>
 
                                         {condObject.get("items").map((thisOption, index) => (
@@ -118,7 +96,6 @@ function ConditionalForms(props) {
                                         ))}
 
                                     </Form.Select>
-
                                 </div>
                                 : <ConditionalForms jsonObj={condObject.get("items")} />
 

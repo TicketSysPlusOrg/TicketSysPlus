@@ -1,5 +1,5 @@
 // specific ticket we want to examine
-import {Button, Col, Container, Form, Modal, Row} from "react-bootstrap";
+import {Button, Col, Container, Form, Row} from "react-bootstrap";
 import React, {useEffect, useState} from "react";
 import {azureConnection} from "../../index";
 import {checkAndRemove} from "../../AppPages";
@@ -54,20 +54,20 @@ function singleTicketView(props) {
                             <Form className="col s12">
 
                                 {/*ticket title and work type*/}
-                                <Row className="mb-4">
+                                <Row className={"mb-4"}>
                                     <h4>{allTicketInfo.fields["System.Title"]}</h4>
                                     <hr/>
                                     <h5>Ticket Type: {allTicketInfo.fields["System.WorkItemType"]}</h5>
                                 </Row>
 
                                 {/*ticket state and priority*/}
-                                <Row className="my-4">
+                                <Row className={"my-4"}>
                                     <Col>Ticket State: {allTicketInfo.fields["System.State"]}</Col>
                                     <Col>Priority: {allTicketInfo.fields["Microsoft.VSTS.Common.Priority"]}</Col>
                                 </Row>
 
                                 {/*ticket description*/}
-                                <Row className="my-4">
+                                <Row className={"my-4"}>
                                     <Col>
                                         <h5>Ticket Description</h5>
                                         <article className={"border border-1 border-dark p-2"}>
@@ -77,12 +77,12 @@ function singleTicketView(props) {
                                 </Row>
 
                                 {/*ticket created date*/}
-                                <Row className="my-4">
+                                <Row className={"my-4"}>
                                     <h5>Created Date: {allTicketInfo.fields["System.CreatedDate"]}</h5>
                                 </Row>
 
                                 {/*ticket created by*/}
-                                <Row className="my-4">
+                                <Row className={"my-4"}>
                                     <h5>Created Date: {allTicketInfo.fields["System.CreatedBy"]}</h5>
                                 </Row>
 

@@ -9,7 +9,7 @@ function StandardUser() {
     const [projectList, setPrjList] = useState(null);
     const [teamVal, setTeamVal] = useState(null);
 
-    /*when team val change is called and teamval is altered, run azure calls, which should (once we have a method to do so) render tickets based on teams (or diff projects once we get that far)*/
+    /*when team val change is called and teamval is altered, run azure calls, which renders tickets based on projects*/
     useEffect(() => {
         initRun();
     }, []);
@@ -42,14 +42,11 @@ function StandardUser() {
                                 <div key={index} onClick={() => prjTickets(thisPrj.id)} className={"projectSelect"}>
                                     <Card className={teamVal[0] === thisPrj.id ? "mt-3 activeProjectCard shadow-lg" : "mt-3 shadow-sm"}>
                                         <Card.Title className={"ms-2 mt-2"}>
-                                            {thisPrj ? thisPrj.name : "Loading..."}
+                                            {thisPrj.name}
                                         </Card.Title>
                                         <Card.Body>
                                             <h6><u>Teams</u></h6>
-                                            {thisPrj ?
-                                                <SidebarTeams thisTeam={thisPrj.id} />
-                                                : "Loading..."}
-
+                                            <SidebarTeams thisTeam={thisPrj.id} />
                                         </Card.Body>
                                     </Card>
                                 </div>
@@ -60,7 +57,7 @@ function StandardUser() {
                 <Col xs={8} sm={7} md={9}>
                     <Container>
                         <Row>
-                            {teamVal ? <UserTickets projects={teamVal} key={teamVal}/> : null}
+                            <UserTickets projects={teamVal} key={teamVal}/>
                         </Row>
                     </Container>
                 </Col>

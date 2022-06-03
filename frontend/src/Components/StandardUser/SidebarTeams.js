@@ -24,18 +24,6 @@ function SidebarTeams(props) {
             {teamList ?
                 teamList.value.map((thisTeam, index) => (
                     <p key={index} className="m-2 mt-3">{teamList ? thisTeam.name : "Loading..."}</p>
-                    // <Card key={index} className="m-2 mt-3">
-                    //     <Card.Title className="m-2">
-                    //         {teamList ? thisTeam.name : "Loading..."}
-                    //     </Card.Title>
-                    //     <Card.Body>
-                    //         {teamList ?
-                    //             <p>{thisTeam.description}</p> : "Loading..."}
-                    //         <Button onClick={teamValChange} size={"sm"} className={" float-end"}
-                    //             value={teamList ? ([teamList.value[index].projectId, teamList.value[index].id]) : null}
-                    //         >See Team Tickets</Button>
-                    //     </Card.Body>
-                    // </Card>
                 )) :
                 <Container>
                     <p>Loading Teams...</p>

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import NewJsonFetched from "../TicketSysPlusPages/NewJsonFetched";
 import { Modal } from "react-bootstrap";
 import JsonViewer from "./JsonViewer";
+import JsonForm from "./jsonForms";
 
 function AdminJson() {
     const [json, setJson] = useState("");
