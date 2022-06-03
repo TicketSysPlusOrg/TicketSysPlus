@@ -1,15 +1,9 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
-import fetchData from "../APIActions/FetchData";
 import NewJsonFetched from "../TicketSysPlusPages/NewJsonFetched";
 import { Modal, Button, Collapse } from "react-bootstrap";
 
-
-const fetchDataPromise = fetchData("ticketInfo");
-
 function AdminJson() {
-    //const dataDetails = fetchDataPromise.read();
-    //const json = JSON.stringify(dataDetails, null, 3);
     const [json, setJson] = useState("");
     const [change, setChange] = useState(true);
     const [data, setData] = useState("");

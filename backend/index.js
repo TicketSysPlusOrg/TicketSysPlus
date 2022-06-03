@@ -4,7 +4,6 @@ import bodyparser from "body-parser";
 import cors from "cors";
 // import routes from './routes/testTicketRoutes';
 import mongoTicketRoutes from "./routes/testTicketRoutes";
-import ticketRouter from "./routes/ticketRoutes";
 import tickSchemaRoute from "./routes/tickSchemaRoute";
 
 const app = express();
@@ -30,7 +29,6 @@ app.use(cors());
 mongoTicketRoutes(app);
 
 //pass ticket route(s) to express app
-app.use("/ticketInfo", ticketRouter);
 app.use("/ticketSchema", tickSchemaRoute);
 
 
