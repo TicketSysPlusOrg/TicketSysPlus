@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import NewJsonFetched from "../TicketSysPlusPages/NewJsonFetched";
 import { Modal } from "react-bootstrap";
+import JsonViewer from "./JsonViewer";
 
 function AdminJson() {
     const [json, setJson] = useState("");
@@ -100,7 +101,7 @@ function AdminJson() {
 
             <div className="container">
                 <p>code mirror below...</p>
-                <codeMirror />
+                <JsonViewer />
             </div>
 
             <Modal show={show} onHide={handleClose} className="row">
