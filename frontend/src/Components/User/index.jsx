@@ -34,36 +34,39 @@ function User() {
     return(
         <>
             <NavBarHeader />
-            <Row>
-                <Col xs={5} sm={4} md={3} id="sidebar">
-                    <Container className="d-flex flex-column justify-content-center ">
+            <Container fluid>
+                <Row >
+                    <Col xs={5} sm={4} md={3} id="sidebar">
+                        <Container className="d-flex flex-column justify-content-center ">
 
-                        {projectList ?
-                            projectList.value.map((thisPrj, index) => (
-                                <div key={index} onClick={() => prjTickets(thisPrj.id)} className={"projectSelect"}>
-                                    <Card className={teamVal[0] === thisPrj.id ? "mt-3 activeProjectCard shadow-lg" : "mt-3 shadow-sm"}>
-                                        <Card.Title className={"ms-2 mt-2"}>
-                                            {thisPrj.name}
-                                        </Card.Title>
-                                        <Card.Body>
-                                            <h6><u>Teams</u></h6>
-                                            <SidebarTeams thisTeam={thisPrj.id} />
-                                        </Card.Body>
-                                    </Card>
-                                </div>
-                            ))
-                            : null}
-                    </Container>
-                </Col>
-                <Col xs={8} sm={7} md={9}>
-                    <div className={"ms-1"}>
-                        <Row>
-                            <Tickets projects={teamVal} key={teamVal} />
-                        </Row>
-                    </div>
-                </Col>
+                            {projectList ?
+                                projectList.value.map((thisPrj, index) => (
+                                    <div key={index} onClick={() => prjTickets(thisPrj.id)} className={"projectSelect"}>
+                                        <Card className={teamVal[0] === thisPrj.id ? "mt-3 activeProjectCard shadow-lg" : "mt-3 shadow-sm"}>
+                                            <Card.Title className={"ms-2 mt-2"}>
+                                                {thisPrj.name}
+                                            </Card.Title>
+                                            <Card.Body>
+                                                <h6><u>Teams</u></h6>
+                                                <SidebarTeams thisTeam={thisPrj.id} />
+                                            </Card.Body>
+                                        </Card>
+                                    </div>
+                                ))
+                                : null}
+                        </Container>
+                    </Col>
+                    <Col xs={8} sm={7} md={9}>
+                        <div className={"ms-1"}>
+                            <Row>
+                                <Tickets projects={teamVal} key={teamVal} />
+                            </Row>
+                        </div>
+                    </Col>
 
-            </Row>
+                </Row>
+            </Container>
+
         </>
     );
 }

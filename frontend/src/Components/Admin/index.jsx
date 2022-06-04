@@ -8,6 +8,7 @@ import NavBar from "../NavBar";
 
 import AdminJson from "./AdminJson";
 import Responders from "./Responders";
+import {Container} from "@mui/material";
 
 
 function Admin() {
@@ -21,12 +22,11 @@ function Admin() {
             authenticationRequest={authRequest}
         >
             <NavBar />
-
-            <Row>
+            <Row className={"me-0"}>
                 <Col>
                     <AdminJson />
                 </Col>
-                <Col xs={3} id="sidebar-right">
+                <Col xs={2} id="sidebar-right">
                     <Row className={"m-2 justify-content-center"}>
                         <Responders/>
                     </Row>
