@@ -2,11 +2,10 @@
 import React, { createRef, useEffect, useState } from "react";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import PropTypes from "prop-types";
-
 import { azureConnection } from "../../index";
 import { parseHtml } from "../../utils/Util";
-
 import ConditionalForms from "./ConditionalForms";
+import AutoCompleteNames from "./AutoCompleteNames";
 
 
 //TODO: make file uploads real
@@ -284,6 +283,7 @@ function TicketForm(props) {
                                 <Form.Label htmlFor={"tickMentions"} className={"fw-bold"}>Mentions</Form.Label>
                                 <Form.Control type={"text"} placeholder={"Enter associates"} ref={inputMentions} />
                                 <Form.Text id={"tickMentions"} name={"tickMentions"} />
+                                <AutoCompleteNames />
                             </Form.Group>
                         </Row>
 

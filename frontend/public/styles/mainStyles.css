@@ -103,7 +103,7 @@
 .bootstrapOverride .makeTicket:active,
 .bootstrapOverride .makeTicket:focus {
     background-color: transparent;
-    border-color: (0, 58, 139);
+    border-color: rgb(0, 58, 139);
     color: rgb(252, 120, 54);
 }
 
@@ -121,7 +121,7 @@
 .bootstrapOverride .logOutButton {
     position: fixed;
     top: 0.8rem;
-    left: 2;
+    left: 2px;
 
 }
 
