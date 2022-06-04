@@ -30,23 +30,23 @@
     background-color: white;
     border-left: 3px solid rgba(184, 134, 11, 0.3);
 }
+
+#root {
+    background-color: #e7ecf1;
+}
+
 .bootstrapOverride .eyeSee {
     cursor: pointer;
     color: #181818;
 }
 
 /*overrides for project selection cards*/
-.projectSelect .card,
-.projectSelect .container
-{
+.projectSelect .card {
     border-width: 0.2rem;
 }
 
 .projectSelect .card:hover,
-.projectSelect .card:focus,
-.projectSelect .container:focus,
-.projectSelect .container:focus
-{
+.projectSelect .card:focus {
     border-color: rgb(68, 179, 183);
 }
 
@@ -56,7 +56,7 @@
 
 /*override for contenteditdiv. grows with more text, no scrollbar*/
 .bootstrapOverride #contentEditDiv {
-    min-height: 5rem;
+    min-height: 2rem;
     overflow: auto;
 }
 
@@ -105,11 +105,6 @@
 
 .bootstrapOverride .modal-dialog {
     max-width: 600px;
-}
-
-body {
-    background-color: #e7ecf1 !important;
-    /*background-image: linear-gradient(to right, white, #ffe6d9);*/
 }
 
 li:hover {
