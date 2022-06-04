@@ -34,7 +34,7 @@ function NavBar() {
         <>
             <Navbar sticky="top" expand="md" bg="light" variant="light" className="shadow p-0 m-0">
 
-                <NavbarBrand className="mx-4 my-2">
+                <NavbarBrand className="mx-4  mb-1">
                     <a className="navbar-brand ms-3" href={window.location.origin} onClick={navigateHome}>
 
                         <img id="motorqLogo" src="/motorqLogo.png" width="120" alt="Orange Motorq Logo" className="img-fluid pe-2" />
@@ -48,7 +48,7 @@ function NavBar() {
                 <Navbar.Offcanvas ref={classRef} id={"offcanvasNavbar-expand-tickets"} aria-labelledby={"offcanvasNavbarLabel-expand-tickets"} placement="end" className={" justify-content-end "} >
                     <Offcanvas.Header closeButton />
                     <Offcanvas.Body>
-                        <Nav className="me-2 ms-auto">
+                        <Nav className="me-2 ms-auto mt-2">
 
                             <NavBarButtons currLocation={currLocation} btnVertSpace={vertSpace} vertOrNot={vertOrNot} />
 
