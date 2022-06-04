@@ -35,6 +35,10 @@
     background-color: #e7ecf1;
 }
 
+.userTicketBtns {
+    cursor: pointer;
+}
+
 .bootstrapOverride .eyeSee {
     cursor: pointer;
     color: #181818;
@@ -52,6 +56,15 @@
 
 .projectSelect .activeProjectCard {
     border-color: rgba(50, 44, 147, 1);
+}
+.hoverOver {
+    border: white 2px solid;
+    background-color: white;
+}
+
+.bootstrapOverride .hoverOver:hover,
+.bootstrapOverride .hoverOver:focus {
+    background-color: rgb(190, 212, 239);
 }
 
 /*override for contenteditdiv. grows with more text, no scrollbar*/
