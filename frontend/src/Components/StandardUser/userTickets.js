@@ -39,6 +39,8 @@ function UserTickets(props) {
     //async calls to devops API
     async function run() {
 
+        if (props.projects === null) return;
+
         const getProj = await azureConnection.getProject(props.projects[0]);
         console.log(getProj);
         setActiveProj(getProj.name);

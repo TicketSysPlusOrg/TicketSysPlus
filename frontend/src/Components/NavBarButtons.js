@@ -55,7 +55,7 @@ function NavBarButtons(props) {
             <ButtonGroup className={vertOrNot}>
 
                 <div>
-                    <Button className={btnVertSpace + "btn makeTicket mx-2"} onClick={handleShow} ticketInfo={null}>
+                    <Button className={btnVertSpace + "btn makeTicket mx-2"} onClick={handleShow}>
                         Create Ticket
                     </Button>
                 </div>

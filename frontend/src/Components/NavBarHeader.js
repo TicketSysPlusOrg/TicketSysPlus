@@ -39,7 +39,7 @@ function NavBarHeader() {
                         <img id="motorqLogo" src="/motorqLogo.png" width="120" alt="Orange Motorq Logo" className="img-fluid pe-2" />
 
                         {/*//TODO: replace with better quality motorq logo*/}
-                        <a className="" id="ts-color"><strong>TicketSystem+</strong></a>
+                        <strong id="ts-color">TicketSystem+</strong>
                     </a>
                 </NavbarBrand>
                 <Navbar.Toggle aria-controls={"offcanvasNavbar-expand-tickets"} />
