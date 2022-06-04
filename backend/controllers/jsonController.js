@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+
 import { jsonSchema } from "../models/jsonSchema";
 
 const Json = mongoose.model("Json", jsonSchema);

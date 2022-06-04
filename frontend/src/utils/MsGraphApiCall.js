@@ -19,19 +19,3 @@ export async function callMsGraph(accessToken) {
         .then(response => response.json())
         .catch(error => console.log(error));
 }
-
-// export async function callBackend(accessToken) {
-//     const headers = new Headers();
-//     const bearer = `Bearer ${accessToken}`;
-//
-//     headers.append("Authorization", bearer);
-//
-//     const options = {
-//         method: "GET",
-//         headers: headers
-//     };
-//
-//     return fetch( /*backend endpoint*/ , options)
-//         .then(response => response.json())
-//         .catch(error => console.log(error));
-// }

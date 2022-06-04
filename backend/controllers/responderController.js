@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+
 import { responderSchema } from "../models/responderSchema.js";
 
 const Responder = mongoose.model("Responder", responderSchema);

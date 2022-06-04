@@ -1,9 +1,12 @@
 // forms to fill to create a new ticket
-import React, {createRef, useEffect, useState} from "react";
-import {Button, Col, Container, Form, Row} from "react-bootstrap";
+import React, { createRef, useEffect, useState } from "react";
+import { Button, Col, Container, Form, Row } from "react-bootstrap";
+import PropTypes from "prop-types";
+
+import { azureConnection } from "../../index";
+import { parseHtml } from "../../utils/Util";
+
 import ConditionalForms from "./ConditionalForms";
-import {azureConnection} from "../../index";
-import {checkAndRemove} from "../../AppPages";
 
 
 //TODO: make file uploads real
@@ -75,8 +78,8 @@ function TicketForm(props) {
         /*TODO: use attachments, what about iteration id/area id?*/
         if(!editTicket) {
             /*create new devops ticket*/
-            const devOpsTickData = {"fields": {"System.State": "To Do", "System.Title": ticketTitle, "System.Description": descAndMentions,
-                "Microsoft.VSTS.Scheduling.DueDate": tickDate, "Microsoft.VSTS.Common.Priority": tickPriority, "System.WorkItemType": ticketType}};
+            const devOpsTickData = { "fields": { "System.State": "To Do", "System.Title": ticketTitle, "System.Description": descAndMentions,
+                "Microsoft.VSTS.Scheduling.DueDate": tickDate, "Microsoft.VSTS.Common.Priority": tickPriority, "System.WorkItemType": ticketType } };
 
             const createTicket = await azureConnection.createWorkItem(prjID, ticketType, devOpsTickData);
         } else {
@@ -102,7 +105,7 @@ function TicketForm(props) {
             }
 
 
-            const updateDevopsTickets = {"fields": ticketUpdates};
+            const updateDevopsTickets = { "fields": ticketUpdates };
             const updateTicket = await azureConnection.updateWorkItem(prjID, props.ticketInfo.id, updateDevopsTickets);
         }
     }
@@ -136,7 +139,7 @@ function TicketForm(props) {
             } else if (typeof divDescObjects === "string") {
                 divDesc.current.innerHTML = divDescObjects;
             } else {
-                divDesc.current.innerHTML += checkAndRemove(divDescObjects.props.children);
+                divDesc.current.innerHTML += parseHtml(divDescObjects.props.children);
             }
 
             /*comments*/
@@ -357,5 +360,10 @@ function TicketForm(props) {
     );
 
 }
+
+TicketForm.propTypes = {
+    editTicket: PropTypes.bool,
+    ticketInfo: PropTypes.object
+};
 
 export default TicketForm;

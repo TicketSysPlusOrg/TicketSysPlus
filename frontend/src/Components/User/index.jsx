@@ -1,11 +1,13 @@
-import React, {useState, useEffect} from "react";
-import NavBarHeader from "../NavBarHeader";
-import UserTickets from "../StandardUser/userTickets";
-import {Card, Col, Container, Row} from "react-bootstrap";
-import SidebarTeams from "../StandardUser/SidebarTeams";
-import {azureConnection} from "../../index";
+import React, { useEffect, useState } from "react";
+import { Card, Col, Container, Row } from "react-bootstrap";
 
-function StandardUser() {
+import { azureConnection } from "../../index";
+import NavBarHeader from "../NavBar";
+
+import SidebarTeams from "./SidebarTeams";
+import Tickets from "./Tickets";
+
+function User() {
     const [projectList, setPrjList] = useState(null);
     const [teamVal, setTeamVal] = useState(null);
 
@@ -56,7 +58,7 @@ function StandardUser() {
                 <Col xs={8} sm={7} md={9}>
                     <div className={"ms-1"}>
                         <Row>
-                            <UserTickets projects={teamVal} key={teamVal}/>
+                            <Tickets projects={teamVal} key={teamVal} />
                         </Row>
                     </div>
                 </Col>
@@ -66,4 +68,4 @@ function StandardUser() {
     );
 }
 
-export default StandardUser;
+export default User;

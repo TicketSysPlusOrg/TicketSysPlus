@@ -1,10 +1,11 @@
 import { useMsal } from "@azure/msal-react";
 import React from "react";
-import { Container, Row, Col, Button } from "react-bootstrap";
+import { Button, Col, Container, Row } from "react-bootstrap";
+
 import { loginRequest } from "../../authConfig";
 
 
-export const Landing = () => {
+function Landing() {
     const authRequest = {
         ...loginRequest
     };
@@ -25,6 +26,6 @@ export const Landing = () => {
             </Row>
         </Container>
     );
-};
+}
 
 export default Landing;

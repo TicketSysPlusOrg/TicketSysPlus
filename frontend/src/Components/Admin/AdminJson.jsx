@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
 import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
+
+import JsonForm from "./JsonForm";
 import JsonViewer from "./JsonViewer";
-import JsonForm from "./jsonForms";
 
 function AdminJson() {
     const [json, setJson] = useState("");

@@ -1,10 +1,11 @@
 import React, { createRef, useEffect, useState } from "react";
+import { Nav, Navbar, NavbarBrand, Offcanvas } from "react-bootstrap";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Navbar, NavbarBrand, Nav, Offcanvas, Container } from "react-bootstrap";
 
 import NavBarButtons from "./NavBarButtons";
 
-function NavBarHeader() {
+
+function NavBar() {
     const currLocation = useLocation();
     const navigate = useNavigate();
 
@@ -49,7 +50,7 @@ function NavBarHeader() {
                     <Offcanvas.Body>
                         <Nav className="me-2 ms-auto">
 
-                            <NavBarButtons thisLocation={currLocation} btnVertOrNot={vertSpace} vertOrNot={vertOrNot} />
+                            <NavBarButtons currLocation={currLocation} btnVertSpace={vertSpace} vertOrNot={vertOrNot} />
 
                         </Nav>
 
@@ -62,4 +63,4 @@ function NavBarHeader() {
 
 }
 
-export default NavBarHeader;
+export default NavBar;

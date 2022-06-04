@@ -1,28 +1,26 @@
-//list of all the current standard user's tickets
-import React, {useEffect, useState} from "react";
-import {Col, Container, Modal} from "react-bootstrap";
-import {azureConnection} from "../../index";
-import {loginRequest} from "../../authConfig";
-import SingleTicket from "./singleTicket";
+import React, { useEffect, useState } from "react";
+import { Col, Container, Modal } from "react-bootstrap";
 import { AiFillEye } from "react-icons/ai";
 import { FaPencilAlt } from "react-icons/fa";
-import { TiArrowForwardOutline } from "react-icons/ti";
 import { FiAlertOctagon } from "react-icons/fi";
-import TicketForm from "./ticketForms";
+import { TiArrowForwardOutline } from "react-icons/ti";
+import PropTypes from "prop-types";
 
-function UserTickets(props) {
-    const authRequest = {
-        ...loginRequest
-    };
+import { azureConnection } from "../../index";
 
+import Ticket from "./Ticket";
+import TicketForm from "./TicketForm";
+
+
+function Tickets({ projects }) {
     /*modal show and hide*/
     const [show, setShow] = useState(false);
     const handleShow = () => setShow(true);
     const handleClose = () => setShow(false);
-    const [ticketInfo, setTicketInfo] = useState(null);
+    const [ticketInfo, setTicketInfo] = useState([]);
 
     function showTicketModal(ticketData){
-        setTicketInfo(ticketData.split("|"));
+        setTicketInfo(ticketData);
         handleShow();
     }
 
@@ -39,9 +37,9 @@ function UserTickets(props) {
     //async calls to devops API
     async function run() {
 
-        if (props.projects === null) return;
+        if (projects === null) return;
 
-        const getProj = await azureConnection.getProject(props.projects[0]);
+        const getProj = await azureConnection.getProject(projects[0]);
         console.log(getProj);
         setActiveProj(getProj.name);
         setActivePrjId(getProj.id);
@@ -50,7 +48,7 @@ function UserTickets(props) {
 
         if(allWorkItems.workItems !== undefined) {
             const listOfIds = allWorkItems.workItems.map(workItem => workItem.id);
-            const ticketBatch = await azureConnection.getWorkItems(props.projects[0], listOfIds);
+            const ticketBatch = await azureConnection.getWorkItems(projects[0], listOfIds);
             setDevOpsTix(ticketBatch);
             console.log(ticketBatch);
         } else {
@@ -71,8 +69,8 @@ function UserTickets(props) {
 
     /*set this ticket's state to blocked*/
     async function blockTicket(itemID) {
-        const blockTicket = {"System.State": "Blocked"};
-        const updateTicket = azureConnection.updateWorkItem(activePrjID, itemID, {"fields": blockTicket});
+        const blockTicket = { "System.State": "Blocked" };
+        const updateTicket = azureConnection.updateWorkItem(activePrjID, itemID, { "fields": blockTicket });
     }
 
     /*trigger tickets rerender on state change (i.e. changing to blocked*/
@@ -107,7 +105,7 @@ function UserTickets(props) {
                                 <Container className={"my-1 py-1 px-0 row hoverOver"} >
                                     <Col xs={1} className={"align-self-center"}>
                                         <div>
-                                            <a title={"Inspect Ticket"} onClick={() => {setRenderEdit(false); showTicketModal(devTix.fields["System.AreaPath"] + "|" + devTix.id);}} className={"eyeSee"}><AiFillEye size={"2rem"} /></a>
+                                            <a title={"Inspect Ticket"} onClick={() => {setRenderEdit(false); showTicketModal([devTix.fields["System.AreaPath"], devTix.id]);}} className={"eyeSee"}><AiFillEye size={"2rem"} /></a>
                                         </div>
                                     </Col>
                                     <Col xs={3}>
@@ -134,7 +132,7 @@ function UserTickets(props) {
                                     <Col xs={2} className={"align-self-center d-flex flex-row-reverse justify-content-between"}>
                                         {/*TODO: this is hard coded to our org. fix that.*/}
                                         <a title={"See DevOps Entry"} className={"mx-1 userTicketBtns"} href={`https://dev.azure.com/KrokhalevPavel/MotorQ%20Project/_workitems/edit/${devTix.id}`} rel={"noreferrer"} target={"_blank"} ><TiArrowForwardOutline size={"1.5rem"}/></a>
-                                        <a title={"Edit Ticket"} className={"mx-1 userTicketBtns"} onClick={() => {setRenderEdit(true); setAllTicketInfo(devTix); showTicketModal(devTix.fields["System.AreaPath"] + "|" + devTix.id);}}><FaPencilAlt size={"1.5rem"}/></a>
+                                        <a title={"Edit Ticket"} className={"mx-1 userTicketBtns"} onClick={() => {setRenderEdit(true); setAllTicketInfo(devTix); showTicketModal([devTix.fields["System.AreaPath"], devTix.id]);}}><FaPencilAlt size={"1.5rem"}/></a>
                                         <a title={"Block Ticket"} className={"mx-1 userTicketBtns"} onClick={() => {blockTicket(devTix.id); setBlockStateChange("Blocked");}}><FiAlertOctagon size={"1.5rem"}/></a>
                                     </Col>
                                 </Container>
@@ -153,7 +151,7 @@ function UserTickets(props) {
                         {renderEdit === true ?
                             <TicketForm editTicket={true} ticketInfo={allTicketInfo}  />
                             :
-                            <SingleTicket ticketData={ticketInfo} clickClose={handleClose} renderTicket={renderEdit} ticketInfo={allTicketInfo}/>
+                            <Ticket ticketData={ticketInfo} clickClose={handleClose} renderTicket={renderEdit} ticketInfo={allTicketInfo}/>
                         }
                     </Modal.Body>
                 </Modal.Dialog>
@@ -164,4 +162,8 @@ function UserTickets(props) {
     );
 }
 
-export default UserTickets;
+Tickets.propTypes = {
+    projects: PropTypes.array
+};
+
+export default Tickets;

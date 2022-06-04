@@ -2,6 +2,7 @@
 import React, { createRef, useState } from "react";
 import axios from "axios";
 import { Button, Form } from "react-bootstrap";
+import PropTypes from "prop-types";
 
 function JsonForm({ jsonModal }) {
     const [show, setShow] = useState(false);
@@ -9,7 +10,7 @@ function JsonForm({ jsonModal }) {
 
     let inputBody = createRef();
 
-    function submitJson(SubmitEvent) {
+    function submitJson() {
 
         const jsonBody = inputBody.current.value;
 
@@ -62,5 +63,9 @@ function JsonForm({ jsonModal }) {
     );
 
 }
+
+JsonForm.propTypes = {
+    jsonModal: PropTypes.object
+};
 
 export default JsonForm;

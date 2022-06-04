@@ -1,14 +1,17 @@
-import React, {useEffect, useState} from "react";
-import {azureConnection} from "../../index";
-import {Container} from "react-bootstrap";
+import React, { useEffect, useState } from "react";
+import { Container } from "react-bootstrap";
+import PropTypes from "prop-types";
 
-function SidebarTeams(props) {
+import { azureConnection } from "../../index";
+
+
+function SidebarTeams({ thisTeam }) {
     const [teamList, setTeamList] = useState(null);
 
     /*get teams associated with project*/
     useEffect(() => {
         (async () => {
-            const teams = await azureConnection.getTeam(props.thisTeam);
+            const teams = await azureConnection.getTeam(thisTeam);
             setTeamList(teams);
         })();
     }, []);
@@ -32,5 +35,9 @@ function SidebarTeams(props) {
         </>
     );
 }
+
+SidebarTeams.propTypes = {
+    thisTeam: PropTypes.string
+};
 
 export default SidebarTeams;

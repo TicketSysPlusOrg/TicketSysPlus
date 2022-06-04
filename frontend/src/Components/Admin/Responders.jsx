@@ -1,7 +1,8 @@
-import React, {useEffect, useState} from "react";
-import {Card, CloseButton, Col, Dropdown, Row} from "react-bootstrap";
-import {azureConnection} from "../../index";
+import React, { useEffect, useState } from "react";
+import { Card, CloseButton, Col, Dropdown, Row } from "react-bootstrap";
 import axios from "axios";
+
+import { azureConnection } from "../../index";
 
 function Responders() {
     /*devops api data retrieval*/
@@ -50,7 +51,7 @@ function Responders() {
 
     function deleteResponder(id){
         console.log(id);
-        axios.delete("http://localhost:4001/responders", {data: {"id" : id}})
+        axios.delete("http://localhost:4001/responders", { data: { "id" : id } })
             .then((res) => {
                 console.log(res);
                 loadResponders();
@@ -92,7 +93,7 @@ function Responders() {
                         <Card key={index}>
                             <Card.Body className={"text-center"}>
                                 <Card.Text className={"text-end d"}><CloseButton onClick={() => deleteResponder(card._id)}/></Card.Text>
-                                <Card.Img variant="top" src={card.image} style={{width: "fit-content", borderRadius: 60/ 2}}/>
+                                <Card.Img variant="top" src={card.image} style={{ width: "fit-content", borderRadius: 60/ 2 }}/>
                                 <Card.Text>
                                     {card ? card.name : null}
                                 </Card.Text>

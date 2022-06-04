@@ -1,16 +1,16 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import { BrowserRouter } from "react-router-dom";
-import AppPages from "./AppPages";
+import { EventType, PublicClientApplication } from "@azure/msal-browser";
+import { MsalProvider } from "@azure/msal-react";
+
 import "bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-// MSAL imports
-import { PublicClientApplication, EventType } from "@azure/msal-browser";
-import { msalConfig, azureConfig } from "./authConfig";
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { BrowserRouter } from "react-router-dom";
 
-import { AzureDevOpsApi } from "./azure-devops-api";
-import { MsalProvider } from "@azure/msal-react";
+import App from "./App";
+import { azureConfig, msalConfig } from "./authConfig";
+import { AzureDevOpsApi } from "./utils/AzureDevOpsApi";
 
 export const azureConnection = new AzureDevOpsApi(azureConfig.organizationUrl, azureConfig.token);
 
@@ -89,13 +89,11 @@ msalInstance.addEventCallback((event) => {
     }
 });
 
-
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
     <BrowserRouter>
         <MsalProvider instance={msalInstance}>
-            <AppPages />
+            <App />
         </MsalProvider>
     </BrowserRouter>
-
 );

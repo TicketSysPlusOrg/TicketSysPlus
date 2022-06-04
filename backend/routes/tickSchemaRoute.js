@@ -1,5 +1,6 @@
 import express from "express";
-import {TicketSchema} from "../models/BaseSchemaJS";
+
+import { TicketSchema } from "../models/BaseSchemaJS";
 
 const routerSchema = express.Router();
 

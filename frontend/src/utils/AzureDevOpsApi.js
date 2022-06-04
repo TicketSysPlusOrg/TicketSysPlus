@@ -1,5 +1,6 @@
-import axios from "axios";
 import { Buffer } from "buffer";
+
+import axios from "axios";
 import { createPatch } from "rfc6902";
 
 const apiVersion = "7.1-preview.3";
@@ -142,8 +143,8 @@ export class AzureDevOpsApi {
      */
     async createWorkItem(project, type, data) {
         return this.instance.post(`${project}/_apis/wit/workitems/$${type}`,
-            createPatch({"fields": {}}, data),
-            {params: { "api-version": "7.1-preview.3" }, headers: { "content-type": "application/json-patch+json"}, }).then(response => {
+            createPatch({ "fields": {} }, data),
+            { params: { "api-version": "7.1-preview.3" }, headers: { "content-type": "application/json-patch+json" }, }).then(response => {
             return response.data;
         }).catch(error => error);
     }
@@ -157,8 +158,8 @@ export class AzureDevOpsApi {
      */
     async updateWorkItem(project, workItemID, data) {
         return this.instance.patch(`${project}/_apis/wit/workitems/${workItemID}`,
-            createPatch({"fields": {}}, data),
-            {params: { "api-version": "7.1-preview.3" }, headers: { "content-type": "application/json-patch+json"}, }).then(response => {
+            createPatch({ "fields": {} }, data),
+            { params: { "api-version": "7.1-preview.3" }, headers: { "content-type": "application/json-patch+json" }, }).then(response => {
             return response.data;
         }).catch(error => error);
     }
@@ -208,7 +209,7 @@ export class AzureDevOpsApi {
     async getProcessesList() {
         return this.instance.get("_apis/process/processes",
             {
-                params: { "api-version": "6.0"}
+                params: { "api-version": "6.0" }
             }).then (res => {
             return res.data;
         }).catch(err => err);
@@ -280,7 +281,7 @@ export class AzureDevOpsApi {
         const teams = await this.getTeams().then(val => val.value.map(item => item.id));
 
         // loop through all the teams in the project and merge them into a single object
-        const temp = {count: 0, value: []};
+        const temp = { count: 0, value: [] };
         for (let i = 0; i < teams.length; i++) {
             const team = teams[i];
             

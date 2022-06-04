@@ -1,9 +1,11 @@
-import React, {useEffect, useState} from "react";
-import {Form} from "react-bootstrap";
-import {ConditionalExample} from "./DataSourceConds";
-import parse from "html-react-parser";
+import React, { useEffect, useState } from "react";
+import { Form } from "react-bootstrap";
+import PropTypes from "prop-types";
 
-function ConditionalForms(props) {
+import { ConditionalExample } from "./DataSourceConds";
+
+
+function ConditionalForms({ index, jsonObj }) {
     const conJSON = ConditionalExample;
     // console.log(conJSON);
 
@@ -30,14 +32,14 @@ function ConditionalForms(props) {
 
     function checkJSON() {
         /*if undefined, use json import. otherwise using props sent by component self calls.*/
-        if(props.jsonObj !== undefined) {
-            if(props.jsonObj === null) {
+        if(jsonObj !== undefined) {
+            if(jsonObj === null) {
                 console.log("null for now");
-            } else if(props.jsonObj === "CHECKANYOF" || props.jsonObj === "CHECKITEM") {
+            } else if(jsonObj === "CHECKANYOF" || jsonObj === "CHECKITEM") {
                 console.log("reached top of select list");
             } else {
-                console.log(props.jsonObj);
-                setCondObject(new Map(Object.entries(props.jsonObj)));
+                console.log(jsonObj);
+                setCondObject(new Map(Object.entries(jsonObj)));
             }
         }
         else {
@@ -53,7 +55,7 @@ function ConditionalForms(props) {
 
     return (
         <>
-            <div key={props.index}>
+            <div key={index}>
                 {condObject !== null ?
                     <div>
 
@@ -147,5 +149,10 @@ function ConditionalForms(props) {
         </>
     );
 }
+
+ConditionalForms.propTypes = {
+    index: PropTypes.any,
+    jsonObj: PropTypes.object
+};
 
 export default ConditionalForms;

@@ -1,16 +1,20 @@
 // specific ticket we want to examine
-import {Button, Col, Container, Form, Row} from "react-bootstrap";
-import React, {useEffect, useState} from "react";
-import {azureConnection} from "../../index";
-import {checkAndRemove} from "../../AppPages";
-import TicketForm from "./ticketForms";
+import React, { useEffect, useState } from "react";
+import { Button, Col, Container, Form, Row } from "react-bootstrap";
+import PropTypes from "prop-types";
 
-function singleTicketView(props) {
+import { azureConnection } from "../../index";
+import { parseHtml } from "../../utils/Util";
+
+import TicketForm from "./TicketForm";
+
+
+function Ticket({ ticketData, clickClose }) {
     const [thisTicketInfo, setThisTicketInfo] = useState(null);
     const [allTicketInfo, setAllTicketInfo] = useState(null);
 
     useEffect(() => {
-        setThisTicketInfo(props.ticketData);
+        setThisTicketInfo(ticketData);
     }, []);
 
     useEffect(() => {
@@ -71,7 +75,7 @@ function singleTicketView(props) {
                                     <Col>
                                         <h5>Ticket Description</h5>
                                         <article className={"border border-1 border-dark p-2"}>
-                                            {checkAndRemove(allTicketInfo.fields["System.Description"])}
+                                            {parseHtml(allTicketInfo.fields["System.Description"])}
                                         </article>
                                     </Col>
                                 </Row>
@@ -81,7 +85,7 @@ function singleTicketView(props) {
                                     <Col>
                                         <h5>Ticket Comments</h5>
                                         <article className={"border border-1 border-dark p-2"}>
-                                            {checkAndRemove(allTicketInfo.fields["Microsoft.VSTS.CMMI.Comments"])}
+                                            {parseHtml(allTicketInfo.fields["Microsoft.VSTS.CMMI.Comments"])}
                                         </article>
                                     </Col>
                                 </Row>
@@ -105,7 +109,7 @@ function singleTicketView(props) {
                                     Edit Ticket
                                 </Button>
 
-                                <Button onClick={props.clickClose} type={"button"} name={"action"} className={"float-end mt-2"}>
+                                <Button onClick={clickClose} type={"button"} name={"action"} className={"float-end mt-2"}>
                                     Close
                                 </Button>
                             </Form>
@@ -119,4 +123,9 @@ function singleTicketView(props) {
     );
 }
 
-export default singleTicketView;
+Ticket.propTypes = {
+    ticketData: PropTypes.array,
+    clickClose: PropTypes.func
+};
+
+export default Ticket;

@@ -2,24 +2,24 @@ import { Button, ButtonGroup, Collapse, Modal } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import React from "react";
 import { useCallback, useState, useEffect } from "react";
+import { useMsal, useAccount } from "@azure/msal-react";
+import { InteractionRequiredAuthError, BrowserUtils } from "@azure/msal-browser";
+import PropTypes from "prop-types";
 
-import { useMsal } from "@azure/msal-react";
-import { InteractionRequiredAuthError } from "@azure/msal-browser";
-import { loginRequest } from "../authConfig";
-import { callMsGraph } from "./graph";
-import TicketForms from "./StandardUser/ticketForms";
+import { loginRequest } from "../../authConfig";
+import { callMsGraph } from "../../utils/MsGraphApiCall";
+import TicketForm from "../User/TicketForm";
 
-function NavBarButtons(props) {
+
+function NavBarButtons({ currLocation, btnVertSpace, vertOrNot }) {
     const [show, setShow] = useState(false);
     const handleShow = () => setShow(true);
     const handleClose = () => setShow(false);
 
     const { instance, accounts } = useMsal();
-    const [graphData, setGraphData] = useState(null);
+    const account = useAccount(accounts[0] || {});
 
-    const vertOrNot = props.vertOrNot;
-    const currLocation = props.thisLocation;
-    const btnVertSpace = props.btnVertOrNot;
+    const [graphData, setGraphData] = useState(null);
 
     useEffect(() => {
         // Silently acquires an access token which is then attached to a request for MS Graph data
@@ -39,7 +39,7 @@ function NavBarButtons(props) {
                 });
             }
         });
-    }, []);
+    }, [account, instance]);
 
 
     const [toggle, setToggle] = useState(false);
@@ -47,7 +47,11 @@ function NavBarButtons(props) {
     const toggleBlur = () => { if (toggle) { toggleFunc(); } };
 
     function logout() {
-        instance.logoutRedirect({ account: accounts[0], postLogoutRedirectUri: window.location.origin });
+        instance.logoutRedirect({
+            account: account,
+            postLogoutRedirectUri: window.location.origin,
+            onRedirectNavigate: () => !BrowserUtils.isInIframe()
+        });
     }
 
     return (
@@ -95,7 +99,7 @@ function NavBarButtons(props) {
                     </Modal.Header>
 
                     <Modal.Body>
-                        <TicketForms />
+                        <TicketForm />
                     </Modal.Body>
                 </Modal.Dialog>
             </Modal>
@@ -103,5 +107,11 @@ function NavBarButtons(props) {
         </>
     );
 }
+
+NavBarButtons.propTypes = {
+    currLocation: PropTypes.object,
+    btnVertSpace: PropTypes.string,
+    vertOrNot: PropTypes.string
+};
 
 export default NavBarButtons;
