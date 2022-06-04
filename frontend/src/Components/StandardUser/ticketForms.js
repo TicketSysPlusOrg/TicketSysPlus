@@ -5,6 +5,7 @@ import ConditionalForms from "./ConditionalForms";
 import {azureConnection} from "../../index";
 import {checkAndRemove} from "../../AppPages";
 
+
 //TODO: make file uploads real
 function TicketForm(props) {
 
@@ -60,10 +61,15 @@ function TicketForm(props) {
         const ticketDesc = inputDesc.current.value;
         const tickDate = inputDate.current.value;
         const tickPriority = inputPriority.current.value;
+
+        //mentions was an array when we were dealing with mongo. we can prob do diff now.
         const tickMentions = inputMentions.current.value.split(/[,| ]+/).map(function (value) {
             return value.trim();
         });
+
+        //TODO: attachments
         const tickAttachments = inputAttachment.current.value;
+
         const descAndMentions = ticketDesc + " Mentions: " + tickMentions;
 
         /*TODO: use attachments, what about iteration id/area id?*/
@@ -132,6 +138,8 @@ function TicketForm(props) {
             } else {
                 divDesc.current.innerHTML += checkAndRemove(divDescObjects.props.children);
             }
+
+            /*comments*/
 
             /*priority*/
             document.getElementById("tickPriority" + props.ticketInfo.fields["Microsoft.VSTS.Common.Priority"]).checked = true;

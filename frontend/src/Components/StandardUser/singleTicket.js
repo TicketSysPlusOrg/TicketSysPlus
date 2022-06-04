@@ -76,6 +76,16 @@ function singleTicketView(props) {
                                     </Col>
                                 </Row>
 
+                                {/*ticket comments*/}
+                                <Row className={"my-4"}>
+                                    <Col>
+                                        <h5>Ticket Comments</h5>
+                                        <article className={"border border-1 border-dark p-2"}>
+                                            {checkAndRemove(allTicketInfo.fields["Microsoft.VSTS.CMMI.Comments"])}
+                                        </article>
+                                    </Col>
+                                </Row>
+
                                 {/*ticket created date*/}
                                 <Row className={"my-4"}>
                                     <h5>Created Date: {allTicketInfo.fields["System.CreatedDate"]}</h5>
