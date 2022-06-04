@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Modal } from "react-bootstrap";
+import {Button, Modal} from "react-bootstrap";
 
 import JsonForm from "./JsonForm";
 import JsonViewer from "./JsonViewer";
@@ -74,6 +74,20 @@ function AdminJson() {
                 console.log(err);
             });
     }
+    // Create a reference to the hidden file input element
+    const hiddenFileInput = React.useRef(null);
+
+    // Programatically click the hidden file input element
+    // when the Button component is clicked
+    const handleClick = event => {
+        hiddenFileInput.current.click();
+    };
+    // Call a function (passed as a prop from the parent component)
+    // to handle the user-selected file
+    const handleChange = event => {
+        const fileUploaded = event.target.files[0];
+        console.log(fileUploaded);
+    };
 
     return (
         <>
@@ -89,7 +103,10 @@ function AdminJson() {
                     <button onClick={handleShow} className="btn btn-danger mx-3" id="savebtn" type="button" disabled={change}>Save</button>
 
                     <button onClick={() => loadOld()} className="btn btn-danger mx-3" id="oldbtn" type="button">Load Old Json Schema</button>
-                    <button className="btn btn-danger mx-3" id="importbtn" type="button">Import</button>
+                    <Button onClick={handleClick}>
+                        Upload a file
+                    </Button>
+                    <input type="file" ref={hiddenFileInput} onChange={handleChange} style={{display: "none"}}/>
                     <button className="btn btn-danger mx-3" id="exportbtn" type="button">Export</button>
                 </div>
 
