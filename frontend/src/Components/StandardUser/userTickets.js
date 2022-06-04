@@ -83,7 +83,16 @@ function UserTickets(props) {
 
     return (
         <>
-            <h4 className={"mt-4"}>Displaying Tickets for: {activeProj}</h4>
+            {/* TODO: Replace this div with a metrics box, for Ex:
+                <> blocked tickets
+                <> priority 3 tickets
+                <> priority 2 tickets
+                <> priority 1 tickets
+                ...etc
+                
+                clicking them filters the tickets to only those tickets (only blocked tickets, only p3 tickets, etc.)
+            */}
+            <div className={"mt-4"}></div>
             {noTickets ?
                 <Col xs={12}>
                     <p>{noTickets}</p>

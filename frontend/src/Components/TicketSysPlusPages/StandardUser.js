@@ -34,7 +34,6 @@ function StandardUser() {
             <NavBarHeader />
             <Row>
                 <Col xs={5} sm={4} md={3} id="sidebar">
-                    <h6 className={"text-center mt-3"}><u>Select a Project</u></h6>
                     <Container className="d-flex flex-column justify-content-center ">
 
                         {projectList ?
