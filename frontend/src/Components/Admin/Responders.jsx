@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Card, CloseButton, Col, Dropdown, Row } from "react-bootstrap";
 import axios from "axios";
+import TextField from "@mui/material/TextField";
+import Autocomplete from "@mui/material/Autocomplete";
 
 import { azureConnection } from "../../index";
 
@@ -60,32 +62,37 @@ function Responders() {
                 console.log(err);
             });
     }
-    //console.log(responders);
+
+    const autoResponders = responders ?
+        responders.value
+            .filter(responder => {
+                if (card === null || card.length === 0) return true;
+                return card.every(card => card.email !== responder.identity.uniqueName);
+            })
+            .map((responder) => {
+                return { label: responder.identity.displayName, imageUrl: responder.identity.imageUrl, email: responder.identity.uniqueName };
+            })
+        : [];
+
     return (
         <>
-
             <h4 className={"mt-4 text-center"}>On-Call Responders</h4>
 
-            <Dropdown className="d-inline mx-2" autoClose="outside">
-                <Dropdown.Toggle id="dropdown-autoclose-outside">
-                    On-Call Responders
-                </Dropdown.Toggle>
-                <Dropdown.Menu>
-                    {responders ?
-                        responders.value
-                            .filter(responder => {
-                                if (card === null || card.length === 0) return true;
-                                return card.every(card => card.email !== responder.identity.uniqueName);
-                            })
-                            .map((responder, index) => (
-                                <Dropdown.Item key={index} onClick={() => APIDropDownToDB(
-                                    responder.identity.imageUrl, responder.identity.displayName, responder.identity.uniqueName
-                                )}>{responder ? responder.identity.displayName : null}</Dropdown.Item>
-                            ))
-                        : null
+            <Autocomplete
+                className={"mb-1"}
+                disablePortal
+                disableCloseOnSelect
+                options={autoResponders}
+                sx={{ width: 300 }}
+                renderInput={(params) => <TextField {...params} label="Responders" />}
+                onChange={(_event, value, reason) => {
+                    if(reason === "selectOption") {
+                        APIDropDownToDB(
+                            value.imageUrl, value.label, value.email
+                        );
                     }
-                </Dropdown.Menu>
-            </Dropdown>
+                }}
+            />
 
             {card ?
                 card.map((card, index) => (

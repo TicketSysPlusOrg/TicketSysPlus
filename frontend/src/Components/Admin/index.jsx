@@ -2,13 +2,13 @@ import { InteractionType } from "@azure/msal-browser";
 import { MsalAuthenticationTemplate } from "@azure/msal-react";
 import React from "react";
 import { Col, Row } from "react-bootstrap";
+import { Container } from "@mui/material";
 
 import { loginRequest } from "../../authConfig";
 import NavBar from "../NavBar";
 
 import AdminJson from "./AdminJson";
 import Responders from "./Responders";
-import {Container} from "@mui/material";
 
 
 function Admin() {

@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import {Button, Modal} from "react-bootstrap";
+import { Button, Modal } from "react-bootstrap";
 
 import JsonForm from "./JsonForm";
 import JsonViewer from "./JsonViewer";
@@ -106,7 +106,7 @@ function AdminJson() {
                     <Button onClick={handleClick}>
                         Upload a file
                     </Button>
-                    <input type="file" ref={hiddenFileInput} onChange={handleChange} style={{display: "none"}}/>
+                    <input type="file" ref={hiddenFileInput} onChange={handleChange} style={{ display: "none" }}/>
                     <button className="btn btn-danger mx-3" id="exportbtn" type="button">Export</button>
                 </div>
 
