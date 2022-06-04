@@ -33,11 +33,13 @@ function NavBarHeader() {
         <>
             <Navbar sticky="top" expand="md" bg="light" variant="light" className="shadow p-0 m-0">
 
-                <NavbarBrand className="mx-4 mt-1">
+                <NavbarBrand className="mx-4 my-2">
                     <a className="navbar-brand ms-3" href={window.location.origin} onClick={navigateHome}>
+
+                        <img id="motorqLogo" src="/motorqLogo.png" width="120" alt="Orange Motorq Logo" className="img-fluid pe-2" />
+
                         {/*//TODO: replace with better quality motorq logo*/}
-                        <img id="motorqLogo" src="/motorqLogo.png" alt="Orange Motorq Logo" className="img-fluid pe-2" />
-                        <p className="ms-5" id="ts-color"><strong>TicketSystem+</strong></p>
+                        <a className="" id="ts-color"><strong>TicketSystem+</strong></a>
                     </a>
                 </NavbarBrand>
                 <Navbar.Toggle aria-controls={"offcanvasNavbar-expand-tickets"} />

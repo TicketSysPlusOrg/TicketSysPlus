@@ -14,14 +14,15 @@
 }
 
 #ts-color {
-    color: darkblue;
-    text-align: justify;
+    color: rgb(104, 171, 193);
+    /*text-align: justify;*/
     font-size: smaller;
+    text-decoration: none;
 }
 
 #sidebar {
     min-height: 100vh;
-    background-color: white;
+    background-color: #e7ecf1;
     border-right: 3px solid rgba(184, 134, 11, 0.3);
 }
 
@@ -57,6 +58,7 @@
 .projectSelect .activeProjectCard {
     border-color: rgba(50, 44, 147, 1);
 }
+
 .hoverOver {
     border: white 2px solid;
     background-color: white;
@@ -75,20 +77,34 @@
 
 /*style overrides for create ticket button*/
 .bootstrapOverride .makeTicket {
-    border-radius: 5px;
-    border: 2px double #ec7a6f;
-    background-color: rgb(252, 120, 54);
-    color: white;
+    border: none;
+    font-size: larger;
+    background-color: transparent;
+    color: rgb(252, 120, 54);
 }
 
-.bootstrapOverride .makeTicket:hover {
-    background-color: rgb(232, 99, 35);
+/*style overrides for admin page button and user name tag*/
+.bootstrapOverride .adminButton {
+    border: none;
+    font-size: larger;
+    background-color: transparent;
+    color: rgb(0, 58, 139);
+}
+
+
+.bootstrapOverride .makeTicket:hover,
+.bootstrapOverride .adminButton:hover {
+    /*background-color: rgb(232, 99, 35);*/
+    background-color: transparent;
+    text-decoration: underline;
+    color: rgb(252, 120, 54);
 }
 
 .bootstrapOverride .makeTicket:active,
 .bootstrapOverride .makeTicket:focus {
-    background-color: rgb(245, 98, 28);
-    border-color: orange;
+    background-color: transparent;
+    border-color: (0, 58, 139);
+    color: rgb(252, 120, 54);
 }
 
 /*override colors for user info button*/

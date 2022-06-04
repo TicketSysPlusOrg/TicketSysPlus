@@ -47,27 +47,27 @@ function NavBarButtons(props) {
             <ButtonGroup className={vertOrNot}>
 
                 <div>
-                    <Button className={btnVertSpace + "btn makeTicket mx-3"} onClick={handleShow} ticketInfo={null}>
+                    <Button className={btnVertSpace + "btn makeTicket mx-2"} onClick={handleShow} ticketInfo={null}>
                         Create Ticket
                     </Button>
                 </div>
                 <div>
                     {currLocation.pathname !== "/" ?
                         <NavLink to="/" >
-                            <Button className={btnVertSpace + " btn btn-primary mx-3"}>TICKETS</Button>
+                            <Button className={btnVertSpace + "btn btn-primary  mx-2"}>TICKETS</Button>
                         </NavLink>
                         : null
                     }
                 </div>
                 {currLocation.pathname !== "/admin" ?
                     <NavLink to="/admin">
-                        <Button className={btnVertSpace + " btn btn-primary mx-3"}>ADMIN PAGE</Button>
+                        <Button className={btnVertSpace + " btn adminButton mx-2"}>Admin Page</Button>
                     </NavLink>
                     : null
                 }
                 {/*TODO: make this a custom button. don't overuse bootstrap.  */}
                 <div>
-                    <Button onClick={toggleFunc} onBlur={toggleBlur} className={btnVertSpace + " ms-3"} id="userBtn">
+                    <Button onClick={toggleFunc} onBlur={toggleBlur} className={btnVertSpace + "adminButton ms-3"} >
                         {graphData ? graphData.displayName : "Loading..."}
                     </Button>
                     <Collapse in={toggle} id="userCollapse" >
