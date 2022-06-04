@@ -22,9 +22,17 @@ function MainApp() {
 
 export default MainApp;
 
-export function checkAndRemove(stringInput) {
-    if (stringInput === undefined || stringInput == null || stringInput.trim() === "") {
-        return stringInput;
+/**
+ * Converts any string into React Components
+ * @param {string} input The string to parse into React Components
+ */
+export function checkAndRemove(input) {
+    if (input === undefined || input == null || input.trim() === "") {
+        return input;
     }
-    return parse(stringInput);
+
+    // remove styling from elements before parsing
+    input = input.replace(/data-darkreader-inline-bgcolor=".*?"|style=".*?"/g, "");
+
+    return parse(input);
 }
