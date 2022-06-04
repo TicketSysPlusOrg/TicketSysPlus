@@ -54,6 +54,11 @@ function NavBarButtons({ currLocation, btnVertSpace, vertOrNot }) {
         });
     }
 
+    function toggleName(e) {
+        const name = graphData.displayName;
+
+    }
+
     return (
         <>
             <ButtonGroup className={vertOrNot}>
@@ -66,7 +71,7 @@ function NavBarButtons({ currLocation, btnVertSpace, vertOrNot }) {
                 <div>
                     {currLocation.pathname !== "/" ?
                         <NavLink to="/" >
-                            <Button className={btnVertSpace + "btn btn-primary  mx-2"}>TICKETS</Button>
+                            <Button className={btnVertSpace + "btn adminButton  mx-2"}>Tickets</Button>
                         </NavLink>
                         : null
                     }
@@ -79,14 +84,21 @@ function NavBarButtons({ currLocation, btnVertSpace, vertOrNot }) {
                 }
                 {/*TODO: make this a custom button. don't overuse bootstrap.  */}
                 <div>
-                    <Button onClick={toggleFunc} onBlur={toggleBlur} className={btnVertSpace + "adminButton ms-3"} >
-                        {graphData ? graphData.displayName : "Loading..."}
+                    <Button onClick={logout}
+                        onBlur={toggleBlur}
+                        onMouseEnter={() => setToggle(true)}
+                        onMouseLeave={() => setToggle(false)}
+                        className={btnVertSpace + "adminButton ms-3 pr-5"} >
+
+                        <p className={toggle ? "invisible" : " "}>
+                            {graphData ? graphData.displayName : "Loading..."}
+                        </p>
+
+                        <p className="logOutButton text-decoration-underline">
+                            {toggle ? "Logout" : " "}
+                        </p>
                     </Button>
-                    <Collapse in={toggle} id="userCollapse" >
-                        <div>
-                            <Button onClick={logout} className="ms-4">Logout</Button>
-                        </div>
-                    </Collapse>
+
                 </div>
 
             </ButtonGroup>

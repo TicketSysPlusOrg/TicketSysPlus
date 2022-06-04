@@ -13,7 +13,7 @@ function Landing() {
 
     return (
         <Container>
-            <Row className="justify-content-center">
+            <Row className="justify-content-center vh-100">
                 <Col md="auto">
                     <div className="mt-5">
 

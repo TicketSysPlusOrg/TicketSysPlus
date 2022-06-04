@@ -118,6 +118,13 @@
     background-color: rgb(232, 99, 35);
 }
 
+.bootstrapOverride .logOutButton {
+    position: fixed;
+    top: 0.8rem;
+    left: 2;
+
+}
+
 .bootstrapOverride #userCollapse {
     position: absolute;
 }
