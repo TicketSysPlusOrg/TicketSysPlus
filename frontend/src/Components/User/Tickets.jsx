@@ -101,6 +101,7 @@ function Tickets({ projects }) {
                     devOpsTix.value.map((devTix, index) => (
                         <Col xs={12} key={index}>
                             {/*TODO: double check that areapath will always be filled*/}
+                            {/* TODO: https://mui.com/material-ui/react-stack/ */}
                             <div className={"projectSelect " }>
                                 <Container className={"my-1 py-1 px-0 row hoverOver"} >
                                     <Col xs={1} className={"align-self-center"}>
@@ -146,7 +147,7 @@ function Tickets({ projects }) {
             }
 
             <Modal show={show} onHide={handleClose} >
-                <Modal.Dialog className="shadow-lg mx-3">
+                <Modal.Dialog className=" mx-3">
                     <Modal.Body>
                         {renderEdit === true ?
                             <TicketForm editTicket={true} ticketInfo={allTicketInfo}  />

@@ -1,8 +1,9 @@
-import React, {useEffect, useState} from "react";
-import { useAutocomplete } from '@mui/base/AutocompleteUnstyled';
-import { styled } from '@mui/material/styles';
-import { autocompleteClasses } from '@mui/material/Autocomplete';
-import {azureConnection} from "../../index";
+import React, { useEffect, useState } from "react";
+import { useAutocomplete } from "@mui/base/AutocompleteUnstyled";
+import { styled } from "@mui/material/styles";
+import { autocompleteClasses } from "@mui/material/Autocomplete";
+
+import { azureConnection } from "../../index";
 
 function AutoCompleteNames() {
     const [teamMembersList, setTeamMembersList] = useState([]);
