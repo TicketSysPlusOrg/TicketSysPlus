@@ -71,11 +71,16 @@ function Responders() {
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
                     {responders ?
-                        responders.value.map((responder, index) => (
-                            <Dropdown.Item key={index} onClick={() => APIDropDownToDB(
-                                responder.identity.imageUrl, responder.identity.displayName, responder.identity.uniqueName
-                            )}>{responder ? responder.identity.displayName : null}</Dropdown.Item>
-                        ))
+                        responders.value
+                            .filter(responder => {
+                                if (card === null || card.length === 0) return true;
+                                return card.every(card => card.email !== responder.identity.uniqueName);
+                            })
+                            .map((responder, index) => (
+                                <Dropdown.Item key={index} onClick={() => APIDropDownToDB(
+                                    responder.identity.imageUrl, responder.identity.displayName, responder.identity.uniqueName
+                                )}>{responder ? responder.identity.displayName : null}</Dropdown.Item>
+                            ))
                         : null
                     }
                 </Dropdown.Menu>
