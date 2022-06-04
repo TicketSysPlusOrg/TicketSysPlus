@@ -4,6 +4,7 @@ import React from "react";
 import { useCallback, useState, useEffect } from "react";
 
 import { useMsal } from "@azure/msal-react";
+import { InteractionRequiredAuthError } from "@azure/msal-browser";
 import { loginRequest } from "../authConfig";
 import { callMsGraph } from "./graph";
 import TicketForms from "./StandardUser/ticketForms";
@@ -30,6 +31,13 @@ function NavBarButtons(props) {
                 setGraphData(response);
                 console.log(response);
             });
+        }).catch(async (error) => {
+            if (error instanceof InteractionRequiredAuthError) {
+                // fallback to interaction when silent call fails
+                return await instance.acquireTokenRedirect(loginRequest).catch(error => {
+                    console.log(error);
+                });
+            }
         });
     }, []);
 
