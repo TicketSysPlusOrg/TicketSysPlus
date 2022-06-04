@@ -32,7 +32,7 @@ function NavBar() {
 
     return (
         <>
-            <Navbar sticky="top" expand="md" bg="light" variant="light" className="shadow p-0 m-0">
+            <Navbar sticky="top" expand="md" variant="light" className=" p-0 m-0" id={"navBg"}>
 
                 <NavbarBrand className="mx-4  mb-1">
                     <a className="navbar-brand ms-3" href={window.location.origin} onClick={navigateHome}>
