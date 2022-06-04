@@ -99,7 +99,7 @@ function Tickets({ projects }) {
                 </Col> :
                 devOpsTix ?
                     devOpsTix.value.map((devTix, index) => (
-                        <Col xs={12} key={index}>
+                        <Col xs={12} key={index} className={"ms-3"}>
                             {/*TODO: double check that areapath will always be filled*/}
                             {/* TODO: https://mui.com/material-ui/react-stack/ */}
                             <div className={"projectSelect " }>
