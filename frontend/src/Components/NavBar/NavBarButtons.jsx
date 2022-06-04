@@ -82,7 +82,7 @@ function NavBarButtons({ currLocation, btnVertSpace, vertOrNot }) {
                     </NavLink>
                     : null
                 }
-                {/*TODO: make this a custom button. don't overuse bootstrap.  */}
+                {/*TODO: https://mui.com/material-ui/react-menu/#basic-menu  */}
                 <div>
                     <Button onClick={logout}
                         onBlur={toggleBlur}
@@ -104,7 +104,7 @@ function NavBarButtons({ currLocation, btnVertSpace, vertOrNot }) {
             </ButtonGroup>
 
             <Modal show={show} onHide={handleClose}>
-                <Modal.Dialog className="shadow-lg mx-3">
+                <Modal.Dialog className=" mx-3">
 
                     <Modal.Header closeButton>
                         <Modal.Title>Make a Ticket</Modal.Title>
