@@ -282,7 +282,7 @@ function TicketForm(props) {
                                 <>
                                     <Container>
                                         <div className={"form-label fw-bold"}>Ticket Description</div>
-                                        <div id={"contentEditDiv"} ref={divDesc} className={"form-control form"}></div>
+                                        <div id={"contentEditDiv"} ref={divDesc} className={"form-control"}></div>
                                     </Container>
                                 </>
                                 : null}
@@ -330,7 +330,6 @@ function TicketForm(props) {
                         }
 
                         {/*SUBMIT BUTTONS*/}
-                        {/*TODO: make button say 'submit changes' if in 'edit ticket' version, apply put method to do so.*/}
                         {props.editTicket === true ?
                             <Button onClick={handleClose} type={"submit"} name={"action"} className={"float-end mt-2"}>
                                 Update

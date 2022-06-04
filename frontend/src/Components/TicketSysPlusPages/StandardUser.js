@@ -55,11 +55,11 @@ function StandardUser() {
                     </Container>
                 </Col>
                 <Col xs={8} sm={7} md={9}>
-                    <Container>
+                    <div className={"ms-1"}>
                         <Row>
                             <UserTickets projects={teamVal} key={teamVal}/>
                         </Row>
-                    </Container>
+                    </div>
                 </Col>
 
             </Row>

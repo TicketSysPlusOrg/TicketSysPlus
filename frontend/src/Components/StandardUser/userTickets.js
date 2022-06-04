@@ -75,15 +75,15 @@ function UserTickets(props) {
                     devOpsTix.value.map((devTix, index) => (
                         <Col xs={12} key={index}>
                             {/*TODO: double check that areapath will always be filled*/}
-                            <div className={"projectSelect"}>
+                            <div className={"projectSelect " }>
                                 <Container className={"my-1 py-1 px-0 row bg-white"} >
                                     <Col xs={1} className={"align-self-center"}>
                                         <div>
-                                            <a onClick={() => showTicketModal(devTix.fields["System.AreaPath"] + "|" + devTix.id)} className={"eyeSee"}><AiFillEye size={"2rem"} /></a>
+                                            <a onClick={() => {setRenderEdit(false); showTicketModal(devTix.fields["System.AreaPath"] + "|" + devTix.id);}} className={"eyeSee"}><AiFillEye size={"2rem"} /></a>
                                         </div>
                                     </Col>
                                     <Col xs={3}>
-                                        <div className={"mx-2 d-inline-block "}>
+                                        <div className={"mx-2 cardOneLine"}>
                                             <strong >{devTix.fields["System.Title"]}</strong>
                                         </div>
                                     </Col>
@@ -99,7 +99,7 @@ function UserTickets(props) {
                                             {/*TODO: remove the extra ternary check for no due date present once we require due date for ticket creation*/}
                                             <strong>Due Date</strong>: {devTix ? (devTix.fields["Microsoft.VSTS.Scheduling.DueDate"] ? devTix.fields["Microsoft.VSTS.Scheduling.DueDate"].slice(0, 10) : null) : null}
                                         </div>
-                                        <div  className={"mx-3 "}>
+                                        <div  className={"ms-2 "}>
                                             <strong>Assigned To</strong>: {getNameBeforeEmail(devTix.fields["System.AssignedTo"])}
                                         </div>
                                     </Col>
