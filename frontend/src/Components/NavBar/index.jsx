@@ -45,6 +45,7 @@ function NavBar() {
                 </NavbarBrand>
                 <Navbar.Toggle aria-controls={"offcanvasNavbar-expand-tickets"} />
 
+                {/* TODO: Remove since we don't care about mobile responsiveness */}
                 <Navbar.Offcanvas ref={classRef} id={"offcanvasNavbar-expand-tickets"} aria-labelledby={"offcanvasNavbarLabel-expand-tickets"} placement="end" className={" justify-content-end "} >
                     <Offcanvas.Header closeButton />
                     <Offcanvas.Body>
