@@ -3,9 +3,8 @@ import mongoose from "mongoose";
 import bodyparser from "body-parser";
 import cors from "cors";
 
-// import routes from './routes/testTicketRoutes';
-import mongoTicketRoutes from "./routes/testTicketRoutes";
-import tickSchemaRoute from "./routes/tickSchemaRoute";
+import responderRoute from "./routes/responderRoute";
+import jsonRoute from "./routes/jsonRoute";
 
 const app = express();
 const PORT = 4001;
@@ -23,19 +22,12 @@ mongoose.connect("mongodb://127.0.0.1:27017", {
 app.use(bodyparser.urlencoded({ extended: true }));
 app.use(bodyparser.json());
 
-//CORS setup
+//cors setup
 app.use(cors());
 
-//pass routes to express app. routes now available
-mongoTicketRoutes(app);
+app.use("/jsons", jsonRoute);
 
-//pass ticket route(s) to express app
-app.use("/ticketSchema", tickSchemaRoute);
-
-
-app.get("/", (req, res) => {
-    res.send(`Our Ticket app is running on port ${PORT}.`);
-});
+app.use("/responders", responderRoute);
 
 //this actually opens up the server/starts the server on port 4001
 app.listen(PORT, () => {
