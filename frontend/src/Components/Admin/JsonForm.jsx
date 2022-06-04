@@ -65,7 +65,7 @@ function JsonForm({ jsonModal }) {
 }
 
 JsonForm.propTypes = {
-    jsonModal: PropTypes.object
+    jsonModal: PropTypes.string
 };
 
 export default JsonForm;
