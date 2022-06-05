@@ -23,7 +23,6 @@ function TicketForm(props) {
     let inputDesc = createRef();
     let inputDate = createRef();
     let inputPriority = createRef();
-    let inputMentions = createRef();
     let inputAttachment = createRef();
     let divDesc = createRef();
 
@@ -66,21 +65,22 @@ function TicketForm(props) {
         const tickDate = inputDate.current.value;
         const tickPriority = inputPriority.current.value;
 
-        //mentions was an array when we were dealing with mongo. we can prob do diff now.
-        const tickMentions = inputMentions.current.value.split(/[,| ]+/).map(function (value) {
-            return value.trim();
-        });
-
         //TODO: attachments
         const tickAttachments = inputAttachment.current.value;
 
-        const descAndMentions = ticketDesc + " Mentions: " + tickMentions;
 
         /*TODO: use attachments, what about iteration id/area id?*/
         if(!editTicket) {
+            /*handle mentions array. need to tag people, so need to mutate into proper name tags for DevOps*/
+            const mentionFormat = "<a href=\"#\" data-vss-mention=\"version2.0,USERID\">@NAME</a>";
+            let allMentions = "";
+            for (let i = 0; i < mentionChoices.length; i++) {
+                allMentions += mentionFormat.replace("USERID", mentionChoices[i].id).replace("NAME", mentionChoices[i].label);
+            }
+
             /*create new devops ticket*/
-            const devOpsTickData = { "fields": { "System.State": "To Do", "System.Title": ticketTitle, "System.Description": descAndMentions,
-                "Microsoft.VSTS.Scheduling.DueDate": tickDate, "Microsoft.VSTS.Common.Priority": tickPriority, "System.WorkItemType": ticketType } };
+            const devOpsTickData = { "fields": { "System.State": "To Do", "System.Title": ticketTitle, "System.Description": ticketDesc,
+                "Microsoft.VSTS.Scheduling.DueDate": tickDate, "Microsoft.VSTS.Common.Priority": tickPriority, "System.WorkItemType": ticketType, "Microsoft.VSTS.CMMI.Comments": allMentions } };
 
             const createTicket = await azureConnection.createWorkItem(prjID, ticketType, devOpsTickData);
         } else {
@@ -104,7 +104,6 @@ function TicketForm(props) {
             if(inputDate.current.value !== props.ticketInfo.fields["Microsoft.VSTS.Scheduling.DueDate"]) {
                 ticketUpdates["Microsoft.VSTS.Scheduling.DueDate"] = inputDate.current.value;
             }
-
 
             const updateDevopsTickets = { "fields": ticketUpdates };
             const updateTicket = await azureConnection.updateWorkItem(prjID, props.ticketInfo.id, updateDevopsTickets);
@@ -176,14 +175,13 @@ function TicketForm(props) {
         }
     }
 
-    useEffect(() => {
-
-    }, [anotherDataSource]);
-
     /*update statevals, typevals, and priorityval onchange. overriding hard set from edit ticket data*/
     const [priorityVal, changePriorityVal] = useState(null);
     const [typeVal, changeTypeVal] = useState(null);
     const [stateVal, changeStateVal] = useState(null);
+
+    /*array of mentioned people. trying to tag them in created ticket and edited ticket*/
+    const [mentionChoices, setMentionChoices] = useState([]);
 
     return (
         <>
@@ -279,13 +277,11 @@ function TicketForm(props) {
                             </Form.Group>
                         </Row>
 
-                        {/*MENTIONS*/}
+                        {/*MENTIONS. for now, sending to comments*/}
                         <Row className={"mb-2"}>
                             <Form.Group className={"col s12"}>
                                 <Form.Label htmlFor={"tickMentions"} className={"fw-bold"}>Mentions</Form.Label>
-                                <Form.Control type={"text"} placeholder={"Enter associates"} ref={inputMentions} />
-                                <Form.Text id={"tickMentions"} name={"tickMentions"} />
-                                <AutoCompleteNames />
+                                <AutoCompleteNames id={"tickMentions"} setMentionChoices={setMentionChoices} />
                             </Form.Group>
                         </Row>
 
