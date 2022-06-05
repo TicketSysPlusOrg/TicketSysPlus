@@ -88,6 +88,16 @@ function Tickets({ projects }) {
         setBlockStateChange(null);
     }, [blockStateChange !== null]);
 
+    function stateColor(currentState) {
+        if(currentState === "Blocked" || currentState === "Removed") {
+            return "redTag";
+        } else if(currentState === "Done" || currentState === "Closed") {
+            return "greenTag";
+        } else {
+            return "";
+        }
+    }
+
     return (
         <>
             {/* TODO: Replace this div with a metrics box, for Ex:
@@ -127,8 +137,8 @@ function Tickets({ projects }) {
                         <Col xs={12} className={"pe-0"} key={index} >
                             {/*TODO: double check that areapath will always be filled*/}
                             {/* TODO: https://mui.com/material-ui/react-stack/ */}
-                            <div className={"projectSelect " }>
-                                <Container fluid className={"my-1 py-1 px-0 row hoverOver cardOneLine align-items-center fw-bold "} >
+                            <div className={"projectSelect"}>
+                                <Container fluid className={stateColor(devTix.fields["System.State"]) + " my-1 py-1 px-0 row hoverOver cardOneLine align-items-center fw-bold "} >
                                     <Col xs={1} className={"ps-3 d-flex"}>
                                         <a title={"Inspect Ticket"} onClick={() => {setRenderEdit(false); showTicketModal([devTix.fields["System.AreaPath"], devTix.id]);}} className={"eyeSee"}>
                                             <VisibilityIcon sx={{ fontSize: "2rem" }}/>
