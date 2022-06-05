@@ -89,11 +89,11 @@ function Tickets({ projects }) {
                 <> priority 2 tickets
                 <> priority 1 tickets
                 ...etc
-                
+
                 clicking them filters the tickets to only those tickets (only blocked tickets, only p3 tickets, etc.)
             */}
             <div className={"mt-4"}></div>
-            <Col xs={12} className={"ms-3"}>
+            <Col xs={12} className={"pe-0"}>
                 <div className={"projectSelect " }>
                     <Container fluid className={"my-1 py-1 px-0 row hoverOver cardOneLine align-items-center fw-bold text-decoration-underline"} >
                         <Col xs={1} className={"ps-3"}>View</Col>
@@ -112,17 +112,17 @@ function Tickets({ projects }) {
                 </div>
             </Col>
             {noTickets ?
-                <Col xs={12}>
+                <Col xs={12} className={"pe-0"}>
                     <p>{noTickets}</p>
                 </Col> :
                 devOpsTix ?
                     devOpsTix.value.map((devTix, index) => (
-                        <Col xs={12} key={index} className={"ms-3"}>
+                        <Col xs={12} className={"pe-0"} key={index} >
                             {/*TODO: double check that areapath will always be filled*/}
                             {/* TODO: https://mui.com/material-ui/react-stack/ */}
                             <div className={"projectSelect " }>
                                 <Container fluid className={"my-1 py-1 px-0 row hoverOver cardOneLine align-items-center fw-bold "} >
-                                    <Col xs={1} className={"d-flex ps-3"}>
+                                    <Col xs={1} className={"ps-3 d-flex"}>
                                         <div className={"align-self-center"}>
                                             <a title={"Inspect Ticket"} onClick={() => {setRenderEdit(false); showTicketModal([devTix.fields["System.AreaPath"], devTix.id]);}} className={"eyeSee"}><AiFillEye size={"2rem"} /></a>
                                         </div>
