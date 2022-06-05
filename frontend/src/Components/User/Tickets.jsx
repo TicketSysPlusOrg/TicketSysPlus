@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Col, Container, Modal } from "react-bootstrap";
-import { AiFillEye } from "react-icons/ai";
-import { FaPencilAlt } from "react-icons/fa";
-import { FiAlertOctagon } from "react-icons/fi";
-import { TiArrowForwardOutline } from "react-icons/ti";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import ModeEditIcon from "@mui/icons-material/ModeEdit";
+import OpenInNewIcon from "@mui/icons-material/OpenInNew";
+import BlockIcon from "@mui/icons-material/Block";
 import PropTypes from "prop-types";
 
 import { azureConnection } from "../../index";
@@ -68,9 +68,15 @@ function Tickets({ projects }) {
     const [allTicketInfo, setAllTicketInfo] = useState(null);
 
     /*set this ticket's state to blocked*/
-    async function blockTicket(itemID) {
-        const blockTicket = { "System.State": "Blocked" };
-        const updateTicket = azureConnection.updateWorkItem(activePrjID, itemID, { "fields": blockTicket });
+    async function blockTicket(itemID, currentState) {
+        if(currentState !== "Blocked") {
+            const blockTicket = { "System.State": "Blocked" };
+            const updateTicket = azureConnection.updateWorkItem(activePrjID, itemID, { "fields": blockTicket });
+        } else {
+            const blockTicket = { "System.State": "Active" };
+            const updateTicket = azureConnection.updateWorkItem(activePrjID, itemID, { "fields": blockTicket });
+        }
+
     }
 
     /*trigger tickets rerender on state change (i.e. changing to blocked*/
@@ -79,6 +85,7 @@ function Tickets({ projects }) {
     /*run render again*/
     useEffect(() => {
         run();
+        setBlockStateChange(null);
     }, [blockStateChange !== null]);
 
     return (
@@ -123,9 +130,9 @@ function Tickets({ projects }) {
                             <div className={"projectSelect " }>
                                 <Container fluid className={"my-1 py-1 px-0 row hoverOver cardOneLine align-items-center fw-bold "} >
                                     <Col xs={1} className={"ps-3 d-flex"}>
-                                        <div className={"align-self-center"}>
-                                            <a title={"Inspect Ticket"} onClick={() => {setRenderEdit(false); showTicketModal([devTix.fields["System.AreaPath"], devTix.id]);}} className={"eyeSee"}><AiFillEye size={"2rem"} /></a>
-                                        </div>
+                                        <a title={"Inspect Ticket"} onClick={() => {setRenderEdit(false); showTicketModal([devTix.fields["System.AreaPath"], devTix.id]);}} className={"eyeSee"}>
+                                            <VisibilityIcon sx={{ fontSize: "2rem" }}/>
+                                        </a>
                                     </Col>
                                     <Col xs={3} title={devTix.fields["System.Title"]}>{devTix.fields["System.Title"]}</Col>
                                     <Col xs={1}>{devTix.id}</Col>
@@ -138,9 +145,15 @@ function Tickets({ projects }) {
                                     <Col xs={2} title={devTix.fields["System.AssignedTo"]}>{getNameBeforeEmail(devTix.fields["System.AssignedTo"])}</Col>
                                     <Col xs={2} className={"d-flex justify-content-around"}>
                                         {/*TODO: this is hard coded to our org. fix that.*/}
-                                        <a title={"Block Ticket"} className={"userTicketBtns"} onClick={() => {blockTicket(devTix.id); setBlockStateChange("Blocked");}}><FiAlertOctagon size={"1.5rem"}/></a>
-                                        <a title={"Edit Ticket"} className={"userTicketBtns"} onClick={() => {setRenderEdit(true); setAllTicketInfo(devTix); showTicketModal([devTix.fields["System.AreaPath"], devTix.id]);}}><FaPencilAlt size={"1.5rem"}/></a>
-                                        <a title={"See DevOps Entry"} className={"userTicketBtns"} href={`https://dev.azure.com/KrokhalevPavel/MotorQ%20Project/_workitems/edit/${devTix.id}`} rel={"noreferrer"} target={"_blank"} ><TiArrowForwardOutline size={"1.5rem"}/></a>
+                                        <a title={"Block Ticket"} className={"userTicketBtns"} onClick={() => {blockTicket(devTix.id, devTix.fields["System.State"]); setBlockStateChange(devTix.fields["System.State"]);}}>
+                                            <BlockIcon sx={devTix.fields["System.State"] === "Blocked" ? { color: "red" } : { color: "green" }}  />
+                                        </a>
+                                        <a title={"Edit Ticket"} className={"userTicketBtns"} onClick={() => {setRenderEdit(true); setAllTicketInfo(devTix); showTicketModal([devTix.fields["System.AreaPath"], devTix.id]);}}>
+                                            <ModeEditIcon />
+                                        </a>
+                                        <a title={"See in DevOps"} className={"userTicketBtns"} href={`https://dev.azure.com/KrokhalevPavel/MotorQ%20Project/_workitems/edit/${devTix.id}`} rel={"noreferrer"} target={"_blank"} >
+                                            <OpenInNewIcon />
+                                        </a>
                                     </Col>
                                 </Container>
                             </div>

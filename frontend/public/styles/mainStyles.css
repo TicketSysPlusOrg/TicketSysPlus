@@ -83,7 +83,11 @@
 /*override style for view ticket button*/
 .bootstrapOverride .eyeSee {
     cursor: pointer;
-    color: #181818;
+    color: rgb(0, 0, 0);
+}
+
+.eyeSee:hover {
+    color: rgb(224, 100, 39);
 }
 
 /*style overrides for create ticket button*/
