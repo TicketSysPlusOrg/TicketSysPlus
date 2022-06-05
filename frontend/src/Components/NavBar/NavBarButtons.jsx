@@ -9,6 +9,8 @@ import PropTypes from "prop-types";
 import { loginRequest } from "../../authConfig";
 import { callMsGraph } from "../../utils/MsGraphApiCall";
 import TicketForm from "../User/TicketForm";
+// TODO: uncomment to hide admin page & settings page to non-admins
+// import { isAdmin } from "../../utils/Util";
 
 
 function NavBarButtons({ currLocation, btnVertSpace, vertOrNot }) {
@@ -20,6 +22,8 @@ function NavBarButtons({ currLocation, btnVertSpace, vertOrNot }) {
     const account = useAccount(accounts[0] || {});
 
     const [graphData, setGraphData] = useState(null);
+    // TODO: set to false to hide admin page & settings page to non-admins
+    const [admin, setAdmin] = useState(true);
 
     useEffect(() => {
         // Silently acquires an access token which is then attached to a request for MS Graph data
@@ -27,8 +31,10 @@ function NavBarButtons({ currLocation, btnVertSpace, vertOrNot }) {
             ...loginRequest,
             account: accounts[0]
         }).then((response) => {
-            callMsGraph(response.accessToken).then(response => {
+            callMsGraph(response.accessToken).then(async response => {
                 setGraphData(response);
+                // TODO: uncomment to hide admin page & settings page to non-admins
+                // setAdmin(await isAdmin(response.mail));
                 console.log(response);
             });
         }).catch(async (error) => {
@@ -76,16 +82,21 @@ function NavBarButtons({ currLocation, btnVertSpace, vertOrNot }) {
                         : null
                     }
                 </div>
-                {currLocation.pathname !== "/admin" ?
-                    <NavLink to="/admin">
-                        <Button className={btnVertSpace + " btn adminButton mx-2"}>Admin Page</Button>
-                    </NavLink>
-                    : null
-                }
                 <div>
-                    <NavLink to="/settings" >
-                        <Button className={btnVertSpace + "btn adminButton  mx-2"}>Settings</Button>
-                    </NavLink>
+                    {currLocation.pathname !== "/admin" && admin ?
+                        <NavLink to="/admin">
+                            <Button className={btnVertSpace + " btn adminButton mx-2"}>Admin Page</Button>
+                        </NavLink>
+                        : null
+                    }
+                </div>
+                <div>
+                    {currLocation.pathname !== "/settings" && admin ?
+                        <NavLink to="/settings" >
+                            <Button className={btnVertSpace + "btn adminButton  mx-2"}>Settings</Button>
+                        </NavLink>
+                        : null
+                    }
                 </div>
                 {/*TODO: https://mui.com/material-ui/react-menu/#basic-menu  */}
                 <div>

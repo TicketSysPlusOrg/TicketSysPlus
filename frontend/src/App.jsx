@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Route, Routes } from "react-router";
 import { useIsAuthenticated } from "@azure/msal-react";
 
@@ -15,6 +15,7 @@ function App() {
         <Routes>
             { isAuthenticated && (<Route path="/" element={<User />} exact />) }
             { !isAuthenticated && (<Route path="/" element={<Landing />} exact />) }
+            {/* TODO: block /admin and /settings routes if not admin */}
             <Route path="/admin" element={<Admin />} exact />
             <Route path="/settings" element={<Settings />} exact />
             <Route path="*" element={<Error />} />

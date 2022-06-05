@@ -1,4 +1,5 @@
 import parse from "html-react-parser";
+import axios from "axios";
 
 /**
  * Parses HTML string into React Components
@@ -13,4 +14,20 @@ export function parseHtml(input) {
     input = input.replace(/data-darkreader-inline-bgcolor=".*?"|style=".*?"/g, "");
 
     return parse(input);
+}
+
+export async function isAdmin(email) {
+    const { data } = await axios.get("http://localhost:4001/admins")
+        .catch((err) => {
+            console.log(err);
+        });
+    return data.some(admin => admin.email === email);
+}
+
+export async function getSettings() {
+    const { data } = await axios.get("http://localhost:4001/settings")
+        .catch((err) => {
+            console.log(err);
+        });
+    return data;
 }
