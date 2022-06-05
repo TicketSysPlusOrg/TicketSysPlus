@@ -82,6 +82,11 @@ function NavBarButtons({ currLocation, btnVertSpace, vertOrNot }) {
                     </NavLink>
                     : null
                 }
+                <div>
+                    <NavLink to="/settings" >
+                        <Button className={btnVertSpace + "btn adminButton  mx-2"}>Settings</Button>
+                    </NavLink>
+                </div>
                 {/*TODO: https://mui.com/material-ui/react-menu/#basic-menu  */}
                 <div>
                     <Button onClick={logout}

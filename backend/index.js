@@ -3,8 +3,10 @@ import mongoose from "mongoose";
 import bodyparser from "body-parser";
 import cors from "cors";
 
-import responderRoute from "./routes/responderRoute";
-import jsonRoute from "./routes/jsonRoute";
+import  responderRoute from "./routes/responderRoute";
+import  jsonRoute from "./routes/jsonRoute";
+import  adminRoute from "./routes/adminRoute";
+import  settingsRoute from "./routes/settingsRoute";
 
 const app = express();
 const PORT = 4001;
@@ -28,6 +30,10 @@ app.use(cors());
 app.use("/jsons", jsonRoute);
 
 app.use("/responders", responderRoute);
+
+app.use("/admins", adminRoute);
+
+app.use("/settings", settingsRoute);
 
 //this actually opens up the server/starts the server on port 4001
 app.listen(PORT, () => {

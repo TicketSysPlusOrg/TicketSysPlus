@@ -1,9 +1,8 @@
 import mongoose from "mongoose";
 
-import { responderSchema } from "../models/responderSchema.js";
+import { memberSchema } from "../models/memberSchema.js";
 
-const Responder = mongoose.model("Responder", responderSchema);
-
+const Responder = mongoose.model("Responder", memberSchema);
 
 //POST
 export const addResponder = (req, res) => {

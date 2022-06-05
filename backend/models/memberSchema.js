@@ -2,11 +2,11 @@ import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
-export const responderSchema = new Schema({
+export const memberSchema = new Schema({
     image: {
         type: String,
         minlength: 1,
-        required: true
+        required: false
     },
     name: {
         type: String,
