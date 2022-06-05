@@ -43,7 +43,7 @@ export const changeSettings = (req, res) => {
             if (err) {
                 res.send(err);
             }
-            res.json(Json);
+            res.json(Settings);
         }
     );
 };

@@ -4,11 +4,12 @@ import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import CloseIcon from "@mui/icons-material/Close";
 import { styled } from "@mui/material/styles";
-
 import { autocompleteClasses } from "@mui/material/Autocomplete";
+import PropTypes from "prop-types";
+
 import { azureConnection } from "../../index";
 
-function AutoCompleteNames({setMentionChoices}) {
+function AutoCompleteNames({ setMentionChoices }) {
     const [teamMembersList, setTeamMembersList] = useState([]);
     const [teamMembers, setTeamMembers] = useState(null);
     const [chooseList, setChooseList] = useState([]);
@@ -58,5 +59,9 @@ function AutoCompleteNames({setMentionChoices}) {
         </>
     );
 }
+
+AutoCompleteNames.propTypes = {
+    setMentionChoices: PropTypes.func
+};
 
 export default AutoCompleteNames;

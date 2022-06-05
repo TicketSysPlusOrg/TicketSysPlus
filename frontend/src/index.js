@@ -1,6 +1,7 @@
 import { EventType, PublicClientApplication } from "@azure/msal-browser";
 // eslint-disable-next-line
 import { MsalProvider } from "@azure/msal-react";
+// eslint-disable-next-line
 import axios from "axios";
 
 import "bootstrap";
