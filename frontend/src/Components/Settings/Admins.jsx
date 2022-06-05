@@ -106,6 +106,9 @@ function Admins() {
                             <Card.Text>
                                 {card ? card.name : null}
                             </Card.Text>
+                            <Card.Text>
+                                {card ? card.email : null}
+                            </Card.Text>
                         </Card.Body>
                     </Card>)
                 )
