@@ -65,10 +65,6 @@ function Responders() {
 
     const autoResponders = responders ?
         responders.value
-            .filter(responder => {
-                if (card === null || card.length === 0) return true;
-                return card.every(card => card.email !== responder.identity.uniqueName);
-            })
             .map((responder) => {
                 return { label: responder.identity.displayName, imageUrl: responder.identity.imageUrl, email: responder.identity.uniqueName };
             })
@@ -83,6 +79,13 @@ function Responders() {
                 disablePortal
                 disableCloseOnSelect
                 options={autoResponders}
+                isOptionEqualToValue={(option, value) => option.label === value.label}
+                filterOptions={(options) => {
+                    return options.filter(responder => {
+                        if (card === null || card.length === 0) return true;
+                        return card.every(card => card.email !== responder.email);
+                    });
+                }}
                 sx={{ width: 300 }}
                 renderInput={(params) => <TextField {...params} label="Responders" />}
                 onChange={(_event, value, reason) => {
