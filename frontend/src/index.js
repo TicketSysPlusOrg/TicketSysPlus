@@ -18,7 +18,7 @@ import { AzureDevOpsApi } from "./utils/AzureDevOpsApi";
 export const azureConnection = new AzureDevOpsApi(azureConfig.organizationUrl, azureConfig.token);
 
 export const backendApi = axios.create({
-    baseURL: process.env.REACT_APP_BASE_URL,
+    baseURL: "http://localhost:4001/",
     headers: {
         common: {
             "Content-Type": "application/json"
@@ -78,8 +78,8 @@ async function run() {
 
     //    const thisData = {"fields": {"System.State": "To Do", "System.Title": "A Ticket Title"}};
 
-//    const createTicket = await azureConnection.createWorkItem(projects.value[0].id, "Task", thisData);
-//    console.log(createTicket);
+    //    const createTicket = await azureConnection.createWorkItem(projects.value[0].id, "Task", thisData);
+    //    console.log(createTicket);
 }
 run();
 
