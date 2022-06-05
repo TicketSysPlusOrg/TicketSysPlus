@@ -56,13 +56,11 @@
 }
 
 .hoverOver.redTag {
-    border: red 2px solid;
-    background-color: #fdf8f8;
+    border: #fd7f7f 2px solid;
 }
 
 .hoverOver.greenTag {
-    border: #0bee3d 2px solid;
-    background-color: #f7fdf7;
+    border: #3bda63 2px solid;
 }
 
 /*overrides for project selection cards*/
