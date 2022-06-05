@@ -50,6 +50,19 @@
     border-radius: 0.375rem;
 }
 
+.hoverOver {
+    border: white 2px solid;
+    background-color: white;
+}
+
+.hoverOver.redTag {
+    border: #fd7f7f 2px solid;
+}
+
+.hoverOver.greenTag {
+    border: #3bda63 2px solid;
+}
+
 /*overrides for project selection cards*/
 .projectSelect .card {
     border-width: 0.2rem;
@@ -62,11 +75,6 @@
 
 .projectSelect .activeProjectCard {
     border-color: rgba(50, 44, 147, 1);
-}
-
-.hoverOver {
-    border: white 2px solid;
-    background-color: white;
 }
 
 .bootstrapOverride .hoverOver:hover,
@@ -83,7 +91,11 @@
 /*override style for view ticket button*/
 .bootstrapOverride .eyeSee {
     cursor: pointer;
-    color: #181818;
+    color: rgb(0, 0, 0);
+}
+
+.eyeSee:hover {
+    color: rgb(224, 100, 39);
 }
 
 /*style overrides for create ticket button*/
