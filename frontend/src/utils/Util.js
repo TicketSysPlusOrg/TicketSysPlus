@@ -16,6 +16,12 @@ export function parseHtml(input) {
     return parse(input);
 }
 
+/**
+ * Checks if an email is saved as an admin in the backend.
+ * TODO: make it not async so you don't have to await the isAdmin method to get output
+ * @param {string} email the email to look up
+ * @returns {boolean} true if the email is from an admin, false otherwise
+ */
 export async function isAdmin(email) {
     const { data } = await axios.get("http://localhost:4001/admins")
         .catch((err) => {
@@ -24,6 +30,9 @@ export async function isAdmin(email) {
     return data.some(admin => admin.email === email);
 }
 
+/**
+ * Gets the Settings JSON Object
+ */
 export async function getSettings() {
     const { data } = await axios.get("http://localhost:4001/settings")
         .catch((err) => {
