@@ -57,7 +57,7 @@ function User() {
                         </Container>
                     </Col>
                     <Col xs={10} id={"inset-shadow"}>
-                        <Row className={"ps-2"}>
+                        <Row className={"ps-3"}>
                             <Tickets projects={teamVal} key={teamVal} />
                         </Row>
                     </Col>
