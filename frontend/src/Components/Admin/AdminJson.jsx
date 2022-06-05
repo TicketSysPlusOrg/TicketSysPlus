@@ -107,7 +107,7 @@ function AdminJson() {
                     <Button onClick={handleClick}>
                         Upload a file
                     </Button>
-                    <input type="file" ref={hiddenFileInput} onChange={handleChange} style={{ display: "none" }}/>
+                    <input type="file" ref={hiddenFileInput} onChange={handleChange} style={{ display: "none" }} />
                     <button className="btn btn-danger mx-3" id="exportbtn" type="button">Export</button>
                 </div>
 
@@ -120,7 +120,7 @@ function AdminJson() {
 
             <div className="container">
                 <p>code mirror below...</p>
-                <JsonViewer />
+                <JsonViewer jsonM />
             </div>
 
             <Modal show={show} onHide={handleClose} className="row">
@@ -132,7 +132,7 @@ function AdminJson() {
                         </Modal.Header>
 
                         <Modal.Body>
-                            <JsonForm jsonModal={data}/>
+                            <JsonForm jsonModal={data} />
                         </Modal.Body>
                     </Modal.Dialog>
                 </div>
