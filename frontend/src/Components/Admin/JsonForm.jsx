@@ -1,8 +1,9 @@
 // forms to fill to create a new ticket
 import React, { createRef, useState } from "react";
-import axios from "axios";
 import { Button, Form } from "react-bootstrap";
 import PropTypes from "prop-types";
+
+import { backendApi } from "../../index";
 
 function JsonForm({ jsonModal }) {
     const [show, setShow] = useState(false);
@@ -14,7 +15,7 @@ function JsonForm({ jsonModal }) {
 
         const jsonBody = inputBody.current.value;
 
-        axios.delete("http://localhost:4001/jsons")
+        backendApi.delete("jsons")
             .then((res) => {
                 console.log(res);
 
@@ -23,7 +24,7 @@ function JsonForm({ jsonModal }) {
                 console.log(err);
             });
 
-        axios.post("http://localhost:4001/jsons", {
+        backendApi.post("jsons", {
             body: jsonBody
         })
             .then((res) => {

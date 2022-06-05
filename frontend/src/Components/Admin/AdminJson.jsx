@@ -1,6 +1,7 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Button, Modal } from "react-bootstrap";
+
+import { backendApi } from "../../index";
 
 import JsonForm from "./JsonForm";
 import JsonViewer from "./JsonViewer";
@@ -18,7 +19,7 @@ function AdminJson() {
     }, []);
 
     function run() {
-        axios.get("http://localhost:4001/jsons")
+        backendApi.get("jsons")
             .then((res) => {
                 const dbJson = res.data[0].body;
                 document.getElementById("jsonText").value = dbJson;
@@ -62,8 +63,8 @@ function AdminJson() {
     }
 
     function loadOld() {
-        axios
-            .get("http://localhost:4001/jsons")
+        backendApi
+            .get("jsons")
             .then((res) => {
                 //TODO: setCurrentJson should be the body of the db data from the get
                 console.log(res.data);

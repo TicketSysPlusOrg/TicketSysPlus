@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
-require('dotenv').config();
+
+require("dotenv").config();
 import { memberSchema } from "../models/memberSchema.js";
 
 const Admin = mongoose.model("Admin", memberSchema);

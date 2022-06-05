@@ -1,5 +1,6 @@
 import parse from "html-react-parser";
-import axios from "axios";
+
+import { backendApi } from "../index";
 
 /**
  * Parses HTML string into React Components
@@ -23,7 +24,7 @@ export function parseHtml(input) {
  * @returns {boolean} true if the email is from an admin, false otherwise
  */
 export async function isAdmin(email) {
-    const { data } = await axios.get("http://localhost:4001/admins")
+    const { data } = await backendApi.get("admins")
         .catch((err) => {
             console.log(err);
         });
@@ -34,7 +35,7 @@ export async function isAdmin(email) {
  * Gets the Settings JSON Object
  */
 export async function getSettings() {
-    const { data } = await axios.get("http://localhost:4001/settings")
+    const { data } = await backendApi.get("settings")
         .catch((err) => {
             console.log(err);
         });

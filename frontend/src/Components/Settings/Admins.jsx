@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Card, CloseButton, Col, Dropdown, Row } from "react-bootstrap";
-import axios from "axios";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 
+import { backendApi } from "../../index";
 import { azureConnection } from "../../index";
 
 function Admins() {
@@ -26,7 +26,7 @@ function Admins() {
     }
 
     function APIDropDownToDB(image, name, email){
-        axios.post("http://localhost:4001/admins", {
+        backendApi.post("admins", {
             image: image,
             name: name,
             email: email
@@ -41,7 +41,7 @@ function Admins() {
     }
 
     function loadAdmins(){
-        axios.get("http://localhost:4001/admins")
+        backendApi.get("admins")
             .then((res) => {
                 console.log(res.data);
                 setCard(res.data);
@@ -53,7 +53,7 @@ function Admins() {
 
     function deleteAdmins(id){
         console.log(id);
-        axios.delete("http://localhost:4001/admins", { data: { "id" : id } })
+        backendApi.delete("admins", { data: { "id" : id } })
             .then((res) => {
                 console.log(res);
                 loadAdmins();

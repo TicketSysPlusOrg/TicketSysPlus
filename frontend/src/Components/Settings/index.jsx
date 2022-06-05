@@ -1,13 +1,13 @@
 import { InteractionType } from "@azure/msal-browser";
 import { MsalAuthenticationTemplate } from "@azure/msal-react";
 import { Box, Container, Paper, Stack } from "@mui/material";
-import axios from "axios";
 import React, { useState, useEffect } from "react";
 
-import Admins from "./Admins";
-
+import { backendApi } from "../../index";
 import { loginRequest } from "../../authConfig";
 import NavBar from "../NavBar";
+
+import Admins from "./Admins";
 
 /*
     {
@@ -31,7 +31,7 @@ function Settings() {
     };
 
     useEffect(() => {
-        // axios.get("http://localhost:4001/");
+        // backendApi.get("");
     }, []);
 
     return(

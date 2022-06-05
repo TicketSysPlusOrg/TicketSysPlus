@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Card, CloseButton, Col, Dropdown, Row } from "react-bootstrap";
-import axios from "axios";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 
+import { backendApi } from "../../index";
 import { azureConnection } from "../../index";
 
 function Responders() {
@@ -26,7 +26,7 @@ function Responders() {
     }
 
     function APIDropDownToDB(Image, Name, Email){
-        axios.post("http://localhost:4001/responders", {
+        backendApi.post("responders", {
             image: Image,
             name: Name,
             email: Email
@@ -41,7 +41,7 @@ function Responders() {
     }
 
     function loadResponders(){
-        axios.get("http://localhost:4001/responders")
+        backendApi.get("responders")
             .then((res) => {
                 console.log(res.data);
                 setCard(res.data);
@@ -53,7 +53,7 @@ function Responders() {
 
     function deleteResponder(id){
         console.log(id);
-        axios.delete("http://localhost:4001/responders", { data: { "id" : id } })
+        backendApi.delete("responders", { data: { "id" : id } })
             .then((res) => {
                 console.log(res);
                 loadResponders();

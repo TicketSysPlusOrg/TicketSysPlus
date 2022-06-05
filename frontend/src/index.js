@@ -1,6 +1,7 @@
 import { EventType, PublicClientApplication } from "@azure/msal-browser";
 // eslint-disable-next-line
 import { MsalProvider } from "@azure/msal-react";
+import axios from "axios";
 
 import "bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -14,6 +15,15 @@ import { azureConfig, msalConfig } from "./authConfig";
 import { AzureDevOpsApi } from "./utils/AzureDevOpsApi";
 
 export const azureConnection = new AzureDevOpsApi(azureConfig.organizationUrl, azureConfig.token);
+
+export const backendApi = axios.create({
+    baseURL: process.env.REACT_APP_BASE_URL,
+    headers: {
+        common: {
+            "Content-Type": "application/json"
+        }
+    },
+});
 
 // TODO: Example Function. Used to showcase how to use the custom Azure DevOps API
 async function run() {
