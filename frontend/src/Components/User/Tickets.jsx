@@ -93,6 +93,24 @@ function Tickets({ projects }) {
                 clicking them filters the tickets to only those tickets (only blocked tickets, only p3 tickets, etc.)
             */}
             <div className={"mt-4"}></div>
+            <Col xs={12} className={"ms-3"}>
+                <div className={"projectSelect " }>
+                    <Container fluid className={"my-1 py-1 px-0 row hoverOver cardOneLine align-items-center fw-bold text-decoration-underline"} >
+                        <Col xs={1} className={"ps-3"}>View</Col>
+                        <Col xs={3}>Title</Col>
+                        <Col xs={1}>ID</Col>
+                        <Col xs={1}>Priority</Col>
+                        <Col xs={1}>State</Col>
+                        <Col xs={1}>Due Date</Col>
+                        <Col xs={2}>Assigned To</Col>
+                        <Col xs={2} className={"d-flex justify-content-around"}>
+                            <div className={"align-self-center"}>Block</div>
+                            <div className={"align-self-center"}>Edit</div>
+                            <div className={"align-self-center"}>See Page</div>
+                        </Col>
+                    </Container>
+                </div>
+            </Col>
             {noTickets ?
                 <Col xs={12}>
                     <p>{noTickets}</p>
@@ -103,38 +121,26 @@ function Tickets({ projects }) {
                             {/*TODO: double check that areapath will always be filled*/}
                             {/* TODO: https://mui.com/material-ui/react-stack/ */}
                             <div className={"projectSelect " }>
-                                <Container className={"my-1 py-1 px-0 row hoverOver"} >
-                                    <Col xs={1} className={"align-self-center"}>
-                                        <div>
+                                <Container fluid className={"my-1 py-1 px-0 row hoverOver cardOneLine align-items-center fw-bold "} >
+                                    <Col xs={1} className={"d-flex ps-3"}>
+                                        <div className={"align-self-center"}>
                                             <a title={"Inspect Ticket"} onClick={() => {setRenderEdit(false); showTicketModal([devTix.fields["System.AreaPath"], devTix.id]);}} className={"eyeSee"}><AiFillEye size={"2rem"} /></a>
                                         </div>
                                     </Col>
-                                    <Col xs={3}>
-                                        <div className={"mx-2 cardOneLine"}>
-                                            <strong >{devTix.fields["System.Title"]}</strong>
-                                        </div>
+                                    <Col xs={3} title={devTix.fields["System.Title"]}>{devTix.fields["System.Title"]}</Col>
+                                    <Col xs={1}>{devTix.id}</Col>
+                                    <Col xs={1}>{devTix.fields["Microsoft.VSTS.Common.Priority"]}</Col>
+                                    <Col xs={1} title={devTix.fields["System.State"]}>{devTix.fields["System.State"]}</Col>
+                                    {/*TODO: remove the extra ternary check for no due date present once we require due date for ticket creation*/}
+                                    <Col xs={1} title={devTix.fields["Microsoft.VSTS.Scheduling.DueDate"] ? devTix.fields["Microsoft.VSTS.Scheduling.DueDate"].slice(0, 10) : null}>
+                                        {devTix.fields["Microsoft.VSTS.Scheduling.DueDate"] ? devTix.fields["Microsoft.VSTS.Scheduling.DueDate"].slice(0, 10) : null}
                                     </Col>
-                                    <Col xs={6}>
-                                        <div className={"mx-2 d-inline-block"}><strong>ID</strong>: {devTix.id}</div>
-                                        <div  className={"mx-2 d-inline-block"}>
-                                            <strong>Priority</strong>: {devTix.fields["Microsoft.VSTS.Common.Priority"]}
-                                        </div>
-                                        <div className={"mx-2 d-inline-block"} onLoad={() => setBlockStateChange(devTix.fields["System.State"])}>
-                                            <strong>State</strong>: {devTix.fields["System.State"]}
-                                        </div>
-                                        <div  className={"mx-2 d-inline-block"}>
-                                            {/*TODO: remove the extra ternary check for no due date present once we require due date for ticket creation*/}
-                                            <strong>Due Date</strong>: {devTix ? (devTix.fields["Microsoft.VSTS.Scheduling.DueDate"] ? devTix.fields["Microsoft.VSTS.Scheduling.DueDate"].slice(0, 10) : null) : null}
-                                        </div>
-                                        <div  className={"ms-2 "}>
-                                            <strong>Assigned To</strong>: {getNameBeforeEmail(devTix.fields["System.AssignedTo"])}
-                                        </div>
-                                    </Col>
-                                    <Col xs={2} className={"align-self-center d-flex flex-row-reverse justify-content-between"}>
+                                    <Col xs={2} title={devTix.fields["System.AssignedTo"]}>{getNameBeforeEmail(devTix.fields["System.AssignedTo"])}</Col>
+                                    <Col xs={2} className={"d-flex justify-content-around"}>
                                         {/*TODO: this is hard coded to our org. fix that.*/}
-                                        <a title={"See DevOps Entry"} className={"mx-1 userTicketBtns"} href={`https://dev.azure.com/KrokhalevPavel/MotorQ%20Project/_workitems/edit/${devTix.id}`} rel={"noreferrer"} target={"_blank"} ><TiArrowForwardOutline size={"1.5rem"}/></a>
-                                        <a title={"Edit Ticket"} className={"mx-1 userTicketBtns"} onClick={() => {setRenderEdit(true); setAllTicketInfo(devTix); showTicketModal([devTix.fields["System.AreaPath"], devTix.id]);}}><FaPencilAlt size={"1.5rem"}/></a>
-                                        <a title={"Block Ticket"} className={"mx-1 userTicketBtns"} onClick={() => {blockTicket(devTix.id); setBlockStateChange("Blocked");}}><FiAlertOctagon size={"1.5rem"}/></a>
+                                        <a title={"Block Ticket"} className={"userTicketBtns"} onClick={() => {blockTicket(devTix.id); setBlockStateChange("Blocked");}}><FiAlertOctagon size={"1.5rem"}/></a>
+                                        <a title={"Edit Ticket"} className={"userTicketBtns"} onClick={() => {setRenderEdit(true); setAllTicketInfo(devTix); showTicketModal([devTix.fields["System.AreaPath"], devTix.id]);}}><FaPencilAlt size={"1.5rem"}/></a>
+                                        <a title={"See DevOps Entry"} className={"userTicketBtns"} href={`https://dev.azure.com/KrokhalevPavel/MotorQ%20Project/_workitems/edit/${devTix.id}`} rel={"noreferrer"} target={"_blank"} ><TiArrowForwardOutline size={"1.5rem"}/></a>
                                     </Col>
                                 </Container>
                             </div>

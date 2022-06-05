@@ -28,24 +28,28 @@ function Ticket({ ticketData, clickClose }) {
 
     const [renderEdit, setRenderEdit] = useState(null);
 
-    /*
-    Microsoft.VSTS.Common.Priority: 4
-    Microsoft.VSTS.Common.StateChangeDate: "2022-04-22T01:31:55.617Z"
-    System.AreaPath: "MotorQ Project"
-    System.ChangedBy: "Nathan Arrowsmith <Arrowsmith.Nathan@student.greenriver.edu>"
-    System.ChangedDate: "2022-04-22T01:31:55.617Z"
-    System.CommentCount: 1
-    System.CreatedBy: "Nathan Arrowsmith <Arrowsmith.Nathan@student.greenriver.edu>"
-    System.CreatedDate: "2022-04-22T01:31:55.617Z"
-    System.Description: "<div>initial ticket creation&nbsp; </div>"
-    System.History: "<div>test </div>"
-    System.IterationPath: "MotorQ Project"
-    System.Reason: "Added to backlog"
-    System.State: "To Do"
-    System.TeamProject: "MotorQ Project"
-    System.Title: "Hello World "
-    System.WorkItemType: "Task"
-    */
+    // Microsoft.VSTS.CMMI.Comments: "<div><a href=\"#\" data-vss-mention=\"version:2.0,efcfb7f0-f368-6e97-914a-8045b7bece52\">@Conor O'Brien</a>&nbsp; </div>"
+    // Microsoft.VSTS.Common.Priority: 4
+    // Microsoft.VSTS.Common.StateChangeDate: "2022-06-05T06:21:06.59Z"
+    // Microsoft.VSTS.Scheduling.DueDate: "2022-06-22T00:00:00Z"
+    // System.AreaPath: "MotorQ Project"
+    // System.AssignedTo: "Conor O'Brien <Obrien.Conor@student.greenriver.edu>"
+    // System.BoardColumn: "To Do"
+    // System.BoardColumnDone: false
+    // System.ChangedBy: "Conor O'Brien <Obrien.Conor@student.greenriver.edu>"
+    // System.ChangedDate: "2022-06-05T18:56:00.753Z"
+    // System.CommentCount: 0
+    // System.CreatedBy: "Pavel Krokhalev <Krokhalev.Pavel@student.greenriver.edu>"
+    // System.CreatedDate: "2022-06-05T06:21:06.59Z"
+    // System.Description: "decriptiondescription"
+    // System.IterationPath: "MotorQ Project"
+    // System.Reason: "Added to backlog"
+    // System.State: "To Do"
+    // System.TeamProject: "MotorQ Project"
+    // System.Title: "One More Check"
+    // System.WorkItemType: "Epic"
+    // WEF_AF37E0623F6A49B49742F64FDD1B97EF_Kanban.Column: "To Do"
+    // WEF_AF37E0623F6A49B49742F64FDD1B97EF_Kanban.Column.Done: false
 
     return (
         <>
@@ -57,24 +61,26 @@ function Ticket({ ticketData, clickClose }) {
                             {/*TODO: validation  for all fields*/}
                             <Form className="col s12">
 
-                                {/*ticket title and work type*/}
+                                {/*ticket title, work type, state, priority*/}
                                 <Row className={"mb-4"}>
                                     <h4>{allTicketInfo.fields["System.Title"]}</h4>
                                     <hr/>
                                     <h5>Ticket Type: {allTicketInfo.fields["System.WorkItemType"]}</h5>
+                                    <h5>Ticket State: {allTicketInfo.fields["System.State"]}</h5>
+                                    <h5>Priority: {allTicketInfo.fields["Microsoft.VSTS.Common.Priority"]}</h5>
                                 </Row>
 
                                 {/*ticket state and priority*/}
-                                <Row className={"my-4"}>
-                                    <Col>Ticket State: {allTicketInfo.fields["System.State"]}</Col>
-                                    <Col>Priority: {allTicketInfo.fields["Microsoft.VSTS.Common.Priority"]}</Col>
-                                </Row>
+                                {/*<Row className={"my-4"}>*/}
+                                {/*    <Col>Ticket State: {allTicketInfo.fields["System.State"]}</Col>*/}
+                                {/*    <Col>Priority: {allTicketInfo.fields["Microsoft.VSTS.Common.Priority"]}</Col>*/}
+                                {/*</Row>*/}
 
                                 {/*ticket description*/}
                                 <Row className={"my-4"}>
                                     <Col>
                                         <h5>Ticket Description</h5>
-                                        <article className={"border border-1 border-dark p-2"}>
+                                        <article className={"border border-1 p-2 articleStyle"}>
                                             {parseHtml(allTicketInfo.fields["System.Description"])}
                                         </article>
                                     </Col>
@@ -84,7 +90,7 @@ function Ticket({ ticketData, clickClose }) {
                                 <Row className={"my-4"}>
                                     <Col>
                                         <h5>Ticket Comments</h5>
-                                        <article className={"border border-1 border-dark p-2"}>
+                                        <article className={"border border-1 p-2 articleStyle"}>
                                             {parseHtml(allTicketInfo.fields["Microsoft.VSTS.CMMI.Comments"])}
                                         </article>
                                     </Col>
@@ -97,7 +103,7 @@ function Ticket({ ticketData, clickClose }) {
 
                                 {/*ticket created by*/}
                                 <Row className={"my-4"}>
-                                    <h5>Created Date: {allTicketInfo.fields["System.CreatedBy"]}</h5>
+                                    <h5>Created By: {allTicketInfo.fields["System.CreatedBy"]}</h5>
                                 </Row>
 
                                 {/*ticket attachments*/}
