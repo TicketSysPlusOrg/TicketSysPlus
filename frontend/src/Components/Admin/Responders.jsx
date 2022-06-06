@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Card, CloseButton, Col, Dropdown, Row } from "react-bootstrap";
+
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
+import Avatar from "@mui/material/Avatar";
+import Stack from "@mui/material/Stack";
 
 import { backendApi } from "../../index";
 import { azureConnection } from "../../index";
@@ -102,8 +105,16 @@ function Responders() {
                     <Col key={index} className={"col-12 mb-1"}>
                         <Card key={index}>
                             <Card.Body className={"text-center"}>
-                                <Card.Text className={"text-end d"}><CloseButton onClick={() => deleteResponder(card._id)}/></Card.Text>
-                                <Card.Img variant="top" src={card.image} style={{ width: "fit-content", borderRadius: 60/ 2 }}/>
+                                <Card.ImgOverlay className={"text-end d"}><CloseButton onClick={() => deleteResponder(card._id)}/></Card.ImgOverlay>
+                                <div className={"align-content-center"}>
+                                    <Avatar
+                                        sx={{ bgcolor: "orange",
+                                            mx:"auto",
+                                            display:"block"}}
+                                        alt={card.name}
+                                        src={card.image}
+                                    />
+                                </div>
                                 <Card.Text>
                                     {card ? card.name : null}
                                 </Card.Text>
