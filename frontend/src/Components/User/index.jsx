@@ -35,8 +35,8 @@ function User() {
         <>
             <NavBarHeader />
             <Container fluid>
-                <Row>
-                    <Col xs={2} id="sidebar" className={"bg-light"}>
+                <Row id={"vhscroll"}>
+                    <Col xs={2} id="sidebar " className={"bg-light vhscroll"}>
                         <Container className="d-flex flex-column justify-content-center ">
 
                             {projectList ?
@@ -56,7 +56,7 @@ function User() {
                                 : null}
                         </Container>
                     </Col>
-                    <Col xs={10} id={"inset-shadow"}>
+                    <Col xs={10} id={"inset-shadow"} className={"colscrolls"}>
                         <Row className={"ps-4"}>
                             <Tickets projects={teamVal} key={teamVal} />
                         </Row>
