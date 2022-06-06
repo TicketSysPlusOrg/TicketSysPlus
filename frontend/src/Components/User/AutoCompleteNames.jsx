@@ -9,7 +9,7 @@ import PropTypes from "prop-types";
 
 import { azureConnection } from "../../index";
 
-function AutoCompleteNames({ singleOrMultiple, setMentionChoices, setAssignee, ticketInfo }) {
+function AutoCompleteNames({ singleOrMultiple, setMentionChoices, setAssignee }) {
     const [teamMembersList, setTeamMembersList] = useState([]);
     const [teamMembers, setTeamMembers] = useState(null);
     const [chooseList, setChooseList] = useState([]);

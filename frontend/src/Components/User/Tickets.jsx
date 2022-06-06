@@ -11,6 +11,13 @@ import { azureConnection } from "../../index";
 import Ticket from "./Ticket";
 import TicketForm from "./TicketForm";
 
+/*get only name from username + email string*/
+export function getNameBeforeEmail(thisString) {
+    if(thisString !== undefined) {
+        let findName = thisString;
+        return findName.substring(0, findName.indexOf("<"));
+    }
+}
 
 function Tickets({ projects }) {
     /*modal show and hide*/
@@ -53,14 +60,6 @@ function Tickets({ projects }) {
             console.log(ticketBatch);
         } else {
             setNoTickets("This project has no tickets!");
-        }
-    }
-
-    /*get only name from username + email string*/
-    function getNameBeforeEmail(thisString) {
-        if(thisString !== undefined) {
-            let findName = thisString;
-            return findName.substring(0, findName.indexOf("<"));
         }
     }
 

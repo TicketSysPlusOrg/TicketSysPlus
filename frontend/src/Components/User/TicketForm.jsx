@@ -8,6 +8,7 @@ import { parseHtml } from "../../utils/Util";
 
 import ConditionalForms from "./ConditionalForms";
 import AutoCompleteNames from "./AutoCompleteNames";
+import {getNameBeforeEmail} from "./Tickets";
 
 
 //TODO: make file uploads real
@@ -144,9 +145,9 @@ function TicketForm(props) {
 
             /*TODO: figure out how to send the specific person name to autocomplete form*/
             /*assigned to*/
-            // if(props.ticketInfo.fields["System.AssignedTo"] !== undefined && props.ticketInfo.fields["System.AssignedTo"] !== null) {
-            //     assignedVal.current.value = props.ticketInfo.fields["System.AssignedTo"];
-            // }
+            if(props.ticketInfo.fields["System.AssignedTo"] !== undefined && props.ticketInfo.fields["System.AssignedTo"] !== null) {
+                changeAssignedTo(props.ticketInfo.fields["System.AssignedTo"]);
+            }
 
             /*ticket type*/
             document.getElementById("tick" + props.ticketInfo.fields["System.WorkItemType"]).checked = true;
@@ -272,11 +273,19 @@ function TicketForm(props) {
                             </Row>
                             : null}
 
+                        {/*CURRENT ASSIGNED TO*/}
+                        <Row className={"mb-2"}>
+                            <Col>
+                                <label className={"fw-bold form-label"}>Current Assignee</label>
+                                <div className={"form-control "}>{assignedTo !== null ? assignedTo : "No assignee!"}</div>
+                            </Col>
+                        </Row>
+
                         {/*ASSIGNED TO*/}
                         <Row className={"mb-2"}>
                             <Form.Group className={"col s12"}>
                                 <Form.Label  htmlFor={"tickAssigned"} className={"fw-bold d-inline-block"}>{editTicket === true ? "Assigned To" : "Assign To"}</Form.Label>
-                                <AutoCompleteNames id={"tickAssigned"} ref={assignedVal} ticketInfo={props.ticketInfo} setMentionChoices={setMentionChoices} setAssignee={setAssignee} singleOrMultiple={""} />
+                                <AutoCompleteNames id={"tickAssigned"} setMentionChoices={setMentionChoices} setAssignee={setAssignee} singleOrMultiple={""} />
                             </Form.Group>
                         </Row>
 
@@ -313,7 +322,7 @@ function TicketForm(props) {
                         <Row className={"mb-2"}>
                             <Form.Group className={"col s12"}>
                                 <Form.Label htmlFor={"tickMentions"} className={"fw-bold"}>Mentions</Form.Label>
-                                <AutoCompleteNames id={"tickMentions"} ref={mentionsVal} ticketInfo={props.ticketInfo} setMentionChoices={setMentionChoices} setAssignee={setAssignee} singleOrMultiple={"multiple"}/>
+                                <AutoCompleteNames id={"tickMentions"} setMentionChoices={setMentionChoices} setAssignee={setAssignee} singleOrMultiple={"multiple"}/>
                             </Form.Group>
                         </Row>
 

@@ -70,12 +70,6 @@ function Ticket({ ticketData, clickClose }) {
                                     <h5>Priority: {allTicketInfo.fields["Microsoft.VSTS.Common.Priority"]}</h5>
                                 </Row>
 
-                                {/*ticket state and priority*/}
-                                {/*<Row className={"my-4"}>*/}
-                                {/*    <Col>Ticket State: {allTicketInfo.fields["System.State"]}</Col>*/}
-                                {/*    <Col>Priority: {allTicketInfo.fields["Microsoft.VSTS.Common.Priority"]}</Col>*/}
-                                {/*</Row>*/}
-
                                 {/*ticket description*/}
                                 <Row className={"my-4"}>
                                     <Col>
