@@ -119,8 +119,8 @@ function NavBarButtons({ currLocation, btnVertSpace, vertOrNot }) {
 
             </ButtonGroup>
 
-            <Modal show={show} onHide={handleClose}>
-                <Modal.Dialog className=" mx-3">
+            <Modal show={show} onHide={handleClose} size={"lg"}>
+                <Modal.Dialog className={"mx-3"}>
 
                     <Modal.Header closeButton>
                         <Modal.Title>Make a Ticket</Modal.Title>

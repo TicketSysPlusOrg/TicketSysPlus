@@ -60,10 +60,6 @@ body::-webkit-scrollbar {
     overflow-y: scroll;
 }
 
-.colscrolls::-webkit-scrollbar {
-    display: none;
-}
-
 .userTicketBtns {
     cursor: pointer;
 }
@@ -172,8 +168,7 @@ body::-webkit-scrollbar {
     padding-bottom: 0;
 }
 
-.bootstrapOverride .cardOneLine div
-{
+.bootstrapOverride .cardOneLine div {
     display: inline-block;
     white-space: nowrap;
     overflow: hidden;
@@ -182,7 +177,7 @@ body::-webkit-scrollbar {
 
 
 .bootstrapOverride .modal-dialog {
-    max-width: 600px;
+    box-shadow: 0.2rem 0.4rem 1.5rem rgba(0,0,0,.175);
 }
 
 li:hover {

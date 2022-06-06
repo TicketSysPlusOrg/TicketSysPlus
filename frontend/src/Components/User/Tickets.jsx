@@ -214,8 +214,8 @@ function Tickets({ projects }) {
                     </Col>
             }
 
-            <Modal show={show} onHide={handleClose} >
-                <Modal.Dialog className=" mx-3">
+            <Modal show={show} onHide={handleClose} size={"lg"}>
+                <Modal.Dialog className={"mx-3"}>
                     <Modal.Body>
                         {renderEdit === true ?
                             <TicketForm editTicket={true} ticketInfo={allTicketInfo}  />
