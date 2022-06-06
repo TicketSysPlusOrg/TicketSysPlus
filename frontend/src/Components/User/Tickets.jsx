@@ -141,7 +141,6 @@ function Tickets({ projects }) {
                             {/* TODO: https://mui.com/material-ui/react-stack/ */}
                             <div className={"projectSelect"}>
                                 {/* TODO: Convert into a data table? https://mui.com/material-ui/react-table/#data-table */}
-                                {/* TODO: Look into making ONLY the tickets scrollable, not the sidebar */}
                                 <Container fluid className={stateColor(devTix.fields["System.State"]) + " my-1 py-1 px-0 row hoverOver cardOneLine align-items-center fw-bold "} >
                                     <Col xs={1} className={"ps-3 d-flex"}>
                                         <Tooltip title={"Inspect Ticket"}>
