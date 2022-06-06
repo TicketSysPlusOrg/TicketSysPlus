@@ -12,6 +12,7 @@ function AdminJson() {
     const [data, setData] = useState("");
     const [show, setShow] = useState(false);
 
+
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
     useEffect(() => {
@@ -24,6 +25,7 @@ function AdminJson() {
                 const dbJson = res.data[0].body;
                 document.getElementById("jsonText").value = dbJson;
                 setJson(dbJson);
+                console.log(dbJson);
             })
             .catch((err) => {
                 console.log(err);
@@ -62,6 +64,7 @@ function AdminJson() {
         }
     }
 
+
     function loadOld() {
         backendApi
             .get("jsons")
@@ -98,6 +101,7 @@ function AdminJson() {
                 </div>
             </div>
 
+
             <div className="row align-items-center justify-content-center mt-2">
                 <div className="col-7 d-flex mb-1">
 
@@ -116,27 +120,15 @@ function AdminJson() {
                     <textarea onChange={() => verify()} style={{ height: "400px" }} name="ticketData" id={"jsonText"} className="text-wrap text-break w-100">
                     </textarea>
                 </div>
+
             </div>
 
-            <div className="container">
-                <p>code mirror below...</p>
-                <JsonViewer jsonM />
-            </div>
-
-            <Modal show={show} onHide={handleClose} className="row">
-                <div className="col-12">
-                    <Modal.Dialog className="shadow-lg my-0">
-
-                        <Modal.Header closeButton>
-                            <Modal.Title className="text-success">Save JSON</Modal.Title>
-                        </Modal.Header>
-
-                        <Modal.Body>
-                            <JsonForm jsonModal={data} />
-                        </Modal.Body>
-                    </Modal.Dialog>
+            <div className="row">
+                <div className="col-9 container">
+                    <p>code mirror below...</p>
+                    <JsonViewer dbJson={json} />
                 </div>
-            </Modal>
+            </div>
         </>
     );
 
