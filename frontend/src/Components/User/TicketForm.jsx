@@ -98,7 +98,12 @@ function TicketForm(props) {
 
                     /*TODO: verify if this patch stuff is the problem that I'm having with the final 'updateattachment' error*/
                     const ticketAttachment =
-                        { "relations": [ { "rel": "AttachedFile", "url": createAttachment["url"], } ] };
+                        { "relations": [ { "rel": "AttachedFile", "url": createAttachment["url"], "attributes": {
+                            "name": tickAttachments[i]["name"],
+                            "type": tickAttachments[i]["type"],
+                            "size": tickAttachments[i]["size"],
+                            "lastModifiedDate": tickAttachments[i]["lastModifiedDate"]
+                        }}]};
                     console.log(ticketAttachment);
 
                     const uploadAttachmentToWI = await azureConnection.updateAttachment(prjID, createTicket.id, ticketAttachment);
