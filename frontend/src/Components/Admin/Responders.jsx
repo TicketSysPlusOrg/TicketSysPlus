@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Card, CloseButton, Col, Dropdown, Row } from "react-bootstrap";
-
-import TextField from "@mui/material/TextField";
-import Autocomplete from "@mui/material/Autocomplete";
-import Avatar from "@mui/material/Avatar";
-import Stack from "@mui/material/Stack";
+import { TextField, Autocomplete, Avatar, Stack } from "@mui/material";
 
 import { backendApi } from "../../index";
 import { azureConnection } from "../../index";
@@ -110,7 +106,7 @@ function Responders() {
                                     <Avatar
                                         sx={{ bgcolor: "orange",
                                             mx:"auto",
-                                            display:"block"}}
+                                            display:"block" }}
                                         alt={card.name}
                                         src={card.image}
                                     />

@@ -5,6 +5,7 @@ import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import BlockIcon from "@mui/icons-material/Block";
 import { useState } from "react";
+import PropTypes from "prop-types";
 
 function SimpleDialog({ open, onClose }) {
     return (
@@ -68,6 +69,11 @@ function SimpleDialog({ open, onClose }) {
         </Dialog>
     );
 }
+
+SimpleDialog.propTypes = {
+    open: PropTypes.bool.isRequired,
+    onClose: PropTypes.func.isRequired
+};
 
 function Legend() {
     const [open, setOpen] = useState(false);
