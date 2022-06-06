@@ -18,7 +18,7 @@ import { AzureDevOpsApi } from "./utils/AzureDevOpsApi";
 export const azureConnection = new AzureDevOpsApi(azureConfig.organizationUrl, azureConfig.token);
 
 export const backendApi = axios.create({
-    baseURL: "http://localhost:4001/",
+    baseURL: process.env.REACT_APP_BACKEND_URL,
     headers: {
         common: {
             "Content-Type": "application/json"
