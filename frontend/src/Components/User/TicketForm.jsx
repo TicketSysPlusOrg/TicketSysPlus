@@ -92,16 +92,18 @@ function TicketForm(props) {
             console.log(createTicket);
 
             if(tickAttachments !== null) {
-                const createAttachment = await azureConnection.createWorkItemAttachment(prjID, tickAttachments);
-                console.log(createAttachment);
+                for (let i = 0; i < tickAttachments.length; i++) {
+                    const createAttachment = await azureConnection.createWorkItemAttachment(prjID, tickAttachments[i]);
+                    console.log(createAttachment);
 
-                /*TODO: verify if this patch stuff is the problem that I'm having with the final 'updateattachment' error*/
-                const ticketAttachment =
-                    { "relations": { "rel": "AttachedFile", "url": createAttachment["url"], }};
-                console.log(ticketAttachment);
+                    /*TODO: verify if this patch stuff is the problem that I'm having with the final 'updateattachment' error*/
+                    const ticketAttachment =
+                        { "relations": [ { "rel": "AttachedFile", "url": createAttachment["url"], } ] };
+                    console.log(ticketAttachment);
 
-                const uploadAttachmentToWI = await azureConnection.updateAttachment(prjID, createTicket.id, ticketAttachment);
-                console.log(uploadAttachmentToWI);
+                    const uploadAttachmentToWI = await azureConnection.updateAttachment(prjID, createTicket.id, ticketAttachment);
+                    console.log(uploadAttachmentToWI);
+                }
             }
 
         } else {
@@ -222,7 +224,7 @@ function TicketForm(props) {
     /*assigned person*/
     const [assignee, setAssignee] = useState(null);
     /*state for file upload. currently one item at a time*/
-    const [uploadVal, setUploadVal] = useState(null);
+    const [uploadVal, setUploadVal] = useState([]);
 
     /*TODO: need to limit file size, run checks, and add to an array of files for creation*/
     function uploadAttach(thisFile) {
@@ -372,7 +374,7 @@ function TicketForm(props) {
                             {/*TODO: make this attachment form real*/}
                             <Form.Group className={"col s12"}>
                                 <Form.Label htmlFor={"tickAttachments"} className={"fw-bold"}>Attachments</Form.Label>
-                                <Form.Control id={"tickAttachments"} name={"tickAttachments"} ref={inputAttachment} onChange={e => uploadAttach(e.currentTarget.value)} type={"file"} />
+                                <Form.Control multiple id={"tickAttachments"} name={"tickAttachments"} ref={inputAttachment} onChange={e => uploadAttach(e.target.files)} type={"file"} />
                             </Form.Group>
                         </Row>
 

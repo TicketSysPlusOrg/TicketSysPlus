@@ -198,7 +198,7 @@ export class AzureDevOpsApi {
      */
     async updateAttachment(project, workItemID, data) {
         return this.instance.patch(`${project}/_apis/wit/workitems/${workItemID}`,
-            createPatch({ "relations": [{}] }, data),
+            createPatch({ "relations": []}, data),
             { params: { "api-version": "7.1-preview.3" }, headers: { "content-type": "application/json-patch+json" }, }).then(response => {
             return response.data;
         }).catch(error => error);
