@@ -21,7 +21,6 @@ function AutoCompleteNames({ singleOrMultiple, setMentionChoices, setAssignee })
             const allTeamMembers = await azureConnection.getAllTeamMembers(projects.value[1].id);
             setTeamMembersList(allTeamMembers);
         })();
-
     }, []);
 
     useEffect(() => {
