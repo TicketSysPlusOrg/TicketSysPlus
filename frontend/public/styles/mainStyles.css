@@ -39,8 +39,10 @@
 
 #root {
     background-color: #e7ecf1;
-    -ms-overflow-style: none;
-    scrollbar-width: none;
+}
+
+body {
+    overflow: hidden;
 }
 
 body::-webkit-scrollbar {
