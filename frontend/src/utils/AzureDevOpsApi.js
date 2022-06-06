@@ -103,7 +103,7 @@ export class AzureDevOpsApi {
     }
 
     /**
-     * Returns a single work item.
+     * Returns a single work item. $Expand relations also returns info on attachments.
      * @param {string} project Project ID or project name
      * @param {string} id The work item id
      */
@@ -111,6 +111,7 @@ export class AzureDevOpsApi {
         return this.instance.get(`${project}/_apis/wit/workitems/${id}`,
             {
                 params: {
+                    "$expand": "relations",
                     "api-version": "7.1-preview.2"
                 },
             }).then (res => {
@@ -135,7 +136,7 @@ export class AzureDevOpsApi {
     }
 
     /**
-     * Creates a work item in devops. Currently in a simple test state.
+     * Creates a work item in devops.
      * @param {string} project Project ID or name
      * @param {string} type work item type - i.e. task, issue, etc.
      * @param {object} data the fields needed to create a new work item
@@ -164,6 +165,44 @@ export class AzureDevOpsApi {
         }).catch(error => error);
     }
 
+    /**
+     * Upload an attachment to DevOps.
+     * New Ticket with attachment order of operations:
+     * - create ticket and collect ticket ID
+     * - upload attachment to DevOps, get upload location info
+     * - update work item with upload location info
+     * @param {string} project Project ID or name
+     * @param {file} uploadData the attachment to upload
+     * @returns {string} error if failed, work item info if successful
+     */
+    async createWorkItemAttachment(project, uploadData) {
+        return this.instance.post(`${project}/_apis/wit/attachments`,
+            uploadData,
+            {
+                params: {
+                    "api-version": "7.1-preview.3"
+                },
+                headers: { "content-type": "application/octet-stream" }
+            }).then (res => {
+            return res.data;
+        }).catch(err => err);
+    }
+
+    //TODO: delete this method later. nearly a carbon copy of the good updateWorkItem function, although it's been useful for troubleshooting.
+    /**
+     * Update existing work item.
+     * @param {string} project Project ID or name
+     * @param {string} workItemID single work item ID
+     * @param {object} data the fields needed to create a new work item
+     * @returns {string} error if failed, work item info if successful
+     */
+    async updateAttachment(project, workItemID, data) {
+        return this.instance.patch(`${project}/_apis/wit/workitems/${workItemID}`,
+            createPatch({ "relations": [{}] }, data),
+            { params: { "api-version": "7.1-preview.3" }, headers: { "content-type": "application/json-patch+json" }, }).then(response => {
+            return response.data;
+        }).catch(error => error);
+    }
 
     /*api version 4 needed. not updated for newer versions.*/
     /**

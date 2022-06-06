@@ -8,8 +8,6 @@ import { parseHtml } from "../../utils/Util";
 
 import ConditionalForms from "./ConditionalForms";
 import AutoCompleteNames from "./AutoCompleteNames";
-import {getNameBeforeEmail} from "./Tickets";
-
 
 //TODO: make file uploads real
 function TicketForm(props) {
@@ -69,7 +67,7 @@ function TicketForm(props) {
         const tickPriority = inputPriority.current.value;
 
         //TODO: attachments
-        const tickAttachments = inputAttachment.current.value;
+        const tickAttachments = uploadVal;
 
         /*handle mentions array for tags*/
         const mentionFormat = "<a href=\"#\" data-vss-mention=\"version2.0,USERID\">@NAME</a>";
@@ -87,9 +85,25 @@ function TicketForm(props) {
             /*create new devops ticket*/
             const devOpsTickData = { "fields": { "System.State": "To Do", "System.Title": ticketTitle, "System.Description": ticketDesc,
                 "Microsoft.VSTS.Scheduling.DueDate": tickDate, "Microsoft.VSTS.Common.Priority": tickPriority,
-                "System.WorkItemType": ticketType, "Microsoft.VSTS.CMMI.Comments": allMentions, "System.AssignedTo": assignedPerson } };
+                "System.WorkItemType": ticketType, "Microsoft.VSTS.CMMI.Comments": allMentions, "System.AssignedTo": assignedPerson,  } };
+            console.log(devOpsTickData);
 
             const createTicket = await azureConnection.createWorkItem(prjID, ticketType, devOpsTickData);
+            console.log(createTicket);
+
+            if(tickAttachments !== null) {
+                const createAttachment = await azureConnection.createWorkItemAttachment(prjID, tickAttachments);
+                console.log(createAttachment);
+
+                /*TODO: verify if this patch stuff is the problem that I'm having with the final 'updateattachment' error*/
+                const ticketAttachment =
+                    { "relations": { "rel": "AttachedFile", "url": createAttachment["url"], }};
+                console.log(ticketAttachment);
+
+                const uploadAttachmentToWI = await azureConnection.updateAttachment(prjID, createTicket.id, ticketAttachment);
+                console.log(uploadAttachmentToWI);
+            }
+
         } else {
             let ticketUpdates = {};
 
@@ -117,7 +131,6 @@ function TicketForm(props) {
                 ticketUpdates["System.AssignedTo"] = assignedPerson;
             }
 
-            /*TODO: currently does not add info to a comments section if one is not present*/
             if(mentionChoices.length > 0) {
                 console.log(allMentions);
                 ticketUpdates["Microsoft.VSTS.CMMI.Comments"] = allMentions;
@@ -208,6 +221,14 @@ function TicketForm(props) {
     const [mentionChoices, setMentionChoices] = useState([]);
     /*assigned person*/
     const [assignee, setAssignee] = useState(null);
+    /*state for file upload. currently one item at a time*/
+    const [uploadVal, setUploadVal] = useState(null);
+
+    /*TODO: need to limit file size, run checks, and add to an array of files for creation*/
+    function uploadAttach(thisFile) {
+        console.log(thisFile);
+        setUploadVal(thisFile);
+    }
 
     return (
         <>
@@ -274,12 +295,15 @@ function TicketForm(props) {
                             : null}
 
                         {/*CURRENT ASSIGNED TO*/}
-                        <Row className={"mb-2"}>
-                            <Col>
-                                <label className={"fw-bold form-label"}>Current Assignee</label>
-                                <div className={"form-control "}>{assignedTo !== null ? assignedTo : "No assignee!"}</div>
-                            </Col>
-                        </Row>
+                        {editTicket ?
+                            <Row className={"mb-2"}>
+                                <Col>
+                                    <label className={"fw-bold form-label"}>Current Assignee</label>
+                                    <div className={"form-control "}>{assignedTo !== null ? assignedTo : "No assignee!"}</div>
+                                </Col>
+                            </Row>
+                            : null}
+
 
                         {/*ASSIGNED TO*/}
                         <Row className={"mb-2"}>
@@ -348,7 +372,7 @@ function TicketForm(props) {
                             {/*TODO: make this attachment form real*/}
                             <Form.Group className={"col s12"}>
                                 <Form.Label htmlFor={"tickAttachments"} className={"fw-bold"}>Attachments</Form.Label>
-                                <Form.Control id={"tickAttachments"} name={"tickAttachments"} ref={inputAttachment} type={"file"} />
+                                <Form.Control id={"tickAttachments"} name={"tickAttachments"} ref={inputAttachment} onChange={e => uploadAttach(e.currentTarget.value)} type={"file"} />
                             </Form.Group>
                         </Row>
 
