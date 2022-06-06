@@ -120,7 +120,7 @@ function TicketForm(props) {
             }
 
             const updateDevopsTickets = { "fields": ticketUpdates };
-            const updateTicket = await azureConnection.updateWorkItem(prjID, props.ticketInfo.id, updateDevopsTickets);
+            const updateTicket = await azureConnection.updateWorkItem(prjID, props.ticketInfo.id, updateDevopsTickets, "fields");
             console.log(updateTicket);
         }
         if(tickAttachments !== null) {
@@ -140,7 +140,7 @@ function TicketForm(props) {
                     } } ] };
                 console.log(ticketAttachment);
 
-                const uploadAttachmentToWI = await azureConnection.updateAttachment(prjID, ticketID, ticketAttachment);
+                const uploadAttachmentToWI = await azureConnection.updateWorkItem(prjID, ticketID, ticketAttachment, "relations");
                 console.log(uploadAttachmentToWI);
             }
         }

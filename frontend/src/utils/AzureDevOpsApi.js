@@ -155,11 +155,18 @@ export class AzureDevOpsApi {
      * @param {string} project Project ID or name
      * @param {string} workItemID single work item ID
      * @param {object} data the fields needed to create a new work item
+     * @param {string }patchType string describing patch format required (fields update or attachment update)
      * @returns {string} error if failed, work item info if successful
      */
-    async updateWorkItem(project, workItemID, data) {
+    async updateWorkItem(project, workItemID, data, patchType) {
+        let patchInput;
+        if(patchType === "fields") {
+            patchInput = createPatch({ "fields": {} }, data);
+        } else if(patchType === "relations") {
+            patchInput = createPatch({ "relations": [] }, data);
+        }
         return this.instance.patch(`${project}/_apis/wit/workitems/${workItemID}`,
-            createPatch({ "fields": {} }, data),
+            patchInput,
             { params: { "api-version": "7.1-preview.3" }, headers: { "content-type": "application/json-patch+json" }, }).then(response => {
             return response.data;
         }).catch(error => error);
@@ -186,22 +193,6 @@ export class AzureDevOpsApi {
             }).then (res => {
             return res.data;
         }).catch(err => err);
-    }
-
-    //TODO: delete this method later. nearly a carbon copy of the good updateWorkItem function, although it's been useful for troubleshooting.
-    /**
-     * Update existing work item.
-     * @param {string} project Project ID or name
-     * @param {string} workItemID single work item ID
-     * @param {object} data the fields needed to create a new work item
-     * @returns {string} error if failed, work item info if successful
-     */
-    async updateAttachment(project, workItemID, data) {
-        return this.instance.patch(`${project}/_apis/wit/workitems/${workItemID}`,
-            createPatch({ "relations": [] }, data),
-            { params: { "api-version": "7.1-preview.3" }, headers: { "content-type": "application/json-patch+json" }, }).then(response => {
-            return response.data;
-        }).catch(error => error);
     }
 
     /*api version 4 needed. not updated for newer versions.*/
