@@ -5,12 +5,12 @@ import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import BlockIcon from "@mui/icons-material/Block";
 import PropTypes from "prop-types";
+import { IconButton, CircularProgress, Tooltip } from "@mui/material";
 
 import { azureConnection } from "../../index";
 
 import Ticket from "./Ticket";
 import TicketForm from "./TicketForm";
-import { IconButton, CircularProgress, Tooltip } from "@mui/material";
 
 /*get only name from username + email string*/
 export function getNameBeforeEmail(thisString) {
