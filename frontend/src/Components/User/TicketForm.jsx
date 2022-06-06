@@ -88,29 +88,8 @@ function TicketForm(props) {
                 "System.WorkItemType": ticketType, "Microsoft.VSTS.CMMI.Comments": allMentions, "System.AssignedTo": assignedPerson,  } };
             console.log(devOpsTickData);
 
-            const createTicket = await azureConnection.createWorkItem(prjID, ticketType, devOpsTickData);
+            var createTicket = await azureConnection.createWorkItem(prjID, ticketType, devOpsTickData);
             console.log(createTicket);
-
-            if(tickAttachments !== null) {
-                for (let i = 0; i < tickAttachments.length; i++) {
-                    const createAttachment = await azureConnection.createWorkItemAttachment(prjID, tickAttachments[i]);
-                    console.log(createAttachment);
-
-                    /*TODO: verify if this patch stuff is the problem that I'm having with the final 'updateattachment' error*/
-                    const ticketAttachment =
-                        { "relations": [ { "rel": "AttachedFile", "url": createAttachment["url"], "attributes": {
-                            "name": tickAttachments[i]["name"],
-                            "type": tickAttachments[i]["type"],
-                            "size": tickAttachments[i]["size"],
-                            "lastModifiedDate": tickAttachments[i]["lastModifiedDate"]
-                        }}]};
-                    console.log(ticketAttachment);
-
-                    const uploadAttachmentToWI = await azureConnection.updateAttachment(prjID, createTicket.id, ticketAttachment);
-                    console.log(uploadAttachmentToWI);
-                }
-            }
-
         } else {
             let ticketUpdates = {};
 
@@ -146,6 +125,27 @@ function TicketForm(props) {
             const updateDevopsTickets = { "fields": ticketUpdates };
             const updateTicket = await azureConnection.updateWorkItem(prjID, props.ticketInfo.id, updateDevopsTickets);
             console.log(updateTicket);
+        }
+        if(tickAttachments !== null) {
+            let ticketID;
+            editTicket ? ticketID = props.ticketInfo.id : ticketID = createTicket.id;
+            for (let i = 0; i < tickAttachments.length; i++) {
+
+                const createAttachment = await azureConnection.createWorkItemAttachment(prjID, tickAttachments[i]);
+                console.log(createAttachment);
+
+                const ticketAttachment =
+                    { "relations": [ { "rel": "AttachedFile", "url": createAttachment["url"], "attributes": {
+                        "name": tickAttachments[i]["name"],
+                        "type": tickAttachments[i]["type"],
+                        "size": tickAttachments[i]["size"],
+                        "lastModifiedDate": tickAttachments[i]["lastModifiedDate"]
+                    } } ] };
+                console.log(ticketAttachment);
+
+                const uploadAttachmentToWI = await azureConnection.updateAttachment(prjID, ticketID, ticketAttachment);
+                console.log(uploadAttachmentToWI);
+            }
         }
     }
 
