@@ -70,7 +70,9 @@ function AutoCompleteNames({ singleOrMultiple, setMentionChoices, setAssignee })
 }
 
 AutoCompleteNames.propTypes = {
-    setMentionChoices: PropTypes.func
+    setMentionChoices: PropTypes.func,
+    singleOrMultiple: PropTypes.string,
+    setAssignee: PropTypes.func
 };
 
 export default AutoCompleteNames;
