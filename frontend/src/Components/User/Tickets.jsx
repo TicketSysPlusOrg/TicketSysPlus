@@ -11,6 +11,13 @@ import { azureConnection } from "../../index";
 import Ticket from "./Ticket";
 import TicketForm from "./TicketForm";
 
+/*get only name from username + email string*/
+export function getNameBeforeEmail(thisString) {
+    if(thisString !== undefined) {
+        let findName = thisString;
+        return findName.substring(0, findName.indexOf("<"));
+    }
+}
 
 function Tickets({ projects }) {
     /*modal show and hide*/
@@ -53,14 +60,6 @@ function Tickets({ projects }) {
             console.log(ticketBatch);
         } else {
             setNoTickets("This project has no tickets!");
-        }
-    }
-
-    /*get only name from username + email string*/
-    function getNameBeforeEmail(thisString) {
-        if(thisString !== undefined) {
-            let findName = thisString;
-            return findName.substring(0, findName.indexOf("<"));
         }
     }
 
@@ -114,12 +113,12 @@ function Tickets({ projects }) {
                 <div className={"projectSelect " }>
                     <Container fluid className={"my-1 py-1 px-0 row hoverOver cardOneLine align-items-center fw-bold text-decoration-underline"} >
                         <Col xs={1} className={"ps-3"}>View</Col>
-                        <Col xs={3}>Title</Col>
                         <Col xs={1}>ID</Col>
+                        <Col xs={3}>Title</Col>
                         <Col xs={1}>Priority</Col>
-                        <Col xs={1}>State</Col>
                         <Col xs={1}>Due Date</Col>
                         <Col xs={2}>Assigned To</Col>
+                        <Col xs={1}>State</Col>
                         <Col xs={2} className={"d-flex justify-content-around"}>
                             <div className={"align-self-center"}>Block</div>
                             <div className={"align-self-center"}>Edit</div>
@@ -144,15 +143,15 @@ function Tickets({ projects }) {
                                             <VisibilityIcon sx={{ fontSize: "2rem" }}/>
                                         </a>
                                     </Col>
-                                    <Col xs={3} title={devTix.fields["System.Title"]}>{devTix.fields["System.Title"]}</Col>
                                     <Col xs={1}>{devTix.id}</Col>
+                                    <Col xs={3} title={devTix.fields["System.Title"]}>{devTix.fields["System.Title"]}</Col>
                                     <Col xs={1}>{devTix.fields["Microsoft.VSTS.Common.Priority"]}</Col>
-                                    <Col xs={1} title={devTix.fields["System.State"]}>{devTix.fields["System.State"]}</Col>
                                     {/*TODO: remove the extra ternary check for no due date present once we require due date for ticket creation*/}
                                     <Col xs={1} title={devTix.fields["Microsoft.VSTS.Scheduling.DueDate"] ? devTix.fields["Microsoft.VSTS.Scheduling.DueDate"].slice(0, 10) : null}>
                                         {devTix.fields["Microsoft.VSTS.Scheduling.DueDate"] ? devTix.fields["Microsoft.VSTS.Scheduling.DueDate"].slice(0, 10) : null}
                                     </Col>
                                     <Col xs={2} title={devTix.fields["System.AssignedTo"]}>{getNameBeforeEmail(devTix.fields["System.AssignedTo"])}</Col>
+                                    <Col xs={1} title={devTix.fields["System.State"]}>{devTix.fields["System.State"]}</Col>
                                     <Col xs={2} className={"d-flex justify-content-around"}>
                                         {/*TODO: this is hard coded to our org. fix that.*/}
                                         <a title={"Block Ticket"} className={"userTicketBtns"} onClick={() => {blockTicket(devTix.id, devTix.fields["System.State"]); setBlockStateChange(devTix.fields["System.State"]);}}>
