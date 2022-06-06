@@ -5,6 +5,7 @@ import { azureConnection } from "../../index";
 import NavBarHeader from "../NavBar";
 
 import SidebarTeams from "./SidebarTeams";
+import Legend from "./Legend";
 import Tickets from "./Tickets";
 
 function User() {
@@ -54,6 +55,8 @@ function User() {
                                     </div>
                                 ))
                                 : null}
+                            
+                            <Legend />
                         </Container>
                     </Col>
                     <Col xs={10} id={"inset-shadow"} className={"colscrolls"}>
