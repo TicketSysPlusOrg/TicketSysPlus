@@ -22,6 +22,7 @@ function Ticket({ ticketData, clickClose }) {
             (async() => {
                 const getTicketInfo = await azureConnection.getWorkItem(thisTicketInfo[0], thisTicketInfo[1]);
                 setAllTicketInfo(getTicketInfo);
+                console.log(getTicketInfo);
             })();
         }
     }, [thisTicketInfo]);
@@ -61,13 +62,21 @@ function Ticket({ ticketData, clickClose }) {
                             {/*TODO: validation  for all fields*/}
                             <Form className="col s12">
 
-                                {/*ticket title, work type, state, priority*/}
+                                {/*ticket title*/}
                                 <Row className={"mb-4"}>
                                     <h4>{allTicketInfo.fields["System.Title"]}</h4>
                                     <hr/>
-                                    <h5>Ticket Type: {allTicketInfo.fields["System.WorkItemType"]}</h5>
-                                    <h5>Ticket State: {allTicketInfo.fields["System.State"]}</h5>
-                                    <h5>Priority: {allTicketInfo.fields["Microsoft.VSTS.Common.Priority"]}</h5>
+                                </Row>
+
+                                <Row className={"mb-4"}>
+                                    <h5>Assigned To: {allTicketInfo.fields["System.AssignedTo"] ? allTicketInfo.fields["System.AssignedTo"] : "No assignment"}</h5>
+                                </Row>
+
+                                {/*work type, state, priority*/}
+                                <Row className={"mb-4"}>
+                                    <h5 className={"mb-4"}>Ticket Type: {allTicketInfo.fields["System.WorkItemType"]}</h5>
+                                    <h5 className={"mb-4"}>Ticket State: {allTicketInfo.fields["System.State"]}</h5>
+                                    <h5 className={"mb-4"}>Priority: {allTicketInfo.fields["Microsoft.VSTS.Common.Priority"]}</h5>
                                 </Row>
 
                                 {/*ticket description*/}
