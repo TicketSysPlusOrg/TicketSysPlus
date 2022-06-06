@@ -96,7 +96,7 @@ body::-webkit-scrollbar {
 
 .bootstrapOverride .hoverOver:hover,
 .bootstrapOverride .hoverOver:focus {
-    background-color: rgb(190, 212, 239);
+    background-color: rgb(240, 246, 255);
 }
 
 /*override for contenteditdiv. grows with more text, no scrollbar*/
