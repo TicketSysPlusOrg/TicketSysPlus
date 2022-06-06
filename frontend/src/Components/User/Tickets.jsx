@@ -120,8 +120,8 @@ function Tickets({ projects }) {
                         <Col xs={2}>Assigned To</Col>
                         <Col xs={1}>State</Col>
                         <Col xs={2} className={"d-flex justify-content-around"}>
-                            <div className={"align-self-center"}>Block</div>
-                            <div className={"align-self-center"}>Edit</div>
+                            <div className={"ps-1 align-self-center"}>Block</div>
+                            <div className={"ps-2 align-self-center"}>Edit</div>
                             <div className={"align-self-center"}>See Page</div>
                         </Col>
                     </Container>
