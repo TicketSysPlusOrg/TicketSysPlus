@@ -73,10 +73,10 @@ function Tickets({ projects }) {
         setLoadingBlockId(itemID);
         if(currentState !== "Blocked") {
             const blockTicket = { "System.State": "Blocked" };
-            const updateTicket = await azureConnection.updateWorkItem(activePrjID, itemID, { "fields": blockTicket });
+            const updateTicket = await azureConnection.updateWorkItem(activePrjID, itemID, { "fields": blockTicket }, "fields");
         } else {
             const blockTicket = { "System.State": "Active" };
-            const updateTicket = await azureConnection.updateWorkItem(activePrjID, itemID, { "fields": blockTicket });
+            const updateTicket = await azureConnection.updateWorkItem(activePrjID, itemID, { "fields": blockTicket }, "fields");
         }
         setLoadingBlockId(null);
     }
