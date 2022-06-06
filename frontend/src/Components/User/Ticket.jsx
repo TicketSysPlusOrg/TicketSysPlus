@@ -86,7 +86,7 @@ function Ticket({ ticketData, clickClose }) {
                                     </Col>
                                 </Row>
 
-                                {/*ticket comments*/}
+                                {/*ticket mentions section*/}
                                 <Row className={"my-4"}>
                                     <Col>
                                         <h5>Ticket Comments</h5>

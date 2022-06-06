@@ -25,6 +25,8 @@ function TicketForm(props) {
     let inputPriority = createRef();
     let inputAttachment = createRef();
     let divDesc = createRef();
+    let assignedVal = createRef();
+    let mentionsVal = createRef();
 
     /*prj ID state variable*/
     const [prjID, setprjID] = useState(null);
@@ -57,7 +59,7 @@ function TicketForm(props) {
 
     async function submitTicket(SubmitEvent) {
         //TODO: stop reload of page but reload modal...? or could JUST close modal and reload the visible tickets
-        /*SubmitEvent.preventDefault();*/
+        SubmitEvent.preventDefault();
 
         const ticketTitle = inputTitle.current.value;
         const ticketType = typeVal;
@@ -68,19 +70,23 @@ function TicketForm(props) {
         //TODO: attachments
         const tickAttachments = inputAttachment.current.value;
 
+        /*handle mentions array for tags*/
+        const mentionFormat = "<a href=\"#\" data-vss-mention=\"version2.0,USERID\">@NAME</a>";
+        let allMentions = "";
+        for (let i = 0; i < mentionChoices.length; i++) {
+            allMentions += mentionFormat.replace("USERID", mentionChoices[i].id).replace("NAME", mentionChoices[i].label);
+        }
+
+        /*handle assigned person*/
+        let assignedPerson = "";
+        assignee !== null ? assignedPerson = assignee.label + " <" + assignee.email + ">" : null;
 
         /*TODO: use attachments, what about iteration id/area id?*/
         if(!editTicket) {
-            /*handle mentions array. need to tag people, so need to mutate into proper name tags for DevOps*/
-            const mentionFormat = "<a href=\"#\" data-vss-mention=\"version2.0,USERID\">@NAME</a>";
-            let allMentions = "";
-            for (let i = 0; i < mentionChoices.length; i++) {
-                allMentions += mentionFormat.replace("USERID", mentionChoices[i].id).replace("NAME", mentionChoices[i].label);
-            }
-
             /*create new devops ticket*/
             const devOpsTickData = { "fields": { "System.State": "To Do", "System.Title": ticketTitle, "System.Description": ticketDesc,
-                "Microsoft.VSTS.Scheduling.DueDate": tickDate, "Microsoft.VSTS.Common.Priority": tickPriority, "System.WorkItemType": ticketType, "Microsoft.VSTS.CMMI.Comments": allMentions } };
+                "Microsoft.VSTS.Scheduling.DueDate": tickDate, "Microsoft.VSTS.Common.Priority": tickPriority,
+                "System.WorkItemType": ticketType, "Microsoft.VSTS.CMMI.Comments": allMentions, "System.AssignedTo": assignedPerson } };
 
             const createTicket = await azureConnection.createWorkItem(prjID, ticketType, devOpsTickData);
         } else {
@@ -94,19 +100,31 @@ function TicketForm(props) {
                 ticketUpdates["Microsoft.VSTS.Common.Priority"] = priorityVal;
             }
 
-            if(stateVal !== props.ticketInfo.fields["System.State"]) {
+            if(stateVal !== null && stateVal !== props.ticketInfo.fields["System.State"]) {
                 ticketUpdates["System.State"] = stateVal;
             }
 
             if(typeVal !== null) {
                 ticketUpdates["System.WorkItemType"] = typeVal;
             }
+
             if(inputDate.current.value !== props.ticketInfo.fields["Microsoft.VSTS.Scheduling.DueDate"]) {
                 ticketUpdates["Microsoft.VSTS.Scheduling.DueDate"] = inputDate.current.value;
             }
 
+            if(assignedPerson !== undefined && assignedPerson !== "" && assignedPerson !== props.ticketInfo.fields["System.AssignedTo"]) {
+                ticketUpdates["System.AssignedTo"] = assignedPerson;
+            }
+
+            /*TODO: currently does not add info to a comments section if one is not present*/
+            if(mentionChoices.length > 0) {
+                console.log(allMentions);
+                ticketUpdates["Microsoft.VSTS.CMMI.Comments"] = allMentions;
+            }
+
             const updateDevopsTickets = { "fields": ticketUpdates };
             const updateTicket = await azureConnection.updateWorkItem(prjID, props.ticketInfo.id, updateDevopsTickets);
+            console.log(updateTicket);
         }
     }
 
@@ -120,11 +138,15 @@ function TicketForm(props) {
     /*set initial states for forms in edit ticket view*/
     useEffect(() => {
         if(editTicket === true) {
-            console.log(props.ticketInfo);
-            console.log(inputState.current.selected);
 
             /*ticket title*/
             inputTitle.current.value = props.ticketInfo.fields["System.Title"];
+
+            /*TODO: figure out how to send the specific person name to autocomplete form*/
+            /*assigned to*/
+            // if(props.ticketInfo.fields["System.AssignedTo"] !== undefined && props.ticketInfo.fields["System.AssignedTo"] !== null) {
+            //     assignedVal.current.value = props.ticketInfo.fields["System.AssignedTo"];
+            // }
 
             /*ticket type*/
             document.getElementById("tick" + props.ticketInfo.fields["System.WorkItemType"]).checked = true;
@@ -175,13 +197,16 @@ function TicketForm(props) {
         }
     }
 
-    /*update statevals, typevals, and priorityval onchange. overriding hard set from edit ticket data*/
+    /*update statevals, typevals, assignedto, and priorityval onchange. overriding hard set from edit ticket data*/
     const [priorityVal, changePriorityVal] = useState(null);
     const [typeVal, changeTypeVal] = useState(null);
     const [stateVal, changeStateVal] = useState(null);
+    const [assignedTo, changeAssignedTo] = useState(null);
 
     /*array of mentioned people. trying to tag them in created ticket and edited ticket*/
     const [mentionChoices, setMentionChoices] = useState([]);
+    /*assigned person*/
+    const [assignee, setAssignee] = useState(null);
 
     return (
         <>
@@ -209,7 +234,6 @@ function TicketForm(props) {
 
                         {/*TICKET TYPE*/}
                         <Row className={"mb-2"}>
-
                             <Form.Group className={"col s12"}>
                                 <Form.Label className={"d-block fw-bold"}>Ticket Type</Form.Label>
                                 {/*TODO: add the epic, issue, and task logos*/}
@@ -248,6 +272,14 @@ function TicketForm(props) {
                             </Row>
                             : null}
 
+                        {/*ASSIGNED TO*/}
+                        <Row className={"mb-2"}>
+                            <Form.Group className={"col s12"}>
+                                <Form.Label  htmlFor={"tickAssigned"} className={"fw-bold d-inline-block"}>{editTicket === true ? "Assigned To" : "Assign To"}</Form.Label>
+                                <AutoCompleteNames id={"tickAssigned"} ref={assignedVal} ticketInfo={props.ticketInfo} setMentionChoices={setMentionChoices} setAssignee={setAssignee} singleOrMultiple={""} />
+                            </Form.Group>
+                        </Row>
+
                         {/*DUE DATE*/}
                         <Row className={"mb-2"}>
                             <Form.Group className={"col s12"}>
@@ -277,11 +309,11 @@ function TicketForm(props) {
                             </Form.Group>
                         </Row>
 
-                        {/*MENTIONS. for now, sending to comments*/}
+                        {/*MENTIONS*/}
                         <Row className={"mb-2"}>
                             <Form.Group className={"col s12"}>
                                 <Form.Label htmlFor={"tickMentions"} className={"fw-bold"}>Mentions</Form.Label>
-                                <AutoCompleteNames id={"tickMentions"} setMentionChoices={setMentionChoices} />
+                                <AutoCompleteNames id={"tickMentions"} ref={mentionsVal} ticketInfo={props.ticketInfo} setMentionChoices={setMentionChoices} setAssignee={setAssignee} singleOrMultiple={"multiple"}/>
                             </Form.Group>
                         </Row>
 

@@ -9,10 +9,11 @@ import PropTypes from "prop-types";
 
 import { azureConnection } from "../../index";
 
-function AutoCompleteNames({ setMentionChoices }) {
+function AutoCompleteNames({ singleOrMultiple, setMentionChoices, setAssignee, ticketInfo }) {
     const [teamMembersList, setTeamMembersList] = useState([]);
     const [teamMembers, setTeamMembers] = useState(null);
     const [chooseList, setChooseList] = useState([]);
+    const [assigned, setAssigned] = useState(null);
 
     useEffect(() => {
         (async () => {
@@ -20,6 +21,7 @@ function AutoCompleteNames({ setMentionChoices }) {
             const allTeamMembers = await azureConnection.getAllTeamMembers(projects.value[1].id);
             setTeamMembersList(allTeamMembers);
         })();
+
     }, []);
 
     useEffect(() => {
@@ -35,23 +37,31 @@ function AutoCompleteNames({ setMentionChoices }) {
         setMentionChoices(chooseList);
     }, [chooseList]);
 
+    useEffect(() => {
+        setAssignee(assigned);
+    }, [assigned]);
+
     return (
         <>
             {teamMembers !== null ?
                 <Autocomplete
                     id={"nameChoices"}
-                    multiple
+                    multiple={singleOrMultiple !== ""}
                     disablePortal
-                    disableCloseOnSelect
                     options={teamMembers}
                     sx={{ borderRadius: "0.375rem"  }}
                     renderInput={ params => (
-                        <TextField {...params} label={"team members"} variant={"outlined"} />
+                        <TextField {...params} label={singleOrMultiple !== "" ? "team members" : "responsible party"} variant={"outlined"} />
                     )}
                     onChange={(_event, value, reason) => {
-                        if(reason === "selectOption" || reason === "removeOption") {
-                            setChooseList(value);
+                        if(singleOrMultiple !== "") {
+                            if(reason === "selectOption" || reason === "removeOption") {
+                                setChooseList(value);
+                            }
+                        } else {
+                            setAssigned(value);
                         }
+
                     }}
                 />
                 : <p>Loading team members...</p>}
