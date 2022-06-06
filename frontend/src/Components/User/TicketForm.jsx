@@ -9,7 +9,6 @@ import { parseHtml } from "../../utils/Util";
 import ConditionalForms from "./ConditionalForms";
 import AutoCompleteNames from "./AutoCompleteNames";
 
-//TODO: make file uploads real
 function TicketForm(props) {
 
     /*show and close vars for modal*/
@@ -57,16 +56,14 @@ function TicketForm(props) {
     }, []);
 
     async function submitTicket(SubmitEvent) {
-        //TODO: stop reload of page but reload modal...? or could JUST close modal and reload the visible tickets
-        SubmitEvent.preventDefault();
+        //TODO: stop reload of full page but close modal and refresh tickets
+        // SubmitEvent.preventDefault();
 
         const ticketTitle = inputTitle.current.value;
         const ticketType = typeVal;
         const ticketDesc = inputDesc.current.value;
         const tickDate = inputDate.current.value;
         const tickPriority = inputPriority.current.value;
-
-        //TODO: attachments
         const tickAttachments = uploadVal;
 
         /*handle mentions array for tags*/
@@ -163,7 +160,6 @@ function TicketForm(props) {
             /*ticket title*/
             inputTitle.current.value = props.ticketInfo.fields["System.Title"];
 
-            /*TODO: figure out how to send the specific person name to autocomplete form*/
             /*assigned to*/
             if(props.ticketInfo.fields["System.AssignedTo"] !== undefined && props.ticketInfo.fields["System.AssignedTo"] !== null) {
                 changeAssignedTo(props.ticketInfo.fields["System.AssignedTo"]);
@@ -198,10 +194,8 @@ function TicketForm(props) {
                 props.ticketInfo.fields = "";
             }
 
-            //TODO: figure out how to fill mentions from comments section of DevOps. not a field I've seen in the work item.
+            //TODO: more mentions functionality?
             /*inputMentions.current.value = props.ticketInfo.fields["System.Mentions"];*/
-            //TODO: attachments stuff
-            /*inputAttachment.current.value = createRef();*/
         }
     }, [editTicket]);
 
@@ -311,7 +305,6 @@ function TicketForm(props) {
                             </Row>
                             : null}
 
-
                         {/*ASSIGNED TO*/}
                         <Row className={"mb-2"}>
                             <Form.Group className={"col s12"}>
@@ -376,7 +369,6 @@ function TicketForm(props) {
 
                         {/*ATTACHMENTS*/}
                         <Row className={"mb-3"}>
-                            {/*TODO: make this attachment form real*/}
                             <Form.Group className={"col s12"}>
                                 <Form.Label htmlFor={"tickAttachments"} className={"fw-bold"}>Attachments</Form.Label>
                                 <Form.Control multiple id={"tickAttachments"} name={"tickAttachments"} ref={inputAttachment} onChange={e => uploadAttach(e.target.files)} type={"file"} />
