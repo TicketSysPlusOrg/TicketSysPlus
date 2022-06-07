@@ -284,6 +284,7 @@ export class AzureDevOpsApi {
         return this.instance.get(`${project}/_apis/wit/attachments/${attachmentId}`,
             {
                 params: {
+                    "download": true,
                     "api-version": "7.1-preview.3"
                 },
             }).then (res => {

@@ -13,19 +13,27 @@ import DeleteButton from "./DeleteButton";
 function TicketForm(props) {
 
     /*show and close vars for modal*/
-    const [show, setShow] = useState(false);
-    const handleClose = () => setShow(false);
+    const handleClose = () => {
+        props.setShow ? props.setShow(false) : null;
+    };
 
+    /*trigger this to run handleClose after all async calls are completed*/
+    const [readyToClose, setReadyToClose] = useState(null);
 
-    /*TODO: need to close modal and refresh tickets*/
+    useEffect(() => {
+        if(readyToClose !== null) {
+            console.log("firing close");
+            handleClose();
+        }
+    }, [readyToClose]);
+
     /*delete ticket*/
     const [deleteTicket, setDeleteTicket] = useState(false);
+
     /*delete ticket call when deleteTicketId !== null*/
     useEffect(() => {
-        if(deleteTicket) {
+        if (deleteTicket) {
             const deleteThisTicket = azureConnection.deleteWorkItem(props.ticketInfo.fields["System.AreaPath"], props.ticketInfo.id);
-            console.log(deleteThisTicket);
-            setShow();
         }
     }, [deleteTicket]);
 
@@ -55,6 +63,7 @@ function TicketForm(props) {
     const [tickStates, setTickStates] = useState(null);
 
     useEffect(() => {
+        //TODO: admin control of selected state
         /*get all available ticket states*/
         (async () => {
             /*currently hardcoded for particular inherited process with custom states*/
@@ -70,8 +79,7 @@ function TicketForm(props) {
     }, []);
 
     async function submitTicket(SubmitEvent) {
-        //TODO: stop reload of full page but close modal and refresh tickets
-        // SubmitEvent.preventDefault();
+        SubmitEvent.preventDefault();
 
         const ticketTitle = inputTitle.current.value;
         const ticketType = typeVal;
@@ -92,43 +100,57 @@ function TicketForm(props) {
         assignee !== null ? assignedPerson = assignee.label + " <" + assignee.email + ">" : null;
 
         /*TODO: use attachments, what about iteration id/area id?*/
-        if(!editTicket) {
+        /*create ticket block*/
+        if (!editTicket) {
             /*create new devops ticket*/
-            const devOpsTickData = { "fields": { "System.State": "To Do", "System.Title": ticketTitle, "System.Description": ticketDesc,
-                "Microsoft.VSTS.Scheduling.DueDate": tickDate, "Microsoft.VSTS.Common.Priority": tickPriority,
-                "System.WorkItemType": ticketType, "Microsoft.VSTS.CMMI.Comments": allMentions, "System.AssignedTo": assignedPerson,  } };
+            const devOpsTickData = {
+                "fields": {
+                    "System.State": "To Do",
+                    "System.Title": ticketTitle,
+                    "System.Description": ticketDesc,
+                    "Microsoft.VSTS.Scheduling.DueDate": tickDate,
+                    "Microsoft.VSTS.Common.Priority": tickPriority,
+                    "System.WorkItemType": ticketType,
+                    "Microsoft.VSTS.CMMI.Comments": allMentions,
+                    "System.AssignedTo": assignedPerson,
+                }
+            };
             console.log(devOpsTickData);
 
-            var createTicket = await azureConnection.createWorkItem(prjID, ticketType, devOpsTickData);
+            const createTicket = await azureConnection.createWorkItem(prjID, ticketType, devOpsTickData);
             console.log(createTicket);
-        } else {
+
+            await uploadAndAttach(prjID, createTicket.id, tickAttachments);
+        }
+        /*update ticket block*/
+        else {
             let ticketUpdates = {};
 
             /*check title, type, description, priority, due date, mentions, attachments when it works */
-            if(inputTitle.current.value !== props.ticketInfo.fields["System.Title"]) {
+            if (inputTitle.current.value !== props.ticketInfo.fields["System.Title"]) {
                 ticketUpdates["System.Title"] = ticketTitle;
             }
-            if(priorityVal !== null) {
+            if (priorityVal !== null) {
                 ticketUpdates["Microsoft.VSTS.Common.Priority"] = priorityVal;
             }
 
-            if(stateVal !== null && stateVal !== props.ticketInfo.fields["System.State"]) {
+            if (stateVal !== null && stateVal !== props.ticketInfo.fields["System.State"]) {
                 ticketUpdates["System.State"] = stateVal;
             }
 
-            if(typeVal !== null) {
+            if (typeVal !== null) {
                 ticketUpdates["System.WorkItemType"] = typeVal;
             }
 
-            if(inputDate.current.value !== props.ticketInfo.fields["Microsoft.VSTS.Scheduling.DueDate"]) {
+            if (inputDate.current.value !== props.ticketInfo.fields["Microsoft.VSTS.Scheduling.DueDate"]) {
                 ticketUpdates["Microsoft.VSTS.Scheduling.DueDate"] = inputDate.current.value;
             }
 
-            if(assignedPerson !== undefined && assignedPerson !== "" && assignedPerson !== props.ticketInfo.fields["System.AssignedTo"]) {
+            if (assignedPerson !== undefined && assignedPerson !== "" && assignedPerson !== props.ticketInfo.fields["System.AssignedTo"]) {
                 ticketUpdates["System.AssignedTo"] = assignedPerson;
             }
 
-            if(mentionChoices.length > 0) {
+            if (mentionChoices.length > 0) {
                 console.log(allMentions);
                 ticketUpdates["Microsoft.VSTS.CMMI.Comments"] = allMentions;
             }
@@ -136,27 +158,34 @@ function TicketForm(props) {
             const updateDevopsTickets = { "fields": ticketUpdates };
             const updateTicket = await azureConnection.updateWorkItem(prjID, props.ticketInfo.id, updateDevopsTickets, "fields");
             console.log(updateTicket);
+            await uploadAndAttach(prjID, props.ticketInfo.id, tickAttachments);
         }
-        if(tickAttachments !== null) {
-            let ticketID = editTicket ? props.ticketInfo.id : createTicket.id;
+    }
 
-            for (let i = 0; i < tickAttachments.length; i++) {
+    /*function for shared info*/
+    async function uploadAndAttach(uploadPrjId, uploadWIId, tickAttachmentsArr) {
 
-                const createAttachment = await azureConnection.createWorkItemAttachment(prjID, tickAttachments[i]);
-                console.log(createAttachment);
+        for (let i = 0; i < tickAttachmentsArr.length; i++) {
+            const createAttachment = await azureConnection.createWorkItemAttachment(uploadPrjId, tickAttachmentsArr[i]);
+            console.log(createAttachment);
 
-                const ticketAttachment =
-                    { "relations": [ { "rel": "AttachedFile", "url": createAttachment["url"], "attributes": {
-                        "name": tickAttachments[i]["name"],
-                        "type": tickAttachments[i]["type"],
-                        "size": tickAttachments[i]["size"],
-                        "lastModifiedDate": tickAttachments[i]["lastModifiedDate"]
-                    } } ] };
-                console.log(ticketAttachment);
+            const ticketAttachment =
+                {
+                    "relations": [{
+                        "rel": "AttachedFile", "url": createAttachment["url"], "attributes": {
+                            "name": tickAttachmentsArr[i]["name"],
+                            "type": tickAttachmentsArr[i]["type"],
+                            "size": tickAttachmentsArr[i]["size"],
+                            "content-disposition": "attachment",
+                            "lastModifiedDate": tickAttachmentsArr[i]["lastModifiedDate"]
+                        }
+                    }]
+                };
+            console.log(ticketAttachment);
 
-                const uploadAttachmentToWI = await azureConnection.updateWorkItem(prjID, ticketID, ticketAttachment, "relations");
-                console.log(uploadAttachmentToWI);
-            }
+            const uploadAttachmentToWI = await azureConnection.updateWorkItem(uploadPrjId, uploadWIId, ticketAttachment, "relations");
+            console.log(uploadAttachmentToWI);
+            setReadyToClose("ready");
         }
     }
 
@@ -169,13 +198,13 @@ function TicketForm(props) {
 
     /*set initial states for forms in edit ticket view*/
     useEffect(() => {
-        if(editTicket === true) {
+        if (editTicket === true) {
 
             /*ticket title*/
             inputTitle.current.value = props.ticketInfo.fields["System.Title"];
 
             /*assigned to*/
-            if(props.ticketInfo.fields["System.AssignedTo"] !== undefined && props.ticketInfo.fields["System.AssignedTo"] !== null) {
+            if (props.ticketInfo.fields["System.AssignedTo"] !== undefined && props.ticketInfo.fields["System.AssignedTo"] !== null) {
                 changeAssignedTo(props.ticketInfo.fields["System.AssignedTo"]);
             }
 
@@ -187,7 +216,7 @@ function TicketForm(props) {
 
             /*description*/
             const divDescObjects = props.ticketInfo.fields["System.Description"];
-            if(divDescObjects === undefined) {
+            if (divDescObjects === undefined) {
                 divDesc.current.innerHTML = "";
             } else if (typeof divDescObjects === "string") {
                 divDesc.current.innerHTML = divDescObjects;
@@ -202,8 +231,8 @@ function TicketForm(props) {
 
             //TODO: CHECK DUE DATE FIELD SLICE. this is likely a lazy method and could be shaving time if done improperly
             /*due date*/
-            if(props.ticketInfo.fields["Microsoft.VSTS.Scheduling.DueDate"] !== undefined) {
-                inputDate.current.value = props.ticketInfo.fields["Microsoft.VSTS.Scheduling.DueDate"].slice(0,10);
+            if (props.ticketInfo.fields["Microsoft.VSTS.Scheduling.DueDate"] !== undefined) {
+                inputDate.current.value = props.ticketInfo.fields["Microsoft.VSTS.Scheduling.DueDate"].slice(0, 10);
             } else {
                 props.ticketInfo.fields = "";
             }
@@ -215,11 +244,13 @@ function TicketForm(props) {
 
     /*trigger more data source forms*/
     let [anotherDataSource, setAnotherDataSource] = useState([0]);
+
     function moreDataSources() {
         setAnotherDataSource([...anotherDataSource, anotherDataSource.length]);
     }
+
     function lessDataSources() {
-        if(anotherDataSource.length !== 1) {
+        if (anotherDataSource.length !== 1) {
             let sourceArr = [...anotherDataSource];
             sourceArr.pop();
             setAnotherDataSource(sourceArr);
@@ -249,7 +280,7 @@ function TicketForm(props) {
         <>
             <Row>
                 <Col>
-                    {/*TODO: fields for project/teams, field for ticket type (task, epic, issue)*/}
+                    {/*TODO: fields for project/teams*/}
                     {/*TODO: validation  for all fields*/}
                     <Form className={"col s12"} onSubmit={submitTicket}>
 
@@ -269,8 +300,8 @@ function TicketForm(props) {
                         <Row className={"mb-2"}>
                             <Form.Group className={"col s12"}>
                                 <Form.Label htmlFor={"ticketTitle"} className={"fw-bold"}>Ticket Title</Form.Label>
-                                <Form.Control type={"text"} placeholder={"Enter title"} ref={inputTitle} />
-                                <Form.Text id={"ticketTitle"} name={"ticketTitle"} />
+                                <Form.Control type={"text"} placeholder={"Enter title"} ref={inputTitle}/>
+                                <Form.Text id={"ticketTitle"} name={"ticketTitle"}/>
                             </Form.Group>
                         </Row>
 
@@ -280,13 +311,22 @@ function TicketForm(props) {
                                 <Form.Label className={"d-block fw-bold"}>Ticket Type</Form.Label>
                                 {/*TODO: add the epic, issue, and task logos*/}
                                 <Form.Label htmlFor={"tickEpic"} className={"ms-3"}>
-                                    Epic <Form.Check className={"ms-3"} inline name={"tickType"} id={"tickEpic"} ref={inputType} type={"radio"} onChange={() => changeTypeVal("Epic")} value={"Epic"} defaultChecked={null} />
+                                    Epic <Form.Check className={"ms-3"} inline name={"tickType"} id={"tickEpic"}
+                                        ref={inputType} type={"radio"}
+                                        onChange={() => changeTypeVal("Epic")} value={"Epic"}
+                                        defaultChecked={null}/>
                                 </Form.Label>
                                 <Form.Label htmlFor={"tickIssue"} className={"ms-3"}>
-                                    Issue <Form.Check className={"ms-3"} inline name={"tickType"} id={"tickIssue"} ref={inputType} type={"radio"} onChange={() => changeTypeVal("Issue")} value={"Issue"} defaultChecked={null} />
+                                    Issue <Form.Check className={"ms-3"} inline name={"tickType"} id={"tickIssue"}
+                                        ref={inputType} type={"radio"}
+                                        onChange={() => changeTypeVal("Issue")} value={"Issue"}
+                                        defaultChecked={null}/>
                                 </Form.Label>
                                 <Form.Label htmlFor={"tickTask"} className={"ms-3"}>
-                                    Task <Form.Check className={"ms-3"} inline name={"tickType"} id={"tickTask"} ref={inputType} type={"radio"} onChange={() => changeTypeVal("Task")} value={"Task"} defaultChecked={null} />
+                                    Task <Form.Check className={"ms-3"} inline name={"tickType"} id={"tickTask"}
+                                        ref={inputType} type={"radio"}
+                                        onChange={() => changeTypeVal("Task")} value={"Task"}
+                                        defaultChecked={null}/>
                                 </Form.Label>
                             </Form.Group>
                         </Row>
@@ -299,13 +339,17 @@ function TicketForm(props) {
 
                                     <Form.Label className={"d-block fw-bold"}>Ticket State</Form.Label>
 
-                                    <Form.Select id={"StateSelect"} ref={inputState} onChange={e => {changeStateVal(e.currentTarget.value); console.log(e.currentTarget.value);}}>
-                                        <option value={"SELECTONE"} >select an option...</option>
+                                    <Form.Select id={"StateSelect"} ref={inputState} onChange={e => {
+                                        changeStateVal(e.currentTarget.value);
+                                        console.log(e.currentTarget.value);
+                                    }}>
+                                        <option value={"SELECTONE"}>select an option...</option>
                                         <option value={"To Do"}>To Do</option>
                                         {tickStates !== null ?
                                             tickStates.value.map(function (thisState, index) {
                                                 return (
-                                                    <option key={index} id={thisState.name + "OPTION"}  value={thisState.name}>{thisState.name}</option> );
+                                                    <option key={index} id={thisState.name + "OPTION"}
+                                                        value={thisState.name}>{thisState.name}</option>);
                                             })
                                             : null}
                                     </Form.Select>
@@ -319,7 +363,8 @@ function TicketForm(props) {
                             <Row className={"mb-2"}>
                                 <Col>
                                     <label className={"fw-bold form-label"}>Current Assignee</label>
-                                    <div className={"form-control "}>{assignedTo !== null ? assignedTo : "No assignee!"}</div>
+                                    <div
+                                        className={"form-control "}>{assignedTo !== null ? assignedTo : "No assignee!"}</div>
                                 </Col>
                             </Row>
                             : null}
@@ -327,16 +372,19 @@ function TicketForm(props) {
                         {/*ASSIGNED TO*/}
                         <Row className={"mb-2"}>
                             <Form.Group className={"col s12"}>
-                                <Form.Label  htmlFor={"tickAssigned"} className={"fw-bold d-inline-block"}>{editTicket === true ? "Assigned To" : "Assign To"}</Form.Label>
-                                <AutoCompleteNames id={"tickAssigned"} setMentionChoices={setMentionChoices} setAssignee={setAssignee} singleOrMultiple={""} />
+                                <Form.Label htmlFor={"tickAssigned"}
+                                    className={"fw-bold d-inline-block"}>{editTicket === true ? "Assigned To" : "Assign To"}</Form.Label>
+                                <AutoCompleteNames id={"tickAssigned"} setMentionChoices={setMentionChoices}
+                                    setAssignee={setAssignee} singleOrMultiple={""}/>
                             </Form.Group>
                         </Row>
 
                         {/*DUE DATE*/}
                         <Row className={"mb-2"}>
                             <Form.Group className={"col s12"}>
-                                <Form.Label  htmlFor={"tickDate"} className={"fw-bold d-inline-block"}>Due Date</Form.Label>
-                                <Form.Control id={"tickDate"} name={"tickDate"} ref={inputDate} type={"date"} />
+                                <Form.Label htmlFor={"tickDate"} className={"fw-bold d-inline-block"}>Due
+                                    Date</Form.Label>
+                                <Form.Control id={"tickDate"} name={"tickDate"} ref={inputDate} type={"date"}/>
                             </Form.Group>
                         </Row>
 
@@ -346,16 +394,28 @@ function TicketForm(props) {
                                 <Form.Label className={"fw-bold"}>Priority</Form.Label>
                                 <div className={"d-flex justify-content-start"}>
                                     <Form.Label htmlFor={"tickPriority1"} className={"ms-4 me-2"}>
-                                        1 <Form.Check className={"ms-2"} inline name={"tickPriority"} id={"tickPriority1"} ref={inputPriority} type={"radio"} onChange={() => changePriorityVal(1)} value={1} defaultChecked={null} />
+                                        1 <Form.Check className={"ms-2"} inline name={"tickPriority"}
+                                            id={"tickPriority1"} ref={inputPriority} type={"radio"}
+                                            onChange={() => changePriorityVal(1)} value={1}
+                                            defaultChecked={null}/>
                                     </Form.Label>
                                     <Form.Label htmlFor={"tickPriority2"} className={"mx-2"}>
-                                        2 <Form.Check className={"ms-2"} inline name={"tickPriority"} id={"tickPriority2"} ref={inputPriority} type={"radio"} onChange={() => changePriorityVal(2)} value={2} defaultChecked={null}/>
+                                        2 <Form.Check className={"ms-2"} inline name={"tickPriority"}
+                                            id={"tickPriority2"} ref={inputPriority} type={"radio"}
+                                            onChange={() => changePriorityVal(2)} value={2}
+                                            defaultChecked={null}/>
                                     </Form.Label>
                                     <Form.Label htmlFor={"tickPriority3"} className={"mx-2"}>
-                                        3 <Form.Check className={"ms-2"} inline name={"tickPriority"} id={"tickPriority3"} ref={inputPriority} type={"radio"} onChange={() => changePriorityVal(3)} value={3} defaultChecked={false}/>
+                                        3 <Form.Check className={"ms-2"} inline name={"tickPriority"}
+                                            id={"tickPriority3"} ref={inputPriority} type={"radio"}
+                                            onChange={() => changePriorityVal(3)} value={3}
+                                            defaultChecked={false}/>
                                     </Form.Label>
                                     <Form.Label htmlFor={"tickPriority4"} className={"mx-2"}>
-                                        4 <Form.Check className={"ms-2"} inline name={"tickPriority"} id={"tickPriority4"} ref={inputPriority} type={"radio"} onChange={() => changePriorityVal(4)} value={4} defaultChecked={null}/>
+                                        4 <Form.Check className={"ms-2"} inline name={"tickPriority"}
+                                            id={"tickPriority4"} ref={inputPriority} type={"radio"}
+                                            onChange={() => changePriorityVal(4)} value={4}
+                                            defaultChecked={null}/>
                                     </Form.Label>
                                 </div>
                             </Form.Group>
@@ -365,13 +425,14 @@ function TicketForm(props) {
                         <Row className={"mb-2"}>
                             <Form.Group className={"col s12"}>
                                 <Form.Label htmlFor={"tickMentions"} className={"fw-bold"}>Mentions</Form.Label>
-                                <AutoCompleteNames id={"tickMentions"} setMentionChoices={setMentionChoices} setAssignee={setAssignee} singleOrMultiple={"multiple"}/>
+                                <AutoCompleteNames id={"tickMentions"} setMentionChoices={setMentionChoices}
+                                    setAssignee={setAssignee} singleOrMultiple={"multiple"}/>
                             </Form.Group>
                         </Row>
 
                         {/*DESCRIPTION*/}
                         <Row className={"mb-2"}>
-                            {editTicket === true?
+                            {editTicket === true ?
                                 <>
                                     <Container>
                                         <div className={"form-label fw-bold"}>Ticket Description</div>
@@ -381,8 +442,9 @@ function TicketForm(props) {
                                 : null}
                             <Form.Group className={editTicket === true ? "col s12 d-none" : "col s12"}>
                                 <Form.Label htmlFor={"ticketDesc"} className={"fw-bold"}>Ticket Description</Form.Label>
-                                <Form.Control as={"textarea"} id={"areaForm"} rows={"2"} type={"text"} placeholder={"Enter description"} ref={inputDesc} />
-                                <Form.Text id={"ticketDesc"} name={"ticketDesc"} />
+                                <Form.Control as={"textarea"} id={"areaForm"} rows={"2"} type={"text"}
+                                    placeholder={"Enter description"} ref={inputDesc}/>
+                                <Form.Text id={"ticketDesc"} name={"ticketDesc"}/>
                             </Form.Group>
                         </Row>
 
@@ -390,16 +452,18 @@ function TicketForm(props) {
                         <Row className={"mb-3"}>
                             <Form.Group className={"col s12"}>
                                 <Form.Label htmlFor={"tickAttachments"} className={"fw-bold"}>Attachments</Form.Label>
-                                <Form.Control multiple id={"tickAttachments"} name={"tickAttachments"} ref={inputAttachment} onChange={e => uploadAttach(e.target.files)} type={"file"} />
+                                <Form.Control multiple id={"tickAttachments"} name={"tickAttachments"}
+                                    ref={inputAttachment} onChange={e => uploadAttach(e.target.files)}
+                                    type={"file"}/>
                             </Form.Group>
                         </Row>
 
                         {/*CONDITIONAL FORMS*/}
-                        {props.editTicket !== true?
+                        {props.editTicket !== true ?
                             <Row>
                                 {anotherDataSource.map((thisSource, index) => (
                                     <div key={index}>
-                                        <ConditionalForms />
+                                        <ConditionalForms/>
                                     </div>
                                 ))}
                                 <Row className={"justify-content-between"}>
@@ -427,13 +491,13 @@ function TicketForm(props) {
                                 Update
                             </Button>
                             :
-                            <Button onClick={handleClose} type={"submit"} name={"action"} className={"float-end mt-3"}>
+                            <Button onClick={handleClose} type={"submit"} name={"action"}
+                                className={"float-end mt-3"}>
                                 Submit
                             </Button>
                         }
 
                     </Form>
-
                 </Col>
 
             </Row>

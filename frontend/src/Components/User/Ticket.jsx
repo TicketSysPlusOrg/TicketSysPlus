@@ -10,7 +10,7 @@ import TicketForm from "./TicketForm";
 import DeleteButton from "./DeleteButton";
 
 
-function Ticket({ ticketData, clickClose }) {
+function Ticket({ ticketData, clickClose, setShow }) {
     const [thisTicketInfo, setThisTicketInfo] = useState(null);
     const [allTicketInfo, setAllTicketInfo] = useState(null);
 
@@ -40,16 +40,6 @@ function Ticket({ ticketData, clickClose }) {
             clickClose(true);
         }
     }, [deleteTicket]);
-
-    function downloadAttachment(attachmentID) {
-        const urlID = attachmentID.split("/");
-        const idLocation = urlID.length -1;
-        console.log(urlID);
-        console.log(idLocation);
-        const dlAttachment = azureConnection.downloadAttachment(thisTicketInfo[0], urlID[idLocation]);
-
-        console.log(dlAttachment);
-    }
 
     // Microsoft.VSTS.CMMI.Comments: "<div><a href=\"#\" data-vss-mention=\"version:2.0,efcfb7f0-f368-6e97-914a-8045b7bece52\">@Conor O'Brien</a>&nbsp; </div>"
     // Microsoft.VSTS.Common.Priority: 4
@@ -149,11 +139,11 @@ function Ticket({ ticketData, clickClose }) {
                                                 <Col xs={3} key={index}>
                                                     <Card className={"shadow-sm"}>
                                                         <Card.Body>
-                                                            <Card.Title>
+                                                            <Card.Title title={thisAttachment.attributes.name} className={"text-truncate"}>
                                                                 {thisAttachment.attributes.name}
                                                             </Card.Title>
                                                             <br />
-                                                            <Button className={"float-end"} size={"sm"} onClick={() => downloadAttachment(thisAttachment.url)}>Download</Button>
+                                                            <a className={"float-end"} href={thisAttachment.url + "?fileName=" + thisAttachment.attributes.name + "&content-disposition=attachment"} download>Download</a>
                                                         </Card.Body>
                                                     </Card>
                                                 </Col>);
@@ -176,7 +166,7 @@ function Ticket({ ticketData, clickClose }) {
                     : <Container>Loading Ticket Info...</Container>
                 : null}
 
-            {renderEdit === true ? <TicketForm editTicket={true} ticketInfo={allTicketInfo}  /> : null}
+            {renderEdit === true ? <TicketForm editTicket={true} ticketInfo={allTicketInfo} setShow={setShow}  /> : null}
         </>
     );
 }

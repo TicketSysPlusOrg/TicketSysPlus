@@ -127,8 +127,9 @@ function NavBarButtons({ currLocation, btnVertSpace, vertOrNot }) {
                     </Modal.Header>
 
                     <Modal.Body>
-                        <TicketForm />
+                        <TicketForm editTicket={false} setShow={setShow}/>
                     </Modal.Body>
+
                 </Modal.Dialog>
             </Modal>
 

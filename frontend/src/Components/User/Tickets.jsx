@@ -220,9 +220,9 @@ function Tickets({ projects }) {
                 <Modal.Dialog className={"mx-3"}>
                     <Modal.Body>
                         {renderEdit === true ?
-                            <TicketForm editTicket={true} ticketInfo={allTicketInfo}  />
+                            <TicketForm editTicket={true} ticketInfo={allTicketInfo} setShow={setShow} />
                             :
-                            <Ticket ticketData={ticketInfo} clickClose={handleClose} renderTicket={renderEdit} ticketInfo={allTicketInfo}/>
+                            <Ticket ticketData={ticketInfo} clickClose={handleClose} setShow={setShow} renderTicket={renderEdit} ticketInfo={allTicketInfo}/>
                         }
                     </Modal.Body>
                 </Modal.Dialog>
