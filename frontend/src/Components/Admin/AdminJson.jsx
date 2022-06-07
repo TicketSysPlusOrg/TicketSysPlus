@@ -124,7 +124,6 @@ function AdminJson() {
 
             <div className="row">
                 <div className="col-9 container">
-                    <p>code mirror below...</p>
                     <JsonViewer dbJson={json} />
                 </div>
             </div>

@@ -14,12 +14,14 @@ function JsonViewer() {
 
     const [change, setChange] = useState(true);
     const [data, setData] = useState("");
-    const [newData, setNewData] = useState("");
     const [show, setShow] = useState(false);
     const [jsonDB, setJson] = useState("");
+    const [jsonError, setJsonError] = useState("");
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+
+    const regex = new RegExp("at position (\\d+)$");
 
 
     useEffect(() => {
@@ -41,36 +43,39 @@ function JsonViewer() {
     }
 
     function validate(jsonToValidate) {
-        let isValid = false;
+        let isValid = true;
         //check for valid JSON format
         try {
-            const tempJSON = JSON.parse(jsonToValidate);
-            isValid = true;
-            document.getElementById("error").innerHTML = " ";
-        } catch (error) {
-            console.log("Invalid JSON Format");
-            console.log(error.message);
-            document.getElementById("error").innerHTML = error.message;
+            JSON.parse(jsonToValidate);
+            setJsonError("");
+        } catch ({ message }) {
+            let output = message;
+            // turn character count into line count
+            if (regex.test(message)) {
+                const regExec = regex.exec(message);
+                if (regExec !== null) {
+                    const position = parseFloat(regExec[1]);
+                    const line = jsonToValidate.slice(0, position).split("\n").length;
+                    output = message.replace(regex, "on line " + line);
+                    console.log(output);
+                }
+            }
+            setJsonError(output);
+            isValid = false;
         }
         return isValid;
     }
 
-    function verify() {
-
-        if (newData !== { jsonDB }) {
-
-            if (validate(newData)) {
-                setChange(false);
-                setData(newData);
-            }
-            else {
-                setChange(true);
-                document.getElementById("error").innerHTML = " ";
-            }
-        }
-        else {
+    function verify(data) {
+        if (jsonDB !== data) {
+            // console.log("Found changes, can save.");
+            setChange(false);
+        } else {
             setChange(true);
-            document.getElementById("error").innerHTML = " ";
+        }
+        if (!validate(data)) {
+            // console.log("Found an error, can not save.");
+            setChange(true);
         }
     }
 
@@ -80,7 +85,7 @@ function JsonViewer() {
             .then((res) => {
                 //TODO: setCurrentJson should be the body of the db data from the get
                 console.log(res.data);
-                document.getElementById("jsonText").value = res.data[0].body;
+                setJson(res.data[0].body);
                 verify();
             })
             .catch((err) => {
@@ -109,7 +114,7 @@ function JsonViewer() {
 
                 <div className="row">
                     <div className="col-12 text-center mt-2">
-                        <p className="text-danger" id="error"> from JsonViewer </p>
+                        <p className="text-danger">{jsonError}</p>
                     </div>
                 </div>
 
@@ -134,10 +139,10 @@ function JsonViewer() {
                             value={jsonDB}
                             height="100%"
                             theme={oneDark}
-                            extensions={[json({ jsx: true })]}
-                            onChange={(value, viewUpdate) => {
-                                setNewData(value);
-                                verify();
+                            extensions={[json()]}
+                            onUpdate={viewUpdate => {
+                                const text = viewUpdate.state.doc.text;
+                                verify(text !== undefined ? text.join("\n") : "");
                             }}
                         />
                     </div>
