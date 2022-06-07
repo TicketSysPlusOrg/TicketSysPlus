@@ -24,7 +24,7 @@ function Responders() {
         setResponders(membersObject);
     }
 
-    function APIDropDownToDB(Image, Name, Email){
+    function APIDropDownToDB(Image, Name, Email) {
         backendApi.post("responders", {
             image: Image,
             name: Name,
@@ -39,7 +39,7 @@ function Responders() {
             });
     }
 
-    function loadResponders(){
+    function loadResponders() {
         backendApi.get("responders")
             .then((res) => {
                 console.log(res.data);
@@ -50,9 +50,9 @@ function Responders() {
             });
     }
 
-    function deleteResponder(id){
+    function deleteResponder(id) {
         console.log(id);
-        backendApi.delete("responders", { data: { "id" : id } })
+        backendApi.delete("responders", { data: { "id": id } })
             .then((res) => {
                 console.log(res);
                 loadResponders();
@@ -71,7 +71,7 @@ function Responders() {
 
     return (
         <>
-            <h4 className={"mt-4 text-center"}>On-Call Responders</h4>
+            <h4 className={"mt-4 text-center onCall lead"} >On-Call Responders</h4>
 
             <Autocomplete
                 className={"mb-1"}
@@ -88,7 +88,7 @@ function Responders() {
                 sx={{ width: 300 }}
                 renderInput={(params) => <TextField {...params} label="Responders" />}
                 onChange={(_event, value, reason) => {
-                    if(reason === "selectOption") {
+                    if (reason === "selectOption") {
                         APIDropDownToDB(
                             value.imageUrl, value.label, value.email
                         );
@@ -101,12 +101,14 @@ function Responders() {
                     <Col key={index} className={"col-12 mb-1"}>
                         <Card key={index}>
                             <Card.Body className={"text-center"}>
-                                <Card.ImgOverlay className={"text-end d"}><CloseButton onClick={() => deleteResponder(card._id)}/></Card.ImgOverlay>
+                                <Card.ImgOverlay className={"text-end d"}><CloseButton onClick={() => deleteResponder(card._id)} /></Card.ImgOverlay>
                                 <div className={"align-content-center"}>
                                     <Avatar
-                                        sx={{ bgcolor: "orange",
-                                            mx:"auto",
-                                            display:"block" }}
+                                        sx={{
+                                            bgcolor: "orange",
+                                            mx: "auto",
+                                            display: "block"
+                                        }}
                                         alt={card.name}
                                         src={card.image}
                                     />

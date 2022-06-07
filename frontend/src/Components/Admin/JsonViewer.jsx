@@ -3,7 +3,7 @@ import CodeMirror from "@uiw/react-codemirror";
 import { oneDark } from "@codemirror/theme-one-dark";
 import { json } from "@codemirror/lang-json";
 import PropTypes from "prop-types";
-import { Button, Modal } from "react-bootstrap";
+import { Button, Modal, Container } from "react-bootstrap";
 
 import { backendApi } from "../../index";
 
@@ -105,38 +105,45 @@ function JsonViewer() {
 
     return (
         <>
+            <div className="container">
 
-            <div className="row">
-                <div className="col-12 text-center mt-2">
-                    <p className="text-danger" id="error"> from JsonViewer </p>
+                <div className="row">
+                    <div className="col-12 text-center mt-2">
+                        <p className="text-danger" id="error"> from JsonViewer </p>
+                    </div>
                 </div>
-            </div>
 
 
-            <div className="row align-items-center justify-content-center mt-2">
-                <div className="col-7 d-flex mb-1">
+                <div className="row align-items-center justify-content-center mt-2">
+                    <div className="col-12 d-flex mb-1 mx-auto">
 
-                    <button onClick={handleShow} className="btn btn-danger mx-3" id="savebtn" type="button" disabled={change}>Save</button>
+                        <button onClick={handleShow} className="btn btn-danger mx-3" id="savebtn" type="button" disabled={change}>Save</button>
 
-                    <button onClick={() => loadOld()} className="btn btn-danger mx-3" id="oldbtn" type="button">Load Old Json Schema</button>
-                    <Button onClick={handleClick}>
-                        Upload a file
-                    </Button>
-                    <input type="file" ref={hiddenFileInput} onChange={handleChange} style={{ display: "none" }} />
-                    <button className="btn btn-danger mx-3" id="exportbtn" type="button">Export</button>
+                        <button onClick={() => loadOld()} className="btn btn-danger mx-3" id="oldbtn" type="button">Load Old Json Schema</button>
+                        <Button onClick={handleClick}>
+                            Upload a file
+                        </Button>
+                        <input type="file" ref={hiddenFileInput} onChange={handleChange} style={{ display: "none" }} />
+                        <button className="btn btn-danger mx-3" id="exportbtn" type="button">Export</button>
+                    </div>
                 </div>
-            </div>
 
-            <CodeMirror
-                value={jsonDB}
-                height="100%"
-                theme={oneDark}
-                extensions={[json({ jsx: true })]}
-                onChange={(value, viewUpdate) => {
-                    setNewData(value);
-                    verify();
-                }}
-            />
+                <div className="row">
+                    <div className="col-12">
+                        <CodeMirror
+                            value={jsonDB}
+                            height="100%"
+                            theme={oneDark}
+                            extensions={[json({ jsx: true })]}
+                            onChange={(value, viewUpdate) => {
+                                setNewData(value);
+                                verify();
+                            }}
+                        />
+                    </div>
+                </div>
+
+            </div>
 
             <Modal show={show} onHide={handleClose} className="row">
                 <div className="col-12">

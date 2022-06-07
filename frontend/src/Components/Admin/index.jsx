@@ -16,19 +16,19 @@ function Admin() {
         ...loginRequest
     };
 
-    return(
+    return (
         <MsalAuthenticationTemplate
             interactionType={InteractionType.Redirect}
             authenticationRequest={authRequest}
         >
             <NavBar />
             <Row className={"me-0"}>
-                <Col>
+                <Col xs={10}>
                     <AdminJson />
                 </Col>
-                <Col xs={2} id="sidebar-right">
+                <Col xs={2} id={"sidebar-right"}>
                     <Row className={"m-2 justify-content-center"}>
-                        <Responders/>
+                        <Responders />
                     </Row>
                 </Col>
             </Row>
