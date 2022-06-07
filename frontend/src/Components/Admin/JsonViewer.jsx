@@ -37,13 +37,11 @@ function JsonViewer() {
         backendApi.get("jsons")
             .then((res) => {
                 const jsonFromDB = res.data[0].body;
-                //document.getElementById("jsonText").value = jsonFromDB;
                 setJson(jsonFromDB);
                 setOldJson(jsonFromDB);
                 console.log(jsonFromDB);
             })
             .catch((err) => {
-                //console.log(err);
                 console.error(err);
             });
     }
@@ -76,13 +74,11 @@ function JsonViewer() {
     function verify(data) {
         setData(data);
         if (oldJson !== data) {
-            // console.log("Found changes, can save.");
             setChange(false);
         } else {
             setChange(true);
         }
         if (!validate(data)) {
-            // console.log("Found an error, can not save.");
             setChange(true);
         }
     }
@@ -124,7 +120,7 @@ function JsonViewer() {
     // to handle the user-selected file
     const handleChange = event => {
         const fileUploaded = event.target.files[0];
-        if (fileUploaded !== undefined) {            
+        if (fileUploaded !== undefined) {
             const reader = new FileReader();
             reader.onload = async (event) => {
                 console.log("Result: " + event.target.result);
@@ -137,15 +133,15 @@ function JsonViewer() {
 
     return (
         <>
-            <div className="container">
+            <div className="container mt-4">
 
                 <div className="row">
                     <div className="col-12 text-center mt-2">
-                        <p className="text-danger">{jsonError}</p>
+                        <p className="adminError">{jsonError}</p>
                     </div>
                 </div>
 
-
+                {/*
                 <div className="row align-items-center justify-content-center mt-2">
                     <div className="col-12 d-flex mb-1 mx-auto">
 
@@ -175,10 +171,60 @@ function JsonViewer() {
                             Export
                         </Button>
                     </div>
-                </div>
+    </div>*/}
 
                 <div className="row">
-                    <div className="col-12">
+
+                    <div className="col-2 mb-1">
+
+                        <div className="row">
+
+                            <div className="col-12">
+
+                                <Button
+                                    onClick={handleShow}
+                                    className="btn btn-danger mb-2 adminBtn saveBtn" disabled={change}
+                                >
+                                    Save
+                                </Button>
+                            </div>
+
+                            <div className="col-12">
+
+                                <Button
+                                    onClick={loadOld}
+                                    className="btn btn-primary mb-2 adminBtn"
+                                >
+                                    Load Original JSON
+                                </Button>
+                            </div>
+
+                            <div className="col-12">
+
+                                <Button onClick={handleClick} className="btn btn-success mb-2 adminBtn">
+                                    Import
+                                </Button>
+
+                                <input type="file" accept="application/json" ref={hiddenFileInput} onChange={handleChange} style={{ display: "none" }} />
+                            </div>
+
+                            <div className="col-12">
+                                <Button
+                                    onClick={() => saveFile(data)}
+                                    className="btn btn-warning adminBtn"
+                                    id="exportbtn"
+                                >
+                                    Export
+                                </Button>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div className="col-10 mx-auto">
                         <CodeMirror
                             value={jsonDB}
                             height="100%"

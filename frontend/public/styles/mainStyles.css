@@ -80,6 +80,28 @@ input[type=radio] {
     cursor: pointer;
 }
 
+.adminBtn {
+    width: 100%;
+}
+
+.bootstrapOverride .saveBtn {
+    background-color: rgb(252, 120, 54);
+    border-color: rgb(252, 120, 54);
+
+}
+
+.bootstrapOverride .saveBtn:hover {
+    background-color: rgb(104, 171, 193);
+    border-color: rgb(104, 171, 193);
+
+}
+
+.adminError {
+    font-size: larger;
+    color: whitesmoke;
+    background-color: rgba(255, 0, 0, 0.815);
+}
+
 .articleStyle {
     border-color: #ced4da;
     border-radius: 0.375rem;
