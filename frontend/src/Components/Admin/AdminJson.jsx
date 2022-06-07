@@ -15,6 +15,8 @@ function AdminJson() {
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+
+
     useEffect(() => {
         run();
     }, []);
@@ -32,6 +34,7 @@ function AdminJson() {
             });
     }
 
+    /*
     function validate(jsonToValidate) {
         let isValid = false;
         //check for valid JSON format
@@ -44,12 +47,12 @@ function AdminJson() {
             document.getElementById("error").innerHTML = error.message;
         }
         return isValid;
-    }
+    }*/
 
-    function verify() {
+    /*function verify() {
         const jsonText = document.getElementById("jsonText").value;
 
-        {/*TODO: && if schema is valid*/ }
+    
         if (jsonText !== json) {
 
             if (validate(jsonText)) {
@@ -62,9 +65,10 @@ function AdminJson() {
             setChange(true);
             document.getElementById("error").innerHTML = " ";
         }
-    }
+        
+    }*/
 
-
+    /*
     function loadOld() {
         backendApi
             .get("jsons")
@@ -77,32 +81,27 @@ function AdminJson() {
             .catch((err) => {
                 console.log(err);
             });
-    }
+    }*/
     // Create a reference to the hidden file input element
-    const hiddenFileInput = React.useRef(null);
+    //const hiddenFileInput = React.useRef(null);
 
     // Programatically click the hidden file input element
     // when the Button component is clicked
-    const handleClick = event => {
+    /*const handleClick = event => {
         hiddenFileInput.current.click();
-    };
+    };*/
     // Call a function (passed as a prop from the parent component)
     // to handle the user-selected file
-    const handleChange = event => {
+    /*const handleChange = event => {
         const fileUploaded = event.target.files[0];
         console.log(fileUploaded);
-    };
+    };*/
 
     return (
         <>
-            <div className="row">
-                <div className="col-12 text-center mt-2">
-                    <p className="text-danger error" id="error">  </p>
-                </div>
-            </div>
 
+            {/*<div className="row align-items-center justify-content-center mt-2">
 
-            <div className="row align-items-center justify-content-center mt-2">
                 <div className="col-7 d-flex mb-1">
 
                     <button onClick={handleShow} className="btn btn-danger mx-3" id="savebtn" type="button" disabled={change}>Save</button>
@@ -121,7 +120,7 @@ function AdminJson() {
                     </textarea>
                 </div>
 
-            </div>
+            </div>*/}
 
             <div className="row">
                 <div className="col-9 container">
@@ -129,6 +128,10 @@ function AdminJson() {
                     <JsonViewer dbJson={json} />
                 </div>
             </div>
+
+
+
+
         </>
     );
 

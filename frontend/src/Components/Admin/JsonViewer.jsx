@@ -19,6 +19,7 @@ function JsonViewer() {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
+
     useEffect(() => {
         run();
     }, []);
@@ -27,12 +28,13 @@ function JsonViewer() {
         backendApi.get("jsons")
             .then((res) => {
                 const jsonFromDB = res.data[0].body;
-                document.getElementById("jsonText").value = jsonFromDB;
+                //document.getElementById("jsonText").value = jsonFromDB;
                 setJson(jsonFromDB);
                 console.log(jsonFromDB);
             })
             .catch((err) => {
-                console.log(err);
+                //console.log(err);
+                console.error(err);
             });
     }
 
@@ -45,12 +47,13 @@ function JsonViewer() {
             document.getElementById("error").innerHTML = " ";
         } catch (error) {
             console.log("Invalid JSON Format");
-            document.getElementById("error").innerHTML = error.message;
+            console.log(error.message);
+            //document.getElementById("error").innerHTML = " test " + error.message + " test ";
         }
         return isValid;
     }
 
-    function verify(data) {
+    function verify() {
 
         if (newData !== { jsonDB }) {
 
@@ -58,7 +61,10 @@ function JsonViewer() {
                 setChange(false);
                 setData(newData);
             }
-
+            else {
+                setChange(true);
+                document.getElementById("error").innerHTML = " ";
+            }
         }
         else {
             setChange(true);
@@ -97,6 +103,14 @@ function JsonViewer() {
 
     return (
         <>
+
+            <div className="row">
+                <div className="col-12 text-center mt-2">
+                    <p className="text-danger" id="error"> from JsonViewer </p>
+                </div>
+            </div>
+
+
             <div className="row align-items-center justify-content-center mt-2">
                 <div className="col-7 d-flex mb-1">
 
@@ -113,7 +127,7 @@ function JsonViewer() {
 
             <CodeMirror
                 value={jsonDB}
-                height="50%"
+                height="100%"
                 theme={oneDark}
                 extensions={[json({ jsx: true })]}
                 onChange={(value, viewUpdate) => {
