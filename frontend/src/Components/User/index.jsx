@@ -9,9 +9,9 @@ import Tickets from "./Tickets";
 
 function User() {
     const [projectList, setPrjList] = useState(null);
-    const [teamVal, setTeamVal] = useState(null);
+    const [prjVal, setPrjVal] = useState(null);
 
-    /*when team val change is called and teamval is altered, run azure calls, which renders tickets based on projects*/
+    /*when prj val change is called and prjVal is altered, run azure calls, which renders tickets based on projects*/
     useEffect(() => {
         initRun();
     }, []);
@@ -19,16 +19,13 @@ function User() {
     async function initRun() {
         const prjs = await azureConnection.getProjects();
         const teams = await azureConnection.getTeams();
-        console.log(prjs);
-        console.log(teams);
         setPrjList(prjs);
-        setTeamVal([teams.value[0].projectId, teams.value[0].id]);
+        setPrjVal([teams.value[0].projectId, teams.value[0].id]);
     }
 
-    async function prjTickets (prjID) {
-        console.log(prjID);
+    async function prjTickets(prjID) {
         const teams = await azureConnection.getTeams(prjID);
-        setTeamVal([prjID, teams.value[0].id]);
+        setPrjVal([prjID, teams.value[0].id]);
     }
 
     return(
@@ -42,7 +39,7 @@ function User() {
                             {projectList ?
                                 projectList.value.map((thisPrj, index) => (
                                     <div key={index} onClick={() => prjTickets(thisPrj.id)} className={"projectSelect"}>
-                                        <Card className={teamVal[0] === thisPrj.id ? "mt-3 activeProjectCard shadow-lg" : "mt-3 shadow-sm"}>
+                                        <Card className={prjVal[0] === thisPrj.id ? "mt-3 activeProjectCard shadow-lg" : "mt-3 shadow-sm"}>
                                             <Card.Title className={"ms-2 mt-2"}>
                                                 {thisPrj.name}
                                             </Card.Title>
@@ -56,7 +53,7 @@ function User() {
                     </Col>
                     <Col xs={10} id={"inset-shadow"} className={"colscrolls"}>
                         <Row className={"ps-4"}>
-                            <Tickets projects={teamVal} key={teamVal} />
+                            <Tickets projects={prjVal} key={prjVal} />
                         </Row>
                     </Col>
                 </Row>
