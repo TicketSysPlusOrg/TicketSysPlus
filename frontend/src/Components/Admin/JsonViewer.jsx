@@ -143,7 +143,7 @@ function JsonViewer() {
                             theme={oneDark}
                             lint={true}
                             gutters={["CodeMirror-lint-markers"]}
-                            extensions={[json(), linter(jsonParseLinter(), {tooltipFilter: jsonParseLinter()})]}
+                            extensions={[json(), linter(jsonParseLinter(), { tooltipFilter: jsonParseLinter() })]}
                             onUpdate={viewUpdate => {
                                 if (viewUpdate.state.doc !== undefined) {
                                     const text = viewUpdate.state.doc.toString();
