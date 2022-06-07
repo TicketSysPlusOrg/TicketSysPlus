@@ -10,6 +10,7 @@
     "@azure/msal-browser": "^2.24.0",
     "@azure/msal-react": "^1.4.0",
     "@codemirror/lang-json": "^0.20.0",
+    "@codemirror/lint": "^0.20.3",
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",
     "@mui/icons-material": "^5.8.2",

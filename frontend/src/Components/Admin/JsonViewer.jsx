@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import CodeMirror from "@uiw/react-codemirror";
+import { linter } from "@codemirror/lint";
 import { oneDark } from "@codemirror/theme-one-dark";
-import { json } from "@codemirror/lang-json";
+import { json, jsonParseLinter } from "@codemirror/lang-json";
 import PropTypes from "prop-types";
 import { Button, Modal, Container } from "react-bootstrap";
 
@@ -48,16 +49,17 @@ function JsonViewer() {
         try {
             JSON.parse(jsonToValidate);
             setJsonError("");
-        } catch ({ message }) {
-            let output = message;
+        } catch (error) {
+            if (!(error instanceof SyntaxError)) throw error;
+
+            let output = error.message;
             // turn character count into line count
-            if (regex.test(message)) {
-                const regExec = regex.exec(message);
+            if (regex.test(error.message)) {
+                const regExec = regex.exec(error.message);
                 if (regExec !== null) {
                     const position = parseFloat(regExec[1]);
                     const line = jsonToValidate.slice(0, position).split("\n").length;
-                    output = message.replace(regex, "on line " + line);
-                    console.log(output);
+                    output = error.message.replace(regex, "on line " + line);
                 }
             }
             setJsonError(output);
@@ -139,10 +141,14 @@ function JsonViewer() {
                             value={jsonDB}
                             height="100%"
                             theme={oneDark}
-                            extensions={[json()]}
+                            lint={true}
+                            gutters={["CodeMirror-lint-markers"]}
+                            extensions={[json(), linter(jsonParseLinter(), {tooltipFilter: jsonParseLinter()})]}
                             onUpdate={viewUpdate => {
-                                const text = viewUpdate.state.doc.text;
-                                verify(text !== undefined ? text.join("\n") : "");
+                                if (viewUpdate.state.doc !== undefined) {
+                                    const text = viewUpdate.state.doc.toString();
+                                    verify(text ? text : "");
+                                }
                             }}
                         />
                     </div>
