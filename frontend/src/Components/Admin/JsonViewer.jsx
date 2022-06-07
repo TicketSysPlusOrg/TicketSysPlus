@@ -50,7 +50,7 @@ function JsonViewer() {
         } catch (error) {
             console.log("Invalid JSON Format");
             console.log(error.message);
-            //document.getElementById("error").innerHTML = " test " + error.message + " test ";
+            document.getElementById("error").innerHTML = error.message;
         }
         return isValid;
     }
