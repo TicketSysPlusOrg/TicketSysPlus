@@ -4,7 +4,6 @@ import { Card, Col, Container, Row } from "react-bootstrap";
 import { azureConnection } from "../../index";
 import NavBarHeader from "../NavBar";
 
-import SidebarTeams from "./SidebarTeams";
 import Legend from "./Legend";
 import Tickets from "./Tickets";
 
@@ -47,10 +46,6 @@ function User() {
                                             <Card.Title className={"ms-2 mt-2"}>
                                                 {thisPrj.name}
                                             </Card.Title>
-                                            <Card.Body>
-                                                <h6><u>Teams</u></h6>
-                                                <SidebarTeams thisTeam={thisPrj.id} />
-                                            </Card.Body>
                                         </Card>
                                     </div>
                                 ))
