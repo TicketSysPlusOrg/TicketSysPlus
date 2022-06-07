@@ -138,8 +138,8 @@ function TicketForm(props) {
             console.log(updateTicket);
         }
         if(tickAttachments !== null) {
-            let ticketID;
-            editTicket ? ticketID = props.ticketInfo.id : ticketID = createTicket.id;
+            let ticketID = editTicket ? props.ticketInfo.id : createTicket.id;
+
             for (let i = 0; i < tickAttachments.length; i++) {
 
                 const createAttachment = await azureConnection.createWorkItemAttachment(prjID, tickAttachments[i]);
