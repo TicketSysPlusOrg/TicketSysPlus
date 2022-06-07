@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
-import { responderSchema } from "../models/responderSchema.js";
 
-const Responder = mongoose.model("Responder", responderSchema);
+import { memberSchema } from "../models/memberSchema.js";
 
+const Responder = mongoose.model("Responder", memberSchema);
 
 //POST
 export const addResponder = (req, res) => {
@@ -49,13 +49,27 @@ export const changeResponder = (req, res) => {
 
 //DELETE
 export const deleteResponder = (req, res) => {
-    Responder.deleteOne(
-        req.body,
-        (err, Responder) => {
-            if (err) {
-                res.send(err);
+    if (req.body.id !== undefined) {
+        const { id, ...filter } = req.body;
+        Responder.findByIdAndDelete(
+            id,
+            filter,
+            (err, Responder) => {
+                if (err) {
+                    res.send(err);
+                }
+                res.json(Responder);
             }
-            res.json(Responder);
-        }
-    );
+        );
+    } else {
+        Responder.deleteOne(
+            req.body,
+            (err, Responder) => {
+                if (err) {
+                    res.send(err);
+                }
+                res.json(Responder);
+            }
+        );
+    }
 };

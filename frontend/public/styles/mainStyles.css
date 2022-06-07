@@ -1,3 +1,19 @@
+body {
+    /*overflow: hidden;*/
+}
+
+body::-webkit-scrollbar {
+    display: none;
+}
+
+li:hover {
+    background-color: #b7e7e7;
+}
+
+input[type=radio] {
+    transform: scale(1.5);
+}
+
 #motorqLogo {
     max-width: 55%;
     min-width: 40%;
@@ -14,20 +30,68 @@
 }
 
 #ts-color {
-    color: darkblue;
-    text-align: justify;
+    color: rgb(104, 171, 193);
     font-size: smaller;
+    text-decoration: none;
+}
+
+.bootstrapOverride .onCall {
+    color: rgb(104, 171, 193);
+    font-weight: bold !important;
 }
 
 #sidebar {
     min-height: 100vh;
-    background-color: white;
-    border-right: 3px solid rgba(184, 134, 11, 0.3);
 }
+
+#inset-shadow {
+    box-shadow: inset 0.2rem 0.4rem 1.5rem rgba(0, 0, 0, .175);
+}
+
+#navBg,
+#sidebar,
 #sidebar-right {
-    min-height: 100vh;
+    background-color: rgb(248, 249, 250);
+}
+
+#sidebar-right {
+    height: 100vh;
+    overflow-y: scroll;
+}
+
+#root {
+    background-color: #e7ecf1;
+}
+
+#vhscroll {
+    height: 100vh;
+}
+
+#vhscroll::-webkit-scrollbar {
+    display: none;
+}
+
+.colscrolls {
+    height: 100%;
+    overflow-y: scroll;
+}
+
+.userTicketBtns {
+    cursor: pointer;
+}
+
+.articleStyle {
+    border-color: #ced4da;
+    border-radius: 0.375rem;
+}
+
+.hoverOver {
+    border: white 2px solid;
     background-color: white;
-    border-left: 3px solid rgba(184, 134, 11, 0.3);
+}
+
+.hoverOver.redTag {
+    border: #fd7f7f 2px solid;
 }
 
 /*overrides for project selection cards*/
@@ -35,7 +99,8 @@
     border-width: 0.2rem;
 }
 
-.projectSelect .card:hover, .projectSelect .card:focus {
+.projectSelect .card:hover,
+.projectSelect .card:focus {
     border-color: rgb(68, 179, 183);
 }
 
@@ -43,37 +108,72 @@
     border-color: rgba(50, 44, 147, 1);
 }
 
+.bootstrapOverride .hoverOver:hover,
+.bootstrapOverride .hoverOver:focus {
+    background-color: rgb(240, 246, 255);
+}
+
 /*override for contenteditdiv. grows with more text, no scrollbar*/
 .bootstrapOverride #contentEditDiv {
-    min-height: 5rem;
-    overflow:auto;
+    min-height: 2rem;
+    overflow: auto;
+}
+
+/*override style for view ticket button*/
+.bootstrapOverride .eyeSee {
+    cursor: pointer;
+    color: rgb(0, 0, 0);
+}
+
+.eyeSee:hover {
+    color: rgb(255, 126, 68);
 }
 
 /*style overrides for create ticket button*/
 .bootstrapOverride .makeTicket {
-    border-radius: 25px;
-    border: 4px double #ec7a6f;
-    background-color: rgb(252,120,54);
-    color: white;
+    border: none;
+    font-size: larger;
+    background-color: transparent;
+    color: rgb(252, 120, 54);
 }
 
-.bootstrapOverride .makeTicket:hover {
-    background-color: rgb(232, 99, 35);
+/*style overrides for admin page button and user name tag*/
+.bootstrapOverride .adminButton {
+    border: none;
+    font-size: larger;
+    background-color: transparent;
+    color: rgb(0, 58, 139);
 }
 
-.bootstrapOverride .makeTicket:active, .bootstrapOverride .makeTicket:focus {
-    background-color: rgb(245, 98, 28);
-    border-color: orange;
+
+.bootstrapOverride .makeTicket:hover,
+.bootstrapOverride .adminButton:hover {
+    background-color: transparent;
+    text-decoration: underline;
+    color: rgb(252, 120, 54);
+}
+
+.bootstrapOverride .makeTicket:active,
+.bootstrapOverride .makeTicket:focus {
+    background-color: transparent;
+    border-color: rgb(0, 58, 139);
+    color: rgb(252, 120, 54);
 }
 
 /*override colors for user info button*/
 .bootstrapOverride #userBtn {
-    background-color: rgb(252,120,54);
+    background-color: rgb(252, 120, 54);
     border: rgb(255, 89, 0);
     color: white;
 }
+
 .bootstrapOverride #userBtn:hover {
     background-color: rgb(232, 99, 35);
+}
+
+.bootstrapOverride .logOutButton {
+    position: fixed;
+    top: 0.8rem;
 }
 
 .bootstrapOverride #userCollapse {
@@ -84,26 +184,16 @@
     padding-bottom: 0;
 }
 
-.bootstrapOverride .cardOneLine {
-    text-overflow: ellipsis;
-    overflow: hidden;
+.bootstrapOverride .cardOneLine div {
+    display: inline-block;
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
+
 
 .bootstrapOverride .modal-dialog {
-    max-width: 600px;
-}
-
-body {
-    background-image: linear-gradient(to right, white, #ffe6d9);
-}
-
-li:hover {
-    background-color: #b7e7e7;
-}
-
-input[type=radio]{
-    transform:scale(1.5);
+    box-shadow: 0.2rem 0.4rem 1.5rem rgba(0, 0, 0, .175);
 }
 
 @media only screen and (max-width: 768px) {

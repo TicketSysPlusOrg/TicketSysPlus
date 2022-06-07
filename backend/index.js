@@ -2,10 +2,11 @@ import express from "express";
 import mongoose from "mongoose";
 import bodyparser from "body-parser";
 import cors from "cors";
-// import routes from './routes/testTicketRoutes';
-import mongoTicketRoutes from "./routes/testTicketRoutes";
-import ticketRouter from "./routes/ticketRoutes";
-import tickSchemaRoute from "./routes/tickSchemaRoute";
+
+import  responderRoute from "./routes/responderRoute";
+import  jsonRoute from "./routes/jsonRoute";
+import  adminRoute from "./routes/adminRoute";
+import  settingsRoute from "./routes/settingsRoute";
 
 const app = express();
 const PORT = 4001;
@@ -17,26 +18,22 @@ mongoose.connect("mongodb://127.0.0.1:27017", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 }).then(() => console.log("Successfully connected to MongoDB Database"))
-.catch(error => console.log("Could not connect to MongoDB Database"));
+    .catch(error => console.log("Could not connect to MongoDB Database"));
 
 //bodyparser setup
 app.use(bodyparser.urlencoded({ extended: true }));
 app.use(bodyparser.json());
 
-//CORS setup
+//cors setup
 app.use(cors());
 
-//pass routes to express app. routes now available
-mongoTicketRoutes(app);
+app.use("/jsons", jsonRoute);
 
-//pass ticket route(s) to express app
-app.use("/ticketInfo", ticketRouter);
-app.use("/ticketSchema", tickSchemaRoute);
+app.use("/responders", responderRoute);
 
+app.use("/admins", adminRoute);
 
-app.get("/", (req, res) => {
-    res.send(`Our Ticket app is running on port ${PORT}.`);
-});
+app.use("/settings", settingsRoute);
 
 //this actually opens up the server/starts the server on port 4001
 app.listen(PORT, () => {

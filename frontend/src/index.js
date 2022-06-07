@@ -1,18 +1,30 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import { BrowserRouter } from "react-router-dom";
-import AppPages from "./AppPages";
+import { EventType, PublicClientApplication } from "@azure/msal-browser";
+// eslint-disable-next-line
+import { MsalProvider } from "@azure/msal-react";
+// eslint-disable-next-line
+import axios from "axios";
+
 import "bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-// MSAL imports
-import { PublicClientApplication, EventType } from "@azure/msal-browser";
-import { msalConfig, azureConfig } from "./authConfig";
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { BrowserRouter } from "react-router-dom";
 
-import { AzureDevOpsApi } from "./azure-devops-api";
-import { MsalProvider } from "@azure/msal-react";
+import App from "./App";
+import { azureConfig, msalConfig } from "./authConfig";
+import { AzureDevOpsApi } from "./utils/AzureDevOpsApi";
 
 export const azureConnection = new AzureDevOpsApi(azureConfig.organizationUrl, azureConfig.token);
+
+export const backendApi = axios.create({
+    baseURL: process.env.REACT_APP_BACKEND_URL,
+    headers: {
+        common: {
+            "Content-Type": "application/json"
+        }
+    },
+});
 
 // TODO: Example Function. Used to showcase how to use the custom Azure DevOps API
 async function run() {
@@ -46,14 +58,28 @@ async function run() {
     const allTeamMembers = await azureConnection.getAllTeamMembers(projects.value[1].id);
     console.log(allTeamMembers);
 
-//    const getTickTypes = await azureConnection.getWorkItemTypes(projects.value[0].id);
-//    console.log(getTickTypes);
-//
-//
-//    const thisData = {"fields": {"System.State": "To Do", "System.Title": "A Ticket Title"}};
-//
-//    const createTicket = await azureConnection.createWorkItem(projects.value[0].id, "Task", thisData);
-//    console.log(createTicket);
+    /*get project property ID. useful for troubleshooting and setting up the other methods used below to get to work item states */
+    /*const getProjProps = await azureConnection.getProjectProperties(projects.value[1].id);
+    console.log(getProjProps);*/
+
+    /*TODO: CURRENTLY PRESET TO GET THE INHERITED PROCESS WORK ITEM TYPES. NEED TO LET CUSTOMER KNOW,
+        OR SET SOMETHING UP VIA ADMIN PAGE FOR DYNAMIC CHOICE.*/
+
+    /*using all of these methods to get work item states*/
+    /*should be four generic ones and one that pavel created*/
+    //  const getProcesses = await azureConnection.getProcessesList();
+    //  console.log(getProcesses);
+    //
+    // const getTickTypes = await azureConnection.getWorkItemTypes(getProcesses.value[4].id);
+    // console.log(getTickTypes);
+    //
+    //  const getStates = await azureConnection.getWorkItemStates(getProcesses.value[4].id, getTickTypes.value[0].id)
+    //  console.log(getStates);
+
+    //    const thisData = {"fields": {"System.State": "To Do", "System.Title": "A Ticket Title"}};
+
+    //    const createTicket = await azureConnection.createWorkItem(projects.value[0].id, "Task", thisData);
+    //    console.log(createTicket);
 }
 run();
 
@@ -75,13 +101,11 @@ msalInstance.addEventCallback((event) => {
     }
 });
 
-
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
     <BrowserRouter>
         <MsalProvider instance={msalInstance}>
-            <AppPages />
+            <App />
         </MsalProvider>
     </BrowserRouter>
-
 );

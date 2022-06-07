@@ -9,6 +9,11 @@
         "eslint:recommended",
         "plugin:react/recommended"
     ],
+    "settings": {
+        "react": {
+            "version": "detect"
+        }
+    },
     "parserOptions": {
         "ecmaFeatures": {
             "jsx": true
@@ -17,7 +22,8 @@
         "sourceType": "module"
     },
     "plugins": [
-        "react"
+        "react",
+        "import"
     ],
     "rules": {
         "indent": [
@@ -35,17 +41,27 @@
         ],
         "no-unused-vars": "off",
         "eol-last": [
-            "error",
+            "warn",
             "always"
         ],
         "no-multiple-empty-lines": [
-            "error",
+            "warn",
             {
                 "max": 2,
                 "maxEOF": 0
             }
         ],
+        "object-curly-spacing": [
+            "warn",
+            "always"
+        ],
         "react/react-in-jsx-scope": "off",
-        "react/prop-types": 1
+        "react/prop-types": 1,
+        "import/order": [
+            "warn",
+            {
+                "newlines-between": "always"
+            }
+        ]
     }
 }
