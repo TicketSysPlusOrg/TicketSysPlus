@@ -1,6 +1,6 @@
 // specific ticket we want to examine
 import React, { useEffect, useState } from "react";
-import { Button, Col, Container, Form, Row } from "react-bootstrap";
+import { Button, Col, Container, Form, Row, Card } from "react-bootstrap";
 import PropTypes from "prop-types";
 
 import { azureConnection } from "../../index";
@@ -40,6 +40,16 @@ function Ticket({ ticketData, clickClose }) {
             clickClose(true);
         }
     }, [deleteTicket]);
+
+    function downloadAttachment(attachmentID) {
+        const urlID = attachmentID.split("/");
+        const idLocation = urlID.length -1;
+        console.log(urlID);
+        console.log(idLocation);
+        const dlAttachment = azureConnection.downloadAttachment(thisTicketInfo[0], urlID[idLocation]);
+
+        console.log(dlAttachment);
+    }
 
     // Microsoft.VSTS.CMMI.Comments: "<div><a href=\"#\" data-vss-mention=\"version:2.0,efcfb7f0-f368-6e97-914a-8045b7bece52\">@Conor O'Brien</a>&nbsp; </div>"
     // Microsoft.VSTS.Common.Priority: 4
@@ -91,9 +101,13 @@ function Ticket({ ticketData, clickClose }) {
 
                                 {/*work type, state, priority*/}
                                 <Row className={"mb-4"}>
-                                    <h5 className={"mb-4"}>Ticket Type: {allTicketInfo.fields["System.WorkItemType"]}</h5>
-                                    <h5 className={"mb-4"}>Ticket State: {allTicketInfo.fields["System.State"]}</h5>
-                                    <h5 className={"mb-4"}>Priority: {allTicketInfo.fields["Microsoft.VSTS.Common.Priority"]}</h5>
+                                    <h5>Ticket Type: {allTicketInfo.fields["System.WorkItemType"]}</h5>
+                                </Row>
+                                <Row className={"mb-4"}>
+                                    <h5>Ticket State: {allTicketInfo.fields["System.State"]}</h5>
+                                </Row>
+                                <Row className={"mb-4"}>
+                                    <h5>Priority: {allTicketInfo.fields["Microsoft.VSTS.Common.Priority"]}</h5>
                                 </Row>
 
                                 {/*ticket description*/}
@@ -127,9 +141,27 @@ function Ticket({ ticketData, clickClose }) {
                                 </Row>
 
                                 {/*ticket attachments*/}
-                                {/*<Row className="mb-2">*/}
+                                <Row className="mb-4">
+                                    <h5>Attachments</h5>
+                                    {allTicketInfo.relations ?
+                                        allTicketInfo.relations.map((thisAttachment, index) => {
+                                            return(
+                                                <Col xs={3} key={index}>
+                                                    <Card className={"shadow-sm"}>
+                                                        <Card.Body>
+                                                            <Card.Title>
+                                                                {thisAttachment.attributes.name}
+                                                            </Card.Title>
+                                                            <br />
+                                                            <Button className={"float-end"} size={"sm"} onClick={() => downloadAttachment(thisAttachment.url)}>Download</Button>
+                                                        </Card.Body>
+                                                    </Card>
+                                                </Col>);
+                                        })
+                                        : <div className={"border border-1 p-2 articleStyle"}>No attachments</div>}
+                                </Row>
 
-                                {/*</Row>*/}
+                                <hr />
 
                                 <Button onClick={() => setRenderEdit(true)} type={"button"} name={"action"} className={"mt-2"}>
                                     Edit Ticket
