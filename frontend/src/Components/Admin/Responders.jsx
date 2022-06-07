@@ -72,6 +72,7 @@ function Responders() {
     return (
         <>
             <h4 className={"mt-4 text-center onCall lead"} >On-Call Responders</h4>
+            <hr />
 
             <Autocomplete
                 className={"mb-1"}

@@ -23,7 +23,7 @@ function Admin() {
         >
             <NavBar />
             <Row className={"me-0"}>
-                <Col xs={10}>
+                <Col xs={10} id={"inset-shadow"}>
                     <AdminJson />
                 </Col>
                 <Col xs={2} id={"sidebar-right"}>
