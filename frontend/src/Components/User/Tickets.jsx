@@ -25,7 +25,10 @@ function Tickets({ projects }) {
     const [show, setShow] = useState(false);
     const handleShow = () => setShow(true);
     const handleClose = () => setShow(false);
+
+    /*ticket info*/
     const [ticketInfo, setTicketInfo] = useState([]);
+
     const [blockingId, setLoadingBlockId] = useState(null);
 
     function showTicketModal(ticketData){
