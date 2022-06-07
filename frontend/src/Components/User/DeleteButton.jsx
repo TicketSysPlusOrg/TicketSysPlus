@@ -1,6 +1,6 @@
 //delete button for single ticket view and edit ticket view
-import React, {useCallback, useEffect, useState} from "react";
-import {Button} from "react-bootstrap";
+import React, { useCallback, useEffect, useState } from "react";
+import { Button } from "react-bootstrap";
 
 /*further development: this could be exported and used in modal display changes, button color toggling, etc. if it appears handy*/
 const useToggle = (initialState = false) => {
@@ -11,7 +11,7 @@ const useToggle = (initialState = false) => {
     return [state, toggle];
 };
 
-function deleteButton ({setDeleteTicket}) {
+function deleteButton ({ setDeleteTicket }) {
     const [showOrHideBtns, setBtnsState] = useToggle();
     
     return (
