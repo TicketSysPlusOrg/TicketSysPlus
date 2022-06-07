@@ -1,3 +1,19 @@
+body {
+    overflow: hidden;
+}
+
+body::-webkit-scrollbar {
+    display: none;
+}
+
+li:hover {
+    background-color: #b7e7e7;
+}
+
+input[type=radio] {
+    transform: scale(1.5);
+}
+
 #motorqLogo {
     max-width: 55%;
     min-width: 40%;
@@ -32,21 +48,14 @@
 }
 
 #sidebar-right {
-    min-height: 100vh;
+    height: 100vh;
+    overflow-y: scroll;
     background-color: white;
     border-left: 3px solid rgba(184, 134, 11, 0.3);
 }
 
 #root {
     background-color: #e7ecf1;
-}
-
-body {
-    overflow: hidden;
-}
-
-body::-webkit-scrollbar {
-    display: none;
 }
 
 #vhscroll {
@@ -180,14 +189,6 @@ body::-webkit-scrollbar {
 
 .bootstrapOverride .modal-dialog {
     box-shadow: 0.2rem 0.4rem 1.5rem rgba(0,0,0,.175);
-}
-
-li:hover {
-    background-color: #b7e7e7;
-}
-
-input[type=radio] {
-    transform: scale(1.5);
 }
 
 @media only screen and (max-width: 768px) {
