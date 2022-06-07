@@ -195,7 +195,6 @@ export class AzureDevOpsApi {
         }).catch(err => err);
     }
 
-    /*api version 4 needed. not updated for newer versions.*/
     /**
      * Return work item types for testing and development purposes. Helpful display of what fields are required for ticket creation
      * @param {string} processId process to pull work item types from
@@ -212,7 +211,6 @@ export class AzureDevOpsApi {
         }).catch(err => err);
     }
 
-    /*api version 4 needed. not updated for newer versions.*/
     /**
      * Get a list of all work item states associated with ticket type.
      * @param {string} processId process ID
@@ -230,8 +228,6 @@ export class AzureDevOpsApi {
         }).catch(err => err);
     }
 
-    /*GETTING CORS ERROR WHEN TESTING WITH LOCALHOST but still getting vals*/
-    /*default (basic) process ID for dev team: b8a3a935-7e91-48b8-a94c-606d37c3e9f2 */
     /**
      * This method returns a list of processes associated with an organization.
      * @returns {string} error if failed, all processes if
@@ -255,6 +251,23 @@ export class AzureDevOpsApi {
             {
                 params: {
                     "api-version": "6.0-preview.1"
+                },
+            }).then (res => {
+            return res.data;
+        }).catch(err => err);
+    }
+
+    /**
+     * Deletes a single work item. This method sends the WI to the DevOps recycle bin.
+     * @param {string} project Project ID or name
+     * @param {string} workItemID single work item ID
+     * @returns {string} error if failed, status code 200 if successful
+     */
+    async deleteWorkItem(project, workItemID) {
+        return this.instance.delete(`${project}/_apis/wit/workitems/${workItemID}`,
+            {
+                params: {
+                    "api-version": "7.1-preview.3"
                 },
             }).then (res => {
             return res.data;

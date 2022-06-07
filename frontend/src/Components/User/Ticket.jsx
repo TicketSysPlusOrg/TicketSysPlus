@@ -7,6 +7,7 @@ import { azureConnection } from "../../index";
 import { parseHtml } from "../../utils/Util";
 
 import TicketForm from "./TicketForm";
+import DeleteButton from "./DeleteButton";
 
 
 function Ticket({ ticketData, clickClose }) {
@@ -28,6 +29,17 @@ function Ticket({ ticketData, clickClose }) {
     }, [thisTicketInfo]);
 
     const [renderEdit, setRenderEdit] = useState(null);
+
+    /*TODO: need to close modal and refresh tickets*/
+    /*delete ticket*/
+    const [deleteTicket, setDeleteTicket] = useState(false);
+    /*delete ticket call when deleteTicketId !== null*/
+    useEffect(() => {
+        if(deleteTicket) {
+            const deleteThisTicket = azureConnection.deleteWorkItem(allTicketInfo.fields["System.AreaPath"], allTicketInfo.id);
+            clickClose(true);
+        }
+    }, [deleteTicket]);
 
     // Microsoft.VSTS.CMMI.Comments: "<div><a href=\"#\" data-vss-mention=\"version:2.0,efcfb7f0-f368-6e97-914a-8045b7bece52\">@Conor O'Brien</a>&nbsp; </div>"
     // Microsoft.VSTS.Common.Priority: 4
@@ -64,8 +76,13 @@ function Ticket({ ticketData, clickClose }) {
 
                                 {/*ticket title*/}
                                 <Row className={"mb-4"}>
-                                    <h4>{allTicketInfo.fields["System.Title"]}</h4>
-                                    <hr/>
+                                    <Col xs={10} className={"d-flex align-items-center"}>
+                                        <h4 className={"mt-1"}>{allTicketInfo.fields["System.Title"]}</h4>
+                                    </Col>
+                                    <Col xs={1} className={"mb-2"}>
+                                        <DeleteButton setDeleteTicket={setDeleteTicket} />
+                                    </Col>
+                                    <hr className={"mt-1"}/>
                                 </Row>
 
                                 <Row className={"mb-4"}>

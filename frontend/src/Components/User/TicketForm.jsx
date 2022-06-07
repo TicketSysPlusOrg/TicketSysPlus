@@ -8,12 +8,26 @@ import { parseHtml } from "../../utils/Util";
 
 import ConditionalForms from "./ConditionalForms";
 import AutoCompleteNames from "./AutoCompleteNames";
+import DeleteButton from "./DeleteButton";
 
 function TicketForm(props) {
 
     /*show and close vars for modal*/
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
+
+
+    /*TODO: need to close modal and refresh tickets*/
+    /*delete ticket*/
+    const [deleteTicket, setDeleteTicket] = useState(false);
+    /*delete ticket call when deleteTicketId !== null*/
+    useEffect(() => {
+        if(deleteTicket) {
+            const deleteThisTicket = azureConnection.deleteWorkItem(props.ticketInfo.fields["System.AreaPath"], props.ticketInfo.id);
+            console.log(deleteThisTicket);
+            setShow();
+        }
+    }, [deleteTicket]);
 
     let inputState = createRef();
     let inputTitle = createRef();
@@ -241,8 +255,13 @@ function TicketForm(props) {
 
                         {editTicket === true ?
                             <Row className={"mb-2"}>
-                                <h4>Editing Ticket</h4>
-                                <hr/>
+                                <Col xs={10} className={"d-flex align-items-center"}>
+                                    <h4>Editing Ticket</h4>
+                                </Col>
+                                <Col xs={1} className={"mb-2"}>
+                                    <DeleteButton setDeleteTicket={setDeleteTicket}/>
+                                </Col>
+                                <hr className={"mt-1"}/>
                             </Row>
                             : null}
 
