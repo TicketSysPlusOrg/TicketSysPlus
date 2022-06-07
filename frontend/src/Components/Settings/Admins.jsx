@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Card, CloseButton, Col, Dropdown, Row } from "react-bootstrap";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
+import Avatar from "@mui/material/Avatar";
 
 import { backendApi } from "../../index";
 import { azureConnection } from "../../index";
@@ -102,7 +103,14 @@ function Admins() {
                     <Card key={index}>
                         <Card.Body className={"text-center"}>
                             <Card.Text className={"text-end d"}><CloseButton onClick={() => deleteAdmins(card._id)}/></Card.Text>
-                            <Card.Img variant="top" src={card.image} style={{ width: "fit-content", borderRadius: 60/ 2 }}/>
+                            <Avatar
+                                sx={{ bgcolor: "orange",
+                                    mx:"auto",
+                                    display:"block"
+                                }}
+                                alt={card.name}
+                                src={card.image}
+                            />
                             <Card.Text>
                                 {card ? card.name : null}
                             </Card.Text>

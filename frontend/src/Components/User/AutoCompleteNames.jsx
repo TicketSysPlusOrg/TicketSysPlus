@@ -19,19 +19,13 @@ function AutoCompleteNames({ singleOrMultiple, setMentionChoices, setAssignee })
         (async () => {
             const projects = await azureConnection.getProjects();
             const allTeamMembers = await azureConnection.getAllTeamMembers(projects.value[1].id);
-            setTeamMembersList(allTeamMembers);
-        })();
-
-    }, []);
-
-    useEffect(() => {
-        (async () => {
-            let mappedTeamMembers = teamMembersList.value.map((teamMember) => {
+            await setTeamMembersList(allTeamMembers);
+            let mappedTeamMembers = allTeamMembers.value.map((teamMember) => {
                 return { label: teamMember.identity.displayName, email: teamMember.identity.uniqueName, id: teamMember.identity.id };
             });
             setTeamMembers(mappedTeamMembers);
         })();
-    }, [teamMembersList]);
+    }, []);
 
     useEffect(() => {
         setMentionChoices(chooseList);
@@ -71,7 +65,9 @@ function AutoCompleteNames({ singleOrMultiple, setMentionChoices, setAssignee })
 }
 
 AutoCompleteNames.propTypes = {
-    setMentionChoices: PropTypes.func
+    setMentionChoices: PropTypes.func,
+    singleOrMultiple: PropTypes.string,
+    setAssignee: PropTypes.func
 };
 
 export default AutoCompleteNames;

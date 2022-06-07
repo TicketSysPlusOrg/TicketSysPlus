@@ -1,3 +1,19 @@
+body {
+    overflow: hidden;
+}
+
+body::-webkit-scrollbar {
+    display: none;
+}
+
+li:hover {
+    background-color: #b7e7e7;
+}
+
+input[type=radio] {
+    transform: scale(1.5);
+}
+
 #motorqLogo {
     max-width: 55%;
     min-width: 40%;
@@ -32,13 +48,27 @@
 }
 
 #sidebar-right {
-    min-height: 100vh;
+    height: 100vh;
+    overflow-y: scroll;
     background-color: white;
     border-left: 3px solid rgba(184, 134, 11, 0.3);
 }
 
 #root {
     background-color: #e7ecf1;
+}
+
+#vhscroll {
+    height: 100vh;
+}
+
+#vhscroll::-webkit-scrollbar {
+    display: none;
+}
+
+.colscrolls {
+    height: 100%;
+    overflow-y: scroll;
 }
 
 .userTicketBtns {
@@ -59,10 +89,6 @@
     border: #fd7f7f 2px solid;
 }
 
-.hoverOver.greenTag {
-    border: #3bda63 2px solid;
-}
-
 /*overrides for project selection cards*/
 .projectSelect .card {
     border-width: 0.2rem;
@@ -79,7 +105,7 @@
 
 .bootstrapOverride .hoverOver:hover,
 .bootstrapOverride .hoverOver:focus {
-    background-color: rgb(190, 212, 239);
+    background-color: rgb(240, 246, 255);
 }
 
 /*override for contenteditdiv. grows with more text, no scrollbar*/
@@ -153,8 +179,7 @@
     padding-bottom: 0;
 }
 
-.bootstrapOverride .cardOneLine div
-{
+.bootstrapOverride .cardOneLine div {
     display: inline-block;
     white-space: nowrap;
     overflow: hidden;
@@ -163,15 +188,7 @@
 
 
 .bootstrapOverride .modal-dialog {
-    max-width: 600px;
-}
-
-li:hover {
-    background-color: #b7e7e7;
-}
-
-input[type=radio] {
-    transform: scale(1.5);
+    box-shadow: 0.2rem 0.4rem 1.5rem rgba(0,0,0,.175);
 }
 
 @media only screen and (max-width: 768px) {

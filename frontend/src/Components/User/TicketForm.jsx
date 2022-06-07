@@ -8,10 +8,7 @@ import { parseHtml } from "../../utils/Util";
 
 import ConditionalForms from "./ConditionalForms";
 import AutoCompleteNames from "./AutoCompleteNames";
-import {getNameBeforeEmail} from "./Tickets";
 
-
-//TODO: make file uploads real
 function TicketForm(props) {
 
     /*show and close vars for modal*/
@@ -59,17 +56,15 @@ function TicketForm(props) {
     }, []);
 
     async function submitTicket(SubmitEvent) {
-        //TODO: stop reload of page but reload modal...? or could JUST close modal and reload the visible tickets
-        SubmitEvent.preventDefault();
+        //TODO: stop reload of full page but close modal and refresh tickets
+        // SubmitEvent.preventDefault();
 
         const ticketTitle = inputTitle.current.value;
         const ticketType = typeVal;
         const ticketDesc = inputDesc.current.value;
         const tickDate = inputDate.current.value;
         const tickPriority = inputPriority.current.value;
-
-        //TODO: attachments
-        const tickAttachments = inputAttachment.current.value;
+        const tickAttachments = uploadVal;
 
         /*handle mentions array for tags*/
         const mentionFormat = "<a href=\"#\" data-vss-mention=\"version2.0,USERID\">@NAME</a>";
@@ -87,9 +82,11 @@ function TicketForm(props) {
             /*create new devops ticket*/
             const devOpsTickData = { "fields": { "System.State": "To Do", "System.Title": ticketTitle, "System.Description": ticketDesc,
                 "Microsoft.VSTS.Scheduling.DueDate": tickDate, "Microsoft.VSTS.Common.Priority": tickPriority,
-                "System.WorkItemType": ticketType, "Microsoft.VSTS.CMMI.Comments": allMentions, "System.AssignedTo": assignedPerson } };
+                "System.WorkItemType": ticketType, "Microsoft.VSTS.CMMI.Comments": allMentions, "System.AssignedTo": assignedPerson,  } };
+            console.log(devOpsTickData);
 
-            const createTicket = await azureConnection.createWorkItem(prjID, ticketType, devOpsTickData);
+            var createTicket = await azureConnection.createWorkItem(prjID, ticketType, devOpsTickData);
+            console.log(createTicket);
         } else {
             let ticketUpdates = {};
 
@@ -117,15 +114,35 @@ function TicketForm(props) {
                 ticketUpdates["System.AssignedTo"] = assignedPerson;
             }
 
-            /*TODO: currently does not add info to a comments section if one is not present*/
             if(mentionChoices.length > 0) {
                 console.log(allMentions);
                 ticketUpdates["Microsoft.VSTS.CMMI.Comments"] = allMentions;
             }
 
             const updateDevopsTickets = { "fields": ticketUpdates };
-            const updateTicket = await azureConnection.updateWorkItem(prjID, props.ticketInfo.id, updateDevopsTickets);
+            const updateTicket = await azureConnection.updateWorkItem(prjID, props.ticketInfo.id, updateDevopsTickets, "fields");
             console.log(updateTicket);
+        }
+        if(tickAttachments !== null) {
+            let ticketID;
+            editTicket ? ticketID = props.ticketInfo.id : ticketID = createTicket.id;
+            for (let i = 0; i < tickAttachments.length; i++) {
+
+                const createAttachment = await azureConnection.createWorkItemAttachment(prjID, tickAttachments[i]);
+                console.log(createAttachment);
+
+                const ticketAttachment =
+                    { "relations": [ { "rel": "AttachedFile", "url": createAttachment["url"], "attributes": {
+                        "name": tickAttachments[i]["name"],
+                        "type": tickAttachments[i]["type"],
+                        "size": tickAttachments[i]["size"],
+                        "lastModifiedDate": tickAttachments[i]["lastModifiedDate"]
+                    } } ] };
+                console.log(ticketAttachment);
+
+                const uploadAttachmentToWI = await azureConnection.updateWorkItem(prjID, ticketID, ticketAttachment, "relations");
+                console.log(uploadAttachmentToWI);
+            }
         }
     }
 
@@ -143,7 +160,6 @@ function TicketForm(props) {
             /*ticket title*/
             inputTitle.current.value = props.ticketInfo.fields["System.Title"];
 
-            /*TODO: figure out how to send the specific person name to autocomplete form*/
             /*assigned to*/
             if(props.ticketInfo.fields["System.AssignedTo"] !== undefined && props.ticketInfo.fields["System.AssignedTo"] !== null) {
                 changeAssignedTo(props.ticketInfo.fields["System.AssignedTo"]);
@@ -178,10 +194,8 @@ function TicketForm(props) {
                 props.ticketInfo.fields = "";
             }
 
-            //TODO: figure out how to fill mentions from comments section of DevOps. not a field I've seen in the work item.
+            //TODO: more mentions functionality?
             /*inputMentions.current.value = props.ticketInfo.fields["System.Mentions"];*/
-            //TODO: attachments stuff
-            /*inputAttachment.current.value = createRef();*/
         }
     }, [editTicket]);
 
@@ -208,6 +222,14 @@ function TicketForm(props) {
     const [mentionChoices, setMentionChoices] = useState([]);
     /*assigned person*/
     const [assignee, setAssignee] = useState(null);
+    /*state for file upload. currently one item at a time*/
+    const [uploadVal, setUploadVal] = useState([]);
+
+    /*TODO: need to limit file size, run checks, and add to an array of files for creation*/
+    function uploadAttach(thisFile) {
+        console.log(thisFile);
+        setUploadVal(thisFile);
+    }
 
     return (
         <>
@@ -274,12 +296,14 @@ function TicketForm(props) {
                             : null}
 
                         {/*CURRENT ASSIGNED TO*/}
-                        <Row className={"mb-2"}>
-                            <Col>
-                                <label className={"fw-bold form-label"}>Current Assignee</label>
-                                <div className={"form-control "}>{assignedTo !== null ? assignedTo : "No assignee!"}</div>
-                            </Col>
-                        </Row>
+                        {editTicket ?
+                            <Row className={"mb-2"}>
+                                <Col>
+                                    <label className={"fw-bold form-label"}>Current Assignee</label>
+                                    <div className={"form-control "}>{assignedTo !== null ? assignedTo : "No assignee!"}</div>
+                                </Col>
+                            </Row>
+                            : null}
 
                         {/*ASSIGNED TO*/}
                         <Row className={"mb-2"}>
@@ -345,10 +369,9 @@ function TicketForm(props) {
 
                         {/*ATTACHMENTS*/}
                         <Row className={"mb-3"}>
-                            {/*TODO: make this attachment form real*/}
                             <Form.Group className={"col s12"}>
                                 <Form.Label htmlFor={"tickAttachments"} className={"fw-bold"}>Attachments</Form.Label>
-                                <Form.Control id={"tickAttachments"} name={"tickAttachments"} ref={inputAttachment} type={"file"} />
+                                <Form.Control multiple id={"tickAttachments"} name={"tickAttachments"} ref={inputAttachment} onChange={e => uploadAttach(e.target.files)} type={"file"} />
                             </Form.Group>
                         </Row>
 
