@@ -13,10 +13,11 @@ import TicketForm from "../User/TicketForm";
 // import { isAdmin } from "../../utils/Util";
 
 
-function NavBarButtons({ currLocation, btnVertSpace, vertOrNot }) {
-    const [show, setShow] = useState(false);
+function NavBarButtons({ currLocation, btnVertSpace, vertOrNot, setShow, show }) {
+
     const handleShow = () => setShow(true);
     const handleClose = () => setShow(false);
+
 
     const { instance, accounts } = useMsal();
     const account = useAccount(accounts[0] || {});
@@ -127,7 +128,7 @@ function NavBarButtons({ currLocation, btnVertSpace, vertOrNot }) {
                     </Modal.Header>
 
                     <Modal.Body>
-                        <TicketForm editTicket={false} setShow={setShow}/>
+                        <TicketForm editTicket={false} setShow={setShow} key={setShow}/>
                     </Modal.Body>
 
                 </Modal.Dialog>

@@ -5,7 +5,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import NavBarButtons from "./NavBarButtons";
 
 
-function NavBar() {
+function NavBar({ show, setShow}) {
     const currLocation = useLocation();
     const navigate = useNavigate();
 
@@ -51,7 +51,7 @@ function NavBar() {
                     <Offcanvas.Body>
                         <Nav className="me-2 ms-auto mt-2">
 
-                            <NavBarButtons currLocation={currLocation} btnVertSpace={vertSpace} vertOrNot={vertOrNot} />
+                            <NavBarButtons currLocation={currLocation} btnVertSpace={vertSpace} vertOrNot={vertOrNot} setShow={setShow} show={show}/>
 
                         </Nav>
 

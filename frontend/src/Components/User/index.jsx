@@ -28,9 +28,21 @@ function User() {
         setPrjVal([prjID, teams.value[0].id]);
     }
 
+    /*child changes to show trigger tickets rerender. needed for rerender after ticket creation*/
+    const [show, setShow] = useState(false);
+
+    const[rerender, setRerender] = useState(false);
+
+    useEffect(() => {
+        if(!show) {
+            console.log("setshowtoggle");
+            rerender === false ? setRerender(true) : setRerender(false);
+        }
+    }, [show]);
+
     return(
         <>
-            <NavBarHeader />
+            <NavBarHeader show={show} setShow={setShow} />
             <Container fluid>
                 <Row id={"vhscroll"}>
                     <Col xs={2} id="sidebar " className={"bg-light vhscroll"}>
@@ -53,7 +65,7 @@ function User() {
                     </Col>
                     <Col xs={10} id={"inset-shadow"} className={"colscrolls"}>
                         <Row className={"ps-4"}>
-                            <Tickets projects={prjVal} key={prjVal} />
+                            <Tickets projects={prjVal} key={prjVal} rerender={rerender} setPrjVal={setPrjVal} />
                         </Row>
                     </Col>
                 </Row>

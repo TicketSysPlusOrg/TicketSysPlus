@@ -20,7 +20,7 @@ export function getNameBeforeEmail(thisString) {
     }
 }
 
-function Tickets({ projects }) {
+function Tickets({ projects, rerender }) {
     /*modal show and hide*/
     const [show, setShow] = useState(false);
     const handleShow = () => setShow(true);
@@ -30,6 +30,9 @@ function Tickets({ projects }) {
     const [ticketInfo, setTicketInfo] = useState([]);
 
     const [blockingId, setLoadingBlockId] = useState(null);
+
+    /*FOR PAVEL*/
+    const [defaultPrj, setDefaultPrj] = useState(null);
 
     function showTicketModal(ticketData){
         setTicketInfo(ticketData);
@@ -51,7 +54,7 @@ function Tickets({ projects }) {
 
         if (projects === null) return;
 
-        const getProj = await azureConnection.getProject(projects[0]);
+        var getProj = await azureConnection.getProject(projects[0]);
         console.log(getProj);
         setActiveProj(getProj.name);
         setActivePrjId(getProj.id);
@@ -72,14 +75,14 @@ function Tickets({ projects }) {
     const [allTicketInfo, setAllTicketInfo] = useState(null);
 
     /*set this ticket's state to blocked*/
-    async function blockTicket(itemID, currentState) {
+    async function blockTicket(itemID, currentState, itemAreaPath) {
         setLoadingBlockId(itemID);
         if(currentState !== "Blocked") {
-            const blockTicket = { "System.State": "Blocked" };
-            const updateTicket = await azureConnection.updateWorkItem(activePrjID, itemID, { "fields": blockTicket }, "fields");
+            const blockTicketToggle = { "System.State": "Blocked" };
+            const updateTicket = await azureConnection.updateWorkItem(itemAreaPath, itemID, { "fields": blockTicketToggle }, "fields");
         } else {
-            const blockTicket = { "System.State": "Active" };
-            const updateTicket = await azureConnection.updateWorkItem(activePrjID, itemID, { "fields": blockTicket }, "fields");
+            const blockTicketToggle = { "System.State": "Active" };
+            const updateTicket = await azureConnection.updateWorkItem(itemAreaPath, itemID, { "fields": blockTicketToggle }, "fields");
         }
         setLoadingBlockId(null);
     }
@@ -91,13 +94,11 @@ function Tickets({ projects }) {
     useEffect(() => {
         run();
         setBlockStateChange(null);
-    }, [blockStateChange !== null]);
+    }, [blockStateChange !== null, rerender]);
 
     function stateColor(currentState) {
         if(currentState === "Blocked" || currentState === "Removed") {
             return "redTag";
-        } else if(currentState === "Done" || currentState === "Closed") {
-            return "greenTag";
         } else {
             return "";
         }
@@ -173,7 +174,7 @@ function Tickets({ projects }) {
                                                 className={"userTicketBtns"}
                                                 color={devTix.fields["System.State"] === "Blocked" ? "error" : "default"}
                                                 onClick={() => {
-                                                    blockTicket(devTix.id, devTix.fields["System.State"]);
+                                                    blockTicket(devTix.id, devTix.fields["System.State"], devTix.fields["System.AreaPath"]);
                                                     setBlockStateChange(devTix.fields["System.State"]);
                                                 }}
                                             >

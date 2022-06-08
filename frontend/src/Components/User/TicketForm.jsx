@@ -99,7 +99,6 @@ function TicketForm(props) {
         let assignedPerson = "";
         assignee !== null ? assignedPerson = assignee.label + " <" + assignee.email + ">" : null;
 
-        /*TODO: use attachments, what about iteration id/area id?*/
         /*create ticket block*/
         if (!editTicket) {
             /*create new devops ticket*/
