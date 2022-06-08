@@ -84,6 +84,11 @@ input[type=radio] {
     overflow-y: scroll;
 }
 
+.iconsize {
+    display: inline;
+    max-width: 3%;
+}
+
 .userTicketBtns {
     cursor: pointer;
 }
