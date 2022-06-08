@@ -298,7 +298,7 @@ function TicketForm(props) {
                         <Row className={"mb-2"}>
                             <Form.Group className={"col s12"}>
                                 <Form.Label htmlFor={"ticketTitle"} className={"fw-bold"}>TICKET TITLE</Form.Label>
-                                <Form.Control type={"text"} placeholder={"Enter title"} ref={inputTitle}/>
+                                <Form.Control aria-required={true} required type={"text"} placeholder={"Enter title"} ref={inputTitle}/>
                                 <Form.Text id={"ticketTitle"} name={"ticketTitle"}/>
                             </Form.Group>
                         </Row>
@@ -309,7 +309,7 @@ function TicketForm(props) {
                                 <Form.Label className={"d-block fw-bold"}>TICKET TYPE</Form.Label>
                                 {/*TODO: add the epic, issue, and task logos*/}
                                 <Form.Label htmlFor={"tickEpic"} className={"ms-3"}>
-                                    Epic <Form.Check className={"ms-3"} inline name={"tickType"} id={"tickEpic"}
+                                    Epic <Form.Check aria-required={true} required className={"ms-3"} inline name={"tickType"} id={"tickEpic"}
                                         ref={inputType} type={"radio"}
                                         onChange={() => changeTypeVal("Epic")} value={"Epic"}
                                         defaultChecked={null}/>
@@ -382,7 +382,7 @@ function TicketForm(props) {
                             <Form.Group className={"col s12"}>
                                 <Form.Label htmlFor={"tickDate"} className={"fw-bold d-inline-block"}>DUE
                                     DATE</Form.Label>
-                                <Form.Control id={"tickDate"} name={"tickDate"} ref={inputDate} type={"date"}/>
+                                <Form.Control aria-required={true} required id={"tickDate"} name={"tickDate"} ref={inputDate} type={"date"}/>
                             </Form.Group>
                         </Row>
 
@@ -392,7 +392,7 @@ function TicketForm(props) {
                                 <Form.Label className={"fw-bold"}>PRIORITY</Form.Label>
                                 <div className={"d-flex justify-content-start"}>
                                     <Form.Label htmlFor={"tickPriority1"} className={"ms-4 me-2"}>
-                                        1 <Form.Check className={"ms-2"} inline name={"tickPriority"}
+                                        1 <Form.Check aria-required={true} required className={"ms-2"} inline name={"tickPriority"}
                                             id={"tickPriority1"} ref={inputPriority} type={"radio"}
                                             onChange={() => changePriorityVal(1)} value={1}
                                             defaultChecked={null}/>
