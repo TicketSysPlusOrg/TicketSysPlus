@@ -11,6 +11,7 @@ import { azureConnection } from "../../index";
 
 import Ticket from "./Ticket";
 import TicketForm from "./TicketForm";
+import { getSettings } from "../../utils/Util";
 
 /*get only name from username + email string*/
 export function getNameBeforeEmail(thisString) {
@@ -53,6 +54,13 @@ function Tickets({ projects, rerender }) {
     async function run() {
 
         if (projects === null) return;
+
+        // const settings = await getSettings();
+
+        // stuff = "";
+        // if (settings !== undefined && settings.length > 0) {
+        //     const stuff = JSON.parse(settings[0].body);
+        // }
 
         var getProj = await azureConnection.getProject(projects[0]);
         console.log(getProj);

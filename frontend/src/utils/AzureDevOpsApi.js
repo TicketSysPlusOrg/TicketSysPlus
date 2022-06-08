@@ -359,7 +359,14 @@ export class AzureDevOpsApi {
         }
     }
 
-    // const membersObject = await azureConnection.getAllTeamMembers(projectId);
-    // const members = membersObject.value.map(member => {name: member.identity.displayName, icon: member.identity.imageUrl, email: member.identity.uniqueName});
-    // [{"name": "", "icon": "", "email": ""}, ...];
+    async getIterations(project) {
+        return this.instance.get(`${project}/_apis/work/teamsettings/iterations`,
+            {
+                params: {
+                    "api-version": "7.1-preview.1"
+                },
+            }).then (res => {
+            return res.data;
+        }).catch(err => err);
+    }
 }
