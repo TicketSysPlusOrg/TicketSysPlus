@@ -63,24 +63,24 @@ function Ticket({ ticketData, clickClose, setShow }) {
                                 </Row>
 
                                 <Row className={"mb-4"}>
-                                    <h5>Assigned To: {allTicketInfo.fields["System.AssignedTo"] ? allTicketInfo.fields["System.AssignedTo"] : "No assignment"}</h5>
+                                    <h5>ASSIGNED TO: {allTicketInfo.fields["System.AssignedTo"] ? allTicketInfo.fields["System.AssignedTo"] : "No assignment"}</h5>
                                 </Row>
 
                                 {/*work type, state, priority*/}
                                 <Row className={"mb-4"}>
-                                    <h5>Ticket Type: {allTicketInfo.fields["System.WorkItemType"]}</h5>
+                                    <h5>TICKET TYPE: {allTicketInfo.fields["System.WorkItemType"]}</h5>
                                 </Row>
                                 <Row className={"mb-4"}>
-                                    <h5>Ticket State: {allTicketInfo.fields["System.State"]}</h5>
+                                    <h5>TICKET STATE: {allTicketInfo.fields["System.State"]}</h5>
                                 </Row>
                                 <Row className={"mb-4"}>
-                                    <h5>Priority: {allTicketInfo.fields["Microsoft.VSTS.Common.Priority"]}</h5>
+                                    <h5>PRIORITY: {allTicketInfo.fields["Microsoft.VSTS.Common.Priority"]}</h5>
                                 </Row>
 
                                 {/*ticket description*/}
                                 <Row className={"my-4"}>
                                     <Col>
-                                        <h5>Ticket Description</h5>
+                                        <h5>TICKET DESCRIPTION</h5>
                                         <article className={"border border-1 p-2 articleStyle"}>
                                             {parseHtml(allTicketInfo.fields["System.Description"])}
                                         </article>
@@ -90,7 +90,7 @@ function Ticket({ ticketData, clickClose, setShow }) {
                                 {/*ticket mentions section*/}
                                 <Row className={"my-4"}>
                                     <Col>
-                                        <h5>Ticket Comments</h5>
+                                        <h5>TICKET COMMENTS</h5>
                                         <article className={"border border-1 p-2 articleStyle"}>
                                             {parseHtml(allTicketInfo.fields["Microsoft.VSTS.CMMI.Comments"])}
                                         </article>
@@ -99,17 +99,17 @@ function Ticket({ ticketData, clickClose, setShow }) {
 
                                 {/*ticket created date*/}
                                 <Row className={"my-4"}>
-                                    <h5>Created Date: {allTicketInfo.fields["System.CreatedDate"]}</h5>
+                                    <h5>CREATED DATE: {allTicketInfo.fields["System.CreatedDate"]}</h5>
                                 </Row>
 
                                 {/*ticket created by*/}
                                 <Row className={"my-4"}>
-                                    <h5>Created By: {allTicketInfo.fields["System.CreatedBy"]}</h5>
+                                    <h5>CREATED BY: {allTicketInfo.fields["System.CreatedBy"]}</h5>
                                 </Row>
 
                                 {/*ticket attachments*/}
                                 <Row className="mb-4">
-                                    <h5>Attachments</h5>
+                                    <h5>ATTACHMENTS</h5>
                                     {allTicketInfo.relations ?
                                         allTicketInfo.relations.map((thisAttachment, index) => {
                                             return(
@@ -125,17 +125,17 @@ function Ticket({ ticketData, clickClose, setShow }) {
                                                     </Card>
                                                 </Col>);
                                         })
-                                        : <div className={"border border-1 p-2 articleStyle"}>No attachments</div>}
+                                        : <div className={"border border-1 p-2 articleStyle"}>No attachments.</div>}
                                 </Row>
 
                                 <hr />
 
                                 <Button onClick={() => setRenderEdit(true)} type={"button"} name={"action"} className={"mt-2"}>
-                                    Edit Ticket
+                                    EDIT TICKET
                                 </Button>
 
                                 <Button onClick={clickClose} type={"button"} name={"action"} className={"float-end mt-2"}>
-                                    Close
+                                    CLOSE
                                 </Button>
                             </Form>
                         </Col>
