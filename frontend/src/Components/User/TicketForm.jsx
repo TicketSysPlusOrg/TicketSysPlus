@@ -1,6 +1,6 @@
 // forms to fill to create a new ticket
 import React, { createRef, useEffect, useState } from "react";
-import { Button, Col, Container, Form, Row } from "react-bootstrap";
+import {Button, Card, Col, Container, Form, Row} from "react-bootstrap";
 import PropTypes from "prop-types";
 
 import { azureConnection } from "../../index";
@@ -434,7 +434,7 @@ function TicketForm(props) {
                         <Row className={"mb-2"}>
                             {editTicket === true ?
                                 <>
-                                    <Container>
+                                    <Container className={"mb-2"}>
                                         <div className={"form-label fw-bold"}>Ticket Description</div>
                                         <div id={"contentEditDiv"} ref={divDesc} className={"form-control"}></div>
                                     </Container>
@@ -449,8 +449,28 @@ function TicketForm(props) {
                         </Row>
 
                         {/*ATTACHMENTS*/}
+                        {props.editTicket ?
+                            <Row className={"mb-3"}>
+                                <h6 className={"fw-bold"}>Current Attachments</h6>
+                                {props.ticketInfo.relations ?
+                                    props.ticketInfo.relations.map((thisAttachment, index) => {
+                                        return(
+                                            <Col xs={3} key={index}>
+                                                <Card className={"shadow-sm"}>
+                                                    <Card.Body>
+                                                        <Card.Title title={thisAttachment.attributes.name} className={"text-truncate"}>{thisAttachment.attributes.name}</Card.Title>
+                                                        <br />
+                                                        <a className={"float-end"} href={thisAttachment.url + "?fileName=" + thisAttachment.attributes.name + "&content-disposition=attachment"} download>Download</a>
+                                                    </Card.Body>
+                                                </Card>
+                                            </Col>); } )
+                                    : null}
+                            </Row>
+                            : null}
+
+
                         <Row className={"mb-3"}>
-                            <Form.Group className={"col s12"}>
+                            <Form.Group className={"col s12 d-block"}>
                                 <Form.Label htmlFor={"tickAttachments"} className={"fw-bold"}>Attachments</Form.Label>
                                 <Form.Control multiple id={"tickAttachments"} name={"tickAttachments"}
                                     ref={inputAttachment} onChange={e => uploadAttach(e.target.files)}

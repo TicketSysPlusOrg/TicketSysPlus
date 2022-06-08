@@ -41,29 +41,6 @@ function Ticket({ ticketData, clickClose, setShow }) {
         }
     }, [deleteTicket]);
 
-    // Microsoft.VSTS.CMMI.Comments: "<div><a href=\"#\" data-vss-mention=\"version:2.0,efcfb7f0-f368-6e97-914a-8045b7bece52\">@Conor O'Brien</a>&nbsp; </div>"
-    // Microsoft.VSTS.Common.Priority: 4
-    // Microsoft.VSTS.Common.StateChangeDate: "2022-06-05T06:21:06.59Z"
-    // Microsoft.VSTS.Scheduling.DueDate: "2022-06-22T00:00:00Z"
-    // System.AreaPath: "MotorQ Project"
-    // System.AssignedTo: "Conor O'Brien <Obrien.Conor@student.greenriver.edu>"
-    // System.BoardColumn: "To Do"
-    // System.BoardColumnDone: false
-    // System.ChangedBy: "Conor O'Brien <Obrien.Conor@student.greenriver.edu>"
-    // System.ChangedDate: "2022-06-05T18:56:00.753Z"
-    // System.CommentCount: 0
-    // System.CreatedBy: "Pavel Krokhalev <Krokhalev.Pavel@student.greenriver.edu>"
-    // System.CreatedDate: "2022-06-05T06:21:06.59Z"
-    // System.Description: "decriptiondescription"
-    // System.IterationPath: "MotorQ Project"
-    // System.Reason: "Added to backlog"
-    // System.State: "To Do"
-    // System.TeamProject: "MotorQ Project"
-    // System.Title: "One More Check"
-    // System.WorkItemType: "Epic"
-    // WEF_AF37E0623F6A49B49742F64FDD1B97EF_Kanban.Column: "To Do"
-    // WEF_AF37E0623F6A49B49742F64FDD1B97EF_Kanban.Column.Done: false
-
     return (
         <>
             {renderEdit === null ?
