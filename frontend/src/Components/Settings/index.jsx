@@ -37,12 +37,14 @@ function Settings() {
         // backendApi.get("");
     }, []);
 
+    const [show, setShow] = useState(false);
+
     return(
         <MsalAuthenticationTemplate
             interactionType={InteractionType.Redirect}
             authenticationRequest={authRequest}
         >
-            <NavBar />
+            <NavBar show={show} setShow={setShow} />
             <Container>
                 <Box sx={{ marginTop: "10vh", height: "83vh" }}>
                     <Stack spacing={2}>
