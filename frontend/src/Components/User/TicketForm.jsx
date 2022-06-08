@@ -176,7 +176,6 @@ function TicketForm(props) {
                             "name": tickAttachmentsArr[i]["name"],
                             "type": tickAttachmentsArr[i]["type"],
                             "size": tickAttachmentsArr[i]["size"],
-                            "content-disposition": "attachment",
                             "lastModifiedDate": tickAttachmentsArr[i]["lastModifiedDate"]
                         }
                     }]

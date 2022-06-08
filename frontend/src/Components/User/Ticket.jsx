@@ -120,7 +120,7 @@ function Ticket({ ticketData, clickClose, setShow }) {
                                                                 {thisAttachment.attributes.name}
                                                             </Card.Title>
                                                             <br />
-                                                            <a className={"float-end"} href={thisAttachment.url + "?fileName=" + thisAttachment.attributes.name + "&content-disposition=attachment"} download>Download</a>
+                                                            <a className={"float-end"} href={thisAttachment.url + "?fileName=" + thisAttachment.attributes.name + "&download=true"} download>Download</a>
                                                         </Card.Body>
                                                     </Card>
                                                 </Col>);
