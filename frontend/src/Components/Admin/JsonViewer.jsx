@@ -141,38 +141,6 @@ function JsonViewer() {
                     </div>
                 </div>
 
-                {/*
-                <div className="row align-items-center justify-content-center mt-2">
-                    <div className="col-12 d-flex mb-1 mx-auto">
-
-                        <Button
-                            onClick={handleShow}
-                            className="btn btn-danger mx-3" disabled={change}
-                        >
-                            Save
-                        </Button>
-
-                        <Button
-                            onClick={loadOld}
-                            className="btn btn-danger mx-3"
-                        >
-                            Load Original JSON
-                        </Button>
-
-                        <Button onClick={handleClick} className="btn btn-danger mx-3">
-                            Import
-                        </Button>
-                        <input type="file" accept="application/json" ref={hiddenFileInput} onChange={handleChange} style={{ display: "none" }} />
-                        <Button
-                            onClick={() => saveFile(data)}
-                            className="btn btn-danger mx-3"
-                            id="exportbtn"
-                        >
-                            Export
-                        </Button>
-                    </div>
-    </div>*/}
-
                 <div className="row">
 
                     <div className="col-2 mb-1">
@@ -223,9 +191,9 @@ function JsonViewer() {
                     </div>
 
 
-
                     <div className="col-10 mx-auto">
                         <CodeMirror
+                            className="rounded"
                             value={jsonDB}
                             height="100%"
                             theme={oneDark}

@@ -275,6 +275,24 @@ export class AzureDevOpsApi {
     }
 
     /**
+     * Download specific attachment.
+     * @param {string} project Project ID or name
+     * @param {string} attachmentId single attachment ID
+     * @returns {string} error if failed, status code 200 if successful
+     */
+    async downloadAttachment(project, attachmentId) {
+        return this.instance.get(`${project}/_apis/wit/attachments/${attachmentId}`,
+            {
+                params: {
+                    "download": true,
+                    "api-version": "7.1-preview.3"
+                },
+            }).then (res => {
+            return res.data;
+        }).catch(err => err);
+    }
+
+    /**
      * Gets the results of the query given its WIQL.
      * @param {string} query The statement to pass through WIQL
      * @param {string} project The project ID or name
@@ -341,7 +359,14 @@ export class AzureDevOpsApi {
         }
     }
 
-    // const membersObject = await azureConnection.getAllTeamMembers(projectId);
-    // const members = membersObject.value.map(member => {name: member.identity.displayName, icon: member.identity.imageUrl, email: member.identity.uniqueName});
-    // [{"name": "", "icon": "", "email": ""}, ...];
+    async getIterations(project) {
+        return this.instance.get(`${project}/_apis/work/teamsettings/iterations`,
+            {
+                params: {
+                    "api-version": "7.1-preview.1"
+                },
+            }).then (res => {
+            return res.data;
+        }).catch(err => err);
+    }
 }

@@ -11,6 +11,7 @@ import { azureConnection } from "../../index";
 
 import Ticket from "./Ticket";
 import TicketForm from "./TicketForm";
+import { getSettings } from "../../utils/Util";
 
 /*get only name from username + email string*/
 export function getNameBeforeEmail(thisString) {
@@ -20,7 +21,7 @@ export function getNameBeforeEmail(thisString) {
     }
 }
 
-function Tickets({ projects }) {
+function Tickets({ projects, rerender }) {
     /*modal show and hide*/
     const [show, setShow] = useState(false);
     const handleShow = () => setShow(true);
@@ -30,6 +31,9 @@ function Tickets({ projects }) {
     const [ticketInfo, setTicketInfo] = useState([]);
 
     const [blockingId, setLoadingBlockId] = useState(null);
+
+    /*FOR PAVEL*/
+    const [defaultPrj, setDefaultPrj] = useState(null);
 
     function showTicketModal(ticketData){
         setTicketInfo(ticketData);
@@ -51,7 +55,14 @@ function Tickets({ projects }) {
 
         if (projects === null) return;
 
-        const getProj = await azureConnection.getProject(projects[0]);
+        // const settings = await getSettings();
+
+        // stuff = "";
+        // if (settings !== undefined && settings.length > 0) {
+        //     const stuff = JSON.parse(settings[0].body);
+        // }
+
+        var getProj = await azureConnection.getProject(projects[0]);
         console.log(getProj);
         setActiveProj(getProj.name);
         setActivePrjId(getProj.id);
@@ -72,14 +83,14 @@ function Tickets({ projects }) {
     const [allTicketInfo, setAllTicketInfo] = useState(null);
 
     /*set this ticket's state to blocked*/
-    async function blockTicket(itemID, currentState) {
+    async function blockTicket(itemID, currentState, itemAreaPath) {
         setLoadingBlockId(itemID);
         if(currentState !== "Blocked") {
-            const blockTicket = { "System.State": "Blocked" };
-            const updateTicket = await azureConnection.updateWorkItem(activePrjID, itemID, { "fields": blockTicket }, "fields");
+            const blockTicketToggle = { "System.State": "Blocked" };
+            const updateTicket = await azureConnection.updateWorkItem(itemAreaPath, itemID, { "fields": blockTicketToggle }, "fields");
         } else {
-            const blockTicket = { "System.State": "Active" };
-            const updateTicket = await azureConnection.updateWorkItem(activePrjID, itemID, { "fields": blockTicket }, "fields");
+            const blockTicketToggle = { "System.State": "Active" };
+            const updateTicket = await azureConnection.updateWorkItem(itemAreaPath, itemID, { "fields": blockTicketToggle }, "fields");
         }
         setLoadingBlockId(null);
     }
@@ -91,13 +102,11 @@ function Tickets({ projects }) {
     useEffect(() => {
         run();
         setBlockStateChange(null);
-    }, [blockStateChange !== null]);
+    }, [blockStateChange !== null, rerender]);
 
     function stateColor(currentState) {
         if(currentState === "Blocked" || currentState === "Removed") {
             return "redTag";
-        } else if(currentState === "Done" || currentState === "Closed") {
-            return "greenTag";
         } else {
             return "";
         }
@@ -128,7 +137,7 @@ function Tickets({ projects }) {
                         <Col xs={2} className={"d-flex justify-content-around"}>
                             <div className={"ps-1 align-self-center"}>Block</div>
                             <div className={"ps-2 align-self-center"}>Edit</div>
-                            <div className={"align-self-center"}>See Page</div>
+                            <div className={"align-self-center"}>DevOps</div>
                         </Col>
                     </Container>
                 </div>
@@ -173,7 +182,7 @@ function Tickets({ projects }) {
                                                 className={"userTicketBtns"}
                                                 color={devTix.fields["System.State"] === "Blocked" ? "error" : "default"}
                                                 onClick={() => {
-                                                    blockTicket(devTix.id, devTix.fields["System.State"]);
+                                                    blockTicket(devTix.id, devTix.fields["System.State"], devTix.fields["System.AreaPath"]);
                                                     setBlockStateChange(devTix.fields["System.State"]);
                                                 }}
                                             >
@@ -220,9 +229,9 @@ function Tickets({ projects }) {
                 <Modal.Dialog className={"mx-3"}>
                     <Modal.Body>
                         {renderEdit === true ?
-                            <TicketForm editTicket={true} ticketInfo={allTicketInfo}  />
+                            <TicketForm editTicket={true} ticketInfo={allTicketInfo} setShow={setShow} />
                             :
-                            <Ticket ticketData={ticketInfo} clickClose={handleClose} renderTicket={renderEdit} ticketInfo={allTicketInfo}/>
+                            <Ticket ticketData={ticketInfo} clickClose={handleClose} setShow={setShow} renderTicket={renderEdit} ticketInfo={allTicketInfo}/>
                         }
                     </Modal.Body>
                 </Modal.Dialog>
@@ -234,7 +243,8 @@ function Tickets({ projects }) {
 }
 
 Tickets.propTypes = {
-    projects: PropTypes.array
+    projects: PropTypes.array,
+    rerender: PropTypes.bool
 };
 
 export default Tickets;

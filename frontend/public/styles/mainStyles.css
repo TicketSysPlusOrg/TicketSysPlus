@@ -90,7 +90,8 @@ input[type=radio] {
 
 }
 
-.bootstrapOverride .saveBtn:hover {
+.bootstrapOverride .saveBtn:hover,
+.bootstrapOverride .adminBtn:hover {
     background-color: rgb(104, 171, 193);
     border-color: rgb(104, 171, 193);
 
