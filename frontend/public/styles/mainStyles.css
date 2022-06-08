@@ -1,5 +1,5 @@
 body {
-    /*overflow: hidden;*/
+    overflow: hidden;
 }
 
 body::-webkit-scrollbar {
@@ -33,6 +33,14 @@ input[type=radio] {
     color: rgb(104, 171, 193);
     font-size: smaller;
     text-decoration: none;
+}
+
+#settingsComponent {
+    overflow: scroll;
+}
+
+#settingsComponent::-webkit-scrollbar {
+    display: none;
 }
 
 .bootstrapOverride .onCall {

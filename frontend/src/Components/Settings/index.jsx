@@ -44,16 +44,18 @@ function Settings() {
             interactionType={InteractionType.Redirect}
             authenticationRequest={authRequest}
         >
-            <NavBar show={show} setShow={setShow} />
-            <Container>
-                <Box sx={{ marginTop: "10vh", height: "83vh" }}>
-                    <Stack spacing={2}>
-                        <Paper elevation={3}><DefaultProject /></Paper>
-                        <Paper elevation={3}><SprintIterationPath /></Paper>
-                        <Paper elevation={3}><Admins /></Paper>
-                    </Stack>
-                </Box>
-            </Container>
+            <div id={"settingsComponent"}>
+                <NavBar show={show} setShow={setShow} />
+                <Container>
+                    <Box sx={{ marginTop: "10vh", height: "83vh" }}>
+                        <Stack spacing={2}>
+                            <Paper elevation={3}><DefaultProject /></Paper>
+                            <Paper elevation={3}><SprintIterationPath /></Paper>
+                            <Paper elevation={3}><Admins /></Paper>
+                        </Stack>
+                    </Box>
+                </Container>
+            </div>
         </MsalAuthenticationTemplate>
     );
 }
