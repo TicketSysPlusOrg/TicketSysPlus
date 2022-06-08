@@ -191,7 +191,6 @@ function JsonViewer() {
                     </div>
 
 
-
                     <div className="col-10 mx-auto">
                         <CodeMirror
                             className="rounded"

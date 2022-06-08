@@ -46,7 +46,7 @@ function NavBarButtons({ currLocation, btnVertSpace, vertOrNot, setShow, show })
                 });
             }
         });
-    }, [account, instance]);
+    }, [accounts, account, instance]);
 
 
     const [toggle, setToggle] = useState(false);
@@ -141,7 +141,9 @@ function NavBarButtons({ currLocation, btnVertSpace, vertOrNot, setShow, show })
 NavBarButtons.propTypes = {
     currLocation: PropTypes.object,
     btnVertSpace: PropTypes.string,
-    vertOrNot: PropTypes.string
+    vertOrNot: PropTypes.string,
+    setShow: PropTypes.func,
+    show: PropTypes.bool,
 };
 
 export default NavBarButtons;

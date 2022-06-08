@@ -150,7 +150,8 @@ function Ticket({ ticketData, clickClose, setShow }) {
 
 Ticket.propTypes = {
     ticketData: PropTypes.array,
-    clickClose: PropTypes.func
+    clickClose: PropTypes.func,
+    setShow: PropTypes.func
 };
 
 export default Ticket;

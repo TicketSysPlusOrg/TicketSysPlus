@@ -235,7 +235,8 @@ function Tickets({ projects, rerender }) {
 }
 
 Tickets.propTypes = {
-    projects: PropTypes.array
+    projects: PropTypes.array,
+    rerender: PropTypes.bool
 };
 
 export default Tickets;

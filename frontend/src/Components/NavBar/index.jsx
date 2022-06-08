@@ -1,11 +1,12 @@
 import React, { createRef, useEffect, useState } from "react";
 import { Nav, Navbar, NavbarBrand, Offcanvas } from "react-bootstrap";
 import { useLocation, useNavigate } from "react-router-dom";
+import PropTypes from "prop-types";
 
 import NavBarButtons from "./NavBarButtons";
 
 
-function NavBar({ show, setShow}) {
+function NavBar({ show, setShow }) {
     const currLocation = useLocation();
     const navigate = useNavigate();
 
@@ -23,7 +24,7 @@ function NavBar({ show, setShow}) {
             setVertOrNot("");
             setVertSpace("");
         }
-    }, []);
+    }, [width]);
 
     function navigateHome(event) {
         event.preventDefault();
@@ -63,5 +64,10 @@ function NavBar({ show, setShow}) {
     );
 
 }
+
+NavBar.propTypes = {
+    show: PropTypes.bool,
+    setShow: PropTypes.func
+};
 
 export default NavBar;

@@ -1,6 +1,6 @@
 // forms to fill to create a new ticket
 import React, { createRef, useEffect, useState } from "react";
-import {Button, Card, Col, Container, Form, Row} from "react-bootstrap";
+import { Button, Card, Col, Container, Form, Row } from "react-bootstrap";
 import PropTypes from "prop-types";
 
 import { azureConnection } from "../../index";
@@ -526,7 +526,8 @@ function TicketForm(props) {
 
 TicketForm.propTypes = {
     editTicket: PropTypes.bool,
-    ticketInfo: PropTypes.object
+    ticketInfo: PropTypes.object,
+    setShow: PropTypes.func
 };
 
 export default TicketForm;
