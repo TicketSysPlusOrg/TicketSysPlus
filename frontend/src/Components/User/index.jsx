@@ -68,7 +68,7 @@ function User() {
             <NavBarHeader show={show} setShow={setShow} />
             <Container fluid>
                 <Row id={"vhscroll"}>
-                    <Col xs={2} id="sidebar " className={"bg-light vhscroll"}>
+                    <Col xs={2} id="sidebar " className={"bg-light"}>
                         <Container className="d-flex flex-column justify-content-center ">
 
                             {projectList ?
