@@ -7,7 +7,7 @@ import { getSettings } from "../../utils/Util";
 import { backendApi } from "../../index";
 import { azureConnection } from "../../index";
 
-function SprintIterationPath(props) {
+function SprintIterationPath() {
     const [projects, setProjects] = useState([]);
     const [project, setProject] = useState("");
 
@@ -47,8 +47,8 @@ function SprintIterationPath(props) {
                     <Autocomplete
                         className={"mb-3"}
                         disablePortal
+                        disableClearable
                         value={project}
-                        disableCloseOnSelect
                         options={projects}
                         isOptionEqualToValue={(option, value) => option.label === value.label}
                         sx={{ width: 300 }}

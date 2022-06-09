@@ -212,6 +212,21 @@ export class AzureDevOpsApi {
     }
 
     /**
+     * Get the icon associated with each work item type.
+     * @returns {string} error if failed, icon information if successful.
+     */
+    async getWorkItemTypeIcons() {
+        return this.instance.get("_apis/wit/workitemicons",
+            {
+                params: {
+                    "api-version": "7.1-preview.1"
+                },
+            }).then (res => {
+            return res.data;
+        }).catch(err => err);
+    }
+
+    /**
      * Get a list of all work item states associated with ticket type.
      * @param {string} processId process ID
      * @param {string} witRefID work item type ID
@@ -274,6 +289,7 @@ export class AzureDevOpsApi {
         }).catch(err => err);
     }
 
+    /*CURRENTLY UNUSED*/
     /**
      * Download specific attachment.
      * @param {string} project Project ID or name

@@ -1,6 +1,6 @@
 import { InteractionType } from "@azure/msal-browser";
 import { MsalAuthenticationTemplate } from "@azure/msal-react";
-import React from "react";
+import React, {useState} from "react";
 import { Col, Row } from "react-bootstrap";
 import { Container } from "@mui/material";
 
@@ -16,12 +16,15 @@ function Admin() {
         ...loginRequest
     };
 
+    /*child changes to show trigger tickets rerender. needed for rerender after ticket creation*/
+    const [show, setShow] = useState(false);
+
     return (
         <MsalAuthenticationTemplate
             interactionType={InteractionType.Redirect}
             authenticationRequest={authRequest}
         >
-            <NavBar />
+            <NavBar show={show} setShow={setShow} />
             <Row className={"me-0"}>
                 <Col xs={10} id={"inset-shadow"}>
                     <AdminJson />

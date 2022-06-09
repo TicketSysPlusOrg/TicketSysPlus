@@ -37,6 +37,7 @@ function TicketForm(props) {
         }
     }, [deleteTicket]);
 
+    /*initialize refs for input value gathering onsubmit*/
     let inputState = createRef();
     let inputTitle = createRef();
     let inputType = createRef();
@@ -51,11 +52,18 @@ function TicketForm(props) {
     /*prj ID state variable*/
     const [prjID, setprjID] = useState(null);
 
+    /*work item icons*/
+    const [icons, setIcons] = useState([]);
+
     /*currently set up just to speak with MotorqProject board.*/
     useEffect(() => {
+        setReadyToClose(null);
         (async () => {
             const projID = await azureConnection.getProjects();
             setprjID(projID.value[1].id);
+
+            const workItemIcons = await azureConnection.getWorkItemTypeIcons();
+            setIcons(workItemIcons.value);
         })();
     }, []);
 
@@ -85,7 +93,7 @@ function TicketForm(props) {
         const ticketType = typeVal;
         const ticketDesc = inputDesc.current.value;
         const tickDate = inputDate.current.value;
-        const tickPriority = inputPriority.current.value;
+        const tickPriority = priorityVal;
         const tickAttachments = uploadVal;
 
         /*handle mentions array for tags*/
@@ -183,8 +191,8 @@ function TicketForm(props) {
 
             const uploadAttachmentToWI = await azureConnection.updateWorkItem(uploadPrjId, uploadWIId, ticketAttachment, "relations");
             console.log(uploadAttachmentToWI);
-            setReadyToClose("ready");
         }
+        setReadyToClose("ready");
     }
 
     /*editTicket state.*/
@@ -274,6 +282,11 @@ function TicketForm(props) {
         setUploadVal(thisFile);
     }
 
+    function returnWorkItemIcon(iconName) {
+        const thisIcon = icons.find(icon => icon.id === iconName);
+        return(<img src={thisIcon.url} alt={thisIcon.id + " work item icon"} id={thisIcon.id} className={"iconsize"} />);
+    }
+
     return (
         <>
             <Row>
@@ -307,21 +320,23 @@ function TicketForm(props) {
                         <Row className={"mb-2"}>
                             <Form.Group className={"col s12"}>
                                 <Form.Label className={"d-block fw-bold"}>TICKET TYPE</Form.Label>
-                                {/*TODO: add the epic, issue, and task logos*/}
-                                <Form.Label htmlFor={"tickEpic"} className={"ms-3"}>
-                                    Epic <Form.Check aria-required={true} required className={"ms-3"} inline name={"tickType"} id={"tickEpic"}
+                                <div className={"ms-4 me-2 d-inline"}>{icons.length !== 0 ? returnWorkItemIcon("icon_crown") : ""}</div>
+                                <Form.Label htmlFor={"tickEpic"}>
+                                    Epic<Form.Check aria-required={true} required className={"ms-3"} inline name={"tickType"} id={"tickEpic"}
                                         ref={inputType} type={"radio"}
                                         onChange={() => changeTypeVal("Epic")} value={"Epic"}
                                         defaultChecked={null}/>
                                 </Form.Label>
-                                <Form.Label htmlFor={"tickIssue"} className={"ms-3"}>
-                                    Issue <Form.Check className={"ms-3"} inline name={"tickType"} id={"tickIssue"}
+                                <div className={"ms-4 me-2 d-inline"}>{icons.length !== 0 ? returnWorkItemIcon("icon_clipboard_issue") : ""}</div>
+                                <Form.Label htmlFor={"tickIssue"}>
+                                    Issue<Form.Check className={"ms-3"} inline name={"tickType"} id={"tickIssue"}
                                         ref={inputType} type={"radio"}
                                         onChange={() => changeTypeVal("Issue")} value={"Issue"}
                                         defaultChecked={null}/>
                                 </Form.Label>
-                                <Form.Label htmlFor={"tickTask"} className={"ms-3"}>
-                                    Task <Form.Check className={"ms-3"} inline name={"tickType"} id={"tickTask"}
+                                <div className={"ms-4 me-2 d-inline"}>{icons.length !== 0 ? returnWorkItemIcon("icon_check_box") : ""}</div>
+                                <Form.Label htmlFor={"tickTask"} >
+                                    Task<Form.Check className={"ms-3"} inline name={"tickType"} id={"tickTask"}
                                         ref={inputType} type={"radio"}
                                         onChange={() => changeTypeVal("Task")} value={"Task"}
                                         defaultChecked={null}/>
@@ -453,7 +468,7 @@ function TicketForm(props) {
                                 {props.ticketInfo.relations ?
                                     props.ticketInfo.relations.map((thisAttachment, index) => {
                                         return(
-                                            <Col xs={3} key={index}>
+                                            <Col xs={3} key={index} className={"mx-2"}>
                                                 <Card className={"shadow-sm"}>
                                                     <Card.Body>
                                                         <Card.Title title={thisAttachment.attributes.name} className={"text-truncate"}>{thisAttachment.attributes.name}</Card.Title>
@@ -505,11 +520,11 @@ function TicketForm(props) {
 
                         {/*SUBMIT BUTTONS*/}
                         {props.editTicket === true ?
-                            <Button onClick={handleClose} type={"submit"} name={"action"} className={"float-end mt-2"}>
+                            <Button type={"submit"} name={"action"} className={"float-end mt-2"}>
                                 UPDATE
                             </Button>
                             :
-                            <Button onClick={handleClose} type={"submit"} name={"action"}
+                            <Button type={"submit"} name={"action"}
                                 className={"float-end mt-3"}>
                                 SUBMIT
                             </Button>

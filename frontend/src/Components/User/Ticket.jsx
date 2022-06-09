@@ -113,8 +113,8 @@ function Ticket({ ticketData, clickClose, setShow }) {
                                     {allTicketInfo.relations ?
                                         allTicketInfo.relations.map((thisAttachment, index) => {
                                             return(
-                                                <Col xs={3} key={index}>
-                                                    <Card className={"shadow-sm"}>
+                                                <Col xs={3} key={index} className={"my-2"}>
+                                                    <Card className={"shadow"}>
                                                         <Card.Body>
                                                             <Card.Title title={thisAttachment.attributes.name} className={"text-truncate"}>
                                                                 {thisAttachment.attributes.name}

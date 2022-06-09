@@ -195,7 +195,7 @@ function JsonViewer() {
                         <CodeMirror
                             className="rounded"
                             value={jsonDB}
-                            height="100%"
+                            height="83VH"
                             theme={oneDark}
                             lint="true"
                             gutters={["CodeMirror-lint-markers"]}

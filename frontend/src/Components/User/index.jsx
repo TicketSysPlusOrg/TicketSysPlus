@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Card, Col, Container, Row } from "react-bootstrap";
 
 import { azureConnection } from "../../index";
+import { getSettings, arrayMove } from "../../utils/Util";
 import NavBarHeader from "../NavBar";
 
 import Legend from "./Legend";
@@ -17,15 +18,37 @@ function User() {
     }, []);
 
     async function initRun() {
+        const settings = await getSettings();
+
+        let defaultProject = "";
+        if (prjVal === null) {
+            if (settings !== undefined && settings.length > 0) {
+                const settingsObj = JSON.parse(settings[0].body);
+                defaultProject = settingsObj.defaultProject;
+            }
+        }
+
         const prjs = await azureConnection.getProjects();
-        const teams = await azureConnection.getTeams();
+        let projectIndex = null;
+        const defaultProj = prjs.value.filter((prj, index) => {
+            if (prj.name === defaultProject) {
+                projectIndex = index;
+                return true;
+            }
+            return false;
+        })[0];
+
+        if (defaultProj !== undefined && projectIndex !== null) {
+            arrayMove(prjs.value, projectIndex, 0);
+        }
+
+        setPrjVal([defaultProj !== undefined ? defaultProj.id : prjs.value[0].id]);
         setPrjList(prjs);
-        setPrjVal([teams.value[0].projectId, teams.value[0].id]);
     }
 
     async function prjTickets(prjID) {
         const teams = await azureConnection.getTeams(prjID);
-        setPrjVal([prjID, teams.value[0].id]);
+        setPrjVal([prjID, undefined]);
     }
 
     /*child changes to show trigger tickets rerender. needed for rerender after ticket creation*/
