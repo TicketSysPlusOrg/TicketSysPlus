@@ -79,8 +79,13 @@ input[type=radio] {
     display: none;
 }
 
+.infoBar {
+    border: white 2px solid;
+    background-color: white;
+}
+
 .colscrolls {
-    height: 100%;
+    height: calc(100% - 65px);
     overflow-y: scroll;
 }
 
