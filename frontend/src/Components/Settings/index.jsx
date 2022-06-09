@@ -14,7 +14,7 @@ import DefaultProject from "./DefaultProject";
 /*
     {
         iterationPath: "",
-        mainProject: ""
+        defaultProject: ""
     }
 */
 

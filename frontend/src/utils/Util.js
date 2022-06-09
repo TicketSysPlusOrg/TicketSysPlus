@@ -41,3 +41,15 @@ export async function getSettings() {
         });
     return data;
 }
+
+/**
+ * Move items in an array
+ * @param {any[]} arr the array to modify
+ * @param {number} fromIndex the index to move from
+ * @param {number} toIndex the index to move to
+ */
+export function arrayMove(arr, fromIndex, toIndex) {
+    var element = arr[fromIndex];
+    arr.splice(fromIndex, 1);
+    arr.splice(toIndex, 0, element);
+}

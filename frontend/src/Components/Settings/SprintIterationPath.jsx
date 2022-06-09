@@ -10,50 +10,54 @@ import { azureConnection } from "../../index";
 function SprintIterationPath(props) {
     const [iterationPaths, setIterationPaths] = useState([]);
     const [iterationPath, setIterationPath] = useState("");
-    const [mainProject, setMainProject] = useState("");
+    const [defaultProject, setDefaultProject] = useState("");
 
     useEffect(() => {
         (async () => {
-            const temp = "MotorQ Project";
-
             backendApi.get("/settings")
                 .then((res) => {
                     if (res.data[0] !== undefined) {
                         let { body } = res.data[0];
                         body = JSON.parse(body);
-                        if (body.mainProject !== undefined) {
-                            setMainProject(body.mainProject);
+                        if (body.defaultProject !== undefined) {
+                            setDefaultProject(body.defaultProject);
                         }
-                        console.log(iterationPath);
+                        console.log(defaultProject);
                     }
                 })
                 .catch((err) => {
                     console.log(err);
                 });
-
-            azureConnection.getIterations(temp)
-                .then(object => {
-                    console.log(object);
-                    setIterationPaths(object.value.map(iteration => {
-                        return iteration.path;
-                    }));
-                    backendApi.get("/settings")
-                        .then((res) => {
-                            if (res.data[0] !== undefined) {
-                                let { body } = res.data[0];
-                                body = JSON.parse(body);
-                                if ( body.iterationPath !== undefined ) {
-                                    setIterationPath(body.iterationPath);
-                                }
-                                console.log(iterationPath);
-                            }
-                        })
-                        .catch((err) => {
-                            console.log(err);
-                        });
-                });
         })();
-    }, []);
+    });
+
+    useEffect(() => {
+        (async () => {
+            if (defaultProject !== "") {
+                azureConnection.getIterations(defaultProject)
+                    .then(object => {
+                        console.log(object);
+                        setIterationPaths(object.value.map(iteration => {
+                            return iteration.path;
+                        }));
+                        backendApi.get("/settings")
+                            .then((res) => {
+                                if (res.data[0] !== undefined) {
+                                    let { body } = res.data[0];
+                                    body = JSON.parse(body);
+                                    if ( body.iterationPath !== undefined ) {
+                                        setIterationPath(body.iterationPath);
+                                    }
+                                    console.log(iterationPath);
+                                }
+                            })
+                            .catch((err) => {
+                                console.log(err);
+                            });
+                    });
+            }
+        })();
+    }, [defaultProject]);
 
     return (
         <>
@@ -65,8 +69,8 @@ function SprintIterationPath(props) {
                     <Autocomplete
                         className={"mb-3"}
                         disablePortal
+                        disableClearable
                         value={iterationPath}
-                        disableCloseOnSelect
                         options={iterationPaths}
                         isOptionEqualToValue={(option, value) => option.label === value.label}
                         sx={{ width: 300 }}
