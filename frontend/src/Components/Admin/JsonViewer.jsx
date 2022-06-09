@@ -163,7 +163,7 @@ function JsonViewer() {
                                     onClick={loadOld}
                                     className="btn btn-primary mb-2 adminBtn"
                                 >
-                                    Load Original JSON
+                                    Load Previous JSON
                                 </Button>
                             </div>
 
