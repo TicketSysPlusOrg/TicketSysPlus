@@ -37,6 +37,7 @@ function TicketForm(props) {
         }
     }, [deleteTicket]);
 
+    /*initialize refs for input value gathering onsubmit*/
     let inputState = createRef();
     let inputTitle = createRef();
     let inputType = createRef();
@@ -56,12 +57,12 @@ function TicketForm(props) {
 
     /*currently set up just to speak with MotorqProject board.*/
     useEffect(() => {
+        setReadyToClose(null);
         (async () => {
             const projID = await azureConnection.getProjects();
             setprjID(projID.value[1].id);
 
             const workItemIcons = await azureConnection.getWorkItemTypeIcons();
-            console.log(workItemIcons);
             setIcons(workItemIcons.value);
         })();
     }, []);
@@ -92,7 +93,7 @@ function TicketForm(props) {
         const ticketType = typeVal;
         const ticketDesc = inputDesc.current.value;
         const tickDate = inputDate.current.value;
-        const tickPriority = inputPriority.current.value;
+        const tickPriority = priorityVal;
         const tickAttachments = uploadVal;
 
         /*handle mentions array for tags*/
@@ -190,8 +191,8 @@ function TicketForm(props) {
 
             const uploadAttachmentToWI = await azureConnection.updateWorkItem(uploadPrjId, uploadWIId, ticketAttachment, "relations");
             console.log(uploadAttachmentToWI);
-            setReadyToClose("ready");
         }
+        setReadyToClose("ready");
     }
 
     /*editTicket state.*/
@@ -282,8 +283,6 @@ function TicketForm(props) {
     }
 
     function returnWorkItemIcon(iconName) {
-        console.log(icons);
-        console.log(iconName);
         const thisIcon = icons.find(icon => icon.id === iconName);
         return(<img src={thisIcon.url} alt={thisIcon.id + " work item icon"} id={thisIcon.id} className={"iconsize"} />);
     }
@@ -322,7 +321,7 @@ function TicketForm(props) {
                             <Form.Group className={"col s12"}>
                                 <Form.Label className={"d-block fw-bold"}>TICKET TYPE</Form.Label>
                                 <div className={"ms-4 me-2 d-inline"}>{icons.length !== 0 ? returnWorkItemIcon("icon_crown") : ""}</div>
-                                <Form.Label inline htmlFor={"tickEpic"}>
+                                <Form.Label htmlFor={"tickEpic"}>
                                     Epic<Form.Check aria-required={true} required className={"ms-3"} inline name={"tickType"} id={"tickEpic"}
                                         ref={inputType} type={"radio"}
                                         onChange={() => changeTypeVal("Epic")} value={"Epic"}
