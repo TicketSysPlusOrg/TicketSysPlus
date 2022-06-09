@@ -11,7 +11,8 @@ function JsonForm({ jsonModal }) {
 
     let inputBody = createRef();
 
-    function submitJson() {
+    function submitJson(event) {
+        event.preventDefault();
 
         const jsonBody = inputBody.current.value;
 
@@ -52,7 +53,7 @@ function JsonForm({ jsonModal }) {
                             </Form.Group>
                         </div>
 
-                        <Button onClick={handleClose} type="submit" name="action" className="float-end mt-2">
+                        <Button onClick={handleClose} type="submit" className="float-end mt-2">
                             Submit
                         </Button>
                     </Form>
