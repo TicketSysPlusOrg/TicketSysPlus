@@ -212,6 +212,21 @@ export class AzureDevOpsApi {
     }
 
     /**
+     * Get the icon associated with each work item type.
+     * @returns {string} error if failed, icon information if successful.
+     */
+    async getWorkItemTypeIcons() {
+        return this.instance.get("_apis/wit/workitemicons",
+            {
+                params: {
+                    "api-version": "7.1-preview.1"
+                },
+            }).then (res => {
+            return res.data;
+        }).catch(err => err);
+    }
+
+    /**
      * Get a list of all work item states associated with ticket type.
      * @param {string} processId process ID
      * @param {string} witRefID work item type ID
@@ -267,6 +282,25 @@ export class AzureDevOpsApi {
         return this.instance.delete(`${project}/_apis/wit/workitems/${workItemID}`,
             {
                 params: {
+                    "api-version": "7.1-preview.3"
+                },
+            }).then (res => {
+            return res.data;
+        }).catch(err => err);
+    }
+
+    /*CURRENTLY UNUSED*/
+    /**
+     * Download specific attachment.
+     * @param {string} project Project ID or name
+     * @param {string} attachmentId single attachment ID
+     * @returns {string} error if failed, status code 200 if successful
+     */
+    async downloadAttachment(project, attachmentId) {
+        return this.instance.get(`${project}/_apis/wit/attachments/${attachmentId}`,
+            {
+                params: {
+                    "download": true,
                     "api-version": "7.1-preview.3"
                 },
             }).then (res => {
@@ -341,7 +375,14 @@ export class AzureDevOpsApi {
         }
     }
 
-    // const membersObject = await azureConnection.getAllTeamMembers(projectId);
-    // const members = membersObject.value.map(member => {name: member.identity.displayName, icon: member.identity.imageUrl, email: member.identity.uniqueName});
-    // [{"name": "", "icon": "", "email": ""}, ...];
+    async getIterations(project) {
+        return this.instance.get(`${project}/_apis/work/teamsettings/iterations`,
+            {
+                params: {
+                    "api-version": "7.1-preview.1"
+                },
+            }).then (res => {
+            return res.data;
+        }).catch(err => err);
+    }
 }

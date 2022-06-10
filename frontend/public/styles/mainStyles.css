@@ -1,5 +1,5 @@
 body {
-    /*overflow: hidden;*/
+    overflow: hidden;
 }
 
 body::-webkit-scrollbar {
@@ -33,6 +33,14 @@ input[type=radio] {
     color: rgb(104, 171, 193);
     font-size: smaller;
     text-decoration: none;
+}
+
+#settingsComponent {
+    overflow: scroll;
+}
+
+#settingsComponent::-webkit-scrollbar {
+    display: none;
 }
 
 .bootstrapOverride .onCall {
@@ -71,9 +79,19 @@ input[type=radio] {
     display: none;
 }
 
+.infoBar {
+    border: white 2px solid;
+    background-color: white;
+}
+
 .colscrolls {
-    height: 100%;
+    height: calc(100% - 65px);
     overflow-y: scroll;
+}
+
+.iconsize {
+    display: inline;
+    max-width: 3%;
 }
 
 .userTicketBtns {

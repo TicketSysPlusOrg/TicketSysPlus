@@ -1,11 +1,12 @@
 import React, { createRef, useEffect, useState } from "react";
 import { Nav, Navbar, NavbarBrand, Offcanvas } from "react-bootstrap";
 import { useLocation, useNavigate } from "react-router-dom";
+import PropTypes from "prop-types";
 
 import NavBarButtons from "./NavBarButtons";
 
 
-function NavBar() {
+function NavBar({ show, setShow }) {
     const currLocation = useLocation();
     const navigate = useNavigate();
 
@@ -23,7 +24,7 @@ function NavBar() {
             setVertOrNot("");
             setVertSpace("");
         }
-    }, []);
+    }, [width]);
 
     function navigateHome(event) {
         event.preventDefault();
@@ -51,7 +52,7 @@ function NavBar() {
                     <Offcanvas.Body>
                         <Nav className="me-2 ms-auto mt-2">
 
-                            <NavBarButtons currLocation={currLocation} btnVertSpace={vertSpace} vertOrNot={vertOrNot} />
+                            <NavBarButtons currLocation={currLocation} btnVertSpace={vertSpace} vertOrNot={vertOrNot} setShow={setShow} show={show}/>
 
                         </Nav>
 
@@ -63,5 +64,10 @@ function NavBar() {
     );
 
 }
+
+NavBar.propTypes = {
+    show: PropTypes.bool,
+    setShow: PropTypes.func
+};
 
 export default NavBar;

@@ -11,6 +11,7 @@ import { azureConnection } from "../../index";
 
 import Ticket from "./Ticket";
 import TicketForm from "./TicketForm";
+import { getSettings } from "../../utils/Util";
 
 /*get only name from username + email string*/
 export function getNameBeforeEmail(thisString) {
@@ -20,7 +21,7 @@ export function getNameBeforeEmail(thisString) {
     }
 }
 
-function Tickets({ projects }) {
+function Tickets({ projects, rerender }) {
     /*modal show and hide*/
     const [show, setShow] = useState(false);
     const handleShow = () => setShow(true);
@@ -30,6 +31,9 @@ function Tickets({ projects }) {
     const [ticketInfo, setTicketInfo] = useState([]);
 
     const [blockingId, setLoadingBlockId] = useState(null);
+
+    /*FOR PAVEL*/
+    const [defaultPrj, setDefaultPrj] = useState(null);
 
     function showTicketModal(ticketData){
         setTicketInfo(ticketData);
@@ -51,7 +55,14 @@ function Tickets({ projects }) {
 
         if (projects === null) return;
 
-        const getProj = await azureConnection.getProject(projects[0]);
+        // const settings = await getSettings();
+
+        // stuff = "";
+        // if (settings !== undefined && settings.length > 0) {
+        //     const stuff = JSON.parse(settings[0].body);
+        // }
+
+        var getProj = await azureConnection.getProject(projects[0]);
         console.log(getProj);
         setActiveProj(getProj.name);
         setActivePrjId(getProj.id);
@@ -72,14 +83,14 @@ function Tickets({ projects }) {
     const [allTicketInfo, setAllTicketInfo] = useState(null);
 
     /*set this ticket's state to blocked*/
-    async function blockTicket(itemID, currentState) {
+    async function blockTicket(itemID, currentState, itemAreaPath) {
         setLoadingBlockId(itemID);
         if(currentState !== "Blocked") {
-            const blockTicket = { "System.State": "Blocked" };
-            const updateTicket = await azureConnection.updateWorkItem(activePrjID, itemID, { "fields": blockTicket }, "fields");
+            const blockTicketToggle = { "System.State": "Blocked" };
+            const updateTicket = await azureConnection.updateWorkItem(itemAreaPath, itemID, { "fields": blockTicketToggle }, "fields");
         } else {
-            const blockTicket = { "System.State": "Active" };
-            const updateTicket = await azureConnection.updateWorkItem(activePrjID, itemID, { "fields": blockTicket }, "fields");
+            const blockTicketToggle = { "System.State": "Active" };
+            const updateTicket = await azureConnection.updateWorkItem(itemAreaPath, itemID, { "fields": blockTicketToggle }, "fields");
         }
         setLoadingBlockId(null);
     }
@@ -91,13 +102,11 @@ function Tickets({ projects }) {
     useEffect(() => {
         run();
         setBlockStateChange(null);
-    }, [blockStateChange !== null]);
+    }, [blockStateChange !== null, rerender]);
 
     function stateColor(currentState) {
         if(currentState === "Blocked" || currentState === "Removed") {
             return "redTag";
-        } else if(currentState === "Done" || currentState === "Closed") {
-            return "greenTag";
         } else {
             return "";
         }
@@ -117,18 +126,18 @@ function Tickets({ projects }) {
             <div className={"mt-4"}></div>
             <Col xs={12} className={"pe-0"}>
                 <div className={"projectSelect " }>
-                    <Container fluid className={"my-1 py-1 px-0 row hoverOver cardOneLine align-items-center fw-bold text-decoration-underline"} >
-                        <Col xs={1} className={"ps-3"}>View</Col>
-                        <Col xs={1}>ID</Col>
+                    <Container fluid className={"my-1 py-1 px-0 row infoBar cardOneLine align-items-center fw-bold text-decoration-underline"} >
+                        <Col xs={1} className={"ps-3"}>ID</Col>
                         <Col xs={3}>Title</Col>
                         <Col xs={1}>Priority</Col>
                         <Col xs={1}>Due Date</Col>
                         <Col xs={2}>Assigned To</Col>
                         <Col xs={1}>State</Col>
-                        <Col xs={2} className={"d-flex justify-content-around"}>
-                            <div className={"ps-1 align-self-center"}>Block</div>
-                            <div className={"ps-2 align-self-center"}>Edit</div>
-                            <div className={"align-self-center"}>See Page</div>
+                        <Col xs={3} className={"d-flex justify-content-around"}>
+                            <div className={"ps-2 align-self-center"}>View</div>
+                            <div className={"ps-3 align-self-center "}>Edit</div>
+                            <div className={"ps-3 align-self-center"}>Block</div>
+                            <div className={"align-self-center"}>DevOps</div>
                         </Col>
                     </Container>
                 </div>
@@ -145,7 +154,16 @@ function Tickets({ projects }) {
                             <div className={"projectSelect"}>
                                 {/* TODO: Convert into a data table? https://mui.com/material-ui/react-table/#data-table */}
                                 <Container fluid className={stateColor(devTix.fields["System.State"]) + " my-1 py-1 px-0 row hoverOver cardOneLine align-items-center fw-bold "} >
-                                    <Col xs={1} className={"ps-3 d-flex"}>
+                                    <Col xs={1}>{devTix.id}</Col>
+                                    <Col xs={3} title={devTix.fields["System.Title"]}>{devTix.fields["System.Title"]}</Col>
+                                    <Col xs={1} className={"ps-4"}>{devTix.fields["Microsoft.VSTS.Common.Priority"]}</Col>
+                                    {/*TODO: remove the extra ternary check for no due date present once we require due date for ticket creation*/}
+                                    <Col xs={1} title={devTix.fields["Microsoft.VSTS.Scheduling.DueDate"] ? devTix.fields["Microsoft.VSTS.Scheduling.DueDate"].slice(0, 10) : null}>
+                                        {devTix.fields["Microsoft.VSTS.Scheduling.DueDate"] ? devTix.fields["Microsoft.VSTS.Scheduling.DueDate"].slice(0, 10) : null}
+                                    </Col>
+                                    <Col xs={2} title={devTix.fields["System.AssignedTo"]}>{getNameBeforeEmail(devTix.fields["System.AssignedTo"])}</Col>
+                                    <Col xs={1} title={devTix.fields["System.State"]}>{devTix.fields["System.State"]}</Col>
+                                    <Col xs={3} className={"d-flex justify-content-around"}>
                                         <Tooltip title={"Inspect Ticket"}>
                                             <IconButton
                                                 className={"eyeSee"}
@@ -155,29 +173,6 @@ function Tickets({ projects }) {
                                                 }}
                                             >
                                                 <VisibilityIcon sx={{ fontSize: "1.7rem" }} />
-                                            </IconButton>
-                                        </Tooltip>
-                                    </Col>
-                                    <Col xs={1}>{devTix.id}</Col>
-                                    <Col xs={3} title={devTix.fields["System.Title"]}>{devTix.fields["System.Title"]}</Col>
-                                    <Col xs={1}>{devTix.fields["Microsoft.VSTS.Common.Priority"]}</Col>
-                                    {/*TODO: remove the extra ternary check for no due date present once we require due date for ticket creation*/}
-                                    <Col xs={1} title={devTix.fields["Microsoft.VSTS.Scheduling.DueDate"] ? devTix.fields["Microsoft.VSTS.Scheduling.DueDate"].slice(0, 10) : null}>
-                                        {devTix.fields["Microsoft.VSTS.Scheduling.DueDate"] ? devTix.fields["Microsoft.VSTS.Scheduling.DueDate"].slice(0, 10) : null}
-                                    </Col>
-                                    <Col xs={2} title={devTix.fields["System.AssignedTo"]}>{getNameBeforeEmail(devTix.fields["System.AssignedTo"])}</Col>
-                                    <Col xs={1} title={devTix.fields["System.State"]}>{devTix.fields["System.State"]}</Col>
-                                    <Col xs={2} className={"d-flex justify-content-around"}>
-                                        <Tooltip title={(devTix.fields["System.State"] === "Blocked" ? "Unblock" : "Block") + " Ticket"}>
-                                            <IconButton
-                                                className={"userTicketBtns"}
-                                                color={devTix.fields["System.State"] === "Blocked" ? "error" : "default"}
-                                                onClick={() => {
-                                                    blockTicket(devTix.id, devTix.fields["System.State"]);
-                                                    setBlockStateChange(devTix.fields["System.State"]);
-                                                }}
-                                            >
-                                                { blockingId !== null && devTix.id === blockingId ? <CircularProgress size={16} /> : <BlockIcon />}
                                             </IconButton>
                                         </Tooltip>
                                         <Tooltip title={"Edit Ticket"}>
@@ -191,6 +186,18 @@ function Tickets({ projects }) {
                                                 }}
                                             >
                                                 <ModeEditIcon />
+                                            </IconButton>
+                                        </Tooltip>
+                                        <Tooltip title={(devTix.fields["System.State"] === "Blocked" ? "Unblock" : "Block") + " Ticket"}>
+                                            <IconButton
+                                                className={"userTicketBtns"}
+                                                color={devTix.fields["System.State"] === "Blocked" ? "error" : "default"}
+                                                onClick={() => {
+                                                    blockTicket(devTix.id, devTix.fields["System.State"], devTix.fields["System.AreaPath"]);
+                                                    setBlockStateChange(devTix.fields["System.State"]);
+                                                }}
+                                            >
+                                                { blockingId !== null && devTix.id === blockingId ? <CircularProgress size={16} /> : <BlockIcon />}
                                             </IconButton>
                                         </Tooltip>
                                         {/*TODO: this is hard coded to our org. fix that.*/}
@@ -220,9 +227,9 @@ function Tickets({ projects }) {
                 <Modal.Dialog className={"mx-3"}>
                     <Modal.Body>
                         {renderEdit === true ?
-                            <TicketForm editTicket={true} ticketInfo={allTicketInfo}  />
+                            <TicketForm editTicket={true} ticketInfo={allTicketInfo} setShow={setShow} />
                             :
-                            <Ticket ticketData={ticketInfo} clickClose={handleClose} renderTicket={renderEdit} ticketInfo={allTicketInfo}/>
+                            <Ticket ticketData={ticketInfo} clickClose={handleClose} setShow={setShow} renderTicket={renderEdit} ticketInfo={allTicketInfo}/>
                         }
                     </Modal.Body>
                 </Modal.Dialog>
@@ -234,7 +241,8 @@ function Tickets({ projects }) {
 }
 
 Tickets.propTypes = {
-    projects: PropTypes.array
+    projects: PropTypes.array,
+    rerender: PropTypes.bool
 };
 
 export default Tickets;

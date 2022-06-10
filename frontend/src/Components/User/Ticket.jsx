@@ -1,6 +1,6 @@
 // specific ticket we want to examine
 import React, { useEffect, useState } from "react";
-import { Button, Col, Container, Form, Row } from "react-bootstrap";
+import { Button, Col, Container, Form, Row, Card } from "react-bootstrap";
 import PropTypes from "prop-types";
 
 import { azureConnection } from "../../index";
@@ -10,7 +10,7 @@ import TicketForm from "./TicketForm";
 import DeleteButton from "./DeleteButton";
 
 
-function Ticket({ ticketData, clickClose }) {
+function Ticket({ ticketData, clickClose, setShow }) {
     const [thisTicketInfo, setThisTicketInfo] = useState(null);
     const [allTicketInfo, setAllTicketInfo] = useState(null);
 
@@ -41,29 +41,6 @@ function Ticket({ ticketData, clickClose }) {
         }
     }, [deleteTicket]);
 
-    // Microsoft.VSTS.CMMI.Comments: "<div><a href=\"#\" data-vss-mention=\"version:2.0,efcfb7f0-f368-6e97-914a-8045b7bece52\">@Conor O'Brien</a>&nbsp; </div>"
-    // Microsoft.VSTS.Common.Priority: 4
-    // Microsoft.VSTS.Common.StateChangeDate: "2022-06-05T06:21:06.59Z"
-    // Microsoft.VSTS.Scheduling.DueDate: "2022-06-22T00:00:00Z"
-    // System.AreaPath: "MotorQ Project"
-    // System.AssignedTo: "Conor O'Brien <Obrien.Conor@student.greenriver.edu>"
-    // System.BoardColumn: "To Do"
-    // System.BoardColumnDone: false
-    // System.ChangedBy: "Conor O'Brien <Obrien.Conor@student.greenriver.edu>"
-    // System.ChangedDate: "2022-06-05T18:56:00.753Z"
-    // System.CommentCount: 0
-    // System.CreatedBy: "Pavel Krokhalev <Krokhalev.Pavel@student.greenriver.edu>"
-    // System.CreatedDate: "2022-06-05T06:21:06.59Z"
-    // System.Description: "decriptiondescription"
-    // System.IterationPath: "MotorQ Project"
-    // System.Reason: "Added to backlog"
-    // System.State: "To Do"
-    // System.TeamProject: "MotorQ Project"
-    // System.Title: "One More Check"
-    // System.WorkItemType: "Epic"
-    // WEF_AF37E0623F6A49B49742F64FDD1B97EF_Kanban.Column: "To Do"
-    // WEF_AF37E0623F6A49B49742F64FDD1B97EF_Kanban.Column.Done: false
-
     return (
         <>
             {renderEdit === null ?
@@ -86,20 +63,24 @@ function Ticket({ ticketData, clickClose }) {
                                 </Row>
 
                                 <Row className={"mb-4"}>
-                                    <h5>Assigned To: {allTicketInfo.fields["System.AssignedTo"] ? allTicketInfo.fields["System.AssignedTo"] : "No assignment"}</h5>
+                                    <h5>ASSIGNED TO: {allTicketInfo.fields["System.AssignedTo"] ? allTicketInfo.fields["System.AssignedTo"] : "No assignment"}</h5>
                                 </Row>
 
                                 {/*work type, state, priority*/}
                                 <Row className={"mb-4"}>
-                                    <h5 className={"mb-4"}>Ticket Type: {allTicketInfo.fields["System.WorkItemType"]}</h5>
-                                    <h5 className={"mb-4"}>Ticket State: {allTicketInfo.fields["System.State"]}</h5>
-                                    <h5 className={"mb-4"}>Priority: {allTicketInfo.fields["Microsoft.VSTS.Common.Priority"]}</h5>
+                                    <h5>TICKET TYPE: {allTicketInfo.fields["System.WorkItemType"]}</h5>
+                                </Row>
+                                <Row className={"mb-4"}>
+                                    <h5>TICKET STATE: {allTicketInfo.fields["System.State"]}</h5>
+                                </Row>
+                                <Row className={"mb-4"}>
+                                    <h5>PRIORITY: {allTicketInfo.fields["Microsoft.VSTS.Common.Priority"]}</h5>
                                 </Row>
 
                                 {/*ticket description*/}
                                 <Row className={"my-4"}>
                                     <Col>
-                                        <h5>Ticket Description</h5>
+                                        <h5>TICKET DESCRIPTION</h5>
                                         <article className={"border border-1 p-2 articleStyle"}>
                                             {parseHtml(allTicketInfo.fields["System.Description"])}
                                         </article>
@@ -109,7 +90,7 @@ function Ticket({ ticketData, clickClose }) {
                                 {/*ticket mentions section*/}
                                 <Row className={"my-4"}>
                                     <Col>
-                                        <h5>Ticket Comments</h5>
+                                        <h5>TICKET COMMENTS</h5>
                                         <article className={"border border-1 p-2 articleStyle"}>
                                             {parseHtml(allTicketInfo.fields["Microsoft.VSTS.CMMI.Comments"])}
                                         </article>
@@ -118,25 +99,43 @@ function Ticket({ ticketData, clickClose }) {
 
                                 {/*ticket created date*/}
                                 <Row className={"my-4"}>
-                                    <h5>Created Date: {allTicketInfo.fields["System.CreatedDate"]}</h5>
+                                    <h5>CREATED DATE: {allTicketInfo.fields["System.CreatedDate"]}</h5>
                                 </Row>
 
                                 {/*ticket created by*/}
                                 <Row className={"my-4"}>
-                                    <h5>Created By: {allTicketInfo.fields["System.CreatedBy"]}</h5>
+                                    <h5>CREATED BY: {allTicketInfo.fields["System.CreatedBy"]}</h5>
                                 </Row>
 
                                 {/*ticket attachments*/}
-                                {/*<Row className="mb-2">*/}
+                                <Row className="mb-4">
+                                    <h5>ATTACHMENTS</h5>
+                                    {allTicketInfo.relations ?
+                                        allTicketInfo.relations.map((thisAttachment, index) => {
+                                            return(
+                                                <Col xs={3} key={index} className={"my-2"}>
+                                                    <Card className={"shadow"}>
+                                                        <Card.Body>
+                                                            <Card.Title title={thisAttachment.attributes.name} className={"text-truncate"}>
+                                                                {thisAttachment.attributes.name}
+                                                            </Card.Title>
+                                                            <br />
+                                                            <a className={"float-end"} href={thisAttachment.url + "?fileName=" + thisAttachment.attributes.name + "&download=true"} download>Download</a>
+                                                        </Card.Body>
+                                                    </Card>
+                                                </Col>);
+                                        })
+                                        : <div className={"border border-1 p-2 articleStyle"}>No attachments.</div>}
+                                </Row>
 
-                                {/*</Row>*/}
+                                <hr />
 
                                 <Button onClick={() => setRenderEdit(true)} type={"button"} name={"action"} className={"mt-2"}>
-                                    Edit Ticket
+                                    EDIT TICKET
                                 </Button>
 
                                 <Button onClick={clickClose} type={"button"} name={"action"} className={"float-end mt-2"}>
-                                    Close
+                                    CLOSE
                                 </Button>
                             </Form>
                         </Col>
@@ -144,14 +143,15 @@ function Ticket({ ticketData, clickClose }) {
                     : <Container>Loading Ticket Info...</Container>
                 : null}
 
-            {renderEdit === true ? <TicketForm editTicket={true} ticketInfo={allTicketInfo}  /> : null}
+            {renderEdit === true ? <TicketForm editTicket={true} ticketInfo={allTicketInfo} setShow={setShow}  /> : null}
         </>
     );
 }
 
 Ticket.propTypes = {
     ticketData: PropTypes.array,
-    clickClose: PropTypes.func
+    clickClose: PropTypes.func,
+    setShow: PropTypes.func
 };
 
 export default Ticket;

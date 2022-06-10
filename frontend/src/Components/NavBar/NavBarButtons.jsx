@@ -20,6 +20,7 @@ function NavBarButtons({ currLocation, btnVertSpace, vertOrNot }) {
     const handleShow = () => setShow(true);
     const handleClose = () => setShow(false);
 
+
     const { instance, accounts } = useMsal();
     const account = useAccount(accounts[0] || {});
 
@@ -47,7 +48,7 @@ function NavBarButtons({ currLocation, btnVertSpace, vertOrNot }) {
                 });
             }
         });
-    }, [account, instance]);
+    }, [accounts, account, instance]);
 
 
     const [toggle, setToggle] = useState(false);
@@ -132,8 +133,9 @@ function NavBarButtons({ currLocation, btnVertSpace, vertOrNot }) {
                     </Modal.Header>
 
                     <Modal.Body>
-                        <TicketForm />
+                        <TicketForm editTicket={false} setShow={setShow} key={setShow} />
                     </Modal.Body>
+
                 </Modal.Dialog>
             </Modal>
 
@@ -144,7 +146,9 @@ function NavBarButtons({ currLocation, btnVertSpace, vertOrNot }) {
 NavBarButtons.propTypes = {
     currLocation: PropTypes.object,
     btnVertSpace: PropTypes.string,
-    vertOrNot: PropTypes.string
+    vertOrNot: PropTypes.string,
+    setShow: PropTypes.func,
+    show: PropTypes.bool,
 };
 
 export default NavBarButtons;

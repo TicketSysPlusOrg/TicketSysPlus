@@ -8,10 +8,13 @@ import { loginRequest } from "../../authConfig";
 import NavBar from "../NavBar";
 
 import Admins from "./Admins";
+import SprintIterationPath from "./SprintIterationPath";
+import DefaultProject from "./DefaultProject";
 
 /*
     {
-        iterationPath: ""
+        iterationPath: "",
+        defaultProject: ""
     }
 */
 
@@ -34,21 +37,25 @@ function Settings() {
         // backendApi.get("");
     }, []);
 
+    const [show, setShow] = useState(false);
+
     return(
         <MsalAuthenticationTemplate
             interactionType={InteractionType.Redirect}
             authenticationRequest={authRequest}
         >
-            <NavBar />
-            <Container>
-                <Box sx={{ marginTop: "10vh", height: "83vh" }}>
-                    <Stack spacing={2}>
-                        <Paper elevation={3}>Config 1</Paper>
-                        <Paper elevation={3}>Config 2</Paper>
-                        <Paper elevation={3}><Admins /></Paper>
-                    </Stack>
-                </Box>
-            </Container>
+            <div id={"settingsComponent"}>
+                <NavBar show={show} setShow={setShow} />
+                <Container>
+                    <Box sx={{ marginTop: "10vh", height: "83vh" }}>
+                        <Stack spacing={2}>
+                            <Paper elevation={3}><DefaultProject /></Paper>
+                            <Paper elevation={3}><SprintIterationPath /></Paper>
+                            <Paper elevation={3}><Admins /></Paper>
+                        </Stack>
+                    </Box>
+                </Container>
+            </div>
         </MsalAuthenticationTemplate>
     );
 }
