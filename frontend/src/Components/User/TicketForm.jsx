@@ -481,7 +481,6 @@ function TicketForm(props) {
                             </Row>
                             : null}
 
-
                         <Row className={"mb-3"}>
                             <Form.Group className={"col s12 d-block"}>
                                 <Form.Label htmlFor={"tickAttachments"} className={"fw-bold"}>ATTACHMENTS</Form.Label>
@@ -496,7 +495,7 @@ function TicketForm(props) {
                             <Row>
                                 {anotherDataSource.map((thisSource, index) => (
                                     <div key={index}>
-                                        <ConditionalForms/>
+                                        <ConditionalForms index={index}/>
                                     </div>
                                 ))}
                                 <Row className={"justify-content-between"}>
