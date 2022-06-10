@@ -32,12 +32,11 @@ export const getJson = (req, res) => {
 
 //PUT
 export const changeJson = (req, res) => {
-    console.log(req.body);
-    if (req.body.id !== undefined) {
-        const { id, ...body } = req.body;
+    if (req.body._id !== undefined) {
+        const { _id, body } = req.body;
         Json.findByIdAndUpdate(
-            id,
-            body,
+            _id,
+            {body: body},
             (err, Json) => {
                 if (err) {
                     res.send(err);
