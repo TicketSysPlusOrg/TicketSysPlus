@@ -17,7 +17,8 @@ function JsonViewer() {
     // latest Json changes
     const [data, setData] = useState("");
     // updates CodeMirror value 
-    const [jsonDB, setJson] = useState("");
+    const [jsonDB, setJsonDB] = useState("");
+    const [currentJson, setCurrentJson] = useState("");
     const [jsonCollection, setJsonCollection] = useState([]);
     // copy of the original Json
     const [oldJson, setOldJson] = useState("");
@@ -46,7 +47,7 @@ function JsonViewer() {
                     backendApi.post("jsons", { body: "" })
                         .then((res) => {
                             console.log(res);
-                            setJson(res.data);
+                            setJsonDB(res.data);
                             backendApi.post("jsons", { body: "" })
                                 .then((res2) => {
                                     console.log(res2);
@@ -73,7 +74,8 @@ function JsonViewer() {
                         });
                     // there are the appropriate amount of items
                 } else {
-                    setJson(currentFromDB);
+                    setJsonDB(currentFromDB);
+                    setCurrentJson(currentFromDB);
                     setOldJson(oldFromDB);
                     setJsonCollection(res.data);
                 }
@@ -112,7 +114,7 @@ function JsonViewer() {
 
     function verify(data) {
         setData(data);
-        if (oldJson !== data) {
+        if (jsonDB !== data) {
             setChange(false);
         } else {
             setChange(true);
@@ -123,20 +125,17 @@ function JsonViewer() {
     }
 
     function loadOld() {
-        /*
+
         backendApi
             .get("jsons")
             .then((res) => {
-                //TODO: setCurrentJson should be the body of the db data from the get
-                console.log(res.data);
-                setJson(res.data[0].body);
-                //verify();
+                setCurrentJson(res.data[1].body);
+                verify();
             })
             .catch((err) => {
                 console.log(err);
-            });*/
-        console.log(oldJson);
-        setJson(oldJson.data);
+            });
+        setCurrentJson(oldJson.data);
     }
 
     const saveFile = async (string) => {
@@ -166,7 +165,7 @@ function JsonViewer() {
             const reader = new FileReader();
             reader.onload = async (event) => {
                 console.log("Result: " + event.target.result);
-                setJson(event.target.result);
+                setJsonDB(event.target.result);
             };
             reader.readAsText(fileUploaded);
         }
@@ -235,7 +234,7 @@ function JsonViewer() {
 
                     <div className="col-10 mx-auto">
                         <CodeMirror
-                            value={jsonDB}
+                            value={currentJson}
                             height="75VH"
                             theme={oneDark}
                             lint="true"
@@ -244,7 +243,6 @@ function JsonViewer() {
                             onUpdate={viewUpdate => {
                                 if (viewUpdate.docChanged) {
                                     const text = viewUpdate.state.doc.toString();
-                                    setJson(text);
                                     if (text && text !== data) {
                                         verify(text);
                                     }

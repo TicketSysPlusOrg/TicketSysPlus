@@ -31,26 +31,6 @@ function JsonForm({ jsonModal, jsonObjects }) {
             .catch((err) => {
                 console.log(err);
             });
-
-        /*backendApi.delete("jsons")
-            .then((res) => {
-                console.log(res);
-
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-
-        backendApi.post("jsons", {
-            body: jsonBody
-        })
-            .then((res) => {
-                console.log(res);
-
-            })
-            .catch((err) => {
-                console.log(err);
-            });*/
     }
 
     return (
