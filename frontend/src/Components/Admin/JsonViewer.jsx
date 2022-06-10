@@ -18,6 +18,7 @@ function JsonViewer() {
     const [data, setData] = useState("");
     // updates CodeMirror value 
     const [jsonDB, setJson] = useState("");
+    const [jsonCollection, setJsonCollection] = useState([])
     // copy of the original Json
     const [oldJson, setOldJson] = useState("");
     const [jsonError, setJsonError] = useState("");
@@ -36,10 +37,12 @@ function JsonViewer() {
     function run() {
         backendApi.get("jsons")
             .then((res) => {
-                const jsonFromDB = res.data[0].body;
-                setJson(jsonFromDB);
-                setOldJson(jsonFromDB);
-                console.log(jsonFromDB);
+                setJsonCollection(res.data);
+                const currentFromDB = res.data[0].body;
+                const oldFromDB = res.data[1].body;
+                setJson(currentFromDB);
+                setOldJson(oldFromDB);
+                //console.log(jsonFromDB);
             })
             .catch((err) => {
                 console.error(err);
@@ -89,7 +92,7 @@ function JsonViewer() {
             .then((res) => {
                 //TODO: setCurrentJson should be the body of the db data from the get
                 console.log(res.data);
-                setJson(res.data[0].body);
+                setJson(res.data[1].body);
                 verify();
             })
             .catch((err) => {
@@ -203,6 +206,7 @@ function JsonViewer() {
                             onUpdate={viewUpdate => {
                                 if (viewUpdate.docChanged) {
                                     const text = viewUpdate.state.doc.toString();
+                                    setJson(text);
                                     if (text && text !== data) {
                                         verify(text);
                                     }
@@ -223,7 +227,7 @@ function JsonViewer() {
                         </Modal.Header>
 
                         <Modal.Body>
-                            <JsonForm jsonModal={data} />
+                            <JsonForm jsonModal={data} jsonObjects={jsonCollection} />
                         </Modal.Body>
                     </Modal.Dialog>
                 </div>

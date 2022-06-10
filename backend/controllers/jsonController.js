@@ -32,20 +32,20 @@ export const getJson = (req, res) => {
 
 //PUT
 export const changeJson = (req, res) => {
-    let bodyid = req.body;
-    console.log(bodyid);
-
-    Json.findByIdAndUpdate(
-        req.body,
-        { blocked: true },
-        { new: true },
-        (err, Json) => {
-            if (err) {
-                res.send(err);
+    console.log(req.body);
+    if (req.body.id !== undefined) {
+        const { id, ...body } = req.body;
+        Json.findByIdAndUpdate(
+            id,
+            body,
+            (err, Json) => {
+                if (err) {
+                    res.send(err);
+                }
+                res.json(Json);
             }
-            res.json(Json);
-        }
-    );
+        );
+    }
 };
 
 //DELETE
