@@ -14,9 +14,17 @@ function JsonForm({ jsonModal, jsonObjects }) {
     function submitJson(event) {
         event.preventDefault();
 
+        jsonObjects[1].body = jsonObjects[0].body;
         jsonObjects[0].body = inputBody.current.value;
         console.log(jsonObjects[0].body);
         backendApi.put("jsons", jsonObjects[0])
+            .then((res) => {
+                console.log(res);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+        backendApi.put("jsons", jsonObjects[1])
             .then((res) => {
                 console.log(res);
             })

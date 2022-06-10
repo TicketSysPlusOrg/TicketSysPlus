@@ -18,7 +18,7 @@ function JsonViewer() {
     const [data, setData] = useState("");
     // updates CodeMirror value 
     const [jsonDB, setJson] = useState("");
-    const [jsonCollection, setJsonCollection] = useState([])
+    const [jsonCollection, setJsonCollection] = useState([]);
     // copy of the original Json
     const [oldJson, setOldJson] = useState("");
     const [jsonError, setJsonError] = useState("");
@@ -37,11 +37,47 @@ function JsonViewer() {
     function run() {
         backendApi.get("jsons")
             .then((res) => {
-                setJsonCollection(res.data);
-                const currentFromDB = res.data[0].body;
-                const oldFromDB = res.data[1].body;
-                setJson(currentFromDB);
-                setOldJson(oldFromDB);
+                const currentFromDB = res.data[0]?.body;
+                const oldFromDB = res.data[1]?.body;
+
+                // if first index is undefined, then the database is empty.
+                // need to it with two items
+                if (currentFromDB === undefined) {
+                    backendApi.post("jsons", {body: ""})
+                        .then((res) => {
+                            console.log(res);
+                            setJson(res.data);
+                            backendApi.post("jsons", {body: ""})
+                                .then((res2) => {
+                                    console.log(res2);
+                                    setJsonCollection([res.data, res2.data]);
+                                })
+                                .catch((err) => {
+                                    console.log(err);
+                                });
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                        });
+                // if second index is undefined, then there's only one item in the database
+                // there needs to be two
+                } else if (oldFromDB === undefined) {
+                    backendApi.post("jsons", {body: ""})
+                        .then((res) => {
+                            setOldJson(res.data);
+                            setJsonCollection([jsonCollection[0], res.data]);
+                            console.log(res);
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                        });
+                // there are the appropriate amount of items
+                } else {
+                    setJson(currentFromDB);
+                    setOldJson(oldFromDB);
+                    setJsonCollection(res.data);
+                }
+
                 //console.log(jsonFromDB);
             })
             .catch((err) => {
@@ -92,8 +128,11 @@ function JsonViewer() {
             .then((res) => {
                 //TODO: setCurrentJson should be the body of the db data from the get
                 console.log(res.data);
-                setJson(res.data[1].body);
-                verify();
+                // only set json if the second index is not an empty string
+                if (res.data[1].body.length > 0) {
+                    setJson(res.data[1].body);
+                    verify();
+                }
             })
             .catch((err) => {
                 console.log(err);
