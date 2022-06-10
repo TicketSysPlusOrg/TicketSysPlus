@@ -287,6 +287,13 @@ function TicketForm(props) {
         return(<img src={thisIcon.url} alt={thisIcon.id + " work item icon"} id={thisIcon.id} className={"iconsize"} />);
     }
 
+    function getDataSourceValues() {
+        const returnValues = document.getElementsByClassName("dataSourceValues");
+        for (let i = 0; i < returnValues.length; i++) {
+            console.log(returnValues[i].textContent);
+        }
+    }
+
     return (
         <>
             <Row>
@@ -295,6 +302,7 @@ function TicketForm(props) {
                     {/*TODO: validation  for all fields*/}
                     <Form className={"col s12"} onSubmit={submitTicket}>
 
+                        {/*EDIT TICKET HEADER AND DELETE BUTTON. AVAILABLE WHEN IN EDIT TICKET MODE.*/}
                         {editTicket === true ?
                             <Row className={"mb-2"}>
                                 <Col xs={10} className={"d-flex align-items-center"}>
@@ -494,9 +502,9 @@ function TicketForm(props) {
                         {props.editTicket !== true ?
                             <Row>
                                 {anotherDataSource.map((thisSource, index) => (
-                                    <div key={index}>
-                                        <Container>
-                                            <ConditionalForms index={index}/>
+                                    <div key={index} className={"dataSourceValues"} onChange={getDataSourceValues}>
+                                        <Container key={index}>
+                                            <ConditionalForms index={index} />
                                         </Container>
                                     </div>
                                 ))}

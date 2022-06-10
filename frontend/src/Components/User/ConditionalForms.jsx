@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Form } from "react-bootstrap";
+import { Form, Container } from "react-bootstrap";
 import PropTypes from "prop-types";
 
 import { ConditionalExample } from "./DataSourceConds";
@@ -32,19 +32,14 @@ function ConditionalForms({ index, jsonObj, key }) {
         otherwise using props sent by component self calls.*/
     function checkJSON() {
         if(jsonObj !== undefined) {
-
             if(jsonObj === null) {
                 console.log("null for now");
-            }
-            else if(jsonObj === "CHECKANYOF" || jsonObj === "CHECKITEM" || jsonObj === "CHECKCHOICE") {
-                console.log("reached top of select list");
             }
             else {
                 console.log(jsonObj);
                 setCondObject(new Map(Object.entries(jsonObj)));
             }
-        }
-        else {
+        } else {
             setCondObject(new Map(Object.entries(conJSON)));
         }
     }
@@ -55,19 +50,17 @@ function ConditionalForms({ index, jsonObj, key }) {
 
     {/*
     *
-    * CHECK TITLE AND DESCRIPTION FIRST, RENDER THINGS BASED ON THAT.
-    * AFTER THIS, CHECK TO SEE IF REQUIREDVAL STATE IS EMPTY OR NOT.
-    *   IF NOT EMPTY, CHECK JSON LAYER AGAINST ANYTHING IT CONTAINS.
-    *   IF FIND A DEFINED VAL AGAINST ANY KEY IN REQUIREDVAL, RENDER NEW COMPONENT AND SET REQUIREDVAL TO NULL.
-    * THEN CHECK REQUIRED. IF 'REQUIRED' NOT RETURNING UNDEFINED, SAVE VAL IN 'REQUIRED VAL' STATE TO BE USED FOR CHECKING THE 'NEXT' CHILD CONDITIONAL FORMAT COMPONENT.
-    * THEN CHECK PROPERTIES. IF 'PROPERTIES' NOT RETURNING UNDEFINED, RENDER NEW COMPONENT AND PASS ON ANYTHING THAT MAY BE IN REQUIREDVAL.
-    * THEN CHECK AGAINST ITEMS, CHOICES, ENUM, AND ANYOF (NOT NECESSARILY IN THAT ORDER).
-    *   IF ANY OF THOSE ARE CONTAINED, SEE IF WHAT THEY RETURN IS AN ARRAY OR NOT.
-    *       IF IT'S AN ARRAY, IS IT AN ARRAY OF OBJECTS OR ARRAY OF STRINGS?
-    *           IF ARRAY OF OBJECTS (KEY-VAL PAIRS), SELECT LIST GENERATION
-    *           IF ARRAY OF STRING/NUMBER/MAYBE BOOLEAN, WE'VE REACHED AN END POINT.
-    * *****FOR NOW: ONCE REACHING THIS END POINT, SINGLE SELECT SHOULD SUFFICE. IDEALLY, WE NEED MULTISELECT. *****
-    *
+    * CHECK TITLE AND DESCRIPTION FIRST. IF NOT RETURNING UNDEFINED, RENDER EACH/EITHER BASED ON THAT.
+    * NEXT CHECK PROPERTIES. IF 'PROPERTIES' NOT RETURNING UNDEFINED, LOOK AT TWO FOLLOWS OPTIONS:
+    *   IF 'REQUIRED' NOT RETURNING UNDEFINED, RENDER NEW COMPONENT WITH JSONOBJ={(CONDOBJECT.GET("PROPERTIES")[CONDOBJECT.GET("REQUIRED)]}
+    *   IF 'REQUIRED' RETURNING UNDEFINED, RENDER NEW COMPONENT WITH JSONOBJ={CONDOBJ.GET("PROPERTIES")}
+    * NEXT CHECK .GET ITEMS, CHOICES, ANYOF, AND ENUM (NOT NECESSARILY IN THAT ORDER).
+    *   IF ANY OF THOSE ARE CONTAINED (I.E. NOT RETURNING UNDEFINED), SEE IF WHAT THEY RETURN IS AN ARRAY OR NOT.
+    *       IF IT'S AN ARRAY, IS IT AN ARRAY OF OBJECTS OR ARRAY OF STRINGS/ENUMS/NUMBERS/BOOLEANS?
+    *           IF ARRAY OF OBJECTS (KEY-VAL PAIRS), SELECT LIST GENERATION.
+    *           IF ARRAY OF STRING/NUMBER/MAYBE BOOLEAN, WE'VE REACHED AN END POINT. REQUIRE A SELECTION (OR MULTI) AND RETURN ALL INFO ON SUBMIT.
+    * ***** NEXT: NEED TO SETUP MULTI/SINGLE SELECT LOGIC AS WELL AS HANDLING DIFFERENT TYPES OF ENDPOINT SELECTIONS (ENUM, STRING, NUMBER, BOOLEAN. *****
+    * ***** AFTER THAT: CONSOLIDATE CODE. *****
     */
     }
 
@@ -79,12 +72,12 @@ function ConditionalForms({ index, jsonObj, key }) {
 
                         {/*object layer has 'title' in it? h5*/}
                         {condObject.get("title") !== undefined ?
-                            <h5>{condObject.get("title")}</h5>
+                            <h5 aria-valuetext={condObject.get("title")}>{condObject.get("title")}</h5>
                             : null}
 
                         {/*object layer has 'description' in it? h6*/}
                         {condObject.get("description") !== undefined ?
-                            <h6>{condObject.get("description")}</h6>
+                            <h6 aria-valuetext={condObject.get("description")}>{condObject.get("description")}</h6>
                             : null}
 
                         {/*object layer has 'properties' key in it?*/}
@@ -100,19 +93,19 @@ function ConditionalForms({ index, jsonObj, key }) {
                         {condObject.get("choices") !== undefined ?
                             /*when .get returns array, map array object. otherwise call this component again to return the items key's values*/
                             Array.isArray(condObject.get("choices")) ?
-                                <div>
-                                    <Form.Select key={renderCondObj} aria-required={true} required defaultValue={"CHECKCHOICE"} onChange={e => {setRenderCondObj(e.target.value); console.log(e.target.value);}}>
+                                <Container key={renderCondObj}>
+                                    <Form.Select aria-required={true} required defaultValue={renderCondObj ? renderCondObj : "CHECKCHOICE"} onChange={e => {setRenderCondObj(e.target.value); console.log(e.target.value);}}>
                                         {condObject.get("choices").map((choiceOption, choiceIndex) => (
                                             (choiceIndex === 0 ?
                                                 <>
-                                                    <option value={"CHECKCHOICE"} disabled>select one...</option>
-                                                    <option key={"choices" + choiceIndex} value={choiceOption} >{choiceOption}</option>
+                                                    <option key={"CHECKCHOICE"} value={"CHECKCHOICE"} disabled>select one...</option>
+                                                    <option key={"choices" + choiceIndex} value={choiceOption} aria-valuetext={choiceOption}>{choiceOption}</option>
                                                 </>
-                                                : <option key={"choices" + choiceIndex} value={choiceOption} >{choiceOption}</option>)
+                                                : <option key={"choices" + choiceIndex} value={choiceOption} aria-valuetext={choiceOption}>{choiceOption}</option>)
                                         ))}
 
                                     </Form.Select>
-                                </div>
+                                </Container>
                                 : <ConditionalForms index={index} jsonObj={condObject.get("choices")} />
 
                             : null}
@@ -121,18 +114,18 @@ function ConditionalForms({ index, jsonObj, key }) {
                         {condObject.get("items") !== undefined ?
                             /*when .get returns array, map array object. otherwise call this component again to return the items key's values*/
                             Array.isArray(condObject.get("items")) ?
-                                <div>
-                                    <Form.Select key={renderCondObj} aria-required={true} required defaultValue={"CHECKITEM"} onChange={e => {setRenderCondObj(e.target.value); console.log(e.target.value);}}>
+                                <Container key={renderCondObj}>
+                                    <Form.Select aria-required={true} required defaultValue={renderCondObj ? renderCondObj : "CHECKITEM"} onChange={e => {setRenderCondObj(e.target.value); console.log(e.target.value);}}>
                                         {condObject.get("items").map((thisOption, optionIndex) => (
                                             (optionIndex === 0 ?
                                                 <>
-                                                    <option value={"CHECKITEM"} disabled>select one...</option>
-                                                    <option key={"items" + optionIndex} value={thisOption} >{thisOption}</option>
+                                                    <option key={"CHECKITEM"} value={"CHECKITEM"} disabled>select one...</option>
+                                                    <option key={"items" + optionIndex} value={thisOption} aria-valuetext={thisOption}>{thisOption}</option>
                                                 </>
-                                                : <option key={"items" + optionIndex} value={thisOption} >{thisOption}</option>)
+                                                : <option key={"items" + optionIndex} value={thisOption} aria-valuetext={thisOption}>{thisOption}</option>)
                                         ))}
                                     </Form.Select>
-                                </div>
+                                </Container>
                                 : <ConditionalForms index={index} jsonObj={condObject.get("items")} />
 
                             : null}
@@ -141,23 +134,23 @@ function ConditionalForms({ index, jsonObj, key }) {
                         {condObject.get("anyOf") !== undefined ?
                             /*when .get returns array, map array objects. otherwise call this component again to return the anyOf key's value*/
                             Array.isArray(condObject.get("anyOf")) ?
-                                <div key={renderCondObj}>
-                                    <Form.Select aria-required={true} required defaultValue={"CHECKANYOF"} onChange={e => {setRenderCondObj(e.currentTarget.value); console.log(e.currentTarget.value);}}>
+                                <Container key={renderCondObj}>
+                                    <Form.Select aria-required={true} required defaultValue={renderCondObj ? renderCondObj : "CHECKANYOF"} onChange={e => {setRenderCondObj(e.currentTarget.value); console.log(e.currentTarget.value);}}>
 
                                         {condObject.get("anyOf").map((thisOption, thisIndex) => (
                                             (thisIndex === 0 ?
                                                 <>
-                                                    <option value={"CHECKANYOF"} disabled>select one...</option>
-                                                    <option key={"anyOf" + thisIndex} value={thisIndex} >{thisOption["title"]}</option>
+                                                    <option key={"CHECKANYOF"} value={"CHECKANYOF"} disabled>select one...</option>
+                                                    <option key={"anyOf" + thisIndex} value={thisIndex} aria-valuetext={thisOption["title"]}>{thisOption["title"]}</option>
                                                 </>
-                                                : <option key={"anyOf" + thisIndex} value={thisIndex} >{thisOption["title"]}</option>)
+                                                : <option key={"anyOf" + thisIndex} value={thisIndex} aria-valuetext={thisOption["title"]}>{thisOption["title"]}</option>)
 
                                         ))}
                                     </Form.Select>
                                     {/*when renderCondObj is not null, render its choices*/}
                                     {renderCondObj !== null ? <ConditionalForms index={index} key={renderCondObj} jsonObj={condObject.get("anyOf")[renderCondObj]} />
                                         : null}
-                                </div>
+                                </Container>
                                 : <ConditionalForms index={index} jsonObj={condObject.get("anyOf")} />
 
                             : null}
@@ -171,7 +164,7 @@ function ConditionalForms({ index, jsonObj, key }) {
                                         {condObject.get("enum").map((thisEnum) => (
                                             <div  key={thisEnum}>
                                                 {/*htmlfor and name need to be unique between iterations of condforms and the same in the same iteration*/}
-                                                <Form.Label htmlFor={"enum" + index} className={"ms-4 me-2"}>
+                                                <Form.Label htmlFor={"enum" + index} className={"ms-4 me-2"} aria-valuetext={thisEnum}>
                                                     {thisEnum} <Form.Check aria-required={true} required className={"ms-2"} inline name={"enum" + index}
                                                         type={"radio"} value={thisEnum} defaultChecked={null}/>
                                                 </Form.Label>
@@ -197,4 +190,3 @@ ConditionalForms.propTypes = {
 };
 
 export default ConditionalForms;
-
