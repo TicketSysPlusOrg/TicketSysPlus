@@ -84,17 +84,20 @@ function JsonViewer() {
     }
 
     function loadOld() {
+        /*
         backendApi
             .get("jsons")
             .then((res) => {
                 //TODO: setCurrentJson should be the body of the db data from the get
                 console.log(res.data);
                 setJson(res.data[0].body);
-                verify();
+                //verify();
             })
             .catch((err) => {
                 console.log(err);
-            });
+            });*/
+        console.log(oldJson);
+        setJson(oldJson.data);
     }
 
     const saveFile = async (string) => {
@@ -194,9 +197,8 @@ function JsonViewer() {
 
                     <div className="col-10 mx-auto">
                         <CodeMirror
-                            className="rounded"
                             value={jsonDB}
-                            height="100%"
+                            height="75VH"
                             theme={oneDark}
                             lint="true"
                             gutters={["CodeMirror-lint-markers"]}
