@@ -495,7 +495,9 @@ function TicketForm(props) {
                             <Row>
                                 {anotherDataSource.map((thisSource, index) => (
                                     <div key={index}>
-                                        <ConditionalForms index={index}/>
+                                        <Container>
+                                            <ConditionalForms index={index}/>
+                                        </Container>
                                     </div>
                                 ))}
                                 <Row className={"justify-content-between"}>

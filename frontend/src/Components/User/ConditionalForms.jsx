@@ -14,19 +14,6 @@ function ConditionalForms({ index, jsonObj, key }) {
     const conJSON = ConditionalExample;
     const [renderCondObj, setRenderCondObj] = useState(null);
 
-    /*
-    * check to see if there was a 'required' value sent in as a key each time there's a new render
-    * if there was, save it so that you can check this layer of json for a key associated with it
-    *
-    * */
-    /*EDITING OUT FOR NOW. TRYING TO ONLY CHANGE REQUIRED VAL ONCE MANUALLY WHEN FINDING REQUIRED, THEN PASSING THAT DOWN AS KEY.
-    * IF WE ALTER IT AND IT'S BEEN PASSED DOWN, WE ARE RERENDERING INFINITELY AT A POINT.*/
-    // useEffect(() => {
-    //     if(key !== null) {
-    //         setRequiredVal(key);
-    //     }
-    // }, []);
-
     /*list of words to scan JSON file for. maybe this should be stored in MongoDB and be mutable by admin?*/
     const keywordList = ["type", "properties", "detail", "choices", "title", "description", "type", "items", "anyOf", "required",
         "uniqueItems", "minItems", "enum"];
@@ -100,12 +87,6 @@ function ConditionalForms({ index, jsonObj, key }) {
                             <h6>{condObject.get("description")}</h6>
                             : null}
 
-                        {/*I THINK THIS IS USELESS ANC I CAN DELETE IT*/}
-                        {/*object layer has 'required' key in it? save to 'requiredVal'*/}
-                        {/*{reqObject ?*/}
-                        {/*    <ConditionalForms index={index} reqObject={null} jsonObj={condObject.get(reqObject)} />*/}
-                        {/*    : null}*/}
-
                         {/*object layer has 'properties' key in it?*/}
                         {condObject.get("properties") !== undefined ?
                             condObject.get("required") !== undefined ?
@@ -113,23 +94,21 @@ function ConditionalForms({ index, jsonObj, key }) {
                                 : <ConditionalForms index={index} jsonObj={condObject.get("properties")} />
                             : null}
 
-                        {/*object layer has 'enrollment_items' key in it?*/}
-                        {/*NOTE: this is not a good plan. need to check each 'required' and save a copy of value there,
-                        then check that value in each object level. get(requiredvalue) and overwrite required each time*/}
-                        {/*{condObject.get("enrollment_items") !== undefined ?*/}
-                        {/*    <ConditionalForms index={index} reqObject={reqObject} jsonObj={condObject.get("enrollment_items")} />*/}
-                        {/*    : null}*/}
-
+                        {/*TODO: reduce code. choices, items, and anyOf are quite similar. could make a separate component.*/}
+                        {/*ALSO: think about what other base choice types there may be. string, enum, number, boolean...?*/}
                         {/*object layer has 'choices' key in it?*/}
                         {condObject.get("choices") !== undefined ?
                             /*when .get returns array, map array object. otherwise call this component again to return the items key's values*/
                             Array.isArray(condObject.get("choices")) ?
                                 <div>
                                     <Form.Select key={renderCondObj} aria-required={true} required defaultValue={"CHECKCHOICE"} onChange={e => {setRenderCondObj(e.target.value); console.log(e.target.value);}}>
-                                        <option value={"CHECKCHOICE"} disabled>select one...</option>
-
-                                        {condObject.get("choices").map((thisOption, choiceIndex) => (
-                                            <option key={"choices" + choiceIndex} value={{thisOption}} >{thisOption}</option>
+                                        {condObject.get("choices").map((choiceOption, choiceIndex) => (
+                                            (choiceIndex === 0 ?
+                                                <>
+                                                    <option value={"CHECKCHOICE"} disabled>select one...</option>
+                                                    <option key={"choices" + choiceIndex} value={choiceOption} >{choiceOption}</option>
+                                                </>
+                                                : <option key={"choices" + choiceIndex} value={choiceOption} >{choiceOption}</option>)
                                         ))}
 
                                     </Form.Select>
@@ -144,16 +123,14 @@ function ConditionalForms({ index, jsonObj, key }) {
                             Array.isArray(condObject.get("items")) ?
                                 <div>
                                     <Form.Select key={renderCondObj} aria-required={true} required defaultValue={"CHECKITEM"} onChange={e => {setRenderCondObj(e.target.value); console.log(e.target.value);}}>
-                                        {/*<option value={"CHECKITEM"} disabled>select one...</option>*/}
-
                                         {condObject.get("items").map((thisOption, optionIndex) => (
                                             (optionIndex === 0 ?
-                                                <option value={"CHECKITEM"} disabled>select one...</option> &&
-                                                <option key={"items" + optionIndex} value={thisOption} >{thisOption}</option>
+                                                <>
+                                                    <option value={"CHECKITEM"} disabled>select one...</option>
+                                                    <option key={"items" + optionIndex} value={thisOption} >{thisOption}</option>
+                                                </>
                                                 : <option key={"items" + optionIndex} value={thisOption} >{thisOption}</option>)
-
                                         ))}
-
                                     </Form.Select>
                                 </div>
                                 : <ConditionalForms index={index} jsonObj={condObject.get("items")} />
@@ -164,18 +141,20 @@ function ConditionalForms({ index, jsonObj, key }) {
                         {condObject.get("anyOf") !== undefined ?
                             /*when .get returns array, map array objects. otherwise call this component again to return the anyOf key's value*/
                             Array.isArray(condObject.get("anyOf")) ?
-                                <div>
-                                    <Form.Select key={renderCondObj} aria-required={true} required defaultValue={"CHECKANYOF"} onChange={e => {setRenderCondObj(e.currentTarget.value); console.log(e.currentTarget.value);}}>
-                                        <option value={"CHECKANYOF"} disabled>select one...</option>
+                                <div key={renderCondObj}>
+                                    <Form.Select aria-required={true} required defaultValue={"CHECKANYOF"} onChange={e => {setRenderCondObj(e.currentTarget.value); console.log(e.currentTarget.value);}}>
 
                                         {condObject.get("anyOf").map((thisOption, thisIndex) => (
                                             (thisIndex === 0 ?
-                                                <option value={"CHECKANYOF"} disabled>select one...</option> &&
-                                                <option key={"anyOf" + thisIndex} value={thisIndex} >{thisOption["title"]}</option>
+                                                <>
+                                                    <option value={"CHECKANYOF"} disabled>select one...</option>
+                                                    <option key={"anyOf" + thisIndex} value={thisIndex} >{thisOption["title"]}</option>
+                                                </>
                                                 : <option key={"anyOf" + thisIndex} value={thisIndex} >{thisOption["title"]}</option>)
 
                                         ))}
                                     </Form.Select>
+                                    {/*when renderCondObj is not null, render its choices*/}
                                     {renderCondObj !== null ? <ConditionalForms index={index} key={renderCondObj} jsonObj={condObject.get("anyOf")[renderCondObj]} />
                                         : null}
                                 </div>
@@ -219,14 +198,3 @@ ConditionalForms.propTypes = {
 
 export default ConditionalForms;
 
-/*PULLED OUT OF ENUM*/
-{/*<Form.Select defaultValue={"CHECKENUM"} onChange={e => {setRenderCondObj(e.currentTarget.value); console.log(e.currentTarget.value);}}>*/}
-{/*    <option value={"CHECKENUM"} disabled>select one...</option>*/}
-
-{/*    {condObject.get("enum").map((thisEnum, index) => (*/}
-{/*        <option key={"enum" + index} value={index} >{thisEnum}</option>*/}
-{/*    ))}*/}
-
-{/*</Form.Select>*/}
-{/*{renderCondObj !== null ? <ConditionalForms key={renderCondObj} jsonObj={condObject.get("enum")[renderCondObj]} />*/}
-{/*    : null}*/}
