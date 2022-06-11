@@ -155,6 +155,8 @@ function ConditionalForms({ index, jsonObj, key }) {
 
                             : null}
 
+                        {/*FINAL DATA SELECTIONS*/}
+
                         {/*object layer has 'enum' object in it?*/}
                         {condObject.get("enum") !== undefined ?
                             /*when .get returns array, map array objects. otherwise call this component again to return the enum key's value*/

@@ -55,7 +55,7 @@ function TicketForm(props) {
     /*work item icons*/
     const [icons, setIcons] = useState([]);
 
-    /*currently set up just to speak with MotorqProject board.*/
+    /*TODO: currently set up just to speak with MotorqProject board. admin env controls should set this properly.*/
     useEffect(() => {
         setReadyToClose(null);
         (async () => {
@@ -86,6 +86,7 @@ function TicketForm(props) {
         })();
     }, []);
 
+    /*new ticket/edit ticket submission block*/
     async function submitTicket(SubmitEvent) {
         SubmitEvent.preventDefault();
 
