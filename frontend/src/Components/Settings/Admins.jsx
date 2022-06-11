@@ -3,7 +3,7 @@ import { Card, CloseButton, Col, Dropdown, Row } from "react-bootstrap";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import Avatar from "@mui/material/Avatar";
-import { Grid } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 
 import { backendApi } from "../../index";
 import { azureConnection } from "../../index";
@@ -108,25 +108,27 @@ function Admins() {
                 {card ?
                     card.map((card, index) => (
                         <Grid item key={index} xs={4}>
-                            <Card key={index}>
-                                <Card.Body className={"text-center"}>
-                                    <Card.Text className={"text-end d"}><CloseButton onClick={() => deleteAdmins(card._id)}/></Card.Text>
-                                    <Avatar
-                                        sx={{ bgcolor: "orange",
-                                            mx:"auto",
-                                            display:"block"
-                                        }}
-                                        alt={card.name}
-                                        src={card.image}
-                                    />
-                                    <Card.Text>
-                                        {card ? card.name : null}
-                                    </Card.Text>
-                                    <Card.Text>
-                                        {card ? card.email : null}
-                                    </Card.Text>
-                                </Card.Body>
-                            </Card>
+                            <Box px={1} pb={1}>
+                                <Card key={index}>
+                                    <Card.Body className={"text-center"}>
+                                        <Card.Text className={"text-end"}><CloseButton onClick={() => deleteAdmins(card._id)}/></Card.Text>
+                                        <Avatar
+                                            sx={{ bgcolor: "orange",
+                                                mx:"auto",
+                                                display:"block"
+                                            }}
+                                            alt={card.name}
+                                            src={card.image}
+                                        />
+                                        <Card.Text>
+                                            {card ? card.name : null}
+                                        </Card.Text>
+                                        <Card.Text>
+                                            {card ? card.email : null}
+                                        </Card.Text>
+                                    </Card.Body>
+                                </Card>
+                            </Box>
                         </Grid>
                     ))
                     : null
