@@ -34,35 +34,25 @@ function Admins() {
             email: email
         })
             .then((res) => {
-                console.log(res);
                 loadAdmins();
             })
-            .catch((err) => {
-                console.log(err);
-            });
+            .catch(console.error);
     }
 
     function loadAdmins(){
         backendApi.get("admins")
             .then((res) => {
-                console.log(res.data);
                 setCard(res.data);
             })
-            .catch((err) => {
-                console.log(err);
-            });
+            .catch(console.error);
     }
 
     function deleteAdmins(id){
-        console.log(id);
         backendApi.delete("admins", { data: { "id" : id } })
             .then((res) => {
-                console.log(res);
                 loadAdmins();
             })
-            .catch((err) => {
-                console.log(err);
-            });
+            .catch(console.error);
     }
 
     const adminsList = admins ?

@@ -25,9 +25,7 @@ export function parseHtml(input) {
  */
 export async function isAdmin(email) {
     const { data } = await backendApi.get("admins")
-        .catch((err) => {
-            console.log(err);
-        });
+        .catch(console.error);
     return data.some(admin => admin.email === email);
 }
 

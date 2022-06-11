@@ -32,7 +32,6 @@ export const getResponder = (req, res) => {
 //PUT
 export const changeResponder = (req, res) => {
     let bodyid = req.body;
-    console.log(bodyid);
 
     Responder.findByIdAndUpdate(
         req.body,

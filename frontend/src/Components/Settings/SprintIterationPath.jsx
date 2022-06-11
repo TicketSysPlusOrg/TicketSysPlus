@@ -25,9 +25,7 @@ function SprintIterationPath(props) {
                         console.log(defaultProject);
                     }
                 })
-                .catch((err) => {
-                    console.log(err);
-                });
+                .catch(console.error);
         })();
     });
 
@@ -51,9 +49,7 @@ function SprintIterationPath(props) {
                                     console.log(iterationPath);
                                 }
                             })
-                            .catch((err) => {
-                                console.log(err);
-                            });
+                            .catch(console.error);
                     });
             }
         })();
@@ -93,15 +89,10 @@ function SprintIterationPath(props) {
                                         })
                                             .then((res) => {
                                                 console.log(res);
-                            
                                             })
-                                            .catch((err) => {
-                                                console.log(err);
-                                            });                    
+                                            .catch(console.error);
                                     })
-                                    .catch((err) => {
-                                        console.log(err);
-                                    });
+                                    .catch(console.error);
                             }
                         }}
                     />

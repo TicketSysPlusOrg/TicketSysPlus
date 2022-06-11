@@ -51,7 +51,6 @@ export const getAdmin = (req, res) => {
 //PUT
 export const changeAdmin = (req, res) => {
     let bodyid = req.body;
-    console.log(bodyid);
 
     Admin.findByIdAndUpdate(
         req.body,
