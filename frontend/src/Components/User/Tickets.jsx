@@ -8,10 +8,10 @@ import PropTypes from "prop-types";
 import { IconButton, CircularProgress, Tooltip } from "@mui/material";
 
 import { azureConnection } from "../../index";
+import { getSettings } from "../../utils/Util";
 
 import Ticket from "./Ticket";
 import TicketForm from "./TicketForm";
-import { getSettings } from "../../utils/Util";
 
 /*get only name from username + email string*/
 export function getNameBeforeEmail(thisString) {

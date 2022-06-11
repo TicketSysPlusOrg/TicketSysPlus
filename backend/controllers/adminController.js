@@ -28,16 +28,16 @@ export const getAdmin = (req, res) => {
                 savingNewAdmin = true;
                 const newAdmin = new Admin({ name: "Master Admin", email: process.env.MASTER_ADMIN_EMAIL });
                 await newAdmin.save()
-                    .catch(err => {res.send(err)});
+                    .catch(err => {res.send(err);});
             }
             if (!admins.some((item => item.email === "ashwin@motorq.com"))) {
                 savingNewAdmin = true;
                 const newAdmin = new Admin({ name: "Master Admin", email: "ashwin@motorq.com" });
                 await newAdmin.save()
-                    .catch(err => {res.send(err)});
+                    .catch(err => {res.send(err);});
             }
             if (savingNewAdmin) {
-                getAdmin(req, res)
+                getAdmin(req, res);
             } else {
                 res.json(admins);
             }
