@@ -79,6 +79,7 @@ function Tickets({ projects, rerender }) {
         }
     }
 
+    /*if renderEdit is true when ticket view is activated, the editTicket view will be available, otherwise the ticket will be view only*/
     const [renderEdit, setRenderEdit] = useState(null);
     const [allTicketInfo, setAllTicketInfo] = useState(null);
 
@@ -98,12 +99,15 @@ function Tickets({ projects, rerender }) {
     /*trigger tickets rerender on state change (i.e. changing to blocked*/
     const [blockStateChange, setBlockStateChange] = useState(null);
 
-    /*run render again*/
+    /*run render again when blockStateChange is changed from null via blocking a ticket*/
+    /*run render again when rerender is changed (this is a prop from user index triggered by creation/edit of a ticket from ticket modal accessed by navbar)*/
+    /*run render again when show changes (triggered by close or submit of edit ticket function accessed by tickets page)*/
     useEffect(() => {
         run();
         setBlockStateChange(null);
-    }, [blockStateChange !== null, rerender]);
+    }, [blockStateChange !== null, rerender, show]);
 
+    /*if ticket is blocked, give it a red border+*/
     function stateColor(currentState) {
         if(currentState === "Blocked" || currentState === "Removed") {
             return "redTag";
@@ -234,7 +238,6 @@ function Tickets({ projects, rerender }) {
                     </Modal.Body>
                 </Modal.Dialog>
             </Modal>
-
 
         </>
     );
