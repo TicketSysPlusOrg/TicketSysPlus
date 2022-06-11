@@ -3,7 +3,7 @@ import { Card, Col, Container, Row } from "react-bootstrap";
 
 import { azureConnection } from "../../index";
 import { getSettings, arrayMove } from "../../utils/Util";
-import NavBarHeader from "../NavBar";
+import NavBar from "../NavBar";
 
 import Legend from "./Legend";
 import Tickets from "./Tickets";
@@ -54,8 +54,8 @@ function User() {
     /*child changes to show trigger tickets rerender. needed for rerender after ticket creation*/
     const [show, setShow] = useState(false);
 
+    /*triggers a ticket page rerender on state change*/
     const[rerender, setRerender] = useState(false);
-
     useEffect(() => {
         if(!show) {
             console.log("setshowtoggle");
@@ -65,7 +65,7 @@ function User() {
 
     return(
         <>
-            <NavBarHeader show={show} setShow={setShow} />
+            <NavBar show={show} setShow={setShow} />
             <Container fluid>
                 <Row id={"vhscroll"}>
                     <Col xs={2} id="sidebar " className={"bg-light"}>
@@ -88,7 +88,7 @@ function User() {
                     </Col>
                     <Col xs={10} id={"inset-shadow"} className={"colscrolls"}>
                         <Row className={"ps-4"}>
-                            <Tickets projects={prjVal} key={prjVal} rerender={rerender} setPrjVal={setPrjVal} />
+                            <Tickets show={show} setShow={setShow} projects={prjVal} key={prjVal} rerender={rerender} setPrjVal={setPrjVal} />
                         </Row>
                     </Col>
                 </Row>

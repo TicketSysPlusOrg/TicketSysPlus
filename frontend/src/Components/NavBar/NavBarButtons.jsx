@@ -13,8 +13,7 @@ import TicketForm from "../User/TicketForm";
 // import { isAdmin } from "../../utils/Util";
 
 
-function NavBarButtons({ currLocation, btnVertSpace, vertOrNot }) {
-    const [show, setShow] = useState(false);
+function NavBarButtons({ setShow, show, currLocation, btnVertSpace, vertOrNot }) {
     const [btnStyles, setBtnStyles] = useState("adminButton");
     const [actvStyles, setActvStyles] = useState("makeTicket");
     const handleShow = () => setShow(true);
