@@ -1,12 +1,10 @@
 export const ConditionalExample = {
     "type": "object",
     "properties": {
-        /*TODO: figure out how to handle a BaseSchema object. currently throws errors and crashes things if I don't put quotes.*/
-        "detail": "BaseSchema",
         "grocery_info": {
-            "title" : "Grocery Information",
+            "title": "Grocery Information",
             "type": "object",
-            "properties" : {
+            "properties": {
                 "items": {
                     "description": "What categories of groceries do you need?",
                     "title": "Grocery categories",
@@ -18,13 +16,39 @@ export const ConditionalExample = {
                                 "title": "Vegetables",
                                 "properties": {
                                     "raw_vegetables": {
-                                        "title": "Raw vegetables might get spoilt in a few days and must be cooked soon. Do you want to proceed?",
                                         "description": "Raw vegetables might get spoilt in a few days and must be cooked soon. Do you want to proceed?",
                                         "type": "string",
-                                        "enum" : ["Yes"]
+                                        "items": {
+                                            "type": "string",
+                                            "oneOf": [
+                                                {
+                                                    "title": "Yes",
+                                                    "properties": {
+                                                        "vegetables": {
+                                                            "description": "Select the vegetables you would like to buy from the following list",
+                                                            "type": "array",
+                                                            "items": {
+                                                                "type": "string",
+                                                                "enum": [
+                                                                    "Tomatoes",
+                                                                    "Eggplant",
+                                                                    "Carrots",
+                                                                    "Potatoes"
+                                                                ]
+                                                            },
+                                                            "uniqueItems": true,
+                                                            "minItems": 1
+                                                        }
+                                                    }
+                                                }
+                                            ]
+                                        },
+                                        "uniqueItems": true,
+                                        "minItems": 1,
+                                        "maxItems": 1
                                     }
                                 },
-                                "required" : ["raw_vegetables"]
+                                "required": ["raw_vegetables"]
                             },
                             {
                                 "title": "Fruits",
@@ -44,14 +68,36 @@ export const ConditionalExample = {
                                         "minItems": 1
                                     }
                                 },
-                                "required": ["fruits_types"]
+                                "required": [ "fruits_types" ]
+                            },
+                            {
+                                "title": "Bread",
+                                "properties": {
+                                    "bread_types": {
+                                        "description": "What type of bread would you like?",
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string",
+                                            "enum": [
+                                                "Wheat",
+                                                "Multi-grain",
+                                                "Milk"
+                                            ]
+                                        },
+                                        "uniqueItems": true,
+                                        "minItems": 1,
+                                        "maxItems": 1
+                                    }
+                                },
+                                "required": [ "bread_types" ]
                             }
                         ]
                     }
                 }
             },
-            "required" : ["items"]
+            "required": [ "items" ]
         }
     },
-    "required": ["grocery_info"]
+    "required": [ "grocery_info" ]
 };
+

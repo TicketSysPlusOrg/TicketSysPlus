@@ -505,7 +505,7 @@ function TicketForm(props) {
                                 {anotherDataSource.map((thisSource, index) => (
                                     <div key={index} className={"dataSourceValues"} onChange={getDataSourceValues}>
                                         <Container key={index}>
-                                            <ConditionalForms index={index} />
+                                            <ConditionalForms index={index} min={0} max={0}/>
                                         </Container>
                                     </div>
                                 ))}
