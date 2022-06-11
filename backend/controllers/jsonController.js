@@ -36,7 +36,7 @@ export const changeJson = (req, res) => {
         const { _id, body } = req.body;
         Json.findByIdAndUpdate(
             _id,
-            {body: body},
+            { body: body },
             (err, Json) => {
                 if (err) {
                     res.send(err);

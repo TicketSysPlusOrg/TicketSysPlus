@@ -1,6 +1,6 @@
 import { InteractionType } from "@azure/msal-browser";
 import { MsalAuthenticationTemplate } from "@azure/msal-react";
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { Col, Row } from "react-bootstrap";
 
 import { loginRequest } from "../../authConfig";
