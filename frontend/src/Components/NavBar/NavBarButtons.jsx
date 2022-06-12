@@ -14,8 +14,8 @@ import TicketForm from "../User/TicketForm";
 
 
 function NavBarButtons({ setShow, show, currLocation, btnVertSpace, vertOrNot }) {
-    const [btnStyles, setBtnStyles] = useState("adminButton");
-    const [actvStyles, setActvStyles] = useState("makeTicket");
+    const [btnStyles, setBtnStyles] = useState("adminButton btn mx-2");
+    const [actvStyles, setActvStyles] = useState("makeTicket btn mx-2");
     const handleShow = () => setShow(true);
     const handleClose = () => setShow(false);
 
@@ -79,7 +79,7 @@ function NavBarButtons({ setShow, show, currLocation, btnVertSpace, vertOrNot })
                 <div>
                     <NavLink to="/" >
                         <Button className=
-                            {currLocation.pathname == "/" ? btnVertSpace + " btn mx-2 " + actvStyles : btnVertSpace + " btn mx-2 " + btnStyles}>
+                            {currLocation.pathname == "/" ? btnVertSpace + actvStyles : btnVertSpace + btnStyles}>
                             Tickets</Button>
                     </NavLink>
                 </div>
@@ -87,7 +87,7 @@ function NavBarButtons({ setShow, show, currLocation, btnVertSpace, vertOrNot })
                     {admin ?
                         <NavLink to="/admin">
                             <Button className=
-                                {currLocation.pathname == "/admin" ? btnVertSpace + " btn mx-2 " + actvStyles : btnVertSpace + " btn mx-2 " + btnStyles}>
+                                {currLocation.pathname == "/admin" ? btnVertSpace + actvStyles : btnVertSpace + btnStyles}>
                                 Admin Page</Button>
                         </NavLink>
                         : null
@@ -97,7 +97,7 @@ function NavBarButtons({ setShow, show, currLocation, btnVertSpace, vertOrNot })
                     {admin ?
                         <NavLink to="/settings" >
                             <Button className=
-                                {currLocation.pathname == "/settings" ? btnVertSpace + " btn mx-2 " + actvStyles : btnVertSpace + " btn mx-2 " + btnStyles}>
+                                {currLocation.pathname == "/settings" ? btnVertSpace + actvStyles : btnVertSpace + btnStyles}>
                                 Settings</Button>
                         </NavLink>
                         : null
