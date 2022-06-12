@@ -188,8 +188,10 @@ input[type=radio] {
 
 
 .bootstrapOverride .makeTicket:hover,
-.bootstrapOverride .adminButton:hover {
+.bootstrapOverride .adminButton:hover,
+.bootstrapOverride .adminButton:focus {
     background-color: transparent;
+    box-shadow: none;
     text-decoration: underline;
     color: rgb(252, 120, 54);
 }
