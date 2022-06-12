@@ -90,9 +90,12 @@ function TicketForm(props) {
     async function submitTicket(SubmitEvent) {
         SubmitEvent.preventDefault();
 
+        /*gather values from dynamicSources*/
+        const dynamicSourceVals = getDataSourceValues();
+
         const ticketTitle = inputTitle.current.value;
         const ticketType = typeVal;
-        const ticketDesc = inputDesc.current.value;
+        let ticketDesc = inputDesc.current.value;
         const tickDate = inputDate.current.value;
         const tickPriority = priorityVal;
         const tickAttachments = uploadVal;
@@ -110,6 +113,7 @@ function TicketForm(props) {
 
         /*create ticket block*/
         if (!editTicket) {
+            ticketDesc = dynamicSourceVals + "\nTICKET CREATOR INFO:\n" + ticketDesc;
             /*create new devops ticket*/
             const devOpsTickData = {
                 "fields": {
@@ -141,28 +145,22 @@ function TicketForm(props) {
             if (priorityVal !== null) {
                 ticketUpdates["Microsoft.VSTS.Common.Priority"] = priorityVal;
             }
-
             if (stateVal !== null && stateVal !== props.ticketInfo.fields["System.State"]) {
                 ticketUpdates["System.State"] = stateVal;
             }
-
             if (typeVal !== null) {
                 ticketUpdates["System.WorkItemType"] = typeVal;
             }
-
             if (inputDate.current.value !== props.ticketInfo.fields["Microsoft.VSTS.Scheduling.DueDate"]) {
                 ticketUpdates["Microsoft.VSTS.Scheduling.DueDate"] = inputDate.current.value;
             }
-
             if (assignedPerson !== undefined && assignedPerson !== "" && assignedPerson !== props.ticketInfo.fields["System.AssignedTo"]) {
                 ticketUpdates["System.AssignedTo"] = assignedPerson;
             }
-
             if (mentionChoices.length > 0) {
                 console.log(allMentions);
                 ticketUpdates["Microsoft.VSTS.CMMI.Comments"] = allMentions;
             }
-
             const updateDevopsTickets = { "fields": ticketUpdates };
             const updateTicket = await azureConnection.updateWorkItem(prjID, props.ticketInfo.id, updateDevopsTickets, "fields");
             console.log(updateTicket);
@@ -283,25 +281,28 @@ function TicketForm(props) {
         setUploadVal(thisFile);
     }
 
+    /*work item icons for ticket creation/edit view*/
     function returnWorkItemIcon(iconName) {
         const thisIcon = icons.find(icon => icon.id === iconName);
         return(<img src={thisIcon.url} alt={thisIcon.id + " work item icon"} id={thisIcon.id} className={"iconsize"} />);
     }
 
+    /*collect info from  dynamic render JSON conditionals on submit.*/
     function getDataSourceValues() {
         let buildReturn = "";
         const returnValues = document.getElementsByClassName("dataSourceValues");
         for (let i = 0; i < returnValues.length; i++) {
-            // console.log(returnValues[i].outerHTML);
+            buildReturn += "QUESTIONNAIRE INFO: \n";
             const thisArray = returnValues[i].outerHTML.split("<");
-            // console.log(thisArray);
             for (let j = 0; j < thisArray.length; j++) {
                 if(thisArray[j].startsWith("h5") || thisArray[j].startsWith("h6")) {
                     buildReturn += thisArray[j].substring(thisArray[j].indexOf(">") + 1) + "\n";
+                } else if (thisArray[j].startsWith("input aria") && thisArray[j].includes("value=\"checked\"")) {
+                    buildReturn += "ANSWER: " + thisArray[j].substring(thisArray[j].indexOf("aria-valuetext=\"") + 16, thisArray[j].indexOf("\" type")) + "\n";
                 }
             }
-            console.log(buildReturn);
         }
+        return buildReturn;
     }
 
     return (

@@ -14,13 +14,44 @@ import ConditionalForms from "./ConditionalForms";
 * */
 function ConditionalAnswers({ index, jsonObj, min, max }) {
 
+    /*conditional object  updated on render*/
     const [condObject, setCondObject] = useState(null);
+    /*input values with className of optionsSelects for value changes and return info*/
+    const [inputVals, setInputVals] = useState(null);
 
+    /*the className + index should allow specificity for changing required in inputValChange*/
     useEffect(() => {
-        console.log("min: " + min);
-        console.log("max: " + max);
+        setInputVals(document.getElementsByClassName("optionSelects"+ index));
         setCondObject(jsonObj);
     }, []);
+
+    /*used to give a text flag in inputs for reading data from the conditional forms on submission of ticket*/
+    /*also used to remove required from all of these checkBoxes when we find at least one checked */
+    function inputValChange() {
+        /*swap this to false if any checks found*/
+        console.log(inputVals);
+        let startBool = false;
+        for (let i = 0; i < inputVals.length; i++) {
+            if(inputVals[i].children[0].checked) {
+                startBool = true;
+                inputVals[i].children[0].value = "checked";
+            } else {
+                inputVals[i].children[0].value = " ";
+            }
+        }
+        if(startBool) {
+            for (let j = 0; j < inputVals.length; j++) {
+                inputVals[j].children[0].required = false;
+            }
+        }
+    }
+
+    /*dynamically putting required on all checkboxes for html validation on submit*/
+    /*this runs on change event and verifies that at least one choice is checked. if it's not, leave required=true, else if one found, uncheck all*/
+    function requiredOrNot() {
+        /*swap this to false if any checks found*/
+        const startBool = true;
+    }
 
     /*TODO: make this page generate check boxes or radio based on single or multi choice, utilizing min and max to find a number*/
     return (
@@ -33,8 +64,8 @@ function ConditionalAnswers({ index, jsonObj, min, max }) {
                                 {/*htmlfor and name need to be unique between iterations of condforms and the same in the same iteration*/}
                                 <Form.Label htmlFor={max === 1 ? index+"enum" : index+"enum"+thisIndex} className={"ms-4 me-2"} aria-valuetext={thisEnum}>
                                     {thisEnum}
-                                    <Form.Check aria-required={true} required className={"ms-2 optionSelects"} inline name={ max === 1 ? index+"enum" : index+"enum"+thisIndex}
-                                        type={max === 1 ? "radio" : "checkbox"} aria-valuetext={thisEnum} value={thisEnum} />
+                                    <Form.Check required={true} className={"ms-2 optionSelects"+ index} inline name={ max === 1 ? index+"enum" : index+"enum"+thisIndex}
+                                        type={max === 1 ? "radio" : "checkbox"} aria-valuetext={thisEnum} onChange={inputValChange} value={" "} />
                                 </Form.Label>
                             </div>
                         ))}
