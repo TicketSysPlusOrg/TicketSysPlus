@@ -7,17 +7,15 @@ import ConditionalSelect from "./ConditionalSelect";
 import ConditionalAnswers from "./ConditionalAnswers";
 
 /*
- * INDEX: the key from the ticketForm array that called conditionalForms component. use it to distinguish conditionalForms iterations and to distinguish list choices
+ * INDEX: key from the ticketForm array that called conditionalForms component. use to distinguish conditionalForms iterations/to distinguish list choices
  * JSONOBJ: the object to be sent in on conditional renders. use it to map out the 'layer' of the json file that we're at.
- * KEY: this could be used to pass down a value gotten from "required" key in object layer. may need to use to iterate deeper.
  * MIN: minimum items from JSON
  * MAX: maximum items from JSON
  * (min and max are checked to see if select on or multi select)
  * */
-function ConditionalForms({ index, jsonObj, key, min, max }) {
+function ConditionalForms({ index, jsonObj, min, max }) {
     /*TODO: this is the current dummy json file. need to pull the active JSON from database*/
     const conJSON = ConditionalExample;
-    const [renderCondObj, setRenderCondObj] = useState(null);
 
     /*list of words to scan JSON file for. maybe this should be stored in MongoDB and be mutable by admin?*/
     const keywordList = ["type", "properties", "detail", "choices", "title", "description", "type", "items", "anyOf", "required",

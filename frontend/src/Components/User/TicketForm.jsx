@@ -289,9 +289,18 @@ function TicketForm(props) {
     }
 
     function getDataSourceValues() {
+        let buildReturn = "";
         const returnValues = document.getElementsByClassName("dataSourceValues");
         for (let i = 0; i < returnValues.length; i++) {
-            console.log(returnValues[i].textContent);
+            // console.log(returnValues[i].outerHTML);
+            const thisArray = returnValues[i].outerHTML.split("<");
+            // console.log(thisArray);
+            for (let j = 0; j < thisArray.length; j++) {
+                if(thisArray[j].startsWith("h5") || thisArray[j].startsWith("h6")) {
+                    buildReturn += thisArray[j].substring(thisArray[j].indexOf(">") + 1) + "\n";
+                }
+            }
+            console.log(buildReturn);
         }
     }
 

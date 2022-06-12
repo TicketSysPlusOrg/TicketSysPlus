@@ -4,12 +4,12 @@ import PropTypes from "prop-types";
 import ConditionalForms from "./ConditionalForms";
 
 /*
-* arrayWord: oneOf, anyOf, allOf
-* index:
-* jsonObj:
-* min: minimum number needed to be selected
-* max: maximum number to be selected
-*
+ * ARRAYWORD: oneOf, anyOf, allOf
+ * INDEX: key from the ticketForm array that called conditionalForms component. use to distinguish conditionalForms iterations/to distinguish list choices
+ * JSONOBJ: the object to be sent in on conditional renders. use it to map out the 'layer' of the json file that we're at.
+ * MIN: minimum items from JSON
+ * MAX: maximum items from JSON
+ *
 * */
 function ConditionalSelect({ index, jsonObj, arrayWord, min, max }) {
     /*renderCondObj is used for rendering list content as well as triggering re-renders based on select choices*/
