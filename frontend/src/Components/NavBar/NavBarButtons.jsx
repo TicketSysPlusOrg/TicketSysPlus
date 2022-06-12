@@ -14,8 +14,8 @@ import TicketForm from "../User/TicketForm";
 
 
 function NavBarButtons({ setShow, show, currLocation, btnVertSpace, vertOrNot }) {
-    const [btnStyles, setBtnStyles] = useState("adminButton btn mx-2");
-    const [actvStyles, setActvStyles] = useState("makeTicket btn mx-2");
+    const [btnStyles] = useState("adminButton btn mx-2");
+    const [actvStyles] = useState("makeTicket btn mx-2");
     const handleShow = () => setShow(true);
     const handleClose = () => setShow(false);
 
