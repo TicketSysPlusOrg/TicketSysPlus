@@ -27,7 +27,7 @@ function ConditionalSelect({ index, jsonObj, arrayWord, min, max }) {
         <>
             {condObject !== null ?
                 <Container key={renderCondObj}>
-                    <Form.Select aria-required={true} required defaultValue={renderCondObj ? renderCondObj : "selectCheck"} onChange={e => {setRenderCondObj(e.currentTarget.value); console.log(e.currentTarget.value);}}>
+                    <Form.Select aria-required={true} required defaultValue={renderCondObj ? renderCondObj : "selectCheck"} onChange={e => {setRenderCondObj(e.currentTarget.value); }}>
                         {condObject.get(arrayWord).map((thisOption, thisIndex) => (
                             (thisIndex === 0 ?
                                 <>

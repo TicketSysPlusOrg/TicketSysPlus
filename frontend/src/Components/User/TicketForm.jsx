@@ -10,6 +10,8 @@ import ConditionalForms from "./ConditionalForms";
 import AutoCompleteNames from "./AutoCompleteNames";
 import DeleteButton from "./DeleteButton";
 
+import { backendApi } from "../../index";
+
 function TicketForm(props) {
 
     /*show and close vars for modal*/
@@ -70,20 +72,29 @@ function TicketForm(props) {
     /*ticket states*/
     const [tickStates, setTickStates] = useState(null);
 
+    /*conditional JSON from DB*/
+    const [currentJSON, setCurrentJSON] = useState(null);
+
     useEffect(() => {
         //TODO: admin control of selected state
         /*get all available ticket states*/
         (async () => {
             /*currently hardcoded for particular inherited process with custom states*/
             const getProcesses = await azureConnection.getProcessesList();
-            /*console.log(getProcesses);*/
 
             const getTickTypes = await azureConnection.getWorkItemTypes(getProcesses.value[4].id);
-            /*console.log(getTickTypes);*/
-
             const allTickStates = await azureConnection.getWorkItemStates(getProcesses.value[4].id, getTickTypes.value[0].id);
             setTickStates(allTickStates);
+
+            /*get latest JSON form for conditional renders*/
+            await backendApi.get("jsons")
+                .then((res) => { setCurrentJSON(JSON.parse(res.data[0].body)); })
+                .catch((err) => {
+                    console.error(err);
+                });
         })();
+
+
     }, []);
 
     /*new ticket/edit ticket submission block*/
@@ -91,7 +102,7 @@ function TicketForm(props) {
         SubmitEvent.preventDefault();
 
         /*gather values from dynamicSources*/
-        const dynamicSourceVals = getDataSourceValues();
+        const dynamicSourceVals = currentDataSourceVals;
 
         const ticketTitle = inputTitle.current.value;
         const ticketType = typeVal;
@@ -113,7 +124,9 @@ function TicketForm(props) {
 
         /*create ticket block*/
         if (!editTicket) {
-            ticketDesc = dynamicSourceVals + "\nTICKET CREATOR INFO:\n" + ticketDesc;
+
+            ticketDesc = dynamicSourceVals + "<p><strong>TICKET CREATOR INFO:</strong></p><p>" + ticketDesc + "</p>";
+
             /*create new devops ticket*/
             const devOpsTickData = {
                 "fields": {
@@ -173,7 +186,6 @@ function TicketForm(props) {
 
         for (let i = 0; i < tickAttachmentsArr.length; i++) {
             const createAttachment = await azureConnection.createWorkItemAttachment(uploadPrjId, tickAttachmentsArr[i]);
-            console.log(createAttachment);
 
             const ticketAttachment =
                 {
@@ -186,10 +198,8 @@ function TicketForm(props) {
                         }
                     }]
                 };
-            console.log(ticketAttachment);
 
             const uploadAttachmentToWI = await azureConnection.updateWorkItem(uploadPrjId, uploadWIId, ticketAttachment, "relations");
-            console.log(uploadAttachmentToWI);
         }
         setReadyToClose("ready");
     }
@@ -287,22 +297,24 @@ function TicketForm(props) {
         return(<img src={thisIcon.url} alt={thisIcon.id + " work item icon"} id={thisIcon.id} className={"iconsize"} />);
     }
 
+    const [currentDataSourceVals, setCurrentDataSourceVals] = useState();
+
     /*collect info from  dynamic render JSON conditionals on submit.*/
     function getDataSourceValues() {
-        let buildReturn = "";
+        let buildHTMLReturn = "";
         const returnValues = document.getElementsByClassName("dataSourceValues");
         for (let i = 0; i < returnValues.length; i++) {
-            buildReturn += "QUESTIONNAIRE INFO: \n";
+            buildHTMLReturn += "<p><strong>QUESTIONNAIRE INFO:</strong></p>";
             const thisArray = returnValues[i].outerHTML.split("<");
             for (let j = 0; j < thisArray.length; j++) {
                 if(thisArray[j].startsWith("h5") || thisArray[j].startsWith("h6")) {
-                    buildReturn += thisArray[j].substring(thisArray[j].indexOf(">") + 1) + "\n";
-                } else if (thisArray[j].startsWith("input aria") && thisArray[j].includes("value=\"checked\"")) {
-                    buildReturn += "ANSWER: " + thisArray[j].substring(thisArray[j].indexOf("aria-valuetext=\"") + 16, thisArray[j].indexOf("\" type")) + "\n";
+                    buildHTMLReturn += "<p>" + (thisArray[j].substring(thisArray[j].indexOf(">") + 1)) + "</p>";
+                } else if (thisArray[j].startsWith("input ") && thisArray[j].includes("value=\"checked\"")) {
+                    buildHTMLReturn += "<p>ANSWER: " +((thisArray[j].substring(thisArray[j].indexOf("aria-valuetext=\"") + 16, thisArray[j].indexOf("\" type")))) + "</p>";
                 }
             }
         }
-        return buildReturn;
+        setCurrentDataSourceVals(buildHTMLReturn);
     }
 
     return (
@@ -515,7 +527,9 @@ function TicketForm(props) {
                                 {anotherDataSource.map((thisSource, index) => (
                                     <div key={index} className={"dataSourceValues"} onChange={getDataSourceValues}>
                                         <Container key={index}>
-                                            <ConditionalForms index={index} min={0} max={0}/>
+                                            {currentJSON ?
+                                                <ConditionalForms jsonObj={currentJSON} index={index} min={0} max={0}/>
+                                                : <p>Loading conditional forms...</p> }
                                         </Container>
                                     </div>
                                 ))}

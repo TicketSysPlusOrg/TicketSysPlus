@@ -14,12 +14,8 @@ import ConditionalAnswers from "./ConditionalAnswers";
  * (min and max are checked to see if select on or multi select)
  * */
 function ConditionalForms({ index, jsonObj, min, max }) {
-    /*TODO: this is the current dummy json file. need to pull the active JSON from database*/
-    const conJSON = ConditionalExample;
-
-    /*list of words to scan JSON file for. maybe this should be stored in MongoDB and be mutable by admin?*/
-    const keywordList = ["type", "properties", "detail", "choices", "title", "description", "type", "items", "anyOf", "required",
-        "uniqueItems", "minItems", "enum"];
+    /* this is the current dummy json file. leaving for testing purposes.*/
+    //const conJSON = ConditionalExample;
 
     /*
     * each time ConditionalForms is rendered, map the new layer of key/val pairs
@@ -34,19 +30,17 @@ function ConditionalForms({ index, jsonObj, min, max }) {
     /*if jsonObj is undefined, use json import to kick off conditionals.
         otherwise using props sent by component self calls/conditional select calls.*/
     function checkJSON() {
-        console.log("min: " + min);
-        console.log("max: " + max);
         if(jsonObj !== undefined) {
             setCondObject(new Map(Object.entries(jsonObj)));
         } else {
-            setCondObject(new Map(Object.entries(conJSON)));
+            console.log("There's a database JSON error!");
         }
     }
 
-    /*console log to see whenever renderCondObj is changed*/
-    useEffect(() => {
-        console.log(condObject);
-    }, [condObject]);
+    /* console log to see whenever renderCondObj is changed. helpful for troubleshooting. */
+    // useEffect(() => {
+    //     console.log(condObject);
+    // }, [condObject]);
 
     {/*
     *
@@ -61,8 +55,7 @@ function ConditionalForms({ index, jsonObj, min, max }) {
     *           IF ARRAY OF STRING/NUMBER/MAYBE BOOLEAN, WE'VE REACHED AN END POINT. REQUIRE A SELECTION (OR MULTI) AND RETURN ALL INFO ON SUBMIT.
     * ***** NEXT: NEED TO SETUP MULTI/SINGLE SELECT LOGIC AS WELL AS HANDLING DIFFERENT TYPES OF ENDPOINT SELECTIONS (ENUM, STRING, NUMBER, BOOLEAN. *****
     * ***** AFTER THAT: CONSOLIDATE CODE. *****
-    */
-    }
+    */}
 
     return (
         <>
