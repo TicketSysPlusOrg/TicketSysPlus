@@ -239,8 +239,6 @@ function TicketForm(props) {
                 divDesc.current.innerHTML += parseHtml(divDescObjects.props.children);
             }
 
-            /*comments*/
-
             /*priority*/
             document.getElementById("tickPriority" + props.ticketInfo.fields["Microsoft.VSTS.Common.Priority"]).checked = true;
 
@@ -382,7 +380,6 @@ function TicketForm(props) {
                                 <Form.Group className={"col s12"}>
 
                                     <Form.Label className={"d-block fw-bold"}>TICKET STATE</Form.Label>
-
                                     <Form.Select id={"StateSelect"} ref={inputState} onChange={e => {
                                         changeStateVal(e.currentTarget.value);
                                         console.log(e.currentTarget.value);
@@ -418,8 +415,8 @@ function TicketForm(props) {
                             <Form.Group className={"col s12"}>
                                 <Form.Label htmlFor={"tickAssigned"}
                                     className={"fw-bold d-inline-block"}>{editTicket === true ? "ASSIGNED TO" : "ASSIGN TO"}</Form.Label>
-                                <AutoCompleteNames id={"tickAssigned"} setMentionChoices={setMentionChoices}
-                                    setAssignee={setAssignee} singleOrMultiple={""}/>
+                                <AutoCompleteNames index={1} id={"tickAssigned"} setMentionChoices={setMentionChoices}
+                                    setAssignee={setAssignee} />
                             </Form.Group>
                         </Row>
 
@@ -432,7 +429,7 @@ function TicketForm(props) {
                             </Form.Group>
                         </Row>
 
-                        {/*Priority*/}
+                        {/*PRIORITY*/}
                         <Row className={"mb-2"}>
                             <Form.Group className={"col s12"}>
                                 <Form.Label className={"fw-bold"}>PRIORITY</Form.Label>
@@ -469,8 +466,8 @@ function TicketForm(props) {
                         <Row className={"mb-2"}>
                             <Form.Group className={"col s12"}>
                                 <Form.Label htmlFor={"tickMentions"} className={"fw-bold"}>MENTIONS</Form.Label>
-                                <AutoCompleteNames id={"tickMentions"} setMentionChoices={setMentionChoices}
-                                    setAssignee={setAssignee} singleOrMultiple={"multiple"}/>
+                                <AutoCompleteNames index={2} id={"tickMentions"} setMentionChoices={setMentionChoices}
+                                    setAssignee={setAssignee} />
                             </Form.Group>
                         </Row>
 
@@ -492,14 +489,20 @@ function TicketForm(props) {
                             </Form.Group>
                         </Row>
 
+                        {/*COMMENTS*/}
+                        {/*{editTicket === true ?*/}
+                        {/*    */}
+
+                        {/*    : null}*/}
+
                         {/*ATTACHMENTS*/}
-                        {props.editTicket ?
+                        {!props.editTicket ?
                             <Row className={"mb-3"}>
                                 <h6 className={"fw-bold"}>CURRENT ATTACHMENTS</h6>
                                 {props.ticketInfo.relations ?
                                     props.ticketInfo.relations.map((thisAttachment, index) => {
                                         return(
-                                            <Col xs={3} key={index} className={"mx-2"}>
+                                            <Col xs={3} key={index} className={"my-2"}>
                                                 <Card className={"shadow-sm"}>
                                                     <Card.Body>
                                                         <Card.Title title={thisAttachment.attributes.name} className={"text-truncate"}>{thisAttachment.attributes.name}</Card.Title>
@@ -514,7 +517,7 @@ function TicketForm(props) {
 
                         <Row className={"mb-3"}>
                             <Form.Group className={"col s12 d-block"}>
-                                <Form.Label htmlFor={"tickAttachments"} className={"fw-bold"}>ATTACHMENTS</Form.Label>
+                                <Form.Label htmlFor={"tickAttachments"} className={"fw-bold"}>{props.editTicket ? "ADD " : ""}ATTACHMENTS</Form.Label>
                                 <Form.Control multiple id={"tickAttachments"} name={"tickAttachments"}
                                     ref={inputAttachment} onChange={e => uploadAttach(e.target.files)}
                                     type={"file"}/>
