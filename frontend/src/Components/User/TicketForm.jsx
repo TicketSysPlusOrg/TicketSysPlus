@@ -496,7 +496,7 @@ function TicketForm(props) {
                         {/*    : null}*/}
 
                         {/*ATTACHMENTS*/}
-                        {!props.editTicket ?
+                        {props.editTicket ?
                             <Row className={"mb-3"}>
                                 <h6 className={"fw-bold"}>CURRENT ATTACHMENTS</h6>
                                 {props.ticketInfo.relations ?
