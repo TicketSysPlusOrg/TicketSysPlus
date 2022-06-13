@@ -14,9 +14,9 @@ input[type=radio] {
     transform: scale(1.5);
 }
 
+/*adjust color of Motorq logo here*/
 #motorqLogo {
-    max-width: 55%;
-    min-width: 40%;
+    filter: invert(58%) sepia(85%) saturate(2242%) hue-rotate(337deg) brightness(101%) contrast(98%);
 }
 
 #groceries {
