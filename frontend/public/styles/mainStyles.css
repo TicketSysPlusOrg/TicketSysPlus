@@ -79,6 +79,11 @@ input[type=radio] {
     display: none;
 }
 
+.bootstrapOverride .inactiveForms {
+    background-color: #f1f0f0;
+    font-weight: 500;
+}
+
 .sortTicket {
     color: rgb(5,97,252);
 }

@@ -1,6 +1,6 @@
 // specific ticket we want to examine
 import React, { useEffect, useState } from "react";
-import { Button, Col, Container, Form, Row, Card } from "react-bootstrap";
+import {Button, Col, Container, Form, Row, Card, FormText} from "react-bootstrap";
 import PropTypes from "prop-types";
 
 import { azureConnection } from "../../index";
@@ -62,26 +62,55 @@ function Ticket({ ticketData, clickClose, setShow }) {
                                     <hr className={"mt-1"}/>
                                 </Row>
 
+                                {/*assigned to*/}
                                 <Row className={"mb-4"}>
-                                    <h5>ASSIGNED TO: {allTicketInfo.fields["System.AssignedTo"] ? allTicketInfo.fields["System.AssignedTo"] : "No assignment"}</h5>
+                                    <h5>Assigned To</h5>
+                                    <Container>
+                                        <div className={"form-control inactiveForms"}>{allTicketInfo.fields["System.AssignedTo"] ? allTicketInfo.fields["System.AssignedTo"] : "No assignment"}</div>
+                                    </Container>
+                                </Row>
+
+                                {/*ticket created by*/}
+                                <Row className={"my-4"}>
+                                    <h5>Created By</h5>
+                                    <Container>
+                                        <div className={"form-control inactiveForms"}>{allTicketInfo.fields["System.CreatedBy"]}</div>
+                                    </Container>
+                                </Row>
+
+                                {/*ticket created date*/}
+                                <Row className={"my-4"}>
+                                    <h5>Created Date</h5>
+                                    <Container>
+                                        <div className={"form-control inactiveForms"}>{allTicketInfo.fields["System.CreatedDate"]}</div>
+                                    </Container>
                                 </Row>
 
                                 {/*work type, state, priority*/}
                                 <Row className={"mb-4"}>
-                                    <h5>TICKET TYPE: {allTicketInfo.fields["System.WorkItemType"]}</h5>
+                                    <h5>Ticket Type</h5>
+                                    <Container>
+                                        <div className={"form-control inactiveForms"}>{allTicketInfo.fields["System.WorkItemType"]}</div>
+                                    </Container>
                                 </Row>
                                 <Row className={"mb-4"}>
-                                    <h5>TICKET STATE: {allTicketInfo.fields["System.State"]}</h5>
+                                    <h5>Ticket State</h5>
+                                    <Container>
+                                        <div className={"form-control inactiveForms"}>{allTicketInfo.fields["System.State"]}</div>
+                                    </Container>
                                 </Row>
                                 <Row className={"mb-4"}>
-                                    <h5>PRIORITY: {allTicketInfo.fields["Microsoft.VSTS.Common.Priority"]}</h5>
+                                    <h5>Priority</h5>
+                                    <Container>
+                                        <div className={"form-control inactiveForms"}>{allTicketInfo.fields["Microsoft.VSTS.Common.Priority"]}</div>
+                                    </Container>
                                 </Row>
 
                                 {/*ticket description*/}
                                 <Row className={"my-4"}>
                                     <Col>
-                                        <h5>TICKET DESCRIPTION</h5>
-                                        <article className={"border border-1 p-2 articleStyle"}>
+                                        <h5>Ticket Description</h5>
+                                        <article className={"border border-1 p-2 articleStyle inactiveForms"}>
                                             {parseHtml(allTicketInfo.fields["System.Description"])}
                                         </article>
                                     </Col>
@@ -90,26 +119,16 @@ function Ticket({ ticketData, clickClose, setShow }) {
                                 {/*ticket mentions section*/}
                                 <Row className={"my-4"}>
                                     <Col>
-                                        <h5>TICKET COMMENTS</h5>
-                                        <article className={"border border-1 p-2 articleStyle"}>
+                                        <h5>Ticket Mentions</h5>
+                                        <article className={"border border-1 p-2 articleStyle inactiveForms"}>
                                             {parseHtml(allTicketInfo.fields["Microsoft.VSTS.CMMI.Comments"])}
                                         </article>
                                     </Col>
                                 </Row>
 
-                                {/*ticket created date*/}
-                                <Row className={"my-4"}>
-                                    <h5>CREATED DATE: {allTicketInfo.fields["System.CreatedDate"]}</h5>
-                                </Row>
-
-                                {/*ticket created by*/}
-                                <Row className={"my-4"}>
-                                    <h5>CREATED BY: {allTicketInfo.fields["System.CreatedBy"]}</h5>
-                                </Row>
-
                                 {/*ticket attachments*/}
                                 <Row className="mb-4">
-                                    <h5>ATTACHMENTS</h5>
+                                    <h5>Attachments</h5>
                                     {allTicketInfo.relations ?
                                         allTicketInfo.relations.map((thisAttachment, index) => {
                                             return(
