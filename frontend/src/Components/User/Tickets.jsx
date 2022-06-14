@@ -30,7 +30,11 @@ function Tickets({ projects, rerender }) {
     /*ticket info*/
     const [ticketInfo, setTicketInfo] = useState([]);
 
+    /*blocking id corresponds with ticket whose blocking state has been changed by onclick event*/
     const [blockingId, setLoadingBlockId] = useState(null);
+
+    /*getting org/project info for opening ticket in DevOps*/
+    const [currentOrgInfo, setCurrentOrgInfo] = useState(null);
 
     /*FOR PAVEL*/
     const [defaultPrj, setDefaultPrj] = useState(null);
@@ -66,6 +70,8 @@ function Tickets({ projects, rerender }) {
         console.log(getProj);
         setActiveProj(getProj.name);
         setActivePrjId(getProj.id);
+
+        setCurrentOrgInfo(azureConnection.url);
 
         const allWorkItems = await azureConnection.getPrjWorkItems(getProj.name, getProj.defaultTeam.id);
 
@@ -219,11 +225,10 @@ function Tickets({ projects, rerender }) {
                                                 { blockingId !== null && devTix.id === blockingId ? <CircularProgress size={16} /> : <BlockIcon />}
                                             </IconButton>
                                         </Tooltip>
-                                        {/*TODO: this is hard coded to our org. fix that.*/}
                                         <Tooltip title={"View in DevOps"}>
                                             <IconButton
                                                 color={"primary"}
-                                                href={`https://dev.azure.com/KrokhalevPavel/MotorQ%20Project/_workitems/edit/${devTix.id}`}
+                                                href={`${currentOrgInfo}/${devTix.fields["System.AreaPath"]}/_workitems/edit/${devTix.id}`}
                                                 rel={"noreferrer"}
                                                 target={"_blank"}
                                                 className={"userTicketBtns"}
