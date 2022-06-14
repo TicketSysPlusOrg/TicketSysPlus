@@ -5,13 +5,12 @@ import PropTypes from "prop-types";
 
 import { azureConnection } from "../../index";
 import { parseHtml } from "../../utils/Util";
+import { backendApi } from "../../index";
 
 import ConditionalForms from "./ConditionalForms";
 import AutoCompleteNames from "./AutoCompleteNames";
 import DeleteButton from "./DeleteButton";
 
-import { backendApi } from "../../index";
-import Ticket from "./Ticket";
 
 function TicketForm(props) {
 

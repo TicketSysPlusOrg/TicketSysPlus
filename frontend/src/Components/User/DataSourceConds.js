@@ -100,4 +100,3 @@ export const ConditionalExample = {
     },
     "required": [ "grocery_info" ]
 };
-

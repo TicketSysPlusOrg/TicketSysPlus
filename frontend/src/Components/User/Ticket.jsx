@@ -1,6 +1,6 @@
 // specific ticket we want to examine
 import React, { useEffect, useState } from "react";
-import {Button, Col, Container, Form, Row, Card, FormText} from "react-bootstrap";
+import { Button, Col, Container, Form, Row, Card, FormText } from "react-bootstrap";
 import PropTypes from "prop-types";
 
 import { azureConnection } from "../../index";
