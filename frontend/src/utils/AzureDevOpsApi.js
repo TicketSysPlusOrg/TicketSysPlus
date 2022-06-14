@@ -163,7 +163,7 @@ export class AzureDevOpsApi {
             {
                 "text": data
             },
-            { params: { "api-version": "7.1-preview.3" }}).then(response => {
+            { params: { "api-version": "7.1-preview.3" } }).then(response => {
             return response.data;
         }).catch(error => error);
     }
