@@ -11,6 +11,7 @@ import AutoCompleteNames from "./AutoCompleteNames";
 import DeleteButton from "./DeleteButton";
 
 import { backendApi } from "../../index";
+import Ticket from "./Ticket";
 
 function TicketForm(props) {
 
@@ -39,6 +40,9 @@ function TicketForm(props) {
         }
     }, [deleteTicket]);
 
+    /*trigger this to return to single ticket view from edit ticket mode*/
+    const [viewTicketMode, setViewTicketMode] = useState(false);
+
     /*initialize refs for input value gathering onsubmit*/
     let inputState = createRef();
     let inputTitle = createRef();
@@ -48,12 +52,10 @@ function TicketForm(props) {
     let inputPriority = createRef();
     let inputAttachment = createRef();
     let divDesc = createRef();
-    let assignedVal = createRef();
-    let mentionsVal = createRef();
+    let inputComment = createRef();
 
     /*prj ID state variable*/
     const [prjID, setprjID] = useState(null);
-
     /*work item icons*/
     const [icons, setIcons] = useState([]);
 
@@ -174,6 +176,15 @@ function TicketForm(props) {
                 console.log(allMentions);
                 ticketUpdates["Microsoft.VSTS.CMMI.Comments"] = allMentions;
             }
+
+            const tickComments = inputComment.current.value;
+
+            /*add new ticket comment*/
+            if(tickComments !== null) {
+                const addTicketComment = await azureConnection.addWorkItemComment(prjID, props.ticketInfo.id, tickComments);
+                console.log(addTicketComment);
+            }
+
             const updateDevopsTickets = { "fields": ticketUpdates };
             const updateTicket = await azureConnection.updateWorkItem(prjID, props.ticketInfo.id, updateDevopsTickets, "fields");
             console.log(updateTicket);
@@ -316,265 +327,279 @@ function TicketForm(props) {
 
     return (
         <>
-            <Row>
-                <Col>
-                    {/*TODO: fields for project/teams*/}
-                    {/*TODO: validation  for all fields*/}
-                    <Form className={"col s12"} onSubmit={submitTicket}>
+            {viewTicketMode === false ?
+                <Row>
+                    <Col>
+                        {/*TODO: fields for project/teams*/}
+                        {/*TODO: validation  for all fields*/}
+                        <Form className={"col s12"} onSubmit={submitTicket}>
 
-                        {/*EDIT TICKET HEADER AND DELETE BUTTON. AVAILABLE WHEN IN EDIT TICKET MODE.*/}
-                        {editTicket === true ?
-                            <Row className={"mb-2"}>
-                                <Col xs={10} className={"d-flex align-items-center"}>
-                                    <h4>EDITING TICKET</h4>
-                                </Col>
-                                <Col xs={1} className={"mb-2"}>
-                                    <DeleteButton setDeleteTicket={setDeleteTicket}/>
-                                </Col>
-                                <hr className={"mt-1"}/>
-                            </Row>
-                            : null}
+                            {/*EDIT TICKET HEADER AND DELETE BUTTON. AVAILABLE WHEN IN EDIT TICKET MODE.*/}
+                            {editTicket === true ?
+                                <Row className={"mb-2"}>
+                                    <Col xs={10} className={"d-flex align-items-center"}>
+                                        <h4>EDITING TICKET</h4>
+                                    </Col>
+                                    <Col xs={1} className={"mb-2"}>
+                                        <DeleteButton setDeleteTicket={setDeleteTicket}/>
+                                    </Col>
+                                    <hr className={"mt-1"}/>
+                                </Row>
+                                : null}
 
-                        {/*TITLE*/}
-                        <Row className={"mb-2"}>
-                            <Form.Group className={"col s12"}>
-                                <Form.Label htmlFor={"ticketTitle"} className={"fw-bold"}>Ticket Title</Form.Label>
-                                <Form.Control aria-required={true} required type={"text"} placeholder={"Enter title"} ref={inputTitle}/>
-                                <Form.Text id={"ticketTitle"} name={"ticketTitle"}/>
-                            </Form.Group>
-                        </Row>
-
-                        {/*TICKET TYPE*/}
-                        <Row className={"mb-2"}>
-                            <Form.Group className={"col s12"}>
-                                <Form.Label className={"d-block fw-bold"}>Ticket Type</Form.Label>
-                                <div className={"ms-4 me-2 d-inline"}>{icons.length !== 0 ? returnWorkItemIcon("icon_crown") : ""}</div>
-                                <Form.Label htmlFor={"tickEpic"}>
-                                    Epic<Form.Check aria-required={true} required className={"ms-3"} inline name={"tickType"} id={"tickEpic"}
-                                        ref={inputType} type={"radio"}
-                                        onChange={() => changeTypeVal("Epic")} value={"Epic"}
-                                        defaultChecked={null}/>
-                                </Form.Label>
-                                <div className={"ms-4 me-2 d-inline"}>{icons.length !== 0 ? returnWorkItemIcon("icon_clipboard_issue") : ""}</div>
-                                <Form.Label htmlFor={"tickIssue"}>
-                                    Issue<Form.Check className={"ms-3"} inline name={"tickType"} id={"tickIssue"}
-                                        ref={inputType} type={"radio"}
-                                        onChange={() => changeTypeVal("Issue")} value={"Issue"}
-                                        defaultChecked={null}/>
-                                </Form.Label>
-                                <div className={"ms-4 me-2 d-inline"}>{icons.length !== 0 ? returnWorkItemIcon("icon_check_box") : ""}</div>
-                                <Form.Label htmlFor={"tickTask"} >
-                                    Task<Form.Check className={"ms-3"} inline name={"tickType"} id={"tickTask"}
-                                        ref={inputType} type={"radio"}
-                                        onChange={() => changeTypeVal("Task")} value={"Task"}
-                                        defaultChecked={null}/>
-                                </Form.Label>
-                            </Form.Group>
-                        </Row>
-
-                        {/*TICKET STATE*/}
-                        {editTicket === true ?
-
+                            {/*TITLE*/}
                             <Row className={"mb-2"}>
                                 <Form.Group className={"col s12"}>
-
-                                    <Form.Label className={"d-block fw-bold"}>Ticket State</Form.Label>
-                                    <Form.Select id={"StateSelect"} ref={inputState} onChange={e => {
-                                        changeStateVal(e.currentTarget.value);
-                                        console.log(e.currentTarget.value);
-                                    }}>
-                                        <option value={"SELECTONE"}>select an option...</option>
-                                        <option value={"To Do"}>To Do</option>
-                                        {tickStates !== null ?
-                                            tickStates.value.map(function (thisState, index) {
-                                                return (
-                                                    <option key={index} id={thisState.name + "OPTION"}
-                                                        value={thisState.name}>{thisState.name}</option>);
-                                            })
-                                            : null}
-                                    </Form.Select>
-
+                                    <Form.Label htmlFor={"ticketTitle"} className={"fw-bold"}>Ticket Title</Form.Label>
+                                    <Form.Control aria-required={true} required type={"text"} placeholder={"Enter title"} ref={inputTitle}/>
+                                    <Form.Text id={"ticketTitle"} name={"ticketTitle"}/>
                                 </Form.Group>
                             </Row>
-                            : null}
 
-                        {/*CURRENT ASSIGNED TO*/}
-                        {editTicket ?
+                            {/*TICKET TYPE*/}
                             <Row className={"mb-2"}>
-                                <Col>
-                                    <label className={"fw-bold form-label"}>Current Assignee</label>
-                                    <div
-                                        className={"form-control "}>{assignedTo !== null ? assignedTo : "No assignee!"}</div>
-                                </Col>
+                                <Form.Group className={"col s12"}>
+                                    <Form.Label className={"d-block fw-bold"}>Ticket Type</Form.Label>
+                                    <div className={"ms-4 me-2 d-inline"}>{icons.length !== 0 ? returnWorkItemIcon("icon_crown") : ""}</div>
+                                    <Form.Label htmlFor={"tickEpic"}>
+                                        Epic<Form.Check aria-required={true} required className={"ms-3"} inline name={"tickType"} id={"tickEpic"}
+                                            ref={inputType} type={"radio"}
+                                            onChange={() => changeTypeVal("Epic")} value={"Epic"}
+                                            defaultChecked={null}/>
+                                    </Form.Label>
+                                    <div className={"ms-4 me-2 d-inline"}>{icons.length !== 0 ? returnWorkItemIcon("icon_clipboard_issue") : ""}</div>
+                                    <Form.Label htmlFor={"tickIssue"}>
+                                        Issue<Form.Check className={"ms-3"} inline name={"tickType"} id={"tickIssue"}
+                                            ref={inputType} type={"radio"}
+                                            onChange={() => changeTypeVal("Issue")} value={"Issue"}
+                                            defaultChecked={null}/>
+                                    </Form.Label>
+                                    <div className={"ms-4 me-2 d-inline"}>{icons.length !== 0 ? returnWorkItemIcon("icon_check_box") : ""}</div>
+                                    <Form.Label htmlFor={"tickTask"} >
+                                        Task<Form.Check className={"ms-3"} inline name={"tickType"} id={"tickTask"}
+                                            ref={inputType} type={"radio"}
+                                            onChange={() => changeTypeVal("Task")} value={"Task"}
+                                            defaultChecked={null}/>
+                                    </Form.Label>
+                                </Form.Group>
                             </Row>
-                            : null}
 
-                        {/*ASSIGNED TO*/}
-                        <Row className={"mb-2"}>
-                            <Form.Group className={"col s12"}>
-                                <Form.Label htmlFor={"tickAssigned"}
-                                    className={"fw-bold d-inline-block"}>{editTicket === true ? "ASSIGNED TO" : "ASSIGN TO"}</Form.Label>
-                                <AutoCompleteNames index={1} id={"tickAssigned"} setMentionChoices={setMentionChoices}
-                                    setAssignee={setAssignee} />
-                            </Form.Group>
-                        </Row>
-
-                        {/*DUE DATE*/}
-                        <Row className={"mb-2"}>
-                            <Form.Group className={"col s12"}>
-                                <Form.Label htmlFor={"tickDate"} className={"fw-bold d-inline-block"}>Due Date</Form.Label>
-                                <Form.Control aria-required={true} required id={"tickDate"} name={"tickDate"} ref={inputDate} type={"date"}/>
-                            </Form.Group>
-                        </Row>
-
-                        {/*PRIORITY*/}
-                        <Row className={"mb-2"}>
-                            <Form.Group className={"col s12"}>
-                                <Form.Label className={"fw-bold"}>Priority</Form.Label>
-                                <div className={"d-flex justify-content-start"}>
-                                    <Form.Label htmlFor={"tickPriority1"} className={"ms-4 me-2"}>
-                                        1 <Form.Check aria-required={true} required className={"ms-2"} inline name={"tickPriority"}
-                                            id={"tickPriority1"} ref={inputPriority} type={"radio"}
-                                            onChange={() => changePriorityVal(1)} value={1}
-                                            defaultChecked={null}/>
-                                    </Form.Label>
-                                    <Form.Label htmlFor={"tickPriority2"} className={"mx-2"}>
-                                        2 <Form.Check className={"ms-2"} inline name={"tickPriority"}
-                                            id={"tickPriority2"} ref={inputPriority} type={"radio"}
-                                            onChange={() => changePriorityVal(2)} value={2}
-                                            defaultChecked={null}/>
-                                    </Form.Label>
-                                    <Form.Label htmlFor={"tickPriority3"} className={"mx-2"}>
-                                        3 <Form.Check className={"ms-2"} inline name={"tickPriority"}
-                                            id={"tickPriority3"} ref={inputPriority} type={"radio"}
-                                            onChange={() => changePriorityVal(3)} value={3}
-                                            defaultChecked={false}/>
-                                    </Form.Label>
-                                    <Form.Label htmlFor={"tickPriority4"} className={"mx-2"}>
-                                        4 <Form.Check className={"ms-2"} inline name={"tickPriority"}
-                                            id={"tickPriority4"} ref={inputPriority} type={"radio"}
-                                            onChange={() => changePriorityVal(4)} value={4}
-                                            defaultChecked={null}/>
-                                    </Form.Label>
-                                </div>
-                            </Form.Group>
-                        </Row>
-
-                        {/*MENTIONS*/}
-                        <Row className={"mb-2"}>
-                            <Form.Group className={"col s12"}>
-                                <Form.Label htmlFor={"tickMentions"} className={"fw-bold"}>Mentions</Form.Label>
-                                <AutoCompleteNames index={2} id={"tickMentions"} setMentionChoices={setMentionChoices}
-                                    setAssignee={setAssignee} />
-                            </Form.Group>
-                        </Row>
-
-                        {/*DESCRIPTION*/}
-                        <Row className={"mb-2"}>
+                            {/*TICKET STATE*/}
                             {editTicket === true ?
-                                <>
-                                    <Container className={"mb-2"}>
-                                        <div className={"form-label fw-bold"}>Ticket Description</div>
-                                        <div id={"contentEditDiv "} ref={divDesc} className={"form-control bg-light"}></div>
-                                    </Container>
-                                </>
+
+                                <Row className={"mb-2"}>
+                                    <Form.Group className={"col s12"}>
+
+                                        <Form.Label className={"d-block fw-bold"}>Ticket State</Form.Label>
+                                        <Form.Select id={"StateSelect"} ref={inputState} onChange={e => {
+                                            changeStateVal(e.currentTarget.value);
+                                            console.log(e.currentTarget.value);
+                                        }}>
+                                            <option value={"SELECTONE"}>select an option...</option>
+                                            <option value={"To Do"}>To Do</option>
+                                            {tickStates !== null ?
+                                                tickStates.value.map(function (thisState, index) {
+                                                    return (
+                                                        <option key={index} id={thisState.name + "OPTION"}
+                                                            value={thisState.name}>{thisState.name}</option>);
+                                                })
+                                                : null}
+                                        </Form.Select>
+
+                                    </Form.Group>
+                                </Row>
                                 : null}
-                            <Form.Group className={editTicket === true ? "col s12 d-none" : "col s12"}>
-                                <Form.Label htmlFor={"ticketDesc"} className={"fw-bold"}>Ticket Description</Form.Label>
-                                <Form.Control as={"textarea"} id={"areaForm"} rows={"2"} type={"text"}
-                                    placeholder={"Enter description"} ref={inputDesc}/>
-                                <Form.Text id={"ticketDesc"} name={"ticketDesc"}/>
-                            </Form.Group>
-                        </Row>
 
-                        {/*COMMENTS*/}
-                        {/*{editTicket === true ?*/}
-                        {/*    */}
-
-                        {/*    : null}*/}
-
-                        {/*ATTACHMENTS*/}
-                        {props.editTicket ?
-                            <Row className={"mb-3"}>
-                                <h6 className={"fw-bold"}>Current Attachments</h6>
-                                {props.ticketInfo.relations ?
-                                    props.ticketInfo.relations.map((thisAttachment, index) => {
-                                        return(
-                                            <Col xs={3} key={index} className={"my-2"}>
-                                                <Card className={"shadow-sm"}>
-                                                    <Card.Body>
-                                                        <Card.Title title={thisAttachment.attributes.name} className={"text-truncate"}>{thisAttachment.attributes.name}</Card.Title>
-                                                        <br />
-                                                        <a className={"float-end"} href={thisAttachment.url + "?fileName=" + thisAttachment.attributes.name + "&content-disposition=attachment"} download>Download</a>
-                                                    </Card.Body>
-                                                </Card>
-                                            </Col>); } )
-                                    : <p>No current attachments.</p>}
-                            </Row>
-                            : null}
-
-                        <Row className={"mb-3"}>
-                            <Form.Group className={"col s12 d-block"}>
-                                <Form.Label htmlFor={"tickAttachments"} className={"fw-bold"}>{props.editTicket ? "Add " : ""}Attachments</Form.Label>
-                                <Form.Control multiple id={"tickAttachments"} name={"tickAttachments"}
-                                    ref={inputAttachment} onChange={e => uploadAttach(e.target.files)}
-                                    type={"file"}/>
-                            </Form.Group>
-                        </Row>
-
-                        {/*CONDITIONAL FORMS*/}
-                        {props.editTicket !== true ?
-                            <Row>
-                                {anotherDataSource.map((thisSource, index) => (
-                                    <div key={index} className={"dataSourceValues"} onChange={getDataSourceValues}>
-                                        <Container key={index}>
-                                            {currentJSON ?
-                                                <ConditionalForms jsonObj={currentJSON} index={index} min={0} max={0}/>
-                                                : <p>Loading conditional forms...</p> }
-                                        </Container>
-                                    </div>
-                                ))}
-                                <Row className={"justify-content-between"}>
-                                    <Col xs={6}>
-                                        {anotherDataSource.length !== 1 ?
-                                            <Button size={"sm"} onClick={lessDataSources} className={"mt-2 ms-3"}>
-                                                Remove Source
-                                            </Button>
-                                            : null}
-                                    </Col>
-                                    <Col xs={6}>
-                                        <Button size={"sm"} onClick={moreDataSources} className={"mt-2 float-end"}>
-                                            Add Another Source
-                                        </Button>
+                            {/*CURRENT ASSIGNED TO*/}
+                            {editTicket ?
+                                <Row className={"mb-2"}>
+                                    <Col>
+                                        <label className={"fw-bold form-label"}>Current Assignee</label>
+                                        <div
+                                            className={"form-control "}>{assignedTo !== null ? assignedTo : "No assignee!"}</div>
                                     </Col>
                                 </Row>
+                                : null}
 
+                            {/*ASSIGNED TO*/}
+                            <Row className={"mb-2"}>
+                                <Form.Group className={"col s12"}>
+                                    <Form.Label htmlFor={"tickAssigned"}
+                                        className={"fw-bold d-inline-block"}>{editTicket === true ? "ASSIGNED TO" : "ASSIGN TO"}</Form.Label>
+                                    <AutoCompleteNames index={1} id={"tickAssigned"} setMentionChoices={setMentionChoices}
+                                        setAssignee={setAssignee} />
+                                </Form.Group>
                             </Row>
-                            : null
-                        }
 
-                        {/*SUBMIT BUTTONS*/}
-                        {props.editTicket === true ?
-                            <Button type={"submit"} name={"action"} className={"float-end mt-2"}>
-                                UPDATE
-                            </Button>
-                            :
-                            <Button type={"submit"} name={"action"}
-                                className={"float-end mt-3"}>
-                                SUBMIT
-                            </Button>
-                        }
+                            {/*DUE DATE*/}
+                            <Row className={"mb-2"}>
+                                <Form.Group className={"col s12"}>
+                                    <Form.Label htmlFor={"tickDate"} className={"fw-bold d-inline-block"}>Due Date</Form.Label>
+                                    <Form.Control aria-required={true} required id={"tickDate"} name={"tickDate"} ref={inputDate} type={"date"}/>
+                                </Form.Group>
+                            </Row>
 
-                    </Form>
-                </Col>
+                            {/*PRIORITY*/}
+                            <Row className={"mb-2"}>
+                                <Form.Group className={"col s12"}>
+                                    <Form.Label className={"fw-bold"}>Priority</Form.Label>
+                                    <div className={"d-flex justify-content-start"}>
+                                        <Form.Label htmlFor={"tickPriority1"} className={"ms-4 me-2"}>
+                                            1 <Form.Check aria-required={true} required className={"ms-2"} inline name={"tickPriority"}
+                                                id={"tickPriority1"} ref={inputPriority} type={"radio"}
+                                                onChange={() => changePriorityVal(1)} value={1}
+                                                defaultChecked={null}/>
+                                        </Form.Label>
+                                        <Form.Label htmlFor={"tickPriority2"} className={"mx-2"}>
+                                            2 <Form.Check className={"ms-2"} inline name={"tickPriority"}
+                                                id={"tickPriority2"} ref={inputPriority} type={"radio"}
+                                                onChange={() => changePriorityVal(2)} value={2}
+                                                defaultChecked={null}/>
+                                        </Form.Label>
+                                        <Form.Label htmlFor={"tickPriority3"} className={"mx-2"}>
+                                            3 <Form.Check className={"ms-2"} inline name={"tickPriority"}
+                                                id={"tickPriority3"} ref={inputPriority} type={"radio"}
+                                                onChange={() => changePriorityVal(3)} value={3}
+                                                defaultChecked={false}/>
+                                        </Form.Label>
+                                        <Form.Label htmlFor={"tickPriority4"} className={"mx-2"}>
+                                            4 <Form.Check className={"ms-2"} inline name={"tickPriority"}
+                                                id={"tickPriority4"} ref={inputPriority} type={"radio"}
+                                                onChange={() => changePriorityVal(4)} value={4}
+                                                defaultChecked={null}/>
+                                        </Form.Label>
+                                    </div>
+                                </Form.Group>
+                            </Row>
 
-            </Row>
+                            {/*MENTIONS*/}
+                            <Row className={"mb-2"}>
+                                <Form.Group className={"col s12"}>
+                                    <Form.Label htmlFor={"tickMentions"} className={"fw-bold"}>Mentions</Form.Label>
+                                    <AutoCompleteNames index={2} id={"tickMentions"} setMentionChoices={setMentionChoices}
+                                        setAssignee={setAssignee} />
+                                </Form.Group>
+                            </Row>
+
+                            {/*DESCRIPTION*/}
+                            <Row className={"mb-2"}>
+                                {editTicket === true ?
+                                    <>
+                                        <Container className={"mb-2"}>
+                                            <div className={"form-label fw-bold"}>Ticket Description</div>
+                                            <div id={"contentEditDiv "} ref={divDesc} className={"form-control bg-light"}></div>
+                                        </Container>
+                                    </>
+                                    : null}
+                                <Form.Group className={editTicket === true ? "col s12 d-none" : "col s12"}>
+                                    <Form.Label htmlFor={"ticketDesc"} className={"fw-bold"}>Ticket Description</Form.Label>
+                                    <Form.Control as={"textarea"} id={"areaForm"} rows={"2"} type={"text"}
+                                        placeholder={"Enter description"} ref={inputDesc}/>
+                                    <Form.Text id={"ticketDesc"} name={"ticketDesc"}/>
+                                </Form.Group>
+                            </Row>
+
+                            {/*COMMENTS*/}
+                            {editTicket === true ?
+                                <Form.Group className={"col s12"}>
+                                    <Form.Label htmlFor={"ticketComment"} className={"fw-bold"}>Ticket Comment</Form.Label>
+                                    <Form.Control as={"textarea"} id={"areaForm"} rows={"2"} type={"text"}
+                                        placeholder={"Enter comment"} ref={inputComment}/>
+                                    <Form.Text id={"ticketComment"} name={"ticketComment"}/>
+                                </Form.Group>
+                                : null}
+
+                            {/*ATTACHMENTS*/}
+                            {props.editTicket ?
+                                <Row className={"mb-3"}>
+                                    <h6 className={"fw-bold"}>Current Attachments</h6>
+                                    {props.ticketInfo.relations ?
+                                        props.ticketInfo.relations.map((thisAttachment, index) => {
+                                            return(
+                                                <Col xs={3} key={index} className={"my-2"}>
+                                                    <Card className={"shadow-sm"}>
+                                                        <Card.Body>
+                                                            <Card.Title title={thisAttachment.attributes.name} className={"text-truncate"}>{thisAttachment.attributes.name}</Card.Title>
+                                                            <br />
+                                                            <a className={"float-end"} href={thisAttachment.url + "?fileName=" + thisAttachment.attributes.name + "&content-disposition=attachment"} download>Download</a>
+                                                        </Card.Body>
+                                                    </Card>
+                                                </Col>); } )
+                                        : <p>No current attachments.</p>}
+                                </Row>
+                                : null}
+
+                            <Row className={"mb-3"}>
+                                <Form.Group className={"col s12 d-block"}>
+                                    <Form.Label htmlFor={"tickAttachments"} className={"fw-bold"}>{props.editTicket ? "Add " : ""}Attachments</Form.Label>
+                                    <Form.Control multiple id={"tickAttachments"} name={"tickAttachments"}
+                                        ref={inputAttachment} onChange={e => uploadAttach(e.target.files)}
+                                        type={"file"}/>
+                                </Form.Group>
+                            </Row>
+
+                            {/*CONDITIONAL FORMS*/}
+                            {props.editTicket !== true ?
+                                <Row>
+                                    {anotherDataSource.map((thisSource, index) => (
+                                        <div key={index} className={"dataSourceValues"} onChange={getDataSourceValues}>
+                                            <Container key={index}>
+                                                {currentJSON ?
+                                                    <ConditionalForms jsonObj={currentJSON} index={index} min={0} max={0}/>
+                                                    : <p>Loading conditional forms...</p> }
+                                            </Container>
+                                        </div>
+                                    ))}
+                                    <Row className={"justify-content-between"}>
+                                        <Col xs={6}>
+                                            {anotherDataSource.length !== 1 ?
+                                                <Button size={"sm"} onClick={lessDataSources} className={"mt-2 ms-3"}>
+                                                    Remove Source
+                                                </Button>
+                                                : null}
+                                        </Col>
+                                        <Col xs={6}>
+                                            <Button size={"sm"} onClick={moreDataSources} className={"mt-2 float-end"}>
+                                                Add Another Source
+                                            </Button>
+                                        </Col>
+                                    </Row>
+
+                                </Row>
+                                : null
+                            }
+
+                            {/*SUBMIT BUTTONS*/}
+                            {props.editTicket === true ?
+                                <>
+                                    <Button type={"button"} name={"singleTickAction"} className={"float-start mt-2"} onClick={() => setViewTicketMode(true)}>
+                                        CANCEL EDIT
+                                    </Button>
+
+                                    <Button type={"submit"} name={"action"} className={"float-end mt-2"}>
+                                        UPDATE
+                                    </Button>
+                                </>
+                                :
+                                <Button type={"submit"} name={"action"}
+                                    className={"float-end mt-3"}>
+                                    SUBMIT
+                                </Button>
+                            }
+
+                        </Form>
+                    </Col>
+                </Row>
+                : null}
+
+            {viewTicketMode === true ? <Ticket ticketData={props.ticketData} editTicket={false} ticketInfo={props.ticketInfo} setShow={props.setShow}  /> : null}
         </>
     );
 
 }
 
 TicketForm.propTypes = {
+    ticketData: PropTypes.array,
     editTicket: PropTypes.bool,
     ticketInfo: PropTypes.object,
     setShow: PropTypes.func

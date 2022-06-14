@@ -111,7 +111,6 @@ function Ticket({ ticketData, clickClose, setShow }) {
                                     </Container>
                                 </Row>
 
-
                                 {/*ticket description*/}
                                 <Row className={"my-4"}>
                                     <Col>
@@ -168,7 +167,7 @@ function Ticket({ ticketData, clickClose, setShow }) {
                     : <Container>Loading Ticket Info...</Container>
                 : null}
 
-            {renderEdit === true ? <TicketForm editTicket={true} ticketInfo={allTicketInfo} setShow={setShow}  /> : null}
+            {renderEdit === true ? <TicketForm ticketData={ticketData} editTicket={true} ticketInfo={allTicketInfo} setShow={setShow}  /> : null}
         </>
     );
 }
