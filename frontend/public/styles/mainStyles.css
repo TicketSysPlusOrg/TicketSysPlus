@@ -79,6 +79,14 @@ input[type=radio] {
     display: none;
 }
 
+.sortTicket {
+    color: rgb(5,97,252);
+}
+
+.sortTicket:hover {
+    color: rgb(101,156,234);
+}
+
 .infoBar {
     border: white 2px solid;
     background-color: white;
@@ -112,7 +120,6 @@ input[type=radio] {
 .bootstrapOverride .adminBtn:hover {
     background-color: rgb(104, 171, 193);
     border-color: rgb(104, 171, 193);
-
 }
 
 .adminError {

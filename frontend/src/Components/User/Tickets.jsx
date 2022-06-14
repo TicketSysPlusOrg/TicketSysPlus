@@ -72,8 +72,8 @@ function Tickets({ projects, rerender }) {
         if(allWorkItems.workItems !== undefined) {
             const listOfIds = allWorkItems.workItems.map(workItem => workItem.id);
             const ticketBatch = await azureConnection.getWorkItems(projects[0], listOfIds);
-            setDevOpsTix(ticketBatch);
-            console.log(ticketBatch);
+            setDevOpsTix(ticketBatch["value"]);
+            console.log(ticketBatch["value"]);
         } else {
             setNoTickets("This project has no tickets!");
         }
@@ -116,6 +116,21 @@ function Tickets({ projects, rerender }) {
         }
     }
 
+    /*sorts displayed tickets by parameter (id, priority, etc.)*/
+    function clickSort(sortParam, secondSortParam) {
+        const checkArr = [...devOpsTix];
+        console.log(checkArr);
+        let sortArr = [...devOpsTix].sort((thisTicket, nextTicket) => secondSortParam === null ?
+            (thisTicket[sortParam] < nextTicket[sortParam] ? 1 : thisTicket[sortParam] > nextTicket[sortParam] ? -1 : 0)
+            : (thisTicket[sortParam][secondSortParam] < nextTicket[sortParam][secondSortParam] ? 1 :
+                thisTicket[sortParam][secondSortParam] > nextTicket[sortParam][secondSortParam] ? -1 : 0));
+        console.log(sortArr);
+        if(sortArr[0] === checkArr[0]) {
+            sortArr = sortArr.reverse();
+        }
+        setDevOpsTix(sortArr);
+    }
+
     return (
         <>
             {/* TODO: Replace this div with a metrics box, for Ex:
@@ -129,15 +144,15 @@ function Tickets({ projects, rerender }) {
             */}
             <div className={"mt-4"}></div>
             <Col xs={12} className={"pe-0"}>
-                <div className={"projectSelect " }>
+                <div className={"projectSelect"}>
                     <Container fluid className={"my-1 py-1 px-0 row infoBar cardOneLine align-items-center fw-bold text-decoration-underline"} >
-                        <Col xs={1} className={"ps-3"}>ID</Col>
-                        <Col xs={3}>Title</Col>
-                        <Col xs={1}>Priority</Col>
-                        <Col xs={1}>Due Date</Col>
-                        <Col xs={2}>Assigned To</Col>
-                        <Col xs={1}>State</Col>
-                        <Col xs={3} className={"d-flex justify-content-around"}>
+                        <Col xs={1} className={"ps-3"}><a href={"#"} onClick={() => clickSort("id", null)} className={"sortTicket"}>ID</a></Col>
+                        <Col xs={2}><a href={"#"} onClick={() => clickSort("fields", "System.Title")}  className={"sortTicket"}>Title</a></Col>
+                        <Col xs={1}><a href={"#"} onClick={() => clickSort("fields", "Microsoft.VSTS.Common.Priority")} className={"sortTicket"}>Priority</a></Col>
+                        <Col xs={2}><a href={"#"} onClick={() => clickSort("fields", "Microsoft.VSTS.Scheduling.DueDate")} className={"sortTicket"}>Due Date</a></Col>
+                        <Col xs={2}><a href={"#"} onClick={() => clickSort("fields", "System.AssignedTo")} className={"sortTicket"}>Assigned To</a></Col>
+                        <Col xs={1}><a href={"#"} onClick={() => clickSort("fields", "System.State")} className={"sortTicket"}>State</a></Col>
+                        <Col xs={3} className={"d-flex justify-content-around "}>
                             <div className={"ps-2 align-self-center"}>View</div>
                             <div className={"ps-3 align-self-center "}>Edit</div>
                             <div className={"ps-3 align-self-center"}>Block</div>
@@ -151,18 +166,18 @@ function Tickets({ projects, rerender }) {
                     <p>{noTickets}</p>
                 </Col> :
                 devOpsTix ?
-                    devOpsTix.value.map((devTix, index) => (
+                    devOpsTix.map((devTix, index) => (
                         <Col xs={12} className={"pe-0"} key={index} >
                             {/*TODO: double check that areapath will always be filled*/}
                             {/* TODO: https://mui.com/material-ui/react-stack/ */}
                             <div className={"projectSelect"}>
                                 {/* TODO: Convert into a data table? https://mui.com/material-ui/react-table/#data-table */}
                                 <Container fluid className={stateColor(devTix.fields["System.State"]) + " my-1 py-1 px-0 row hoverOver cardOneLine align-items-center fw-bold "} >
-                                    <Col xs={1}>{devTix.id}</Col>
-                                    <Col xs={3} title={devTix.fields["System.Title"]}>{devTix.fields["System.Title"]}</Col>
+                                    <Col xs={1} className={"ps-3"}>{devTix.id}</Col>
+                                    <Col xs={2} className={"ps-3 align-self-center"} title={devTix.fields["System.Title"]}>{devTix.fields["System.Title"]}</Col>
                                     <Col xs={1} className={"ps-4"}>{devTix.fields["Microsoft.VSTS.Common.Priority"]}</Col>
                                     {/*TODO: remove the extra ternary check for no due date present once we require due date for ticket creation*/}
-                                    <Col xs={1} title={devTix.fields["Microsoft.VSTS.Scheduling.DueDate"] ? devTix.fields["Microsoft.VSTS.Scheduling.DueDate"].slice(0, 10) : null}>
+                                    <Col xs={2} title={devTix.fields["Microsoft.VSTS.Scheduling.DueDate"] ? devTix.fields["Microsoft.VSTS.Scheduling.DueDate"].slice(0, 10) : null}>
                                         {devTix.fields["Microsoft.VSTS.Scheduling.DueDate"] ? devTix.fields["Microsoft.VSTS.Scheduling.DueDate"].slice(0, 10) : null}
                                     </Col>
                                     <Col xs={2} title={devTix.fields["System.AssignedTo"]}>{getNameBeforeEmail(devTix.fields["System.AssignedTo"])}</Col>
