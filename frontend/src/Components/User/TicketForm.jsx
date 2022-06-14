@@ -242,7 +242,6 @@ function TicketForm(props) {
             /*priority*/
             document.getElementById("tickPriority" + props.ticketInfo.fields["Microsoft.VSTS.Common.Priority"]).checked = true;
 
-            //TODO: CHECK DUE DATE FIELD SLICE. this is likely a lazy method and could be shaving time if done improperly
             /*due date*/
             if (props.ticketInfo.fields["Microsoft.VSTS.Scheduling.DueDate"] !== undefined) {
                 inputDate.current.value = props.ticketInfo.fields["Microsoft.VSTS.Scheduling.DueDate"].slice(0, 10);
@@ -476,7 +475,7 @@ function TicketForm(props) {
                                 <>
                                     <Container className={"mb-2"}>
                                         <div className={"form-label fw-bold"}>Ticket Description</div>
-                                        <div id={"contentEditDiv"} ref={divDesc} className={"form-control"}></div>
+                                        <div id={"contentEditDiv "} ref={divDesc} className={"form-control bg-light"}></div>
                                     </Container>
                                 </>
                                 : null}
@@ -516,7 +515,7 @@ function TicketForm(props) {
 
                         <Row className={"mb-3"}>
                             <Form.Group className={"col s12 d-block"}>
-                                <Form.Label htmlFor={"tickAttachments"} className={"fw-bold"}>{props.editTicket ? "ADD " : ""}Attachments</Form.Label>
+                                <Form.Label htmlFor={"tickAttachments"} className={"fw-bold"}>{props.editTicket ? "Add " : ""}Attachments</Form.Label>
                                 <Form.Control multiple id={"tickAttachments"} name={"tickAttachments"}
                                     ref={inputAttachment} onChange={e => uploadAttach(e.target.files)}
                                     type={"file"}/>
