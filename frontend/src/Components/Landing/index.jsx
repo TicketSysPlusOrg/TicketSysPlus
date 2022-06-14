@@ -12,15 +12,14 @@ function Landing() {
     const { instance } = useMsal();
 
     return (
-        <Container>
-            <Row className="justify-content-center vh-100">
-                <Col md="auto">
-                    <div className="mt-5">
-
-                        <img id="motorqLogo" src="/motorqLogo.png" alt="Orange Motorq Logo" className="img-fluid pe-2" />
-                        <p className="ms-5" id="ts-color"><strong>TicketSystem+</strong></p>
-                        <p>Click below to log in through your Azure DevOps account</p>
-                        <Button variant="success" onClick={() => instance.loginRedirect(authRequest)}>Log In</Button>
+        <Container className="vh-100 landingBody" >
+            <Row className="justify-content-center">
+                <Col md="auto" className="mt-5">
+                    <div className="mt-5 container landingBox p-5 border border-4 shadow-lg">
+                        <img id="motorqLogo" src="/motorqLogo.svg" width="270" alt="Orange Motorq Logo" className="img-fluid pe-2" />
+                        <p className="ms-5 landing"><strong>TicketSystem+</strong></p>
+                        <p className="lead">Click below to log in through your Azure DevOps account</p>
+                        <Button className="shadow" variant="success" onClick={() => instance.loginRedirect(authRequest)}>Log In</Button>
                     </div>
                 </Col>
             </Row>
