@@ -35,6 +35,28 @@ input[type=radio] {
     text-decoration: none;
 }
 
+.landing {
+    font-size: larger;
+    color: rgb(104, 171, 193);
+}
+
+.landingBody {
+    background-image: linear-gradient(rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.3)), url("/motorqHome.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+    padding: 0;
+    min-width: 100vw;
+
+}
+
+.bootstrapOverride .landingBox {
+    background-color: whitesmoke;
+    border-radius: 25px;
+    border-color: rgba(95, 94, 94, 0.272) !important;
+
+
+}
+
 #settingsComponent {
     overflow: scroll;
 }
@@ -80,11 +102,11 @@ input[type=radio] {
 }
 
 .sortTicket {
-    color: rgb(5,97,252);
+    color: rgb(5, 97, 252);
 }
 
 .sortTicket:hover {
-    color: rgb(101,156,234);
+    color: rgb(101, 156, 234);
 }
 
 .infoBar {
