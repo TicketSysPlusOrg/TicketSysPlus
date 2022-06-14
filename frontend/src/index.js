@@ -58,6 +58,9 @@ async function run() {
     const allTeamMembers = await azureConnection.getAllTeamMembers(projects.value[1].id);
     console.log(allTeamMembers);
 
+    /*const addComment = await azureConnection.addWorkItemComment(projects.value[1].id, 1, "New comment here.");
+    console.log(addComment);*/
+
     /*get project property ID. useful for troubleshooting and setting up the other methods used below to get to work item states */
     /*const getProjProps = await azureConnection.getProjectProperties(projects.value[1].id);
     console.log(getProjProps);*/
