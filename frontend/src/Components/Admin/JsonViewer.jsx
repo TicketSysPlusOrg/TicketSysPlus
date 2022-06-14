@@ -263,7 +263,7 @@ function JsonViewer() {
                         </Modal.Header>
 
                         <Modal.Body>
-                            <JsonForm jsonModal={data} jsonObjects={jsonCollection} />
+                            <JsonForm jsonModal={data} jsonObjects={jsonCollection} setShow={setShow} />
                         </Modal.Body>
                     </Modal.Dialog>
                 </div>
