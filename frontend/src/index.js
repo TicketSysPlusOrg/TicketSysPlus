@@ -12,10 +12,10 @@ import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 
 import App from "./App";
-import { azureConfig, msalConfig } from "./authConfig";
+import { msalConfig } from "./authConfig";
 import { AzureDevOpsApi } from "./utils/AzureDevOpsApi";
 
-export const azureConnection = new AzureDevOpsApi(azureConfig.organizationUrl, azureConfig.token);
+export const azureConnection = new AzureDevOpsApi(process.env.REACT_APP_DEVOPS_ORGANIZATION_URL, process.env.REACT_APP_DEVOPS_TOKEN);
 
 export const backendApi = axios.create({
     baseURL: process.env.REACT_APP_BACKEND_URL,
