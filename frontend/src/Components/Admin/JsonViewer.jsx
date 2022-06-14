@@ -18,15 +18,18 @@ function JsonViewer() {
     const [data, setData] = useState("");
     // updates CodeMirror value 
     const [jsonDB, setJsonDB] = useState("");
+    // copy of the original Json
     const [currentJson, setCurrentJson] = useState("");
     const [jsonCollection, setJsonCollection] = useState([]);
-    // copy of the original Json
+    // copy of whole collection array of jsons ([0] being current, [1] being previous)
     const [oldJson, setOldJson] = useState("");
+    // copy of previous json
     const [jsonError, setJsonError] = useState("");
+    // error to display if codemirror finds syntax error
     const [show, setShow] = useState(false);
-
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+    // save modal display value
 
     const regex = new RegExp("at position (\\d+)$");
 
@@ -42,7 +45,8 @@ function JsonViewer() {
                 const oldFromDB = res.data[1]?.body;
 
                 // if first index is undefined, then the database is empty.
-                // need to it with two items
+                // there needs to be two
+                // adds two empty items
                 if (currentFromDB === undefined) {
                     backendApi.post("jsons", { body: "" })
                         .then((res) => {
@@ -75,9 +79,13 @@ function JsonViewer() {
                     // there are the appropriate amount of items
                 } else {
                     setJsonDB(currentFromDB);
+                    // sets the json that codemirror will test against
                     setCurrentJson(currentFromDB);
+                    // sets the json that codemirror will display initially
                     setOldJson(oldFromDB);
+                    // sets the previous json file that was the last iteration
                     setJsonCollection(res.data);
+                    // sets the whole json collection
                 }
 
                 //console.log(jsonFromDB);
@@ -112,6 +120,8 @@ function JsonViewer() {
         return isValid;
     }
 
+    // checks if the json data from codemirror has been altered and validated
+    // enables save button if json from codemirror is valid and verified
     function verify(data) {
         setData(data);
         if (jsonDB !== data) {
@@ -124,6 +134,8 @@ function JsonViewer() {
         }
     }
 
+    // loads previous iteration json from database collection to codemirror
+    // verifies loaded json
     function loadOld() {
 
         backendApi
@@ -176,6 +188,7 @@ function JsonViewer() {
         <>
             <div className="container mt-4">
 
+                {/*Codemirror error display*/}
                 <div className="row">
                     <div className="col-12 text-center mt-2">
                         <p className="adminError">{jsonError}</p>
@@ -185,7 +198,7 @@ function JsonViewer() {
                 <div className="row">
 
                     <div className="col-2 mb-1">
-
+                        {/*Buttons Save, Load Previous, Import, Export */}
                         <div className="row">
 
                             <div className="col-12">
@@ -231,7 +244,7 @@ function JsonViewer() {
 
                     </div>
 
-
+                    {/*Codemirror which updates data on change */}
                     <div className="col-10 mx-auto">
                         <CodeMirror
                             value={currentJson}
@@ -253,7 +266,8 @@ function JsonViewer() {
                 </div>
 
             </div>
-
+            {/*Modal which displays on Save button click and displays the json from Codemirror before finally submitting
+                to the database*/}
             <Modal show={show} onHide={handleClose} className="row">
                 <div className="col-12">
                     <Modal.Dialog className="shadow-lg my-0">
@@ -263,6 +277,8 @@ function JsonViewer() {
                         </Modal.Header>
 
                         <Modal.Body>
+                            {/*Passes Codemirror json data, the json Collection, and Modal useEffect method as props
+                                to the JsonForm component*/}
                             <JsonForm jsonModal={data} jsonObjects={jsonCollection} setShow={setShow} />
                         </Modal.Body>
                     </Modal.Dialog>
