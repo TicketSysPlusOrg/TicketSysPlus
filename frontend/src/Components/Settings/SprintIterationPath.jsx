@@ -45,9 +45,9 @@ function SprintIterationPath({ defaultProject, setDefaultProject }) {
                                     body = JSON.parse(body);
                                     const path = body.iterationPath.split("\\");
                                     if ( body.iterationPath !== undefined && path[0] === defaultProject ) {
-                                        setIterationPath({ label: path[1], path: body.iterationPath});
+                                        setIterationPath({ label: path[1], path: body.iterationPath });
                                     } else {
-                                        setIterationPath({ label: "", path: ""});
+                                        setIterationPath({ label: "", path: "" });
                                     }
                                 }
                             })
