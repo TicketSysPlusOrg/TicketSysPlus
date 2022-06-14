@@ -174,7 +174,7 @@ function Tickets({ projects, rerender }) {
                                 {/* TODO: Convert into a data table? https://mui.com/material-ui/react-table/#data-table */}
                                 <Container fluid className={stateColor(devTix.fields["System.State"]) + " my-1 py-1 px-0 row hoverOver cardOneLine align-items-center fw-bold "} >
                                     <Col xs={1} className={"ps-3"}>{devTix.id}</Col>
-                                    <Col xs={2} className={"ps-3 align-self-center"} title={devTix.fields["System.Title"]}>{devTix.fields["System.Title"]}</Col>
+                                    <Col xs={2} className={"ps-3 align-self-center text-capitalize"} title={devTix.fields["System.Title"]}>{devTix.fields["System.Title"]}</Col>
                                     <Col xs={1} className={"ps-4"}>{devTix.fields["Microsoft.VSTS.Common.Priority"]}</Col>
                                     {/*TODO: remove the extra ternary check for no due date present once we require due date for ticket creation*/}
                                     <Col xs={2} title={devTix.fields["Microsoft.VSTS.Scheduling.DueDate"] ? devTix.fields["Microsoft.VSTS.Scheduling.DueDate"].slice(0, 10) : null}>

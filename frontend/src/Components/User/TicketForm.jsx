@@ -339,7 +339,7 @@ function TicketForm(props) {
                         {/*TITLE*/}
                         <Row className={"mb-2"}>
                             <Form.Group className={"col s12"}>
-                                <Form.Label htmlFor={"ticketTitle"} className={"fw-bold"}>TICKET TITLE</Form.Label>
+                                <Form.Label htmlFor={"ticketTitle"} className={"fw-bold"}>Ticket Title</Form.Label>
                                 <Form.Control aria-required={true} required type={"text"} placeholder={"Enter title"} ref={inputTitle}/>
                                 <Form.Text id={"ticketTitle"} name={"ticketTitle"}/>
                             </Form.Group>
@@ -348,7 +348,7 @@ function TicketForm(props) {
                         {/*TICKET TYPE*/}
                         <Row className={"mb-2"}>
                             <Form.Group className={"col s12"}>
-                                <Form.Label className={"d-block fw-bold"}>TICKET TYPE</Form.Label>
+                                <Form.Label className={"d-block fw-bold"}>Ticket Type</Form.Label>
                                 <div className={"ms-4 me-2 d-inline"}>{icons.length !== 0 ? returnWorkItemIcon("icon_crown") : ""}</div>
                                 <Form.Label htmlFor={"tickEpic"}>
                                     Epic<Form.Check aria-required={true} required className={"ms-3"} inline name={"tickType"} id={"tickEpic"}
@@ -379,7 +379,7 @@ function TicketForm(props) {
                             <Row className={"mb-2"}>
                                 <Form.Group className={"col s12"}>
 
-                                    <Form.Label className={"d-block fw-bold"}>TICKET STATE</Form.Label>
+                                    <Form.Label className={"d-block fw-bold"}>Ticket State</Form.Label>
                                     <Form.Select id={"StateSelect"} ref={inputState} onChange={e => {
                                         changeStateVal(e.currentTarget.value);
                                         console.log(e.currentTarget.value);
@@ -403,7 +403,7 @@ function TicketForm(props) {
                         {editTicket ?
                             <Row className={"mb-2"}>
                                 <Col>
-                                    <label className={"fw-bold form-label"}>CURRENT ASSIGNEE</label>
+                                    <label className={"fw-bold form-label"}>Current Assignee</label>
                                     <div
                                         className={"form-control "}>{assignedTo !== null ? assignedTo : "No assignee!"}</div>
                                 </Col>
@@ -423,8 +423,7 @@ function TicketForm(props) {
                         {/*DUE DATE*/}
                         <Row className={"mb-2"}>
                             <Form.Group className={"col s12"}>
-                                <Form.Label htmlFor={"tickDate"} className={"fw-bold d-inline-block"}>DUE
-                                    DATE</Form.Label>
+                                <Form.Label htmlFor={"tickDate"} className={"fw-bold d-inline-block"}>Due Date</Form.Label>
                                 <Form.Control aria-required={true} required id={"tickDate"} name={"tickDate"} ref={inputDate} type={"date"}/>
                             </Form.Group>
                         </Row>
@@ -432,7 +431,7 @@ function TicketForm(props) {
                         {/*PRIORITY*/}
                         <Row className={"mb-2"}>
                             <Form.Group className={"col s12"}>
-                                <Form.Label className={"fw-bold"}>PRIORITY</Form.Label>
+                                <Form.Label className={"fw-bold"}>Priority</Form.Label>
                                 <div className={"d-flex justify-content-start"}>
                                     <Form.Label htmlFor={"tickPriority1"} className={"ms-4 me-2"}>
                                         1 <Form.Check aria-required={true} required className={"ms-2"} inline name={"tickPriority"}
@@ -465,7 +464,7 @@ function TicketForm(props) {
                         {/*MENTIONS*/}
                         <Row className={"mb-2"}>
                             <Form.Group className={"col s12"}>
-                                <Form.Label htmlFor={"tickMentions"} className={"fw-bold"}>MENTIONS</Form.Label>
+                                <Form.Label htmlFor={"tickMentions"} className={"fw-bold"}>Mentions</Form.Label>
                                 <AutoCompleteNames index={2} id={"tickMentions"} setMentionChoices={setMentionChoices}
                                     setAssignee={setAssignee} />
                             </Form.Group>
@@ -476,13 +475,13 @@ function TicketForm(props) {
                             {editTicket === true ?
                                 <>
                                     <Container className={"mb-2"}>
-                                        <div className={"form-label fw-bold"}>TICKET DESCRIPTION</div>
+                                        <div className={"form-label fw-bold"}>Ticket Description</div>
                                         <div id={"contentEditDiv"} ref={divDesc} className={"form-control"}></div>
                                     </Container>
                                 </>
                                 : null}
                             <Form.Group className={editTicket === true ? "col s12 d-none" : "col s12"}>
-                                <Form.Label htmlFor={"ticketDesc"} className={"fw-bold"}>TICKET DESCRIPTION</Form.Label>
+                                <Form.Label htmlFor={"ticketDesc"} className={"fw-bold"}>Ticket Description</Form.Label>
                                 <Form.Control as={"textarea"} id={"areaForm"} rows={"2"} type={"text"}
                                     placeholder={"Enter description"} ref={inputDesc}/>
                                 <Form.Text id={"ticketDesc"} name={"ticketDesc"}/>
@@ -498,7 +497,7 @@ function TicketForm(props) {
                         {/*ATTACHMENTS*/}
                         {props.editTicket ?
                             <Row className={"mb-3"}>
-                                <h6 className={"fw-bold"}>CURRENT ATTACHMENTS</h6>
+                                <h6 className={"fw-bold"}>Current Attachments</h6>
                                 {props.ticketInfo.relations ?
                                     props.ticketInfo.relations.map((thisAttachment, index) => {
                                         return(
@@ -517,7 +516,7 @@ function TicketForm(props) {
 
                         <Row className={"mb-3"}>
                             <Form.Group className={"col s12 d-block"}>
-                                <Form.Label htmlFor={"tickAttachments"} className={"fw-bold"}>{props.editTicket ? "ADD " : ""}ATTACHMENTS</Form.Label>
+                                <Form.Label htmlFor={"tickAttachments"} className={"fw-bold"}>{props.editTicket ? "ADD " : ""}Attachments</Form.Label>
                                 <Form.Control multiple id={"tickAttachments"} name={"tickAttachments"}
                                     ref={inputAttachment} onChange={e => uploadAttach(e.target.files)}
                                     type={"file"}/>
