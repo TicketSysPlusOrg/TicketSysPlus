@@ -152,6 +152,23 @@ export class AzureDevOpsApi {
     }
 
     /**
+     * Add a comment to an existing work item.
+     * @param {string} project Project ID or name
+     * @param {string} workItemId ticket to add comment to
+     * @param {object} data the fields needed to create a new work item
+     * @returns {string} error if failed, work item info if successful
+     */
+    async addWorkItemComment(project, workItemId, data) {
+        return this.instance.post(`${project}/_apis/wit/workItems/${workItemId}/comments`,
+            {
+                "text": data
+            },
+            { params: { "api-version": "7.1-preview.3" }}).then(response => {
+            return response.data;
+        }).catch(error => error);
+    }
+
+    /**
      * Update existing work item.
      * @param {string} project Project ID or name
      * @param {string} workItemID single work item ID
