@@ -11,7 +11,7 @@ import { backendApi } from "../../index";
 import JsonForm from "./JsonForm";
 
 
-function JsonViewer() {
+function JsonViewer({ isAdmin }) {
 
     const [change, setChange] = useState(true);
     // latest Json changes
@@ -93,6 +93,13 @@ function JsonViewer() {
             .catch((err) => {
                 console.error(err);
             });
+        if (!isAdmin) {
+            setChange(true);
+            setJsonError("Not a registered admin.");
+            return;
+        } else {
+            setJsonError("");
+        }
     }
 
     function validate(jsonToValidate) {
@@ -205,7 +212,8 @@ function JsonViewer() {
 
                                 <Button
                                     onClick={handleShow}
-                                    className="btn btn-danger mb-2 adminBtn saveBtn" disabled={change}
+                                    className="btn btn-danger mb-2 adminBtn saveBtn"
+                                    disabled={change}
                                 >
                                     Save
                                 </Button>
@@ -214,6 +222,7 @@ function JsonViewer() {
                             <div className="col-12">
 
                                 <Button
+                                    disabled={!isAdmin}
                                     onClick={loadOld}
                                     className="btn btn-primary mb-2 adminBtn"
                                 >
@@ -223,7 +232,11 @@ function JsonViewer() {
 
                             <div className="col-12">
 
-                                <Button onClick={handleClick} className="btn btn-success mb-2 adminBtn">
+                                <Button
+                                    disabled={!isAdmin}
+                                    onClick={handleClick}
+                                    className="btn btn-success mb-2 adminBtn"
+                                >
                                     Import
                                 </Button>
 
@@ -232,6 +245,7 @@ function JsonViewer() {
 
                             <div className="col-12">
                                 <Button
+                                    disabled={!isAdmin}
                                     onClick={() => saveFile(data)}
                                     className="btn btn-warning adminBtn"
                                     id="exportbtn"
@@ -247,6 +261,7 @@ function JsonViewer() {
                     {/*Codemirror which updates data on change */}
                     <div className="col-10 mx-auto">
                         <CodeMirror
+                            readOnly={!isAdmin}
                             value={currentJson}
                             height="75VH"
                             theme={oneDark}

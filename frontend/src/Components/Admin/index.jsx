@@ -1,10 +1,12 @@
 import { InteractionType } from "@azure/msal-browser";
 import { MsalAuthenticationTemplate } from "@azure/msal-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
+import { useMsal, useAccount } from "@azure/msal-react";
 
 import { loginRequest } from "../../authConfig";
 import NavBar from "../NavBar";
+import { isAdmin } from "../../utils/Util";
 
 import Responders from "./Responders";
 import JsonViewer from "./JsonViewer";
@@ -15,8 +17,20 @@ function Admin() {
         ...loginRequest
     };
 
+    const [admin, setIsAdmin] = useState(false);
+
+    const { accounts } = useMsal();
+    const account = useAccount(accounts[0] || {});
+    
     /*child changes to show trigger tickets rerender. needed for rerender after ticket creation*/
     const [show, setShow] = useState(false);
+
+    useEffect(() => {
+        (async () => {
+            setIsAdmin(await isAdmin(account.username));
+            // setIsAdmin(false);
+        })();
+    }, []);
 
     return (
         <MsalAuthenticationTemplate
@@ -26,11 +40,11 @@ function Admin() {
             <NavBar show={show} setShow={setShow} />
             <Row className={"me-0"}>
                 <Col xs={10} id={"inset-shadow"}>
-                    <JsonViewer />
+                    <JsonViewer isAdmin={admin}/>
                 </Col>
                 <Col xs={2} id={"sidebar-right"}>
                     <Row className={"m-2 justify-content-center"}>
-                        <Responders />
+                        <Responders isAdmin={admin}/>
                     </Row>
                 </Col>
             </Row>

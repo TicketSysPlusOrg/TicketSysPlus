@@ -5,7 +5,7 @@ import { TextField, Autocomplete, Avatar, Stack } from "@mui/material";
 import { backendApi } from "../../index";
 import { azureConnection } from "../../index";
 
-function Responders() {
+function Responders({ isAdmin }) {
     /*devops api data retrieval*/
     const [responders, setResponders] = useState(null);
     const [card, setCard] = useState(null);
@@ -75,6 +75,7 @@ function Responders() {
             <hr />
 
             <Autocomplete
+                disabled={!isAdmin}
                 className={"mb-1"}
                 disablePortal
                 disableCloseOnSelect
