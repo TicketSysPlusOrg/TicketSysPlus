@@ -54,7 +54,7 @@ function Ticket({ ticketData, clickClose, setShow }) {
                                 {/*ticket title*/}
                                 <Row className={"mb-4"}>
                                     <Col xs={10} className={"d-flex align-items-center"}>
-                                        <h4 className={"mt-1"}>{allTicketInfo.fields["System.Title"]}</h4>
+                                        <h4 className={"mt-1 text-capitalize"}>{allTicketInfo.fields["System.Title"]}</h4>
                                     </Col>
                                     <Col xs={1} className={"mb-2"}>
                                         <DeleteButton setDeleteTicket={setDeleteTicket} />
@@ -62,9 +62,26 @@ function Ticket({ ticketData, clickClose, setShow }) {
                                     <hr className={"mt-1"}/>
                                 </Row>
 
+                                {/*work type, state, priority*/}
+                                <Row className={"mb-2"}>
+                                    <Col>
+                                        <h5 className={"inlineH5"} >Priority:</h5>
+                                        <div className={"ms-2 form-control inactiveForms"}>{allTicketInfo.fields["Microsoft.VSTS.Common.Priority"]}</div>
+                                    </Col>
+                                    <Col>
+                                        <h5 className={"inlineH5"} >Ticket Type:</h5>
+                                        <div className={"ms-2 form-control inactiveForms"}>{allTicketInfo.fields["System.WorkItemType"]}</div>
+                                    </Col>
+                                    <Col>
+                                        <h5 className={"inlineH5"} >Ticket State:</h5>
+                                        <div className={"ms-2 form-control inactiveForms"}>{allTicketInfo.fields["System.State"]}</div>
+                                    </Col>
+                                    <hr className={"mt-5"}/>
+                                </Row>
+
                                 {/*assigned to*/}
                                 <Row className={"mb-4"}>
-                                    <h5>Assigned To</h5>
+                                    <h5 className={"mb-3"}>Assigned To</h5>
                                     <Container>
                                         <div className={"form-control inactiveForms"}>{allTicketInfo.fields["System.AssignedTo"] ? allTicketInfo.fields["System.AssignedTo"] : "No assignment"}</div>
                                     </Container>
@@ -72,39 +89,28 @@ function Ticket({ ticketData, clickClose, setShow }) {
 
                                 {/*ticket created by*/}
                                 <Row className={"my-4"}>
-                                    <h5>Created By</h5>
+                                    <h5 className={"mb-3"}>Created By</h5>
                                     <Container>
                                         <div className={"form-control inactiveForms"}>{allTicketInfo.fields["System.CreatedBy"]}</div>
                                     </Container>
                                 </Row>
 
-                                {/*ticket created date*/}
+                                {/*due date*/}
                                 <Row className={"my-4"}>
-                                    <h5>Created Date</h5>
+                                    <h5 className={"mb-3"}>Due Date</h5>
+                                    <Container>
+                                        <div className={"form-control inactiveForms"}>{allTicketInfo.fields["Microsoft.VSTS.Scheduling.DueDate"]}</div>
+                                    </Container>
+                                </Row>
+
+                                {/*created date*/}
+                                <Row className={"my-4"}>
+                                    <h5 className={"mb-3"}>Created Date</h5>
                                     <Container>
                                         <div className={"form-control inactiveForms"}>{allTicketInfo.fields["System.CreatedDate"]}</div>
                                     </Container>
                                 </Row>
 
-                                {/*work type, state, priority*/}
-                                <Row className={"mb-4"}>
-                                    <h5>Ticket Type</h5>
-                                    <Container>
-                                        <div className={"form-control inactiveForms"}>{allTicketInfo.fields["System.WorkItemType"]}</div>
-                                    </Container>
-                                </Row>
-                                <Row className={"mb-4"}>
-                                    <h5>Ticket State</h5>
-                                    <Container>
-                                        <div className={"form-control inactiveForms"}>{allTicketInfo.fields["System.State"]}</div>
-                                    </Container>
-                                </Row>
-                                <Row className={"mb-4"}>
-                                    <h5>Priority</h5>
-                                    <Container>
-                                        <div className={"form-control inactiveForms"}>{allTicketInfo.fields["Microsoft.VSTS.Common.Priority"]}</div>
-                                    </Container>
-                                </Row>
 
                                 {/*ticket description*/}
                                 <Row className={"my-4"}>

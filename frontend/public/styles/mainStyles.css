@@ -84,6 +84,14 @@ input[type=radio] {
     font-weight: 500;
 }
 
+.bootstrapOverride div.inactiveForms, .bootstrapOverride h5.inlineH5 {
+    display: inline;
+}
+
+.bootstrapOverride .inlineContainer {
+    display: inline;
+}
+
 .sortTicket {
     color: rgb(5,97,252);
 }
