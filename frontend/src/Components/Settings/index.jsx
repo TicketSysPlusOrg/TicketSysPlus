@@ -33,9 +33,6 @@ function Settings() {
         ...loginRequest
     };
 
-    useEffect(() => {
-        // backendApi.get("");
-    }, []);
 
     const [show, setShow] = useState(false);
 

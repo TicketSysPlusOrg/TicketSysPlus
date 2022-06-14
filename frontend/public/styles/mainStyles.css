@@ -14,9 +14,9 @@ input[type=radio] {
     transform: scale(1.5);
 }
 
+/*adjust color of Motorq logo here*/
 #motorqLogo {
-    max-width: 55%;
-    min-width: 40%;
+    filter: invert(58%) sepia(85%) saturate(2242%) hue-rotate(337deg) brightness(101%) contrast(98%);
 }
 
 #groceries {
@@ -79,8 +79,26 @@ input[type=radio] {
     display: none;
 }
 
+.bootstrapOverride .inactiveForms {
+    background-color: #f1f0f0;
+    font-weight: 500;
+}
+
+.sortTicket {
+    color: rgb(5,97,252);
+}
+
+.sortTicket:hover {
+    color: rgb(101,156,234);
+}
+
+.infoBar {
+    border: white 2px solid;
+    background-color: white;
+}
+
 .colscrolls {
-    height: 100%;
+    height: calc(100% - 65px);
     overflow-y: scroll;
 }
 
@@ -107,7 +125,6 @@ input[type=radio] {
 .bootstrapOverride .adminBtn:hover {
     background-color: rgb(104, 171, 193);
     border-color: rgb(104, 171, 193);
-
 }
 
 .adminError {
@@ -183,8 +200,10 @@ input[type=radio] {
 
 
 .bootstrapOverride .makeTicket:hover,
-.bootstrapOverride .adminButton:hover {
+.bootstrapOverride .adminButton:hover,
+.bootstrapOverride .adminButton:focus {
     background-color: transparent;
+    box-shadow: none;
     text-decoration: underline;
     color: rgb(252, 120, 54);
 }

@@ -10,6 +10,8 @@ import ConditionalForms from "./ConditionalForms";
 import AutoCompleteNames from "./AutoCompleteNames";
 import DeleteButton from "./DeleteButton";
 
+import { backendApi } from "../../index";
+
 function TicketForm(props) {
 
     /*show and close vars for modal*/
@@ -55,7 +57,7 @@ function TicketForm(props) {
     /*work item icons*/
     const [icons, setIcons] = useState([]);
 
-    /*currently set up just to speak with MotorqProject board.*/
+    /*TODO: currently set up just to speak with MotorqProject board. admin env controls should set this properly.*/
     useEffect(() => {
         setReadyToClose(null);
         (async () => {
@@ -70,28 +72,41 @@ function TicketForm(props) {
     /*ticket states*/
     const [tickStates, setTickStates] = useState(null);
 
+    /*conditional JSON from DB*/
+    const [currentJSON, setCurrentJSON] = useState(null);
+
     useEffect(() => {
         //TODO: admin control of selected state
         /*get all available ticket states*/
         (async () => {
             /*currently hardcoded for particular inherited process with custom states*/
             const getProcesses = await azureConnection.getProcessesList();
-            /*console.log(getProcesses);*/
 
             const getTickTypes = await azureConnection.getWorkItemTypes(getProcesses.value[4].id);
-            /*console.log(getTickTypes);*/
-
             const allTickStates = await azureConnection.getWorkItemStates(getProcesses.value[4].id, getTickTypes.value[0].id);
             setTickStates(allTickStates);
+
+            /*get latest JSON form for conditional renders*/
+            await backendApi.get("jsons")
+                .then((res) => { setCurrentJSON(JSON.parse(res.data[0].body)); })
+                .catch((err) => {
+                    console.error(err);
+                });
         })();
+
+
     }, []);
 
+    /*new ticket/edit ticket submission block*/
     async function submitTicket(SubmitEvent) {
         SubmitEvent.preventDefault();
 
+        /*gather values from dynamicSources*/
+        const dynamicSourceVals = currentDataSourceVals;
+
         const ticketTitle = inputTitle.current.value;
         const ticketType = typeVal;
-        const ticketDesc = inputDesc.current.value;
+        let ticketDesc = inputDesc.current.value;
         const tickDate = inputDate.current.value;
         const tickPriority = priorityVal;
         const tickAttachments = uploadVal;
@@ -109,6 +124,9 @@ function TicketForm(props) {
 
         /*create ticket block*/
         if (!editTicket) {
+
+            ticketDesc = dynamicSourceVals + "<p><strong>TICKET CREATOR INFO:</strong></p><p>" + ticketDesc + "</p>";
+
             /*create new devops ticket*/
             const devOpsTickData = {
                 "fields": {
@@ -140,28 +158,22 @@ function TicketForm(props) {
             if (priorityVal !== null) {
                 ticketUpdates["Microsoft.VSTS.Common.Priority"] = priorityVal;
             }
-
             if (stateVal !== null && stateVal !== props.ticketInfo.fields["System.State"]) {
                 ticketUpdates["System.State"] = stateVal;
             }
-
             if (typeVal !== null) {
                 ticketUpdates["System.WorkItemType"] = typeVal;
             }
-
             if (inputDate.current.value !== props.ticketInfo.fields["Microsoft.VSTS.Scheduling.DueDate"]) {
                 ticketUpdates["Microsoft.VSTS.Scheduling.DueDate"] = inputDate.current.value;
             }
-
             if (assignedPerson !== undefined && assignedPerson !== "" && assignedPerson !== props.ticketInfo.fields["System.AssignedTo"]) {
                 ticketUpdates["System.AssignedTo"] = assignedPerson;
             }
-
             if (mentionChoices.length > 0) {
                 console.log(allMentions);
                 ticketUpdates["Microsoft.VSTS.CMMI.Comments"] = allMentions;
             }
-
             const updateDevopsTickets = { "fields": ticketUpdates };
             const updateTicket = await azureConnection.updateWorkItem(prjID, props.ticketInfo.id, updateDevopsTickets, "fields");
             console.log(updateTicket);
@@ -174,7 +186,6 @@ function TicketForm(props) {
 
         for (let i = 0; i < tickAttachmentsArr.length; i++) {
             const createAttachment = await azureConnection.createWorkItemAttachment(uploadPrjId, tickAttachmentsArr[i]);
-            console.log(createAttachment);
 
             const ticketAttachment =
                 {
@@ -187,10 +198,8 @@ function TicketForm(props) {
                         }
                     }]
                 };
-            console.log(ticketAttachment);
 
             const uploadAttachmentToWI = await azureConnection.updateWorkItem(uploadPrjId, uploadWIId, ticketAttachment, "relations");
-            console.log(uploadAttachmentToWI);
         }
         setReadyToClose("ready");
     }
@@ -229,8 +238,6 @@ function TicketForm(props) {
             } else {
                 divDesc.current.innerHTML += parseHtml(divDescObjects.props.children);
             }
-
-            /*comments*/
 
             /*priority*/
             document.getElementById("tickPriority" + props.ticketInfo.fields["Microsoft.VSTS.Common.Priority"]).checked = true;
@@ -282,9 +289,30 @@ function TicketForm(props) {
         setUploadVal(thisFile);
     }
 
+    /*work item icons for ticket creation/edit view*/
     function returnWorkItemIcon(iconName) {
         const thisIcon = icons.find(icon => icon.id === iconName);
         return(<img src={thisIcon.url} alt={thisIcon.id + " work item icon"} id={thisIcon.id} className={"iconsize"} />);
+    }
+
+    const [currentDataSourceVals, setCurrentDataSourceVals] = useState();
+
+    /*collect info from  dynamic render JSON conditionals on submit.*/
+    function getDataSourceValues() {
+        let buildHTMLReturn = "";
+        const returnValues = document.getElementsByClassName("dataSourceValues");
+        for (let i = 0; i < returnValues.length; i++) {
+            buildHTMLReturn += "<p><strong>QUESTIONNAIRE INFO:</strong></p>";
+            const thisArray = returnValues[i].outerHTML.split("<");
+            for (let j = 0; j < thisArray.length; j++) {
+                if(thisArray[j].startsWith("h5") || thisArray[j].startsWith("h6")) {
+                    buildHTMLReturn += "<p>" + (thisArray[j].substring(thisArray[j].indexOf(">") + 1)) + "</p>";
+                } else if (thisArray[j].startsWith("input ") && thisArray[j].includes("value=\"checked\"")) {
+                    buildHTMLReturn += "<p>ANSWER: " +((thisArray[j].substring(thisArray[j].indexOf("aria-valuetext=\"") + 16, thisArray[j].indexOf("\" type")))) + "</p>";
+                }
+            }
+        }
+        setCurrentDataSourceVals(buildHTMLReturn);
     }
 
     return (
@@ -295,6 +323,7 @@ function TicketForm(props) {
                     {/*TODO: validation  for all fields*/}
                     <Form className={"col s12"} onSubmit={submitTicket}>
 
+                        {/*EDIT TICKET HEADER AND DELETE BUTTON. AVAILABLE WHEN IN EDIT TICKET MODE.*/}
                         {editTicket === true ?
                             <Row className={"mb-2"}>
                                 <Col xs={10} className={"d-flex align-items-center"}>
@@ -310,7 +339,7 @@ function TicketForm(props) {
                         {/*TITLE*/}
                         <Row className={"mb-2"}>
                             <Form.Group className={"col s12"}>
-                                <Form.Label htmlFor={"ticketTitle"} className={"fw-bold"}>TICKET TITLE</Form.Label>
+                                <Form.Label htmlFor={"ticketTitle"} className={"fw-bold"}>Ticket Title</Form.Label>
                                 <Form.Control aria-required={true} required type={"text"} placeholder={"Enter title"} ref={inputTitle}/>
                                 <Form.Text id={"ticketTitle"} name={"ticketTitle"}/>
                             </Form.Group>
@@ -319,7 +348,7 @@ function TicketForm(props) {
                         {/*TICKET TYPE*/}
                         <Row className={"mb-2"}>
                             <Form.Group className={"col s12"}>
-                                <Form.Label className={"d-block fw-bold"}>TICKET TYPE</Form.Label>
+                                <Form.Label className={"d-block fw-bold"}>Ticket Type</Form.Label>
                                 <div className={"ms-4 me-2 d-inline"}>{icons.length !== 0 ? returnWorkItemIcon("icon_crown") : ""}</div>
                                 <Form.Label htmlFor={"tickEpic"}>
                                     Epic<Form.Check aria-required={true} required className={"ms-3"} inline name={"tickType"} id={"tickEpic"}
@@ -350,8 +379,7 @@ function TicketForm(props) {
                             <Row className={"mb-2"}>
                                 <Form.Group className={"col s12"}>
 
-                                    <Form.Label className={"d-block fw-bold"}>TICKET STATE</Form.Label>
-
+                                    <Form.Label className={"d-block fw-bold"}>Ticket State</Form.Label>
                                     <Form.Select id={"StateSelect"} ref={inputState} onChange={e => {
                                         changeStateVal(e.currentTarget.value);
                                         console.log(e.currentTarget.value);
@@ -375,7 +403,7 @@ function TicketForm(props) {
                         {editTicket ?
                             <Row className={"mb-2"}>
                                 <Col>
-                                    <label className={"fw-bold form-label"}>CURRENT ASSIGNEE</label>
+                                    <label className={"fw-bold form-label"}>Current Assignee</label>
                                     <div
                                         className={"form-control "}>{assignedTo !== null ? assignedTo : "No assignee!"}</div>
                                 </Col>
@@ -387,24 +415,23 @@ function TicketForm(props) {
                             <Form.Group className={"col s12"}>
                                 <Form.Label htmlFor={"tickAssigned"}
                                     className={"fw-bold d-inline-block"}>{editTicket === true ? "ASSIGNED TO" : "ASSIGN TO"}</Form.Label>
-                                <AutoCompleteNames id={"tickAssigned"} setMentionChoices={setMentionChoices}
-                                    setAssignee={setAssignee} singleOrMultiple={""}/>
+                                <AutoCompleteNames index={1} id={"tickAssigned"} setMentionChoices={setMentionChoices}
+                                    setAssignee={setAssignee} />
                             </Form.Group>
                         </Row>
 
                         {/*DUE DATE*/}
                         <Row className={"mb-2"}>
                             <Form.Group className={"col s12"}>
-                                <Form.Label htmlFor={"tickDate"} className={"fw-bold d-inline-block"}>DUE
-                                    DATE</Form.Label>
+                                <Form.Label htmlFor={"tickDate"} className={"fw-bold d-inline-block"}>Due Date</Form.Label>
                                 <Form.Control aria-required={true} required id={"tickDate"} name={"tickDate"} ref={inputDate} type={"date"}/>
                             </Form.Group>
                         </Row>
 
-                        {/*Priority*/}
+                        {/*PRIORITY*/}
                         <Row className={"mb-2"}>
                             <Form.Group className={"col s12"}>
-                                <Form.Label className={"fw-bold"}>PRIORITY</Form.Label>
+                                <Form.Label className={"fw-bold"}>Priority</Form.Label>
                                 <div className={"d-flex justify-content-start"}>
                                     <Form.Label htmlFor={"tickPriority1"} className={"ms-4 me-2"}>
                                         1 <Form.Check aria-required={true} required className={"ms-2"} inline name={"tickPriority"}
@@ -437,9 +464,9 @@ function TicketForm(props) {
                         {/*MENTIONS*/}
                         <Row className={"mb-2"}>
                             <Form.Group className={"col s12"}>
-                                <Form.Label htmlFor={"tickMentions"} className={"fw-bold"}>MENTIONS</Form.Label>
-                                <AutoCompleteNames id={"tickMentions"} setMentionChoices={setMentionChoices}
-                                    setAssignee={setAssignee} singleOrMultiple={"multiple"}/>
+                                <Form.Label htmlFor={"tickMentions"} className={"fw-bold"}>Mentions</Form.Label>
+                                <AutoCompleteNames index={2} id={"tickMentions"} setMentionChoices={setMentionChoices}
+                                    setAssignee={setAssignee} />
                             </Form.Group>
                         </Row>
 
@@ -448,27 +475,33 @@ function TicketForm(props) {
                             {editTicket === true ?
                                 <>
                                     <Container className={"mb-2"}>
-                                        <div className={"form-label fw-bold"}>TICKET DESCRIPTION</div>
+                                        <div className={"form-label fw-bold"}>Ticket Description</div>
                                         <div id={"contentEditDiv"} ref={divDesc} className={"form-control"}></div>
                                     </Container>
                                 </>
                                 : null}
                             <Form.Group className={editTicket === true ? "col s12 d-none" : "col s12"}>
-                                <Form.Label htmlFor={"ticketDesc"} className={"fw-bold"}>TICKET DESCRIPTION</Form.Label>
+                                <Form.Label htmlFor={"ticketDesc"} className={"fw-bold"}>Ticket Description</Form.Label>
                                 <Form.Control as={"textarea"} id={"areaForm"} rows={"2"} type={"text"}
                                     placeholder={"Enter description"} ref={inputDesc}/>
                                 <Form.Text id={"ticketDesc"} name={"ticketDesc"}/>
                             </Form.Group>
                         </Row>
 
+                        {/*COMMENTS*/}
+                        {/*{editTicket === true ?*/}
+                        {/*    */}
+
+                        {/*    : null}*/}
+
                         {/*ATTACHMENTS*/}
                         {props.editTicket ?
                             <Row className={"mb-3"}>
-                                <h6 className={"fw-bold"}>CURRENT ATTACHMENTS</h6>
+                                <h6 className={"fw-bold"}>Current Attachments</h6>
                                 {props.ticketInfo.relations ?
                                     props.ticketInfo.relations.map((thisAttachment, index) => {
                                         return(
-                                            <Col xs={3} key={index} className={"mx-2"}>
+                                            <Col xs={3} key={index} className={"my-2"}>
                                                 <Card className={"shadow-sm"}>
                                                     <Card.Body>
                                                         <Card.Title title={thisAttachment.attributes.name} className={"text-truncate"}>{thisAttachment.attributes.name}</Card.Title>
@@ -481,10 +514,9 @@ function TicketForm(props) {
                             </Row>
                             : null}
 
-
                         <Row className={"mb-3"}>
                             <Form.Group className={"col s12 d-block"}>
-                                <Form.Label htmlFor={"tickAttachments"} className={"fw-bold"}>ATTACHMENTS</Form.Label>
+                                <Form.Label htmlFor={"tickAttachments"} className={"fw-bold"}>{props.editTicket ? "ADD " : ""}Attachments</Form.Label>
                                 <Form.Control multiple id={"tickAttachments"} name={"tickAttachments"}
                                     ref={inputAttachment} onChange={e => uploadAttach(e.target.files)}
                                     type={"file"}/>
@@ -495,8 +527,12 @@ function TicketForm(props) {
                         {props.editTicket !== true ?
                             <Row>
                                 {anotherDataSource.map((thisSource, index) => (
-                                    <div key={index}>
-                                        <ConditionalForms/>
+                                    <div key={index} className={"dataSourceValues"} onChange={getDataSourceValues}>
+                                        <Container key={index}>
+                                            {currentJSON ?
+                                                <ConditionalForms jsonObj={currentJSON} index={index} min={0} max={0}/>
+                                                : <p>Loading conditional forms...</p> }
+                                        </Container>
                                     </div>
                                 ))}
                                 <Row className={"justify-content-between"}>

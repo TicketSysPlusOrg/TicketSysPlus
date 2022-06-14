@@ -13,8 +13,9 @@ import TicketForm from "../User/TicketForm";
 // import { isAdmin } from "../../utils/Util";
 
 
-function NavBarButtons({ currLocation, btnVertSpace, vertOrNot, setShow, show }) {
-
+function NavBarButtons({ setShow, show, currLocation, btnVertSpace, vertOrNot }) {
+    const [btnStyles] = useState("adminButton btn mx-2");
+    const [actvStyles] = useState("makeTicket btn mx-2");
     const handleShow = () => setShow(true);
     const handleClose = () => setShow(false);
 
@@ -71,30 +72,33 @@ function NavBarButtons({ currLocation, btnVertSpace, vertOrNot, setShow, show })
             <ButtonGroup className={vertOrNot}>
 
                 <div>
-                    <Button className={btnVertSpace + "btn makeTicket mx-2"} onClick={handleShow}>
+                    <Button className={btnVertSpace + "btn mx-2 " + btnStyles} onClick={handleShow}>
                         Create Ticket
                     </Button>
                 </div>
                 <div>
-                    {currLocation.pathname !== "/" ?
-                        <NavLink to="/" >
-                            <Button className={btnVertSpace + "btn adminButton  mx-2"}>Tickets</Button>
-                        </NavLink>
-                        : null
-                    }
+                    <NavLink to="/" >
+                        <Button className=
+                            {currLocation.pathname == "/" ? btnVertSpace + actvStyles : btnVertSpace + btnStyles}>
+                            Tickets</Button>
+                    </NavLink>
                 </div>
                 <div>
-                    {currLocation.pathname !== "/admin" && admin ?
+                    {admin ?
                         <NavLink to="/admin">
-                            <Button className={btnVertSpace + " btn adminButton mx-2"}>Admin Page</Button>
+                            <Button className=
+                                {currLocation.pathname == "/admin" ? btnVertSpace + actvStyles : btnVertSpace + btnStyles}>
+                                Admin Page</Button>
                         </NavLink>
                         : null
                     }
                 </div>
                 <div>
-                    {currLocation.pathname !== "/settings" && admin ?
+                    {admin ?
                         <NavLink to="/settings" >
-                            <Button className={btnVertSpace + "btn adminButton  mx-2"}>Settings</Button>
+                            <Button className=
+                                {currLocation.pathname == "/settings" ? btnVertSpace + actvStyles : btnVertSpace + btnStyles}>
+                                Settings</Button>
                         </NavLink>
                         : null
                     }
@@ -128,7 +132,7 @@ function NavBarButtons({ currLocation, btnVertSpace, vertOrNot, setShow, show })
                     </Modal.Header>
 
                     <Modal.Body>
-                        <TicketForm editTicket={false} setShow={setShow} key={setShow}/>
+                        <TicketForm editTicket={false} setShow={setShow} key={setShow} />
                     </Modal.Body>
 
                 </Modal.Dialog>

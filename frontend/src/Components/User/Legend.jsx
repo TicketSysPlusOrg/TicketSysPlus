@@ -1,5 +1,6 @@
 import { Dialog, DialogTitle, Fab, IconButton, List, ListItem, ListItemIcon, ListItemText } from "@mui/material";
 import QuestionMarkIcon from "@mui/icons-material/QuestionMark";
+import SettingsIcon from "@mui/icons-material/Settings";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
@@ -94,9 +95,9 @@ function Legend() {
                 onClick={() => setOpen(true)}
             >
                 <QuestionMarkIcon />
-
             </Fab>
-            <SimpleDialog open={open} onClose={handleClose}/>
+
+            <SimpleDialog open={open} onClose={handleClose} />
         </>
     );
 }

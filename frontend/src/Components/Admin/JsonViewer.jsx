@@ -17,7 +17,9 @@ function JsonViewer() {
     // latest Json changes
     const [data, setData] = useState("");
     // updates CodeMirror value 
-    const [jsonDB, setJson] = useState("");
+    const [jsonDB, setJsonDB] = useState("");
+    const [currentJson, setCurrentJson] = useState("");
+    const [jsonCollection, setJsonCollection] = useState([]);
     // copy of the original Json
     const [oldJson, setOldJson] = useState("");
     const [jsonError, setJsonError] = useState("");
@@ -36,10 +38,49 @@ function JsonViewer() {
     function run() {
         backendApi.get("jsons")
             .then((res) => {
-                const jsonFromDB = res.data[0].body;
-                setJson(jsonFromDB);
-                setOldJson(jsonFromDB);
-                console.log(jsonFromDB);
+                const currentFromDB = res.data[0]?.body;
+                const oldFromDB = res.data[1]?.body;
+
+                // if first index is undefined, then the database is empty.
+                // need to it with two items
+                if (currentFromDB === undefined) {
+                    backendApi.post("jsons", { body: "" })
+                        .then((res) => {
+                            console.log(res);
+                            setJsonDB(res.data);
+                            backendApi.post("jsons", { body: "" })
+                                .then((res2) => {
+                                    console.log(res2);
+                                    setJsonCollection([res.data, res2.data]);
+                                })
+                                .catch((err) => {
+                                    console.log(err);
+                                });
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                        });
+                    // if second index is undefined, then there's only one item in the database
+                    // there needs to be two
+                } else if (oldFromDB === undefined) {
+                    backendApi.post("jsons", { body: "" })
+                        .then((res) => {
+                            setOldJson(res.data);
+                            setJsonCollection([jsonCollection[0], res.data]);
+                            console.log(res);
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                        });
+                    // there are the appropriate amount of items
+                } else {
+                    setJsonDB(currentFromDB);
+                    setCurrentJson(currentFromDB);
+                    setOldJson(oldFromDB);
+                    setJsonCollection(res.data);
+                }
+
+                //console.log(jsonFromDB);
             })
             .catch((err) => {
                 console.error(err);
@@ -73,7 +114,7 @@ function JsonViewer() {
 
     function verify(data) {
         setData(data);
-        if (oldJson !== data) {
+        if (jsonDB !== data) {
             setChange(false);
         } else {
             setChange(true);
@@ -84,17 +125,17 @@ function JsonViewer() {
     }
 
     function loadOld() {
+
         backendApi
             .get("jsons")
             .then((res) => {
-                //TODO: setCurrentJson should be the body of the db data from the get
-                console.log(res.data);
-                setJson(res.data[0].body);
+                setCurrentJson(res.data[1].body);
                 verify();
             })
             .catch((err) => {
                 console.log(err);
             });
+        setCurrentJson(oldJson.data);
     }
 
     const saveFile = async (string) => {
@@ -124,7 +165,7 @@ function JsonViewer() {
             const reader = new FileReader();
             reader.onload = async (event) => {
                 console.log("Result: " + event.target.result);
-                setJson(event.target.result);
+                setJsonDB(event.target.result);
             };
             reader.readAsText(fileUploaded);
         }
@@ -163,7 +204,7 @@ function JsonViewer() {
                                     onClick={loadOld}
                                     className="btn btn-primary mb-2 adminBtn"
                                 >
-                                    Load Original JSON
+                                    Load Previous JSON
                                 </Button>
                             </div>
 
@@ -193,9 +234,8 @@ function JsonViewer() {
 
                     <div className="col-10 mx-auto">
                         <CodeMirror
-                            className="rounded"
-                            value={jsonDB}
-                            height="83VH"
+                            value={currentJson}
+                            height="75VH"
                             theme={oneDark}
                             lint="true"
                             gutters={["CodeMirror-lint-markers"]}
@@ -223,7 +263,7 @@ function JsonViewer() {
                         </Modal.Header>
 
                         <Modal.Body>
-                            <JsonForm jsonModal={data} />
+                            <JsonForm jsonModal={data} jsonObjects={jsonCollection} setShow={setShow} />
                         </Modal.Body>
                     </Modal.Dialog>
                 </div>

@@ -1,57 +1,61 @@
 import React, { useEffect, useState } from "react";
-import { Form } from "react-bootstrap";
+import { Form, Container } from "react-bootstrap";
 import PropTypes from "prop-types";
 
 import { ConditionalExample } from "./DataSourceConds";
+import ConditionalSelect from "./ConditionalSelect";
+import ConditionalAnswers from "./ConditionalAnswers";
 
+/*
+ * INDEX: key from the ticketForm array that called conditionalForms component. use to distinguish conditionalForms iterations/to distinguish list choices
+ * JSONOBJ: the object to be sent in on conditional renders. use it to map out the 'layer' of the json file that we're at.
+ * MIN: minimum items from JSON
+ * MAX: maximum items from JSON
+ * (min and max are checked to see if select on or multi select)
+ * */
+function ConditionalForms({ index, jsonObj, min, max }) {
+    /* this is the current dummy json file. leaving for testing purposes.*/
+    //const conJSON = ConditionalExample;
 
-function ConditionalForms({ index, jsonObj }) {
-    const conJSON = ConditionalExample;
-    // console.log(conJSON);
-
-    const [showChoices, setChoices] = useState("");
-    // const catchItemStuff = (value) => {
-    //     let jsonVal = JSON.parse(value);
-    //     console.log(jsonVal);
-    //     setChoices(jsonVal);
-    // };
-
-    /*list of words to scan JSON file for. maybe this should be stored in MongoDB and be mutable by admin?*/
-    const keywordList = ["type", "properties", "detail", "choices", "title", "description", "type", "items", "anyOf", "required",
-        "uniqueItems", "minItems", "enum"];
-
-    // const getKeywordsList = ["properties", ]
-
-    /*conditional object state. variable set to react component (html-to-react parsing)*/
-    /*const [condObject, setCondObject] = useState([]);*/
+    /*
+    * each time ConditionalForms is rendered, map the new layer of key/val pairs
+    * */
     const [condObject, setCondObject] = useState(new Map());
 
+    /*on-render useEffect*/
     useEffect(() => {
         checkJSON();
     }, []);
 
+    /*if jsonObj is undefined, use json import to kick off conditionals.
+        otherwise using props sent by component self calls/conditional select calls.*/
     function checkJSON() {
-        /*if undefined, use json import. otherwise using props sent by component self calls.*/
         if(jsonObj !== undefined) {
-            if(jsonObj === null) {
-                console.log("null for now");
-            } else if(jsonObj === "CHECKANYOF" || jsonObj === "CHECKITEM") {
-                console.log("reached top of select list");
-            } else {
-                console.log(jsonObj);
-                setCondObject(new Map(Object.entries(jsonObj)));
-            }
-        }
-        else {
-            setCondObject(new Map(Object.entries(conJSON)));
+            setCondObject(new Map(Object.entries(jsonObj)));
+        } else {
+            console.log("There's a database JSON error!");
         }
     }
 
-    const [renderCondObj, setRenderCondObj] = useState(null);
+    /* console log to see whenever renderCondObj is changed. helpful for troubleshooting. */
+    // useEffect(() => {
+    //     console.log(condObject);
+    // }, [condObject]);
 
-    useEffect(() => {
-        console.log(renderCondObj);
-    }, [renderCondObj]);
+    {/*
+    *
+    * CHECK TITLE AND DESCRIPTION FIRST. IF NOT RETURNING UNDEFINED, RENDER EACH/EITHER BASED ON THAT.
+    * NEXT CHECK PROPERTIES. IF 'PROPERTIES' NOT RETURNING UNDEFINED, LOOK AT TWO FOLLOWS OPTIONS:
+    *   IF 'REQUIRED' NOT RETURNING UNDEFINED, RENDER NEW COMPONENT WITH JSONOBJ={(CONDOBJECT.GET("PROPERTIES")[CONDOBJECT.GET("REQUIRED)]}
+    *   IF 'REQUIRED' RETURNING UNDEFINED, RENDER NEW COMPONENT WITH JSONOBJ={CONDOBJ.GET("PROPERTIES")}
+    * NEXT CHECK .GET ITEMS, CHOICES, ANYOF, AND ENUM (NOT NECESSARILY IN THAT ORDER).
+    *   IF ANY OF THOSE ARE CONTAINED (I.E. NOT RETURNING UNDEFINED), SEE IF WHAT THEY RETURN IS AN ARRAY OR NOT.
+    *       IF IT'S AN ARRAY, IS IT AN ARRAY OF OBJECTS OR ARRAY OF STRINGS/ENUMS/NUMBERS/BOOLEANS?
+    *           IF ARRAY OF OBJECTS (KEY-VAL PAIRS), SELECT LIST GENERATION.
+    *           IF ARRAY OF STRING/NUMBER/MAYBE BOOLEAN, WE'VE REACHED AN END POINT. REQUIRE A SELECTION (OR MULTI) AND RETURN ALL INFO ON SUBMIT.
+    * ***** NEXT: NEED TO SETUP MULTI/SINGLE SELECT LOGIC AS WELL AS HANDLING DIFFERENT TYPES OF ENDPOINT SELECTIONS (ENUM, STRING, NUMBER, BOOLEAN. *****
+    * ***** AFTER THAT: CONSOLIDATE CODE. *****
+    */}
 
     return (
         <>
@@ -59,87 +63,76 @@ function ConditionalForms({ index, jsonObj }) {
                 {condObject !== null ?
                     <div>
 
-                        {/*object layer has 'title' object in it?*/}
-                        {condObject.get("title") !== undefined ?
-                            <h5>{condObject.get("title")}</h5>
+                        {/* object layer has 'title' in it? h5 */}
+                        {condObject.has("title") ?
+                            <h5 aria-valuetext={condObject.get("title")}>{condObject.get("title")}</h5>
                             : null}
 
-                        {/*object layer has 'description' object in it?*/}
-                        {condObject.get("description") !== undefined ?
-                            <h6>{condObject.get("description")}</h6>
+                        {/* object layer has 'description' in it? h6 */}
+                        {condObject.has("description") ?
+                            <h6 aria-valuetext={condObject.get("description")}>{condObject.get("description")}</h6>
                             : null}
 
-                        {/*object layer has 'properties' object in it?*/}
-                        {condObject.get("properties") !== undefined ?
-                            <ConditionalForms key={null} jsonObj={condObject.get("properties")} />
+                        {/* object layer has 'properties' key in it? */}
+                        {condObject.has("properties") ?
+                            condObject.get("required") !== undefined ?
+                                <ConditionalForms index={index} jsonObj={condObject.get("properties")[condObject.get("required")]} min={0} max={0} />
+                                : <ConditionalForms index={index} jsonObj={condObject.get("properties")} min={0} max={0} />
                             : null}
 
-                        {/*object layer has 'enrollment_items' object in it?*/}
-                        {/*NOTE: this is not a good plan. need to check each 'required' and save a copy of value there, then check that value in each object level. get(requiredvalue) and overwrite required each time*/}
-                        {condObject.get("enrollment_items") !== undefined ?
-                            <ConditionalForms key={null} jsonObj={condObject.get("enrollment_items")} />
+                        {/*CHOICES IS PROBABLY USELESS. I FOUND IN JSON ONLINE BUT IT'S NOT STANDARD JSON VERBIAGE*/}
+                        {/*object layer has 'choices' key in it?*/}
+                        {condObject.has("choices") ?
+                            Array.isArray(condObject.get("choices")) ?
+                                <ConditionalSelect index={index} jsonObj={condObject} arrayWord={"choices"} min={0} max={0} />
+                                : <ConditionalForms index={index} jsonObj={condObject.get("choices")} min={0} max={0} />
                             : null}
 
-                        {/*object layer has 'choices' object in it?*/}
-                        {condObject.get("choices") !== undefined ?
-                            <ConditionalForms key={null} jsonObj={condObject.get("choices")} />
-                            : null}
-
-                        {/*object layer has 'items' object in it?*/}
-                        {condObject.get("items") !== undefined ?
-                            /*when get returns array, map array object. otherwise call this component again to return the items key's values*/
+                        {/*<ConditionalSelect index={index} jsonObj={condObject} arrayWord={"items"} min={condObj.get("minItems")} max={condObj.get("maxItems")}/>*/}
+                        {/*object layer has 'items' key in it?*/}
+                        {condObject.has("items") ?
+                            /*when .get returns array, map array object. otherwise call this component again to return the items key's values*/
                             Array.isArray(condObject.get("items")) ?
-                                <div>
-                                    <Form.Select key={renderCondObj} defaultValue={"CHECKITEM"} onChange={e => {setRenderCondObj(e.target.value); console.log(e.target.value);}}>
-                                        <option value={"CHECKITEM"} disabled>select one...</option>
-
-                                        {condObject.get("items").map((thisOption, index) => (
-                                            <option key={"items" + index} value={index} >{thisOption}</option>
-                                        ))}
-
-                                    </Form.Select>
-                                </div>
-                                : <ConditionalForms jsonObj={condObject.get("items")} />
-
+                                <ConditionalSelect index={index} jsonObj={condObject} arrayWord={"items"}
+                                    min={condObject.has("minItems") ? condObject.get("minItems") : min}
+                                    max={condObject.has("maxItems") ? condObject.get("maxItems") : max}/>
+                                : <ConditionalForms index={index} jsonObj={condObject.get("items")}
+                                    min={condObject.has("minItems") ? condObject.get("minItems") : min}
+                                    max={condObject.has("maxItems") ? condObject.get("maxItems") : max}/>
                             : null}
 
-                        {/*object layer has 'anyOf' object in it?*/}
-                        {condObject.get("anyOf") !== undefined ?
-                            /*when get returns array, map array objects. otherwise call this component again to return the anyOf key's value*/
-                            Array.isArray(condObject.get("anyOf")) ?
-                                <div>
-                                    <Form.Select key={renderCondObj} defaultValue={"CHECKANYOF"} onChange={e => {setRenderCondObj(e.currentTarget.value); console.log(e.currentTarget.value);}}>
-                                        <option value={"CHECKANYOF"} disabled>select one...</option>
-
-                                        {condObject.get("anyOf").map((thisOption, index) => (
-                                            <option key={"anyOf" + index} value={index} >{thisOption["title"]}</option>
-                                        ))}
-                                    </Form.Select>
-                                    {renderCondObj !== null ? <ConditionalForms jsonObj={condObject.get("anyOf")[renderCondObj]} />
-                                        : null}
-                                </div>
-                                : <ConditionalForms jsonObj={condObject.get("anyOf")} />
-
+                        {/*object layer has 'anyOf', 'allOf', or 'oneOf' object in it?*/}
+                        {/*NOTE: oneOf, anyOf, allOf have to be arrays by JSON standard*/}
+                        {condObject.has("anyOf") ?
+                            <ConditionalSelect index={index} jsonObj={condObject} arrayWord={"anyOf"} min={0} max={0} />
                             : null}
 
-                        {/*object layer has 'enum' object in it?*/}
-                        {condObject.get("enum") !== undefined ?
-                            /*when get returns array, map array objects. otherwise call this component again to return the enum key's value*/
+                        {condObject.has("oneOf") ?
+                            <ConditionalSelect index={index} jsonObj={condObject} arrayWord={"oneOf"} min={0} max={0} />
+                            : null}
+
+                        {condObject.has("allOf") ?
+                            <ConditionalSelect index={index} jsonObj={condObject} arrayWord={"allOf"} min={0} max={0} />
+                            : null}
+
+
+                        {/*FINAL DATA SELECTION*/}
+
+                        {/* object layer has 'enum' object in it? */}
+                        {/* enum will always be array by JSON standards */}
+                        {condObject.has("enum") ?
+                            /*when .get returns array, map array objects. otherwise call this component again to return the enum key's value*/
                             Array.isArray(condObject.get("enum")) ?
-                                <div>
-                                    <Form.Select defaultValue={"CHECKENUM"} onChange={e => {setRenderCondObj(e.currentTarget.value); console.log(e.currentTarget.value);}}>
-                                        <option value={"CHECKENUM"} disabled>select one...</option>
+                                <ConditionalAnswers index={index} jsonObj={condObject} min={min} max={max} />
+                                : <ConditionalForms index={index} jsonObj={condObject.get("enum")} min={0} max={0} />
 
-                                        {condObject.get("enum").map((thisEnum, index) => (
-                                            <option key={"enum" + index} value={index} >{thisEnum}</option>
-                                        ))}
+                            : null}
 
-                                    </Form.Select>
-                                    {renderCondObj !== null ? <ConditionalForms jsonObj={condObject.get("enum")[renderCondObj]} />
-                                        : null}
-                                </div>
-                                : <ConditionalForms jsonObj={condObject.get("enum")} />
-
+                        {/*if the code has gotten this far, we are looking to see if a 'required' was missed in JSON layer with properties*/}
+                        {!condObject.has("required") && condObject.size === 1 ?
+                            condObject.get(condObject.keys().next().value) !== undefined ?
+                                <ConditionalForms index={index} jsonObj={condObject.get(condObject.keys().next().value)} min={0} max={0} />
+                                : null
                             : null}
 
                     </div>

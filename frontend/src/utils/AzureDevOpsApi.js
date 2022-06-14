@@ -128,6 +128,7 @@ export class AzureDevOpsApi {
         return this.instance.get(`${project}/_apis/wit/workitems?ids=${ids.join(",")}`,
             {
                 params: {
+                    "$expand": "relations",
                     "api-version": "7.1-preview.2"
                 },
             }).then (res => {

@@ -18,7 +18,7 @@ mongoose.connect("mongodb://127.0.0.1:27017", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 }).then(() => console.log("Successfully connected to MongoDB Database"))
-    .catch(error => console.log("Could not connect to MongoDB Database"));
+    .catch(error => console.error(`ERROR: ${error.message}`));
 
 //bodyparser setup
 app.use(bodyparser.urlencoded({ extended: true }));

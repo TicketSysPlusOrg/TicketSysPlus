@@ -7,48 +7,50 @@ const Admin = mongoose.model("Admin", memberSchema);
 
 
 //POST
-export const addAdmin = (req, res) => {
+export const addAdmin = async (req, res) => {
     let newAdmin = new Admin(req.body);
 
-    newAdmin.save((err, adminObject) => {
-        //save to DB
-        if (err) {
+    newAdmin.save()
+        .then(admin => {
+            res.json(admin);
+        })
+        .catch((err) => {
             res.send(err);
-        }
-        res.json(adminObject);
-    });
+        });
 };
 
 //GET
 export const getAdmin = (req, res) => {
-    Admin.find(async (err, adminObject) => {
-        //save to DB
-        if (err) {
-            res.send(err);
-        }
-
-        // if database does not include master admin, forcefully add them
-        if (!adminObject.some((item => item.email === process.env.MASTER_ADMIN_EMAIL))) {
-            const newAdmin = new Admin({ name: "Master Admin", email: process.env.MASTER_ADMIN_EMAIL });
-            newAdmin.save((err, adminObject) => {
-                if (err) {
-                    res.send(err);
-                }
-                // recursive call once master admin is added
+    Admin.find().exec()
+        .then(async admins => {
+            let savingNewAdmin = false;
+            if (!admins.some((item => item.email === process.env.MASTER_ADMIN_EMAIL))) {
+                savingNewAdmin = true;
+                const newAdmin = new Admin({ name: "Master Admin", email: process.env.MASTER_ADMIN_EMAIL });
+                await newAdmin.save()
+                    .catch(err => {res.send(err);});
+            }
+            if (!admins.some((item => item.email === "ashwin@motorq.com"))) {
+                savingNewAdmin = true;
+                const newAdmin = new Admin({ name: "Master Admin", email: "ashwin@motorq.com" });
+                await newAdmin.save()
+                    .catch(err => {res.send(err);});
+            }
+            if (savingNewAdmin) {
                 getAdmin(req, res);
-            });
-        } else {
-            res.json(adminObject);
-        }
-
-    });
+            } else {
+                res.json(admins);
+            }
+        })
+        .catch(err => {
+            res.send(err);
+        });
 };
 
 
 //PUT
 export const changeAdmin = (req, res) => {
     let bodyid = req.body;
-    console.log(bodyid);
 
     Admin.findByIdAndUpdate(
         req.body,

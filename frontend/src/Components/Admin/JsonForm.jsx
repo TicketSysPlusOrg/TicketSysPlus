@@ -5,31 +5,29 @@ import PropTypes from "prop-types";
 
 import { backendApi } from "../../index";
 
-function JsonForm({ jsonModal }) {
-    const [show, setShow] = useState(false);
-    const handleClose = () => setShow(false);
+function JsonForm({ jsonModal, jsonObjects, setShow }) {
 
     let inputBody = createRef();
 
-    function submitJson() {
+    function submitJson(event) {
+        // stop refreshing page
+        event.preventDefault();
 
-        const jsonBody = inputBody.current.value;
+        setShow(false);
 
-        backendApi.delete("jsons")
+        jsonObjects[1].body = jsonObjects[0].body;
+        jsonObjects[0].body = inputBody.current.value;
+        console.log(jsonObjects[0].body);
+        backendApi.put("jsons", jsonObjects[0])
             .then((res) => {
                 console.log(res);
-
             })
             .catch((err) => {
                 console.log(err);
             });
-
-        backendApi.post("jsons", {
-            body: jsonBody
-        })
+        backendApi.put("jsons", jsonObjects[1])
             .then((res) => {
                 console.log(res);
-
             })
             .catch((err) => {
                 console.log(err);
@@ -52,7 +50,7 @@ function JsonForm({ jsonModal }) {
                             </Form.Group>
                         </div>
 
-                        <Button onClick={handleClose} type="submit" name="action" className="float-end mt-2">
+                        <Button type="submit" className="float-end mt-2">
                             Submit
                         </Button>
                     </Form>

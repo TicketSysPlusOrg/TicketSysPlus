@@ -38,9 +38,8 @@ function NavBar({ show, setShow }) {
                 <NavbarBrand className="mx-4  mb-1">
                     <a className="navbar-brand ms-3" href={window.location.origin} onClick={navigateHome}>
 
-                        <img id="motorqLogo" src="/motorqLogo.png" width="120" alt="Orange Motorq Logo" className="img-fluid pe-2" />
+                        <img id="motorqLogo" src="/motorqLogo.svg" width="110" alt="Orange Motorq Logo" className="img-fluid pe-2" />
 
-                        {/*//TODO: replace with better quality motorq logo*/}
                         <strong id="ts-color">TicketSystem+</strong>
                     </a>
                 </NavbarBrand>
@@ -52,7 +51,7 @@ function NavBar({ show, setShow }) {
                     <Offcanvas.Body>
                         <Nav className="me-2 ms-auto mt-2">
 
-                            <NavBarButtons currLocation={currLocation} btnVertSpace={vertSpace} vertOrNot={vertOrNot} setShow={setShow} show={show}/>
+                            <NavBarButtons currLocation={currLocation} btnVertSpace={vertSpace} vertOrNot={vertOrNot} setShow={setShow} show={show} />
 
                         </Nav>
 

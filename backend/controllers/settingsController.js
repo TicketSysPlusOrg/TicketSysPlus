@@ -33,7 +33,6 @@ export const getSettings = (req, res) => {
 //PUT
 export const changeSettings = (req, res) => {
     let bodyid = req.body;
-    console.log(bodyid);
 
     Settings.findByIdAndUpdate(
         req.body,
