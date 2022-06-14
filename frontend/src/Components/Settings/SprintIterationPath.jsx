@@ -7,10 +7,9 @@ import { getSettings } from "../../utils/Util";
 import { backendApi } from "../../index";
 import { azureConnection } from "../../index";
 
-function SprintIterationPath(props) {
+function SprintIterationPath({ defaultProject, setDefaultProject }) {
     const [iterationPaths, setIterationPaths] = useState([]);
-    const [iterationPath, setIterationPath] = useState("");
-    const [defaultProject, setDefaultProject] = useState("");
+    const [iterationPath, setIterationPath] = useState({ label: "", path: "" });
 
     useEffect(() => {
         (async () => {
@@ -27,7 +26,7 @@ function SprintIterationPath(props) {
                 })
                 .catch(console.error);
         })();
-    });
+    }, []);
 
     useEffect(() => {
         (async () => {
@@ -36,17 +35,20 @@ function SprintIterationPath(props) {
                     .then(object => {
                         console.log(object);
                         setIterationPaths(object.value.map(iteration => {
-                            return iteration.path;
+                            const labelArray = iteration.path.split("\\");
+                            return { path: iteration.path, label: labelArray[1] !== undefined ? labelArray[1] : iteration.path };
                         }));
                         backendApi.get("/settings")
                             .then((res) => {
                                 if (res.data[0] !== undefined) {
                                     let { body } = res.data[0];
                                     body = JSON.parse(body);
-                                    if ( body.iterationPath !== undefined ) {
-                                        setIterationPath(body.iterationPath);
+                                    const path = body.iterationPath.split("\\");
+                                    if ( body.iterationPath !== undefined && path[0] === defaultProject ) {
+                                        setIterationPath({ label: path[1], path: body.iterationPath});
+                                    } else {
+                                        setIterationPath({ label: "", path: ""});
                                     }
-                                    console.log(iterationPath);
                                 }
                             })
                             .catch(console.error);
@@ -68,13 +70,13 @@ function SprintIterationPath(props) {
                         disableClearable
                         value={iterationPath}
                         options={iterationPaths}
-                        isOptionEqualToValue={(option, value) => option.label === value.label}
+                        isOptionEqualToValue={(option, value) => option.label === value.label || option.path.length > 0}
                         sx={{ width: 300 }}
                         renderInput={(params) => <TextField {...params} label="Set Iteration Path..." />}
                         onChange={async (_event, value, reason) => {
                             if(reason === "selectOption") {
                                 const changes = {
-                                    "iterationPath": value
+                                    "iterationPath": value.path
                                 };
 
                                 setIterationPath(value);
