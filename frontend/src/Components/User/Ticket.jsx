@@ -8,6 +8,7 @@ import { parseHtml } from "../../utils/Util";
 
 import TicketForm from "./TicketForm";
 import DeleteButton from "./DeleteButton";
+import TicketComments from "./TicketComments";
 
 
 function Ticket({ ticketData, clickClose, setShow }) {
@@ -28,6 +29,16 @@ function Ticket({ ticketData, clickClose, setShow }) {
         }
     }, [thisTicketInfo]);
 
+    /*comments from work item*/
+    const [workItemComments, setWorkItemComments] = useState(null);
+    useEffect(() => {
+        (async () => {
+            const workItemComments = await azureConnection.getWorkItemComments(allTicketInfo.fields["System.AreaPath"], allTicketInfo.id);
+            setWorkItemComments(workItemComments);
+        })();
+    }, [allTicketInfo]);
+
+    /*render edit state. if true, swap to edit ticket view*/
     const [renderEdit, setRenderEdit] = useState(null);
 
     /*TODO: need to close modal and refresh tickets*/
@@ -51,7 +62,7 @@ function Ticket({ ticketData, clickClose, setShow }) {
                             {/*TODO: validation  for all fields*/}
                             <Form className="col s12">
 
-                                {/*ticket title*/}
+                                {/*TICKET TITLE*/}
                                 <Row className={"mb-4"}>
                                     <Col xs={10} className={"d-flex align-items-center"}>
                                         <h4 className={"mt-1 text-capitalize"}>{allTicketInfo.fields["System.Title"]}</h4>
@@ -62,7 +73,7 @@ function Ticket({ ticketData, clickClose, setShow }) {
                                     <hr className={"mt-1"}/>
                                 </Row>
 
-                                {/*work type, state, priority*/}
+                                {/*WORK TYPE, STATE, PRIORITY*/}
                                 <Row className={"mb-2"}>
                                     <Col>
                                         <h5 className={"inlineH5"} >Priority:</h5>
@@ -79,7 +90,7 @@ function Ticket({ ticketData, clickClose, setShow }) {
                                     <hr className={"mt-5"}/>
                                 </Row>
 
-                                {/*assigned to*/}
+                                {/*ASSIGNED TO*/}
                                 <Row className={"mb-4"}>
                                     <h5 className={"mb-3"}>Assigned To</h5>
                                     <Container>
@@ -87,7 +98,7 @@ function Ticket({ ticketData, clickClose, setShow }) {
                                     </Container>
                                 </Row>
 
-                                {/*ticket created by*/}
+                                {/*TICKET CREATED BY*/}
                                 <Row className={"my-4"}>
                                     <h5 className={"mb-3"}>Created By</h5>
                                     <Container>
@@ -95,7 +106,7 @@ function Ticket({ ticketData, clickClose, setShow }) {
                                     </Container>
                                 </Row>
 
-                                {/*due date*/}
+                                {/*DUE DATE*/}
                                 <Row className={"my-4"}>
                                     <h5 className={"mb-3"}>Due Date</h5>
                                     <Container>
@@ -103,7 +114,7 @@ function Ticket({ ticketData, clickClose, setShow }) {
                                     </Container>
                                 </Row>
 
-                                {/*created date*/}
+                                {/*CREATED DATE*/}
                                 <Row className={"my-4"}>
                                     <h5 className={"mb-3"}>Created Date</h5>
                                     <Container>
@@ -111,7 +122,7 @@ function Ticket({ ticketData, clickClose, setShow }) {
                                     </Container>
                                 </Row>
 
-                                {/*ticket description*/}
+                                {/*TICKET DESCRIPTION*/}
                                 <Row className={"my-4"}>
                                     <Col>
                                         <h5>Ticket Description</h5>
@@ -121,7 +132,7 @@ function Ticket({ ticketData, clickClose, setShow }) {
                                     </Col>
                                 </Row>
 
-                                {/*ticket mentions section*/}
+                                {/*TICKET MENTIONS SECTION*/}
                                 <Row className={"my-4"}>
                                     <Col>
                                         <h5>Ticket Mentions</h5>
@@ -131,7 +142,15 @@ function Ticket({ ticketData, clickClose, setShow }) {
                                     </Col>
                                 </Row>
 
-                                {/*ticket attachments*/}
+                                {/*TICKET COMMENTS*/}
+                                <Row className={"mb-4"}>
+                                    <h6 className={"fw-bold"}>Ticket Comments</h6>
+                                    {workItemComments ?
+                                        <TicketComments workItemComments={workItemComments} />
+                                        : <p>No ticket comments available.</p>}
+                                </Row>
+
+                                {/*TICKET ATTACHMENTS*/}
                                 <Row className="mb-4">
                                     <h5>Attachments</h5>
                                     {allTicketInfo.relations ?
