@@ -12,6 +12,8 @@ import AutoCompleteNames from "./AutoCompleteNames";
 import DeleteButton from "./DeleteButton";
 import Ticket from "./Ticket";
 import TicketComments from "./TicketComments";
+import TicketAttachments from "./TicketAttachments";
+import SelectorChecks from "./SelectorChecks";
 
 function TicketForm(props) {
     /*update statevals, typevals, assignedto, and priorityval onchange. overriding hard set from edit ticket data*/
@@ -19,6 +21,7 @@ function TicketForm(props) {
     const [typeVal, changeTypeVal] = useState(null);
     const [stateVal, changeStateVal] = useState(null);
     const [assignedTo, changeAssignedTo] = useState(null);
+    const [rowValue, setRowValue] = useState("comments");
 
     /*show and close vars for modal*/
     const handleClose = () => {
@@ -106,9 +109,10 @@ function TicketForm(props) {
         })();
     }, []);
 
+    /*get work item comments*/
     useEffect(() => {
         (async () => {
-            const workItemComments = await azureConnection.getWorkItemComments(props.ticketInfo.fields["System.AreaPath"], props.ticketInfo.id);
+            const workItemComments = await azureConnection.getWorkItemComments(props.ticketInfo.fields["System.AreaPath"], props.ticketInfo.id, "");
             setWorkItemComments(workItemComments);
         })();
     }, [props.ticketInfo]);
@@ -501,33 +505,24 @@ function TicketForm(props) {
                                 </Form.Group>
                                 : null}
 
-                            {/*CURRENT COMMENTS*/}
-                            <Row className={"mb-3"}>
-                                <h6 className={"fw-bold"}>Ticket Comments</h6>
-                                {workItemComments ?
-                                    <TicketComments workItemComments={workItemComments} />
-                                    : <p>No ticket comments available.</p>}
-                            </Row>
+                            {/*COMMENTS/ATTACHMENTS SELECTORS*/}
+                            <SelectorChecks setRowValue={setRowValue} rowValue={rowValue} />
 
-                            {/*CURRENT ATTACHMENTS*/}
-                            {props.editTicket ?
+                            {/*CURRENT COMMENTS AND ATTACHMENTS*/}
+                            {rowValue === "comments" ?
+                                <Row className={"mb-3"}>
+                                    <h6 className={"fw-bold"}>Ticket Comments</h6>
+                                    {workItemComments ?
+                                        <TicketComments ticketInfo={props.ticketInfo} workItemComments={workItemComments} />
+                                        : <p>No ticket comments available.</p>}
+                                </Row>
+                                :
                                 <Row className={"mb-3"}>
                                     <h6 className={"fw-bold"}>Current Attachments</h6>
                                     {props.ticketInfo.relations ?
-                                        props.ticketInfo.relations.map((thisAttachment, index) => {
-                                            return(
-                                                <Col xs={3} key={index} className={"my-2"}>
-                                                    <Card className={"shadow-sm"}>
-                                                        <Card.Body>
-                                                            <Card.Title title={thisAttachment.attributes.name} className={"text-truncate"}>{thisAttachment.attributes.name}</Card.Title>
-                                                            <br />
-                                                            <a className={"float-end"} href={thisAttachment.url + "?fileName=" + thisAttachment.attributes.name + "&content-disposition=attachment"} download>Download</a>
-                                                        </Card.Body>
-                                                    </Card>
-                                                </Col>); } )
+                                        <TicketAttachments ticketInfo={props.ticketInfo} />
                                         : <p>No current attachments.</p>}
-                                </Row>
-                                : null}
+                                </Row> }
 
                             {/*ADD ATTACHMENTS*/}
                             <Row className={"mb-3"}>
