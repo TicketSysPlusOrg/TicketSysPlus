@@ -193,7 +193,7 @@ function JsonViewer({ isAdmin }) {
 
     return (
         <>
-            <div className="container mt-4">
+            <div className="container mt-4 jsonViewer">
 
                 {/*Codemirror error display*/}
                 <div className="row">
@@ -212,7 +212,7 @@ function JsonViewer({ isAdmin }) {
 
                                 <Button
                                     onClick={handleShow}
-                                    className="btn btn-danger mb-2 adminBtn saveBtn"
+                                    className="btn btn-danger mb-2 adminBtn saveBtn shadow"
                                     disabled={change}
                                 >
                                     Save
@@ -224,7 +224,7 @@ function JsonViewer({ isAdmin }) {
                                 <Button
                                     disabled={!isAdmin}
                                     onClick={loadOld}
-                                    className="btn btn-primary mb-2 adminBtn"
+                                    className="btn loadBtn mb-2 adminBtn shadow"
                                 >
                                     Load Previous JSON
                                 </Button>
@@ -235,7 +235,7 @@ function JsonViewer({ isAdmin }) {
                                 <Button
                                     disabled={!isAdmin}
                                     onClick={handleClick}
-                                    className="btn btn-success mb-2 adminBtn"
+                                    className="btn importBtn mb-2 adminBtn shadow"
                                 >
                                     Import
                                 </Button>
@@ -247,8 +247,7 @@ function JsonViewer({ isAdmin }) {
                                 <Button
                                     disabled={!isAdmin}
                                     onClick={() => saveFile(data)}
-                                    className="btn btn-warning adminBtn"
-                                    id="exportbtn"
+                                    className="btn exportBtn adminBtn shadow"
                                 >
                                     Export
                                 </Button>
