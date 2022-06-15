@@ -172,10 +172,11 @@ export class AzureDevOpsApi {
      * Get all comments associated with a work item.
      * @param {string} project Project ID or name
      * @param {string} workItemId ticket to retrieve comments from
+     * @param {string} commentID comment to retrieve (if not trying to retrieve a single ticket, sending in "" as param)
      * @returns {string} error if failed, all comments if successful
      */
-    async getWorkItemComments(project, workItemId) {
-        return this.instance.get(`${project}/_apis/wit/workItems/${workItemId}/comments`,
+    async getWorkItemComments(project, workItemId, commentID) {
+        return this.instance.get(`${project}/_apis/wit/workItems/${workItemId}/comments${commentID}`,
             { params: { "api-version": "7.1-preview.3" },
             }).then (res => {return res.data;}).catch(err => err);
     }
