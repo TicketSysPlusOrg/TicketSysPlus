@@ -11,6 +11,7 @@ import ConditionalForms from "./ConditionalForms";
 import AutoCompleteNames from "./AutoCompleteNames";
 import DeleteButton from "./DeleteButton";
 import Ticket from "./Ticket";
+import TicketComments from "./TicketComments";
 
 function TicketForm(props) {
     /*update statevals, typevals, assignedto, and priorityval onchange. overriding hard set from edit ticket data*/
@@ -62,7 +63,7 @@ function TicketForm(props) {
     /*work item icons*/
     const [icons, setIcons] = useState([]);
 
-    /*TODO: currently set up just to speak with MotorqProject board. admin env controls should set this properly.*/
+    /*TODO: currently, get icons set up just to speak with MotorqProject board. admin env controls should set this properly.*/
     /*get work item icons on page render*/
     useEffect(() => {
         setReadyToClose(null);
@@ -80,6 +81,9 @@ function TicketForm(props) {
 
     /*conditional JSON from DB*/
     const [currentJSON, setCurrentJSON] = useState(null);
+
+    /*comments from work item*/
+    const [workItemComments, setWorkItemComments] = useState(null);
 
     /*get processes and work item type for ticket editing*/
     useEffect(() => {
@@ -101,6 +105,13 @@ function TicketForm(props) {
                 });
         })();
     }, []);
+
+    useEffect(() => {
+        (async () => {
+            const workItemComments = await azureConnection.getWorkItemComments(props.ticketInfo.fields["System.AreaPath"], props.ticketInfo.id);
+            setWorkItemComments(workItemComments);
+        })();
+    }, [props.ticketInfo]);
 
     /*new ticket/edit ticket submission block*/
     async function submitTicket(SubmitEvent) {
@@ -145,10 +156,8 @@ function TicketForm(props) {
                     "System.AssignedTo": assignedPerson,
                 }
             };
-            console.log(devOpsTickData);
 
             const createTicket = await azureConnection.createWorkItem(prjID, ticketType, devOpsTickData);
-            console.log(createTicket);
 
             await uploadAndAttach(prjID, createTicket.id, tickAttachments);
         }
@@ -399,7 +408,7 @@ function TicketForm(props) {
                                     <Col>
                                         <label className={"fw-bold form-label"}>Current Assignee</label>
                                         <div
-                                            className={"form-control "}>{assignedTo !== null ? assignedTo : "No assignee!"}</div>
+                                            className={"form-control bg-light"}>{assignedTo !== null ? assignedTo : "No assignee!"}</div>
                                     </Col>
                                 </Row>
                                 : null}
@@ -482,17 +491,25 @@ function TicketForm(props) {
                                 </Form.Group>
                             </Row>
 
-                            {/*COMMENTS*/}
+                            {/*ADD TICKET COMMENT*/}
                             {editTicket === true ?
-                                <Form.Group className={"col s12"}>
-                                    <Form.Label htmlFor={"ticketComment"} className={"fw-bold"}>Ticket Comment</Form.Label>
+                                <Form.Group className={"col s12 mb-2"}>
+                                    <Form.Label htmlFor={"ticketComment"} className={"fw-bold"}>New Ticket Comment</Form.Label>
                                     <Form.Control as={"textarea"} id={"areaForm"} rows={"2"} type={"text"}
                                         placeholder={"Enter comment"} ref={inputComment}/>
                                     <Form.Text id={"ticketComment"} name={"ticketComment"}/>
                                 </Form.Group>
                                 : null}
 
-                            {/*ATTACHMENTS*/}
+                            {/*CURRENT COMMENTS*/}
+                            <Row className={"mb-3"}>
+                                <h6 className={"fw-bold"}>Ticket Comments</h6>
+                                {workItemComments ?
+                                    <TicketComments workItemComments={workItemComments} />
+                                    : <p>No ticket comments available.</p>}
+                            </Row>
+
+                            {/*CURRENT ATTACHMENTS*/}
                             {props.editTicket ?
                                 <Row className={"mb-3"}>
                                     <h6 className={"fw-bold"}>Current Attachments</h6>
@@ -512,6 +529,7 @@ function TicketForm(props) {
                                 </Row>
                                 : null}
 
+                            {/*ADD ATTACHMENTS*/}
                             <Row className={"mb-3"}>
                                 <Form.Group className={"col s12 d-block"}>
                                     <Form.Label htmlFor={"tickAttachments"} className={"fw-bold"}>{props.editTicket ? "Add " : ""}Attachments</Form.Label>
