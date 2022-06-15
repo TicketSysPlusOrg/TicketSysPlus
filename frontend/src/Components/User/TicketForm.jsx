@@ -13,6 +13,11 @@ import DeleteButton from "./DeleteButton";
 import Ticket from "./Ticket";
 
 function TicketForm(props) {
+    /*update statevals, typevals, assignedto, and priorityval onchange. overriding hard set from edit ticket data*/
+    const [priorityVal, changePriorityVal] = useState(null);
+    const [typeVal, changeTypeVal] = useState(null);
+    const [stateVal, changeStateVal] = useState(null);
+    const [assignedTo, changeAssignedTo] = useState(null);
 
     /*show and close vars for modal*/
     const handleClose = () => {
@@ -21,7 +26,6 @@ function TicketForm(props) {
 
     /*trigger this to run handleClose after all async calls are completed*/
     const [readyToClose, setReadyToClose] = useState(null);
-
     useEffect(() => {
         if(readyToClose !== null) {
             console.log("firing close");
@@ -59,6 +63,7 @@ function TicketForm(props) {
     const [icons, setIcons] = useState([]);
 
     /*TODO: currently set up just to speak with MotorqProject board. admin env controls should set this properly.*/
+    /*get work item icons on page render*/
     useEffect(() => {
         setReadyToClose(null);
         (async () => {
@@ -76,6 +81,7 @@ function TicketForm(props) {
     /*conditional JSON from DB*/
     const [currentJSON, setCurrentJSON] = useState(null);
 
+    /*get processes and work item type for ticket editing*/
     useEffect(() => {
         //TODO: admin control of selected state
         /*get all available ticket states*/
@@ -94,8 +100,6 @@ function TicketForm(props) {
                     console.error(err);
                 });
         })();
-
-
     }, []);
 
     /*new ticket/edit ticket submission block*/
@@ -172,7 +176,6 @@ function TicketForm(props) {
                 ticketUpdates["System.AssignedTo"] = assignedPerson;
             }
             if (mentionChoices.length > 0) {
-                console.log(allMentions);
                 ticketUpdates["Microsoft.VSTS.CMMI.Comments"] = allMentions;
             }
 
@@ -186,12 +189,11 @@ function TicketForm(props) {
 
             const updateDevopsTickets = { "fields": ticketUpdates };
             const updateTicket = await azureConnection.updateWorkItem(prjID, props.ticketInfo.id, updateDevopsTickets, "fields");
-            console.log(updateTicket);
             await uploadAndAttach(prjID, props.ticketInfo.id, tickAttachments);
         }
     }
 
-    /*function for shared info*/
+    /*function for uploading attachments. used in edit ticket and create ticket functions.*/
     async function uploadAndAttach(uploadPrjId, uploadWIId, tickAttachmentsArr) {
 
         for (let i = 0; i < tickAttachmentsArr.length; i++) {
@@ -208,7 +210,6 @@ function TicketForm(props) {
                         }
                     }]
                 };
-
             const uploadAttachmentToWI = await azureConnection.updateWorkItem(uploadPrjId, uploadWIId, ticketAttachment, "relations");
         }
         setReadyToClose("ready");
@@ -216,15 +217,13 @@ function TicketForm(props) {
 
     /*editTicket state.*/
     const [editTicket, getEditTicketState] = useState(null);
-
     useEffect(() => {
         getEditTicketState(props.editTicket);
     }, []);
 
-    /*set initial states for forms in edit ticket view*/
+    /*set initial values for forms in edit ticket view*/
     useEffect(() => {
         if (editTicket === true) {
-
             /*ticket title*/
             inputTitle.current.value = props.ticketInfo.fields["System.Title"];
 
@@ -235,9 +234,6 @@ function TicketForm(props) {
 
             /*ticket type*/
             document.getElementById("tick" + props.ticketInfo.fields["System.WorkItemType"]).checked = true;
-
-            /*ticket state*/
-            document.getElementById("StateSelect").value = props.ticketInfo.fields["System.State"];
 
             /*description*/
             const divDescObjects = props.ticketInfo.fields["System.Description"];
@@ -259,18 +255,16 @@ function TicketForm(props) {
                 props.ticketInfo.fields = "";
             }
 
-            //TODO: more mentions functionality?
-            /*inputMentions.current.value = props.ticketInfo.fields["System.Mentions"];*/
+            /*ticket state*/
+            document.getElementById("StateSelect").value = props.ticketInfo.fields["System.State"];
         }
-    }, [editTicket]);
+    }, [editTicket && tickStates !== null]);
 
     /*trigger more data source forms*/
     let [anotherDataSource, setAnotherDataSource] = useState([0]);
-
     function moreDataSources() {
         setAnotherDataSource([...anotherDataSource, anotherDataSource.length]);
     }
-
     function lessDataSources() {
         if (anotherDataSource.length !== 1) {
             let sourceArr = [...anotherDataSource];
@@ -278,12 +272,6 @@ function TicketForm(props) {
             setAnotherDataSource(sourceArr);
         }
     }
-
-    /*update statevals, typevals, assignedto, and priorityval onchange. overriding hard set from edit ticket data*/
-    const [priorityVal, changePriorityVal] = useState(null);
-    const [typeVal, changeTypeVal] = useState(null);
-    const [stateVal, changeStateVal] = useState(null);
-    const [assignedTo, changeAssignedTo] = useState(null);
 
     /*array of mentioned people. trying to tag them in created ticket and edited ticket*/
     const [mentionChoices, setMentionChoices] = useState([]);
@@ -304,6 +292,7 @@ function TicketForm(props) {
         return(<img src={thisIcon.url} alt={thisIcon.id + " work item icon"} id={thisIcon.id} className={"iconsize"} />);
     }
 
+    /*use state for returning info from conditional forms on submit*/
     const [currentDataSourceVals, setCurrentDataSourceVals] = useState();
 
     /*collect info from  dynamic render JSON conditionals on submit.*/
@@ -385,7 +374,6 @@ function TicketForm(props) {
 
                             {/*TICKET STATE*/}
                             {editTicket === true ?
-
                                 <Row className={"mb-2"}>
                                     <Form.Group className={"col s12"}>
 
@@ -394,17 +382,13 @@ function TicketForm(props) {
                                             changeStateVal(e.currentTarget.value);
                                             console.log(e.currentTarget.value);
                                         }}>
-                                            <option value={"SELECTONE"}>select an option...</option>
-                                            <option value={"To Do"}>To Do</option>
-                                            {tickStates !== null ?
-                                                tickStates.value.map(function (thisState, index) {
-                                                    return (
-                                                        <option key={index} id={thisState.name + "OPTION"}
-                                                            value={thisState.name}>{thisState.name}</option>);
-                                                })
-                                                : null}
+                                            <option key={"SELECTONE"} value={"SELECTONE"} disabled>select an option...</option>
+                                            <option key={"To Do"} value={"To Do"}>To Do</option>
+                                            {tickStates ?
+                                                tickStates.value.map((thisState, thisIndex) =>
+                                                    (<option key={thisIndex} id={thisState.name + "OPTION"} value={thisState.name}>{thisState.name}</option>))
+                                                : <option key={"LOADING"}>Loading...</option>}
                                         </Form.Select>
-
                                     </Form.Group>
                                 </Row>
                                 : null}
