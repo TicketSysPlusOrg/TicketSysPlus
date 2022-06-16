@@ -1,6 +1,6 @@
 // specific ticket we want to examine
 import React, { useEffect, useState } from "react";
-import {Button, Col, Container, Form, Row, Card, FormText} from "react-bootstrap";
+import { Button, Col, Container, Form, Row, Card, FormText } from "react-bootstrap";
 import PropTypes from "prop-types";
 
 import { azureConnection } from "../../index";
@@ -8,11 +8,15 @@ import { parseHtml } from "../../utils/Util";
 
 import TicketForm from "./TicketForm";
 import DeleteButton from "./DeleteButton";
+import TicketComments from "./TicketComments";
+import TicketAttachments from "./TicketAttachments";
+import SelectorChecks from "./SelectorChecks";
 
 
 function Ticket({ ticketData, clickClose, setShow }) {
     const [thisTicketInfo, setThisTicketInfo] = useState(null);
     const [allTicketInfo, setAllTicketInfo] = useState(null);
+    const [rowValue, setRowValue] = useState("none");
 
     useEffect(() => {
         setThisTicketInfo(ticketData);
@@ -28,6 +32,18 @@ function Ticket({ ticketData, clickClose, setShow }) {
         }
     }, [thisTicketInfo]);
 
+    /*comments from work item*/
+    const [workItemComments, setWorkItemComments] = useState(null);
+    useEffect(() => {
+        if(allTicketInfo !== null) {
+            (async () => {
+                const ticketComments = await azureConnection.getWorkItemComments(allTicketInfo.fields["System.AreaPath"], allTicketInfo.id, "");
+                setWorkItemComments(ticketComments);
+            })();
+        }
+    }, [allTicketInfo]);
+
+    /*render edit state. if true, swap to edit ticket view*/
     const [renderEdit, setRenderEdit] = useState(null);
 
     /*TODO: need to close modal and refresh tickets*/
@@ -51,7 +67,7 @@ function Ticket({ ticketData, clickClose, setShow }) {
                             {/*TODO: validation  for all fields*/}
                             <Form className="col s12">
 
-                                {/*ticket title*/}
+                                {/*TICKET TITLE*/}
                                 <Row className={"mb-4"}>
                                     <Col xs={10} className={"d-flex align-items-center"}>
                                         <h4 className={"mt-1 text-capitalize"}>{allTicketInfo.fields["System.Title"]}</h4>
@@ -62,7 +78,7 @@ function Ticket({ ticketData, clickClose, setShow }) {
                                     <hr className={"mt-1"}/>
                                 </Row>
 
-                                {/*work type, state, priority*/}
+                                {/*WORK TYPE, STATE, PRIORITY*/}
                                 <Row className={"mb-2"}>
                                     <Col>
                                         <h5 className={"inlineH5"} >Priority:</h5>
@@ -79,7 +95,7 @@ function Ticket({ ticketData, clickClose, setShow }) {
                                     <hr className={"mt-5"}/>
                                 </Row>
 
-                                {/*assigned to*/}
+                                {/*ASSIGNED TO*/}
                                 <Row className={"mb-4"}>
                                     <h5 className={"mb-3"}>Assigned To</h5>
                                     <Container>
@@ -87,7 +103,7 @@ function Ticket({ ticketData, clickClose, setShow }) {
                                     </Container>
                                 </Row>
 
-                                {/*ticket created by*/}
+                                {/*TICKET CREATED BY*/}
                                 <Row className={"my-4"}>
                                     <h5 className={"mb-3"}>Created By</h5>
                                     <Container>
@@ -95,7 +111,7 @@ function Ticket({ ticketData, clickClose, setShow }) {
                                     </Container>
                                 </Row>
 
-                                {/*due date*/}
+                                {/*DUE DATE*/}
                                 <Row className={"my-4"}>
                                     <h5 className={"mb-3"}>Due Date</h5>
                                     <Container>
@@ -103,7 +119,7 @@ function Ticket({ ticketData, clickClose, setShow }) {
                                     </Container>
                                 </Row>
 
-                                {/*created date*/}
+                                {/*CREATED DATE*/}
                                 <Row className={"my-4"}>
                                     <h5 className={"mb-3"}>Created Date</h5>
                                     <Container>
@@ -111,8 +127,7 @@ function Ticket({ ticketData, clickClose, setShow }) {
                                     </Container>
                                 </Row>
 
-
-                                {/*ticket description*/}
+                                {/*TICKET DESCRIPTION*/}
                                 <Row className={"my-4"}>
                                     <Col>
                                         <h5>Ticket Description</h5>
@@ -122,7 +137,7 @@ function Ticket({ ticketData, clickClose, setShow }) {
                                     </Col>
                                 </Row>
 
-                                {/*ticket mentions section*/}
+                                {/*TICKET MENTIONS SECTION*/}
                                 <Row className={"my-4"}>
                                     <Col>
                                         <h5>Ticket Mentions</h5>
@@ -132,26 +147,25 @@ function Ticket({ ticketData, clickClose, setShow }) {
                                     </Col>
                                 </Row>
 
-                                {/*ticket attachments*/}
-                                <Row className="mb-4">
-                                    <h5>Attachments</h5>
-                                    {allTicketInfo.relations ?
-                                        allTicketInfo.relations.map((thisAttachment, index) => {
-                                            return(
-                                                <Col xs={3} key={index} className={"my-2"}>
-                                                    <Card className={"shadow"}>
-                                                        <Card.Body>
-                                                            <Card.Title title={thisAttachment.attributes.name} className={"text-truncate"}>
-                                                                {thisAttachment.attributes.name}
-                                                            </Card.Title>
-                                                            <br />
-                                                            <a className={"float-end"} href={thisAttachment.url + "?fileName=" + thisAttachment.attributes.name + "&download=true"} download>Download</a>
-                                                        </Card.Body>
-                                                    </Card>
-                                                </Col>);
-                                        })
-                                        : <div className={"border border-1 p-2 articleStyle"}>No attachments.</div>}
-                                </Row>
+                                {/*COMMENTS/ATTACHMENTS SELECTORS*/}
+                                <SelectorChecks setRowValue={setRowValue} />
+
+                                {/*TICKET COMMENTS AND ATTACHMENTS*/}
+                                {rowValue === "comments" ?
+                                    <Row className={"mb-4"}>
+                                        <h5>Ticket Comments</h5>
+                                        {workItemComments && workItemComments.totalCount !== 0 ?
+                                            <TicketComments ticketInfo={allTicketInfo} workItemComments={workItemComments} />
+                                            : <div className={"text-center"}>No ticket comments.</div>}
+                                    </Row>
+                                    : rowValue === "attachments" ?
+                                        <Row className={"mb-4"} >
+                                            <h5>Attachments</h5>
+                                            {allTicketInfo.relations ?
+                                                <TicketAttachments ticketInfo={allTicketInfo} />
+                                                : <div className={"text-center"}>No ticket attachments.</div>}
+                                        </Row>
+                                        : null}
 
                                 <hr />
 
@@ -168,7 +182,7 @@ function Ticket({ ticketData, clickClose, setShow }) {
                     : <Container>Loading Ticket Info...</Container>
                 : null}
 
-            {renderEdit === true ? <TicketForm editTicket={true} ticketInfo={allTicketInfo} setShow={setShow}  /> : null}
+            {renderEdit === true ? <TicketForm ticketData={ticketData} editTicket={true} ticketInfo={allTicketInfo} setShow={setShow}  /> : null}
         </>
     );
 }

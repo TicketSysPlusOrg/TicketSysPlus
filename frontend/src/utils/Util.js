@@ -1,6 +1,6 @@
 import parse from "html-react-parser";
 
-import {backendApi} from "../index";
+import { backendApi } from "../index";
 
 /**
  * Parses HTML String into React Components.

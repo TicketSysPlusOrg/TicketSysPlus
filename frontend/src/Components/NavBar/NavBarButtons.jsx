@@ -9,11 +9,9 @@ import PropTypes from "prop-types";
 import { loginRequest } from "../../authConfig";
 import { callMsGraph } from "../../utils/MsGraphApiCall";
 import TicketForm from "../User/TicketForm";
-// TODO: uncomment to hide admin page & settings page to non-admins
-// import { isAdmin } from "../../utils/Util";
 
 
-function NavBarButtons({ setShow, show, currLocation, btnVertSpace, vertOrNot }) {
+function NavBarButtons({ setShow, show, currLocation, btnVertSpace, vertOrNot, iterationPath }) {
     const [btnStyles] = useState("adminButton btn mx-2");
     const [actvStyles] = useState("makeTicket btn mx-2");
     const handleShow = () => setShow(true);
@@ -24,8 +22,6 @@ function NavBarButtons({ setShow, show, currLocation, btnVertSpace, vertOrNot })
     const account = useAccount(accounts[0] || {});
 
     const [graphData, setGraphData] = useState(null);
-    // TODO: set to false to hide admin page & settings page to non-admins
-    const [admin, setAdmin] = useState(true);
 
     useEffect(() => {
         // Silently acquires an access token which is then attached to a request for MS Graph data
@@ -35,8 +31,6 @@ function NavBarButtons({ setShow, show, currLocation, btnVertSpace, vertOrNot })
         }).then((response) => {
             callMsGraph(response.accessToken).then(async response => {
                 setGraphData(response);
-                // TODO: uncomment to hide admin page & settings page to non-admins
-                // setAdmin(await isAdmin(response.mail));
                 console.log(response);
             });
         }).catch(async (error) => {
@@ -84,24 +78,18 @@ function NavBarButtons({ setShow, show, currLocation, btnVertSpace, vertOrNot })
                     </NavLink>
                 </div>
                 <div>
-                    {admin ?
-                        <NavLink to="/admin">
-                            <Button className=
-                                {currLocation.pathname == "/admin" ? btnVertSpace + actvStyles : btnVertSpace + btnStyles}>
+                    <NavLink to="/admin">
+                        <Button className=
+                            {currLocation.pathname == "/admin" ? btnVertSpace + actvStyles : btnVertSpace + btnStyles}>
                                 Admin Page</Button>
-                        </NavLink>
-                        : null
-                    }
+                    </NavLink>
                 </div>
                 <div>
-                    {admin ?
-                        <NavLink to="/settings" >
-                            <Button className=
-                                {currLocation.pathname == "/settings" ? btnVertSpace + actvStyles : btnVertSpace + btnStyles}>
+                    <NavLink to="/settings" >
+                        <Button className=
+                            {currLocation.pathname == "/settings" ? btnVertSpace + actvStyles : btnVertSpace + btnStyles}>
                                 Settings</Button>
-                        </NavLink>
-                        : null
-                    }
+                    </NavLink>
                 </div>
                 {/*TODO: https://mui.com/material-ui/react-menu/#basic-menu  */}
                 <div>
@@ -132,7 +120,7 @@ function NavBarButtons({ setShow, show, currLocation, btnVertSpace, vertOrNot })
                     </Modal.Header>
 
                     <Modal.Body>
-                        <TicketForm editTicket={false} setShow={setShow} key={setShow} />
+                        <TicketForm editTicket={false} setShow={setShow} key={setShow} iterationPath={iterationPath} />
                     </Modal.Body>
 
                 </Modal.Dialog>

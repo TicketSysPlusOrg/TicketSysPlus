@@ -9,53 +9,37 @@ const Settings = mongoose.model("Settings", settingsSchema);
 export const addSettings = (req, res) => {
     let newSettings = new Settings(req.body);
 
-    newSettings.save((err, Settings) => {
-        //save to DB
-        if (err) {
-            res.send(err);
-        }
-        res.json(Settings);
-    });
+    newSettings.save()
+        .then(settings => res.json(settings))
+        .catch(err => res.send(err));
 };
 
 //GET
 export const getSettings = (req, res) => {
-    Settings.find((err, Settings) => {
-        //save to DB
-        if (err) {
-            res.send(err);
-        }
-        res.json(Settings);
-    });
+    Settings.find().exec()
+        .then(settings => res.json(settings))
+        .catch(err => res.send(err));
 };
 
 
 //PUT
 export const changeSettings = (req, res) => {
-    let bodyid = req.body;
-
-    Settings.findByIdAndUpdate(
-        req.body,
-        { blocked: true },
-        { new: true },
-        (err, Settings) => {
-            if (err) {
-                res.send(err);
-            }
-            res.json(Settings);
-        }
-    );
+    if (req.body._id !== undefined) {
+        const { _id, body } = req.body;
+        Settings.findByIdAndUpdate(
+            _id,
+            { body: body }
+        ).exec()
+            .then(settings => res.json(settings))
+            .catch(err => res.send(err));
+    }
 };
 
 //DELETE
 export const deleteSettings = (req, res) => {
     Settings.deleteOne(
-        req.body,
-        (err, Settings) => {
-            if (err) {
-                res.send(err);
-            }
-            res.json(Settings);
-        }
-    );
+        req.body
+    ).exec()
+        .then(json => res.json(json))
+        .catch(err => res.send(err));
 };

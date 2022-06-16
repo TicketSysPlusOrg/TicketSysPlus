@@ -12,10 +12,10 @@ import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 
 import App from "./App";
-import { azureConfig, msalConfig } from "./authConfig";
+import { msalConfig } from "./authConfig";
 import { AzureDevOpsApi } from "./utils/AzureDevOpsApi";
 
-export const azureConnection = new AzureDevOpsApi(azureConfig.organizationUrl, azureConfig.token);
+export const azureConnection = new AzureDevOpsApi(process.env.REACT_APP_DEVOPS_ORGANIZATION_URL);
 
 export const backendApi = axios.create({
     baseURL: process.env.REACT_APP_BACKEND_URL,
@@ -58,6 +58,12 @@ async function run() {
     const allTeamMembers = await azureConnection.getAllTeamMembers(projects.value[1].id);
     console.log(allTeamMembers);
 
+    /*const addComment = await azureConnection.addWorkItemComment(projects.value[1].id, 1, "Another new comment here.");
+    console.log(addComment);*/
+
+    /*const getComments = await azureConnection.getWorkItemComments(projects.value[1].id, 1);
+    console.log(getComments);*/
+
     /*get project property ID. useful for troubleshooting and setting up the other methods used below to get to work item states */
     /*const getProjProps = await azureConnection.getProjectProperties(projects.value[1].id);
     console.log(getProjProps);*/
@@ -81,7 +87,7 @@ async function run() {
     //    const createTicket = await azureConnection.createWorkItem(projects.value[0].id, "Task", thisData);
     //    console.log(createTicket);
 }
-run();
+// run();
 
 export const msalInstance = new PublicClientApplication(msalConfig);
 

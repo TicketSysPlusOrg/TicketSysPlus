@@ -11,16 +11,12 @@ const apiVersion = "7.1-preview.3";
  * TODO: team object already has a project ID.. use that instead of requesting project ID
  */
 export class AzureDevOpsApi {
-    constructor(url, token) {
+    constructor(url) {
         this.url = url;
-        this.token = token;
         this.instance = axios.create({
             baseURL: url,
             headers: {
                 common: {
-                    // "Authorization": "Basic <Username>:<PAT Token>"
-                    // When using PAT there is no username, but you still need to include : in the base64 conversion
-                    "Authorization": `Basic ${Buffer.from(":" + token).toString("base64")}`,
                     "Content-Type": "application/json"
                 }
             },
@@ -28,6 +24,10 @@ export class AzureDevOpsApi {
                 "api-version": apiVersion
             }
         });
+    }
+
+    setToken(token) {
+        this.instance.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     }
 
     /**
@@ -149,6 +149,36 @@ export class AzureDevOpsApi {
             { params: { "api-version": "7.1-preview.3" }, headers: { "content-type": "application/json-patch+json" }, }).then(response => {
             return response.data;
         }).catch(error => error);
+    }
+
+    /**
+     * Add a comment to an existing work item.
+     * @param {string} project Project ID or name
+     * @param {string} workItemId ticket to add comment to
+     * @param {object} data the fields needed to create a new work item
+     * @returns {string} error if failed, comment info if successful
+     */
+    async addWorkItemComment(project, workItemId, data) {
+        return this.instance.post(`${project}/_apis/wit/workItems/${workItemId}/comments`,
+            {
+                "text": data
+            },
+            { params: { "api-version": "7.1-preview.3" } }).then(response => {
+            return response.data;
+        }).catch(error => error);
+    }
+
+    /**
+     * Get all comments associated with a work item.
+     * @param {string} project Project ID or name
+     * @param {string} workItemId ticket to retrieve comments from
+     * @param {string} commentID comment to retrieve (if not trying to retrieve a single ticket, sending in "" as param)
+     * @returns {string} error if failed, all comments if successful
+     */
+    async getWorkItemComments(project, workItemId, commentID) {
+        return this.instance.get(`${project}/_apis/wit/workItems/${workItemId}/comments${commentID}`,
+            { params: { "api-version": "7.1-preview.3" },
+            }).then (res => {return res.data;}).catch(err => err);
     }
 
     /**

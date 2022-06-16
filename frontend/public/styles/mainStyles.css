@@ -46,7 +46,12 @@ input[type=radio] {
     background-position: center;
     padding: 0;
     min-width: 100vw;
+}
 
+.jsonViewer {
+    background-image: url("/motorqAdmin.svg");
+    background-repeat: no-repeat;
+    background-position: left;
 }
 
 .bootstrapOverride .landingBox {
@@ -106,7 +111,8 @@ input[type=radio] {
     font-weight: 500;
 }
 
-.bootstrapOverride div.inactiveForms, .bootstrapOverride h5.inlineH5 {
+.bootstrapOverride div.inactiveForms,
+.bootstrapOverride h5.inlineH5 {
     display: inline;
 }
 
@@ -151,10 +157,44 @@ input[type=radio] {
 
 }
 
+.bootstrapOverride .loadBtn {
+    background-color: rgb(0, 58, 139);
+    border-color: rgb(0, 58, 139);
+
+}
+
+.bootstrapOverride .importBtn {
+    background-color: rgb(4, 116, 0);
+    border-color: rgb(4, 116, 0);
+
+}
+
+.bootstrapOverride .exportBtn {
+    background-color: rgb(206, 186, 35);
+    border-color: rgb(206, 186, 35);
+
+}
+
+.bootstrapOverride .saveBtn:disabled {
+    background-color: rgb(141, 141, 141);
+    border-color: rgb(141, 141, 141);
+    color: white;
+
+}
+
 .bootstrapOverride .saveBtn:hover,
 .bootstrapOverride .adminBtn:hover {
     background-color: rgb(104, 171, 193);
     border-color: rgb(104, 171, 193);
+}
+
+.lineClamp {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    height: 3em;
 }
 
 .adminError {

@@ -7,7 +7,7 @@ import { styled } from "@mui/material/styles";
 import { autocompleteClasses } from "@mui/material/Autocomplete";
 import PropTypes from "prop-types";
 
-import {azureConnection, backendApi} from "../../index";
+import { azureConnection, backendApi } from "../../index";
 
 
 /*
