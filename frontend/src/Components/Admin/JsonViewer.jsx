@@ -129,25 +129,20 @@ function JsonViewer({ isAdmin }) {
         setCurrentData(data);
         if (data !== initialData) {
             setChange(false);
-            console.log("can save");
         } else {
             setChange(true);
-            console.log("cannot save");
         }
         if (!validate(data)) {
             setChange(true);
-            console.log("cannot save");
         }
     }
 
     // loads previous iteration json from database collection to codemirror
     // verifies loaded json
     function loadOld() {
-        console.log("test");
         backendApi
             .get("jsons")
             .then((res) => {
-                console.log("test1");
                 setData(res.data[1].body);
             })
             .catch((err) => {
@@ -181,12 +176,10 @@ function JsonViewer({ isAdmin }) {
         if (fileUploaded !== undefined) {
             const reader = new FileReader();
             reader.onload = async (event) => {
-                console.log("Result: " + event.target.result);
                 setCurrentData(event.target.result);
             };
             reader.readAsText(fileUploaded);
         }
-        console.log(fileUploaded);
     };
 
     return (
@@ -270,7 +263,6 @@ function JsonViewer({ isAdmin }) {
                                 if (viewUpdate.docChanged) {
                                     const text = viewUpdate.state.doc.toString();
                                     if (text && text !== currentData) {
-                                        console.log("yup");
                                         verify(text);
                                     }
                                 }

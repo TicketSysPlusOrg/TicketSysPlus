@@ -51,7 +51,6 @@ function Responders({ isAdmin }) {
     }
 
     function deleteResponder(id) {
-        console.log(id);
         backendApi.delete("responders", { data: { "id": id } })
             .then((res) => {
                 console.log(res);
