@@ -9,12 +9,12 @@ import  adminRoute from "./routes/adminRoute";
 import  settingsRoute from "./routes/settingsRoute";
 
 const app = express();
-const PORT = 4001;
+const PORT = process.env.EXPRESS_PORT || 4001;
 
 //mongo connection: lib simplifies connections to mongo and allows shorter syntax for queries
 //mongo will tell us we're connected and we will get promise response
 mongoose.Promise = global.Promise;
-mongoose.connect("mongodb://127.0.0.1:27017", {
+mongoose.connect(`mongodb://127.0.0.1:${process.env.MONGODB_PORT || 27017}`, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 }).then(() => console.log("Successfully connected to MongoDB Database"))
