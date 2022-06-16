@@ -137,6 +137,12 @@ function Tickets({ projects, rerender }) {
         setDevOpsTix(sortArr);
     }
 
+    /*returns the generic iteration path or sprint path following / if there is one*/
+    function splitPath(iterationInfo) {
+        const splitInfo = iterationInfo.split("\\");
+        return splitInfo[splitInfo.length - 1];
+    }
+
     return (
         <>
             {/* TODO: Replace this div with a metrics box, for Ex:
@@ -152,10 +158,11 @@ function Tickets({ projects, rerender }) {
             <Col xs={12} className={"pe-0"}>
                 <div className={"projectSelect"}>
                     <Container fluid className={"my-1 py-1 px-0 row infoBar cardOneLine align-items-center fw-bold text-decoration-underline"} >
-                        <Col xs={1} className={"ps-3"}><a href={"#"} onClick={() => clickSort("id", null)} className={"sortTicket"}>ID</a></Col>
+                        <Col xs={1} className={"ps-4"}><a href={"#"} onClick={() => clickSort("id", null)} className={"sortTicket"}>ID</a></Col>
                         <Col xs={2}><a href={"#"} onClick={() => clickSort("fields", "System.Title")}  className={"sortTicket"}>Title</a></Col>
                         <Col xs={1}><a href={"#"} onClick={() => clickSort("fields", "Microsoft.VSTS.Common.Priority")} className={"sortTicket"}>Priority</a></Col>
-                        <Col xs={2}><a href={"#"} onClick={() => clickSort("fields", "Microsoft.VSTS.Scheduling.DueDate")} className={"sortTicket"}>Due Date</a></Col>
+                        <Col xs={1}><a href={"#"} onClick={() => clickSort("fields", "Microsoft.VSTS.Scheduling.DueDate")} className={"sortTicket"}>Due Date</a></Col>
+                        <Col xs={1}><a href={"#"} onClick={() => clickSort("fields", "System.IterationPath")} className={"sortTicket"}>Sprint</a></Col>
                         <Col xs={2}><a href={"#"} onClick={() => clickSort("fields", "System.AssignedTo")} className={"sortTicket"}>Assigned To</a></Col>
                         <Col xs={1}><a href={"#"} onClick={() => clickSort("fields", "System.State")} className={"sortTicket"}>State</a></Col>
                         <Col xs={3} className={"d-flex justify-content-around "}>
@@ -179,13 +186,14 @@ function Tickets({ projects, rerender }) {
                             <div className={"projectSelect"}>
                                 {/* TODO: Convert into a data table? https://mui.com/material-ui/react-table/#data-table */}
                                 <Container fluid className={stateColor(devTix.fields["System.State"]) + " my-1 py-1 px-0 row hoverOver cardOneLine align-items-center fw-bold "} >
-                                    <Col xs={1} className={"ps-3"}>{devTix.id}</Col>
+                                    <Col xs={1} className={"ps-4"}>{devTix.id}</Col>
                                     <Col xs={2} className={"ps-3 align-self-center text-capitalize"} title={devTix.fields["System.Title"]}>{devTix.fields["System.Title"]}</Col>
                                     <Col xs={1} className={"ps-4"}>{devTix.fields["Microsoft.VSTS.Common.Priority"]}</Col>
                                     {/*TODO: remove the extra ternary check for no due date present once we require due date for ticket creation*/}
-                                    <Col xs={2} title={devTix.fields["Microsoft.VSTS.Scheduling.DueDate"] ? devTix.fields["Microsoft.VSTS.Scheduling.DueDate"].slice(0, 10) : null}>
+                                    <Col xs={1} title={devTix.fields["Microsoft.VSTS.Scheduling.DueDate"] ? devTix.fields["Microsoft.VSTS.Scheduling.DueDate"].slice(0, 10) : null}>
                                         {devTix.fields["Microsoft.VSTS.Scheduling.DueDate"] ? devTix.fields["Microsoft.VSTS.Scheduling.DueDate"].slice(0, 10) : null}
                                     </Col>
+                                    <Col xs={1} title={devTix.fields["System.IterationPath"]}>{splitPath(devTix.fields["System.IterationPath"])}</Col>
                                     <Col xs={2} title={devTix.fields["System.AssignedTo"]}>{getNameBeforeEmail(devTix.fields["System.AssignedTo"])}</Col>
                                     <Col xs={1} title={devTix.fields["System.State"]}>{devTix.fields["System.State"]}</Col>
                                     <Col xs={3} className={"d-flex justify-content-around"}>
