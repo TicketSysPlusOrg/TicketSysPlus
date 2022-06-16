@@ -1,8 +1,8 @@
-import {Card, Col} from "react-bootstrap";
+import { Card, Col } from "react-bootstrap";
 import React from "react";
 
 
-function TicketAttachments({ticketInfo}) {
+function TicketAttachments({ ticketInfo }) {
 
     return (
         <>
