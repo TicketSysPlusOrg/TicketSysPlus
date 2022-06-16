@@ -1,6 +1,6 @@
 import {Card, Col, Button} from "react-bootstrap";
 import {parseHtml} from "../../utils/Util";
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import {azureConnection} from "../../index";
 
 /**
@@ -10,8 +10,10 @@ import {azureConnection} from "../../index";
  * @returns {JSX.Element} TicketComments object
  */
 function TicketComments({ ticketInfo, workItemComments}) {
+    /*set state to display single ticket information*/
     const [singleComment, setSingleComment] = useState(null);
 
+    /*get all the chosen ticket's info for display*/
     async function getSingleComment(commentID) {
         const getComment = await azureConnection.getWorkItemComments(ticketInfo.fields["System.AreaPath"], ticketInfo.id, "/" + commentID);
         console.log(getComment);
@@ -33,11 +35,11 @@ function TicketComments({ ticketInfo, workItemComments}) {
                                         <Card.Title title={thisComment.createdBy.displayName} className={"text-truncate"}>
                                             {thisComment.createdBy.displayName}
                                         </Card.Title>
-                                        <Card.Text className={"lineClamp"}>
+                                        <div className={"lineClamp"}>
                                             {parseHtml(thisComment.text)}
-                                        </Card.Text>
-                                        <Button size={"small"} className={"float-end"} variant={"outline-primary"} t
-                                            type={"button"} onClick={() => getSingleComment(thisComment.id) }>VIEW</Button>
+                                        </div>
+                                        <Button size={"small"} className={"float-end mt-2"} variant={"outline-primary"} type={"button"}
+                                            onClick={() => getSingleComment(thisComment.id) }>VIEW</Button>
                                     </Card.Body>
                                 </Card>
                             </Col>); } )
@@ -47,23 +49,22 @@ function TicketComments({ ticketInfo, workItemComments}) {
                     <Col className={"mt-3"}>
                         <Card className={"shadow-sm"}>
                             <Card.Header as="h5">
-                                {singleComment.createdDate.slice(0, 10)} <img alt={"author icon"} src={singleComment.createdBy.imageUrl} className={"float-end"} />
+                                Comment Date: {singleComment.createdDate.slice(0, 10)} <img alt={"author icon"} src={singleComment.createdBy.imageUrl} className={"float-end"} />
                             </Card.Header>
                             <Card.Body>
                                 <Card.Title title={singleComment.createdBy.displayName} className={"text-truncate"}>
-                                    {singleComment.createdBy.displayName}
+                                    Created By:{singleComment.createdBy.displayName}
                                 </Card.Title>
-                                <Card.Text >
+                                <div>
                                     {parseHtml(singleComment.text)}
-                                </Card.Text>
-                                <Button className={"float-end"} variant={"outline-primary"} t
-                                    type={"button"} onClick={() => setSingleComment(null)}>CLOSE</Button>
+                                </div>
+                                <Button className={"float-end mt-2"} variant={"outline-primary"} type={"button"}
+                                    onClick={() => setSingleComment(null)}>CLOSE</Button>
                             </Card.Body>
                         </Card>
                     </Col>
                     : <p>Error loading comment.</p>
             }
-
         </>
     );
 }
