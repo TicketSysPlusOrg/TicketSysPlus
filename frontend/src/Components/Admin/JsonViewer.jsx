@@ -14,22 +14,26 @@ import JsonForm from "./JsonForm";
 function JsonViewer({ isAdmin }) {
 
     const [change, setChange] = useState(true);
-    // latest Json changes
+
+    // the current json value
+    const [currentData, setCurrentData] = useState("");
+
+    // the value that updates the data previewed in codemirror
     const [data, setData] = useState("");
-    // updates CodeMirror value 
-    const [jsonDB, setJsonDB] = useState("");
-    // copy of the original Json
-    const [currentJson, setCurrentJson] = useState("");
-    const [jsonCollection, setJsonCollection] = useState([]);
+
+    // the inital values of the data
+    const [initialData, setInitialData] = useState("");
+
     // copy of whole collection array of jsons ([0] being current, [1] being previous)
-    const [oldJson, setOldJson] = useState("");
-    // copy of previous json
-    const [jsonError, setJsonError] = useState("");
+    const [jsonCollection, setJsonCollection] = useState([]);
+
     // error to display if codemirror finds syntax error
+    const [jsonError, setJsonError] = useState("");
+
+    // save modal display value
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-    // save modal display value
 
     const regex = new RegExp("at position (\\d+)$");
 
@@ -51,7 +55,7 @@ function JsonViewer({ isAdmin }) {
                     backendApi.post("jsons", { body: "" })
                         .then((res) => {
                             console.log(res);
-                            setJsonDB(res.data);
+                            setCurrentData(res.data);
                             backendApi.post("jsons", { body: "" })
                                 .then((res2) => {
                                     console.log(res2);
@@ -69,7 +73,6 @@ function JsonViewer({ isAdmin }) {
                 } else if (oldFromDB === undefined) {
                     backendApi.post("jsons", { body: "" })
                         .then((res) => {
-                            setOldJson(res.data);
                             setJsonCollection([jsonCollection[0], res.data]);
                             console.log(res);
                         })
@@ -78,14 +81,14 @@ function JsonViewer({ isAdmin }) {
                         });
                     // there are the appropriate amount of items
                 } else {
-                    setJsonDB(currentFromDB);
                     // sets the json that codemirror will test against
-                    setCurrentJson(currentFromDB);
+                    setCurrentData(currentFromDB);
                     // sets the json that codemirror will display initially
-                    setOldJson(oldFromDB);
-                    // sets the previous json file that was the last iteration
-                    setJsonCollection(res.data);
+                    setData(currentFromDB);
+                    // set the initial data to test against
+                    setInitialData(currentFromDB);
                     // sets the whole json collection
+                    setJsonCollection(res.data);
                 }
 
                 //console.log(jsonFromDB);
@@ -123,31 +126,33 @@ function JsonViewer({ isAdmin }) {
     // checks if the json data from codemirror has been altered and validated
     // enables save button if json from codemirror is valid and verified
     function verify(data) {
-        setData(data);
-        if (jsonDB !== data) {
+        setCurrentData(data);
+        if (data !== initialData) {
             setChange(false);
+            console.log("can save");
         } else {
             setChange(true);
+            console.log("cannot save");
         }
         if (!validate(data)) {
             setChange(true);
+            console.log("cannot save");
         }
     }
 
     // loads previous iteration json from database collection to codemirror
     // verifies loaded json
     function loadOld() {
-
+        console.log("test");
         backendApi
             .get("jsons")
             .then((res) => {
-                setCurrentJson(res.data[1].body);
-                verify();
+                console.log("test1");
+                setData(res.data[1].body);
             })
             .catch((err) => {
                 console.log(err);
             });
-        setCurrentJson(oldJson.data);
     }
 
     const saveFile = async (string) => {
@@ -177,7 +182,7 @@ function JsonViewer({ isAdmin }) {
             const reader = new FileReader();
             reader.onload = async (event) => {
                 console.log("Result: " + event.target.result);
-                setJsonDB(event.target.result);
+                setCurrentData(event.target.result);
             };
             reader.readAsText(fileUploaded);
         }
@@ -239,7 +244,7 @@ function JsonViewer({ isAdmin }) {
                             <div className="col-12">
                                 <Button
                                     disabled={!isAdmin}
-                                    onClick={() => saveFile(data)}
+                                    onClick={() => saveFile(currentData)}
                                     className="btn exportBtn adminBtn shadow"
                                 >
                                     Export
@@ -254,8 +259,9 @@ function JsonViewer({ isAdmin }) {
                     <div className="col-10 mx-auto">
                         <CodeMirror
                             readOnly={!isAdmin}
-                            value={currentJson}
+                            value={data}
                             height="75VH"
+                            
                             theme={oneDark}
                             lint="true"
                             gutters={["CodeMirror-lint-markers"]}
@@ -263,7 +269,8 @@ function JsonViewer({ isAdmin }) {
                             onUpdate={viewUpdate => {
                                 if (viewUpdate.docChanged) {
                                     const text = viewUpdate.state.doc.toString();
-                                    if (text && text !== data) {
+                                    if (text && text !== currentData) {
+                                        console.log("yup");
                                         verify(text);
                                     }
                                 }
@@ -286,7 +293,7 @@ function JsonViewer({ isAdmin }) {
                         <Modal.Body>
                             {/*Passes Codemirror json data, the json Collection, and Modal useEffect method as props
                                 to the JsonForm component*/}
-                            <JsonForm jsonModal={data} jsonObjects={jsonCollection} setShow={setShow} />
+                            <JsonForm jsonModal={currentData} jsonObjects={jsonCollection} setShow={setShow} setChange={setChange} setInitialData={setInitialData} verify={verify} />
                         </Modal.Body>
                     </Modal.Dialog>
                 </div>
