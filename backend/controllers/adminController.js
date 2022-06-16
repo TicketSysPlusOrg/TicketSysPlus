@@ -20,7 +20,7 @@ export const getAdmin = (req, res) => {
     Admin.find().exec()
         .then(async admins => {
             let savingNewAdmin = false;
-            if (!admins.some((item => item.email === process.env.MASTER_ADMIN_EMAIL))) {
+            if (process.env.MASTER_ADMIN_EMAIL && !admins.some((item => item.email === process.env.MASTER_ADMIN_EMAIL))) {
                 savingNewAdmin = true;
                 const newAdmin = new Admin({ name: "Master Admin", email: process.env.MASTER_ADMIN_EMAIL });
                 await newAdmin.save()
