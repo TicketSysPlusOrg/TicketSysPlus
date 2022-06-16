@@ -16,7 +16,7 @@ import SelectorChecks from "./SelectorChecks";
 function Ticket({ ticketData, clickClose, setShow }) {
     const [thisTicketInfo, setThisTicketInfo] = useState(null);
     const [allTicketInfo, setAllTicketInfo] = useState(null);
-    const [rowValue, setRowValue] = useState("comments");
+    const [rowValue, setRowValue] = useState("none");
 
     useEffect(() => {
         setThisTicketInfo(ticketData);
@@ -37,11 +37,10 @@ function Ticket({ ticketData, clickClose, setShow }) {
     useEffect(() => {
         if(allTicketInfo !== null) {
             (async () => {
-                const workItemComments = await azureConnection.getWorkItemComments(allTicketInfo.fields["System.AreaPath"], allTicketInfo.id, "");
-                setWorkItemComments(workItemComments);
+                const ticketComments = await azureConnection.getWorkItemComments(allTicketInfo.fields["System.AreaPath"], allTicketInfo.id, "");
+                setWorkItemComments(ticketComments);
             })();
         }
-
     }, [allTicketInfo]);
 
     /*render edit state. if true, swap to edit ticket view*/
@@ -154,18 +153,19 @@ function Ticket({ ticketData, clickClose, setShow }) {
                                 {/*TICKET COMMENTS AND ATTACHMENTS*/}
                                 {rowValue === "comments" ?
                                     <Row className={"mb-4"}>
-                                        <h6 className={"fw-bold"}>Ticket Comments</h6>
-                                        {workItemComments ?
+                                        <h5>Ticket Comments</h5>
+                                        {workItemComments && workItemComments.totalCount !== 0 ?
                                             <TicketComments ticketInfo={allTicketInfo} workItemComments={workItemComments} />
-                                            : <p>No ticket comments available.</p>}
+                                            : <div className={"text-center"}>No ticket comments.</div>}
                                     </Row>
-                                    :
-                                    <Row className={"mb-4"} >
-                                        <h5>Attachments</h5>
-                                        {allTicketInfo.relations ?
-                                            <TicketAttachments ticketInfo={allTicketInfo} />
-                                            : <div className={"border border-1 p-2 articleStyle"}>No attachments.</div>}
-                                    </Row> }
+                                    : rowValue === "attachments" ?
+                                        <Row className={"mb-4"} >
+                                            <h5>Attachments</h5>
+                                            {allTicketInfo.relations ?
+                                                <TicketAttachments ticketInfo={allTicketInfo} />
+                                                : <div className={"text-center"}>No ticket attachments.</div>}
+                                        </Row>
+                                        : null}
 
                                 <hr />
 

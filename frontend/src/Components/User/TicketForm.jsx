@@ -15,13 +15,19 @@ import TicketComments from "./TicketComments";
 import TicketAttachments from "./TicketAttachments";
 import SelectorChecks from "./SelectorChecks";
 
+/**
+ * This component is the basis for ticket creation/updates. It contains forms for creating new tickets or updating contained fields.
+ * @param props
+ * @returns {JSX.Element}
+ * @constructor
+ */
 function TicketForm(props) {
     /*update statevals, typevals, assignedto, and priorityval onchange. overriding hard set from edit ticket data*/
     const [priorityVal, changePriorityVal] = useState(null);
     const [typeVal, changeTypeVal] = useState(null);
     const [stateVal, changeStateVal] = useState(null);
     const [assignedTo, changeAssignedTo] = useState(null);
-    const [rowValue, setRowValue] = useState("comments");
+    const [rowValue, setRowValue] = useState("none");
 
     /*show and close vars for modal*/
     const handleClose = () => {
@@ -331,8 +337,6 @@ function TicketForm(props) {
             {viewTicketMode === false ?
                 <Row>
                     <Col>
-                        {/*TODO: fields for project/teams*/}
-                        {/*TODO: validation  for all fields*/}
                         <Form className={"col s12"} onSubmit={submitTicket}>
 
                             {/*EDIT TICKET HEADER AND DELETE BUTTON. AVAILABLE WHEN IN EDIT TICKET MODE.*/}
@@ -421,7 +425,7 @@ function TicketForm(props) {
                             <Row className={"mb-2"}>
                                 <Form.Group className={"col s12"}>
                                     <Form.Label htmlFor={"tickAssigned"}
-                                        className={"fw-bold d-inline-block"}>{editTicket === true ? "ASSIGNED TO" : "ASSIGN TO"}</Form.Label>
+                                        className={"fw-bold d-inline-block"}>Assign To</Form.Label>
                                     <AutoCompleteNames index={1} id={"tickAssigned"} setMentionChoices={setMentionChoices}
                                         setAssignee={setAssignee} />
                                 </Form.Group>
@@ -516,13 +520,14 @@ function TicketForm(props) {
                                         <TicketComments ticketInfo={props.ticketInfo} workItemComments={workItemComments} />
                                         : <p>No ticket comments available.</p>}
                                 </Row>
-                                :
-                                <Row className={"mb-3"}>
-                                    <h6 className={"fw-bold"}>Current Attachments</h6>
-                                    {props.ticketInfo.relations ?
-                                        <TicketAttachments ticketInfo={props.ticketInfo} />
-                                        : <p>No current attachments.</p>}
-                                </Row> }
+                                : rowValue === "attachments" ?
+                                    <Row className={"mb-3"}>
+                                        <h6 className={"fw-bold"}>Current Attachments</h6>
+                                        {props.ticketInfo.relations ?
+                                            <TicketAttachments ticketInfo={props.ticketInfo} />
+                                            : <p>No current attachments.</p>}
+                                    </Row>
+                                    : null}
 
                             {/*ADD ATTACHMENTS*/}
                             <Row className={"mb-3"}>
