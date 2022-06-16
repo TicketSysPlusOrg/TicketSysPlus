@@ -15,7 +15,7 @@ import App from "./App";
 import { msalConfig } from "./authConfig";
 import { AzureDevOpsApi } from "./utils/AzureDevOpsApi";
 
-export const azureConnection = new AzureDevOpsApi(process.env.REACT_APP_DEVOPS_ORGANIZATION_URL, process.env.REACT_APP_DEVOPS_TOKEN);
+export const azureConnection = new AzureDevOpsApi(process.env.REACT_APP_DEVOPS_ORGANIZATION_URL);
 
 export const backendApi = axios.create({
     baseURL: process.env.REACT_APP_BACKEND_URL,
@@ -87,7 +87,7 @@ async function run() {
     //    const createTicket = await azureConnection.createWorkItem(projects.value[0].id, "Task", thisData);
     //    console.log(createTicket);
 }
-run();
+// run();
 
 export const msalInstance = new PublicClientApplication(msalConfig);
 

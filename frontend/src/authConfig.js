@@ -54,6 +54,11 @@ export const loginRequest = {
     scopes: ["User.Read"]
 };
 
+// scope for Azure DevOps API
+export const apiConfig = {
+    scopes: ["499b84ac-1321-427f-aa17-267ca6975798/.default"]
+};
+
 // Add here the endpoints for MS Graph API services you would like to use.
 export const graphConfig = {
     graphMeEndpoint: "https://graph.microsoft.com/v1.0/me"

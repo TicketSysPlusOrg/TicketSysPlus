@@ -11,16 +11,12 @@ const apiVersion = "7.1-preview.3";
  * TODO: team object already has a project ID.. use that instead of requesting project ID
  */
 export class AzureDevOpsApi {
-    constructor(url, token) {
+    constructor(url) {
         this.url = url;
-        this.token = token;
         this.instance = axios.create({
             baseURL: url,
             headers: {
                 common: {
-                    // "Authorization": "Basic <Username>:<PAT Token>"
-                    // When using PAT there is no username, but you still need to include : in the base64 conversion
-                    "Authorization": `Basic ${Buffer.from(":" + token).toString("base64")}`,
                     "Content-Type": "application/json"
                 }
             },
@@ -28,6 +24,10 @@ export class AzureDevOpsApi {
                 "api-version": apiVersion
             }
         });
+    }
+
+    setToken(token) {
+        this.instance.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     }
 
     /**
