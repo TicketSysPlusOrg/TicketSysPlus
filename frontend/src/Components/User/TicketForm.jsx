@@ -167,6 +167,10 @@ function TicketForm(props) {
                 }
             };
 
+            if (props.iterationPath !== undefined && props.iterationPath !== "") {
+                devOpsTickData.fields["System.IterationPath"] = props.iterationPath;
+            }
+
             const createTicket = await azureConnection.createWorkItem(prjID, ticketType, devOpsTickData);
 
             await uploadAndAttach(prjID, createTicket.id, tickAttachments);

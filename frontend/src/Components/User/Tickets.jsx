@@ -21,7 +21,7 @@ export function getNameBeforeEmail(thisString) {
     }
 }
 
-function Tickets({ projects, rerender }) {
+function Tickets({ projects, rerender, iterationPath }) {
     /*modal show and hide*/
     const [show, setShow] = useState(false);
     const handleShow = () => setShow(true);
@@ -35,9 +35,6 @@ function Tickets({ projects, rerender }) {
 
     /*getting org/project info for opening ticket in DevOps*/
     const [currentOrgInfo, setCurrentOrgInfo] = useState(null);
-
-    /*FOR PAVEL*/
-    const [defaultPrj, setDefaultPrj] = useState(null);
 
     function showTicketModal(ticketData){
         setTicketInfo(ticketData);
@@ -59,12 +56,7 @@ function Tickets({ projects, rerender }) {
 
         if (projects === null) return;
 
-        // const settings = await getSettings();
-
-        // stuff = "";
-        // if (settings !== undefined && settings.length > 0) {
-        //     const stuff = JSON.parse(settings[0].body);
-        // }
+        console.log(`path: ${iterationPath}`);
 
         var getProj = await azureConnection.getProject(projects[0]);
         console.log(getProj);
@@ -259,7 +251,7 @@ function Tickets({ projects, rerender }) {
                 <Modal.Dialog className={"mx-3"}>
                     <Modal.Body>
                         {renderEdit === true ?
-                            <TicketForm ticketData={ticketInfo} editTicket={true} ticketInfo={allTicketInfo} setShow={setShow} />
+                            <TicketForm ticketData={ticketInfo} editTicket={true} ticketInfo={allTicketInfo} setShow={setShow} iterationPath={iterationPath} />
                             :
                             <Ticket ticketData={ticketInfo} clickClose={handleClose} setShow={setShow} renderTicket={renderEdit} ticketInfo={allTicketInfo}/>
                         }

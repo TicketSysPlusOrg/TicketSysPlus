@@ -6,7 +6,7 @@ import PropTypes from "prop-types";
 import NavBarButtons from "./NavBarButtons";
 
 
-function NavBar({ show, setShow }) {
+function NavBar({ show, setShow, iterationPath }) {
     const currLocation = useLocation();
     const navigate = useNavigate();
 
@@ -51,7 +51,7 @@ function NavBar({ show, setShow }) {
                     <Offcanvas.Body>
                         <Nav className="me-2 ms-auto mt-2">
 
-                            <NavBarButtons currLocation={currLocation} btnVertSpace={vertSpace} vertOrNot={vertOrNot} setShow={setShow} show={show} />
+                            <NavBarButtons currLocation={currLocation} btnVertSpace={vertSpace} vertOrNot={vertOrNot} setShow={setShow} show={show} iterationPath={iterationPath} />
 
                         </Nav>
 
