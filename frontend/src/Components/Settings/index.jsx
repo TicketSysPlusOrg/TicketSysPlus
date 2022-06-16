@@ -36,6 +36,8 @@ function Settings() {
 
     const [show, setShow] = useState(false);
 
+    const [defaultProject, setDefaultProject] = useState("");
+
     return(
         <MsalAuthenticationTemplate
             interactionType={InteractionType.Redirect}
@@ -46,8 +48,8 @@ function Settings() {
                 <Container>
                     <Box sx={{ marginTop: "10vh", height: "83vh" }}>
                         <Stack spacing={2}>
-                            <Paper elevation={3}><DefaultProject /></Paper>
-                            <Paper elevation={3}><SprintIterationPath /></Paper>
+                            <Paper elevation={3}><DefaultProject defaultProject={defaultProject} setDefaultProject={setDefaultProject} /></Paper>
+                            <Paper elevation={3}><SprintIterationPath defaultProject={defaultProject} setDefaultProject={setDefaultProject} /></Paper>
                             <Paper elevation={3}><Admins /></Paper>
                         </Stack>
                     </Box>

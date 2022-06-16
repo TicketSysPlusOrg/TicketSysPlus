@@ -11,20 +11,27 @@ import { backendApi } from "../../index";
 import JsonForm from "./JsonForm";
 
 
-function JsonViewer() {
+function JsonViewer({ isAdmin }) {
 
     const [change, setChange] = useState(true);
-    // latest Json changes
-    const [data, setData] = useState("");
-    // updates CodeMirror value 
-    const [jsonDB, setJsonDB] = useState("");
-    const [currentJson, setCurrentJson] = useState("");
-    const [jsonCollection, setJsonCollection] = useState([]);
-    // copy of the original Json
-    const [oldJson, setOldJson] = useState("");
-    const [jsonError, setJsonError] = useState("");
-    const [show, setShow] = useState(false);
 
+    // the current json value
+    const [currentData, setCurrentData] = useState("");
+
+    // the value that updates the data previewed in codemirror
+    const [data, setData] = useState("");
+
+    // the inital values of the data
+    const [initialData, setInitialData] = useState("");
+
+    // copy of whole collection array of jsons ([0] being current, [1] being previous)
+    const [jsonCollection, setJsonCollection] = useState([]);
+
+    // error to display if codemirror finds syntax error
+    const [jsonError, setJsonError] = useState("");
+
+    // save modal display value
+    const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
@@ -42,12 +49,13 @@ function JsonViewer() {
                 const oldFromDB = res.data[1]?.body;
 
                 // if first index is undefined, then the database is empty.
-                // need to it with two items
+                // there needs to be two
+                // adds two empty items
                 if (currentFromDB === undefined) {
                     backendApi.post("jsons", { body: "" })
                         .then((res) => {
                             console.log(res);
-                            setJsonDB(res.data);
+                            setCurrentData(res.data);
                             backendApi.post("jsons", { body: "" })
                                 .then((res2) => {
                                     console.log(res2);
@@ -65,7 +73,6 @@ function JsonViewer() {
                 } else if (oldFromDB === undefined) {
                     backendApi.post("jsons", { body: "" })
                         .then((res) => {
-                            setOldJson(res.data);
                             setJsonCollection([jsonCollection[0], res.data]);
                             console.log(res);
                         })
@@ -74,9 +81,13 @@ function JsonViewer() {
                         });
                     // there are the appropriate amount of items
                 } else {
-                    setJsonDB(currentFromDB);
-                    setCurrentJson(currentFromDB);
-                    setOldJson(oldFromDB);
+                    // sets the json that codemirror will test against
+                    setCurrentData(currentFromDB);
+                    // sets the json that codemirror will display initially
+                    setData(currentFromDB);
+                    // set the initial data to test against
+                    setInitialData(currentFromDB);
+                    // sets the whole json collection
                     setJsonCollection(res.data);
                 }
 
@@ -112,9 +123,11 @@ function JsonViewer() {
         return isValid;
     }
 
+    // checks if the json data from codemirror has been altered and validated
+    // enables save button if json from codemirror is valid and verified
     function verify(data) {
-        setData(data);
-        if (jsonDB !== data) {
+        setCurrentData(data);
+        if (data !== initialData) {
             setChange(false);
         } else {
             setChange(true);
@@ -124,18 +137,17 @@ function JsonViewer() {
         }
     }
 
+    // loads previous iteration json from database collection to codemirror
+    // verifies loaded json
     function loadOld() {
-
         backendApi
             .get("jsons")
             .then((res) => {
-                setCurrentJson(res.data[1].body);
-                verify();
+                setData(res.data[1].body);
             })
             .catch((err) => {
                 console.log(err);
             });
-        setCurrentJson(oldJson.data);
     }
 
     const saveFile = async (string) => {
@@ -164,18 +176,17 @@ function JsonViewer() {
         if (fileUploaded !== undefined) {
             const reader = new FileReader();
             reader.onload = async (event) => {
-                console.log("Result: " + event.target.result);
-                setJsonDB(event.target.result);
+                setCurrentData(event.target.result);
             };
             reader.readAsText(fileUploaded);
         }
-        console.log(fileUploaded);
     };
 
     return (
         <>
-            <div className="container mt-4">
+            <div className="container mt-4 jsonViewer">
 
+                {/*Codemirror error display*/}
                 <div className="row">
                     <div className="col-12 text-center mt-2">
                         <p className="adminError">{jsonError}</p>
@@ -185,14 +196,15 @@ function JsonViewer() {
                 <div className="row">
 
                     <div className="col-2 mb-1">
-
+                        {/*Buttons Save, Load Previous, Import, Export */}
                         <div className="row">
 
                             <div className="col-12">
 
                                 <Button
                                     onClick={handleShow}
-                                    className="btn btn-danger mb-2 adminBtn saveBtn" disabled={change}
+                                    className="btn btn-danger mb-2 adminBtn saveBtn shadow"
+                                    disabled={change}
                                 >
                                     Save
                                 </Button>
@@ -201,8 +213,9 @@ function JsonViewer() {
                             <div className="col-12">
 
                                 <Button
+                                    disabled={!isAdmin}
                                     onClick={loadOld}
-                                    className="btn btn-primary mb-2 adminBtn"
+                                    className="btn loadBtn mb-2 adminBtn shadow"
                                 >
                                     Load Previous JSON
                                 </Button>
@@ -210,7 +223,11 @@ function JsonViewer() {
 
                             <div className="col-12">
 
-                                <Button onClick={handleClick} className="btn btn-success mb-2 adminBtn">
+                                <Button
+                                    disabled={!isAdmin}
+                                    onClick={handleClick}
+                                    className="btn importBtn mb-2 adminBtn shadow"
+                                >
                                     Import
                                 </Button>
 
@@ -219,9 +236,9 @@ function JsonViewer() {
 
                             <div className="col-12">
                                 <Button
-                                    onClick={() => saveFile(data)}
-                                    className="btn btn-warning adminBtn"
-                                    id="exportbtn"
+                                    disabled={!isAdmin}
+                                    onClick={() => saveFile(currentData)}
+                                    className="btn exportBtn adminBtn shadow"
                                 >
                                     Export
                                 </Button>
@@ -231,11 +248,13 @@ function JsonViewer() {
 
                     </div>
 
-
+                    {/*Codemirror which updates data on change */}
                     <div className="col-10 mx-auto">
                         <CodeMirror
-                            value={currentJson}
+                            readOnly={!isAdmin}
+                            value={data}
                             height="75VH"
+                            
                             theme={oneDark}
                             lint="true"
                             gutters={["CodeMirror-lint-markers"]}
@@ -243,7 +262,7 @@ function JsonViewer() {
                             onUpdate={viewUpdate => {
                                 if (viewUpdate.docChanged) {
                                     const text = viewUpdate.state.doc.toString();
-                                    if (text && text !== data) {
+                                    if (text && text !== currentData) {
                                         verify(text);
                                     }
                                 }
@@ -253,7 +272,8 @@ function JsonViewer() {
                 </div>
 
             </div>
-
+            {/*Modal which displays on Save button click and displays the json from Codemirror before finally submitting
+                to the database*/}
             <Modal show={show} onHide={handleClose} className="row">
                 <div className="col-12">
                     <Modal.Dialog className="shadow-lg my-0">
@@ -263,7 +283,9 @@ function JsonViewer() {
                         </Modal.Header>
 
                         <Modal.Body>
-                            <JsonForm jsonModal={data} jsonObjects={jsonCollection} setShow={setShow} />
+                            {/*Passes Codemirror json data, the json Collection, and Modal useEffect method as props
+                                to the JsonForm component*/}
+                            <JsonForm jsonModal={currentData} jsonObjects={jsonCollection} setShow={setShow} setChange={setChange} setInitialData={setInitialData} verify={verify} />
                         </Modal.Body>
                     </Modal.Dialog>
                 </div>

@@ -8,42 +8,30 @@ const Responder = mongoose.model("Responder", memberSchema);
 export const addResponder = (req, res) => {
     let newResponder = new Responder(req.body);
 
-    newResponder.save((err, Responder) => {
-        //save to DB
-        if (err) {
-            res.send(err);
-        }
-        res.json(Responder);
-    });
+    newResponder.save()
+        .then(responder => res.json(responder))
+        .catch(err => res.send(err));
 };
 
 //GET
 export const getResponder = (req, res) => {
-    Responder.find((err, Responder) => {
-        //save to DB
-        if (err) {
-            res.send(err);
-        }
-        res.json(Responder);
-    });
+    Responder.find().exec()
+        .then(responder => res.json(responder))
+        .catch(err => res.send(err));
 };
 
 
 //PUT
 export const changeResponder = (req, res) => {
-    let bodyid = req.body;
-
-    Responder.findByIdAndUpdate(
-        req.body,
-        { blocked: true },
-        { new: true },
-        (err, Responder) => {
-            if (err) {
-                res.send(err);
-            }
-            res.json(Responder);
-        }
-    );
+    if (req.body._id !== undefined) {
+        const { _id, body } = req.body;
+        Responder.findByIdAndUpdate(
+            _id,
+            { body: body }
+        ).exec()
+            .then(responder => res.json(responder))
+            .catch(err => res.send(err));
+    }
 };
 
 //DELETE
@@ -52,23 +40,15 @@ export const deleteResponder = (req, res) => {
         const { id, ...filter } = req.body;
         Responder.findByIdAndDelete(
             id,
-            filter,
-            (err, Responder) => {
-                if (err) {
-                    res.send(err);
-                }
-                res.json(Responder);
-            }
-        );
+            filter
+        ).exec()
+            .then(responder => res.json(responder))
+            .catch(err => res.send(err));
     } else {
         Responder.deleteOne(
-            req.body,
-            (err, Responder) => {
-                if (err) {
-                    res.send(err);
-                }
-                res.json(Responder);
-            }
-        );
+            req.body
+        ).exec()
+            .then(responder => res.json(responder))
+            .catch(err => res.send(err));
     }
 };

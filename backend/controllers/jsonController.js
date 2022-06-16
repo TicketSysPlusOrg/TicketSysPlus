@@ -9,24 +9,16 @@ const Json = mongoose.model("Json", jsonSchema);
 export const addJson = (req, res) => {
     let newJson = new Json(req.body);
 
-    newJson.save((err, Json) => {
-        //save to DB
-        if (err) {
-            res.send(err);
-        }
-        res.json(Json);
-    });
+    newJson.save()
+        .then(json => res.json(json))
+        .catch(err => res.send(err));
 };
 
 //GET
 export const getJson = (req, res) => {
-    Json.find((err, Json) => {
-        //save to DB
-        if (err) {
-            res.send(err);
-        }
-        res.json(Json);
-    });
+    Json.find().exec()
+        .then(json => res.json(json))
+        .catch(err => res.send(err));
 };
 
 
@@ -36,26 +28,18 @@ export const changeJson = (req, res) => {
         const { _id, body } = req.body;
         Json.findByIdAndUpdate(
             _id,
-            { body: body },
-            (err, Json) => {
-                if (err) {
-                    res.send(err);
-                }
-                res.json(Json);
-            }
-        );
+            { body: body }
+        ).exec()
+            .then(json => res.json(json))
+            .catch(err => res.send(err));
     }
 };
 
 //DELETE
 export const deleteJson = (req, res) => {
     Json.deleteOne(
-        req.body,
-        (err, Json) => {
-            if (err) {
-                res.send(err);
-            }
-            res.json(Json);
-        }
-    );
+        req.body
+    ).exec()
+        .then(json => res.json(json))
+        .catch(err => res.send(err));
 };

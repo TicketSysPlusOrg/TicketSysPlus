@@ -3,7 +3,8 @@ import parse from "html-react-parser";
 import { backendApi } from "../index";
 
 /**
- * Parses HTML string into React Components
+ * Parses HTML String into React Components.
+ * Also capitalizes first character inside HTML elements prior to parsing to React Components.
  * @param {string} input The HTML string to parse into React Components
  */
 export function parseHtml(input) {
@@ -14,7 +15,15 @@ export function parseHtml(input) {
     // remove styling from elements before parsing
     input = input.replace(/data-darkreader-inline-bgcolor=".*?"|style=".*?"/g, "");
 
-    return parse(input);
+    let splitit = input.split(">");
+    for (let i = 0; i < splitit.length; i++) {
+        if(splitit[i].charAt(0).toUpperCase() !== undefined) {
+            splitit[i] = splitit[i].charAt(0).toUpperCase() + splitit[i].substring(1);
+        }
+    }
+    splitit = splitit.join(">");
+
+    return parse(splitit);
 }
 
 /**

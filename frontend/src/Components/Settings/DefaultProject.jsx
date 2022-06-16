@@ -7,9 +7,8 @@ import { getSettings } from "../../utils/Util";
 import { backendApi } from "../../index";
 import { azureConnection } from "../../index";
 
-function SprintIterationPath() {
+function SprintIterationPath({ defaultProject, setDefaultProject }) {
     const [projects, setProjects] = useState([]);
-    const [project, setProject] = useState("");
 
     useEffect(() => {
         (async () => {
@@ -26,9 +25,9 @@ function SprintIterationPath() {
                         let { body } = res.data[0];
                         body = JSON.parse(body);
                         if ( body.defaultProject !== undefined ) {
-                            setProject(body.defaultProject);
+                            setDefaultProject(body.defaultProject);
                         }
-                        console.log(project);
+                        console.log(defaultProject);
                     }
                 })
                 .catch((err) => {
@@ -40,18 +39,18 @@ function SprintIterationPath() {
     return (
         <>
             <Grid container className={"mt-4"}>
-                <Grid item xs={8} className={"mt-2"}>
+                <Grid item xs={4} className={"mt-2"}>
                     <h4 className={"text-center"}>Default Project</h4>
                 </Grid>
-                <Grid item xs={4}>
+                <Grid item xs={8}>
                     <Autocomplete
                         className={"mb-3"}
                         disablePortal
                         disableClearable
-                        value={project}
+                        value={defaultProject}
                         options={projects}
                         isOptionEqualToValue={(option, value) => option.label === value.label}
-                        sx={{ width: 300 }}
+                        sx={{ pr: 4 }}
                         renderInput={(params) => <TextField {...params} label="Set Default Project..." />}
                         onChange={async (_event, value, reason) => {
                             if(reason === "selectOption") {
@@ -59,7 +58,7 @@ function SprintIterationPath() {
                                     "defaultProject": value
                                 };
 
-                                setProject(value);
+                                setDefaultProject(value);
 
                                 const settings = await getSettings();
                                 const body = (settings !== undefined && settings.length > 0 ? JSON.parse(settings[0].body) : {});

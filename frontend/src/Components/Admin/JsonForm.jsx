@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 
 import { backendApi } from "../../index";
 
-function JsonForm({ jsonModal, jsonObjects, setShow }) {
+function JsonForm({ jsonModal, jsonObjects, setShow, setInitialData, setChange }) {
 
     let inputBody = createRef();
 
@@ -17,21 +17,14 @@ function JsonForm({ jsonModal, jsonObjects, setShow }) {
 
         jsonObjects[1].body = jsonObjects[0].body;
         jsonObjects[0].body = inputBody.current.value;
-        console.log(jsonObjects[0].body);
-        backendApi.put("jsons", jsonObjects[0])
-            .then((res) => {
-                console.log(res);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-        backendApi.put("jsons", jsonObjects[1])
-            .then((res) => {
-                console.log(res);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+
+        Promise.all([
+            backendApi.put("jsons", jsonObjects[0]),
+            backendApi.put("jsons", jsonObjects[1])
+        ]).then(_result => {
+            setInitialData(jsonObjects[0].body);
+            setChange(true);
+        }).catch(console.error);
     }
 
     return (

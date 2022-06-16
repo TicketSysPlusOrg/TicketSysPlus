@@ -152,6 +152,36 @@ export class AzureDevOpsApi {
     }
 
     /**
+     * Add a comment to an existing work item.
+     * @param {string} project Project ID or name
+     * @param {string} workItemId ticket to add comment to
+     * @param {object} data the fields needed to create a new work item
+     * @returns {string} error if failed, comment info if successful
+     */
+    async addWorkItemComment(project, workItemId, data) {
+        return this.instance.post(`${project}/_apis/wit/workItems/${workItemId}/comments`,
+            {
+                "text": data
+            },
+            { params: { "api-version": "7.1-preview.3" } }).then(response => {
+            return response.data;
+        }).catch(error => error);
+    }
+
+    /**
+     * Get all comments associated with a work item.
+     * @param {string} project Project ID or name
+     * @param {string} workItemId ticket to retrieve comments from
+     * @param {string} commentID comment to retrieve (if not trying to retrieve a single ticket, sending in "" as param)
+     * @returns {string} error if failed, all comments if successful
+     */
+    async getWorkItemComments(project, workItemId, commentID) {
+        return this.instance.get(`${project}/_apis/wit/workItems/${workItemId}/comments${commentID}`,
+            { params: { "api-version": "7.1-preview.3" },
+            }).then (res => {return res.data;}).catch(err => err);
+    }
+
+    /**
      * Update existing work item.
      * @param {string} project Project ID or name
      * @param {string} workItemID single work item ID

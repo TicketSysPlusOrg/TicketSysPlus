@@ -13,7 +13,7 @@ import TicketForm from "../User/TicketForm";
 // import { isAdmin } from "../../utils/Util";
 
 
-function NavBarButtons({ setShow, show, currLocation, btnVertSpace, vertOrNot }) {
+function NavBarButtons({ setShow, show, currLocation, btnVertSpace, vertOrNot, iterationPath }) {
     const [btnStyles] = useState("adminButton btn mx-2");
     const [actvStyles] = useState("makeTicket btn mx-2");
     const handleShow = () => setShow(true);
@@ -132,7 +132,7 @@ function NavBarButtons({ setShow, show, currLocation, btnVertSpace, vertOrNot })
                     </Modal.Header>
 
                     <Modal.Body>
-                        <TicketForm editTicket={false} setShow={setShow} key={setShow} />
+                        <TicketForm editTicket={false} setShow={setShow} key={setShow} iterationPath={iterationPath} />
                     </Modal.Body>
 
                 </Modal.Dialog>
