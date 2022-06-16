@@ -93,13 +93,6 @@ function JsonViewer({ isAdmin }) {
             .catch((err) => {
                 console.error(err);
             });
-        if (!isAdmin) {
-            setChange(true);
-            setJsonError("Not a registered admin.");
-            return;
-        } else {
-            setJsonError("");
-        }
     }
 
     function validate(jsonToValidate) {
