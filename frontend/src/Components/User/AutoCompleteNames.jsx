@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import TextField from "@mui/material/TextField";
-import Autocomplete from "@mui/material/Autocomplete"
+import Autocomplete from "@mui/material/Autocomplete";
 import PropTypes from "prop-types";
 
 import { azureConnection, backendApi } from "../../index";
