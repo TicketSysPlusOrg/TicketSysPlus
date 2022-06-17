@@ -4,6 +4,7 @@ import { TextField, Autocomplete, Avatar, Stack } from "@mui/material";
 
 import { backendApi } from "../../index";
 import { azureConnection } from "../../index";
+import { getSettings } from "../../utils/Util";
 
 /**
  * Adam Percival, Nathan Arrowsmith, Pavel Krokhalev, Conor O'Brien
@@ -27,11 +28,19 @@ function Responders({ isAdmin }) {
         loadResponders();
     }, []);
 
-    //gets all projects from devops api as an array
-    //assigns all members from the project in the index [1] to a usestate
+    //gets all team members from settings' default project 
+    //assigns members from the project to a usestate
     async function run() {
-        const projects = await azureConnection.getProjects();
-        const membersObject = await azureConnection.getAllTeamMembers(projects.value[1].id);
+        const settings = await getSettings();
+
+        /*get default project per admin settings panel*/
+        let defaultProject = "";
+        if (settings !== undefined && settings.length > 0) {
+            const settingsObj = JSON.parse(settings[0].body);
+            defaultProject = settingsObj.defaultProject;
+        }
+
+        const membersObject = await azureConnection.getAllTeamMembers(defaultProject);
 
         setResponders(membersObject);
     }
