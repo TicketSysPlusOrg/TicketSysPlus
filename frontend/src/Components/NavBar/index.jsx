@@ -5,7 +5,16 @@ import PropTypes from "prop-types";
 
 import NavBarButtons from "./NavBarButtons";
 
-
+/**
+ * Adam Percival, Nathan Arrowsmith, Pavel Krokhalev, Conor O'Brien
+ * 6/16/2022
+ *
+ * Navbar component containing buttons to populate navbar and window size measurement to trigger offcanvas or not.
+ * @param {props} show helps trigger tickets view reload in parent component.
+ * @param {props} setShow helps trigger tickets view reload in parent component.
+ * @param {props} iterationPath the sprint that tickets will be created for. used in ticket creation.
+ * @returns {JSX.Element} NavBar component
+ */
 function NavBar({ show, setShow, iterationPath }) {
     const currLocation = useLocation();
     const navigate = useNavigate();

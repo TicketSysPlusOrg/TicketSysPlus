@@ -1,18 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { Form, Container } from "react-bootstrap";
 import PropTypes from "prop-types";
 
 import { ConditionalExample } from "./DataSourceConds";
 import ConditionalSelect from "./ConditionalSelect";
 import ConditionalAnswers from "./ConditionalAnswers";
 
-/*
- * INDEX: key from the ticketForm array that called conditionalForms component. use to distinguish conditionalForms iterations/to distinguish list choices
- * JSONOBJ: the object to be sent in on conditional renders. use it to map out the 'layer' of the json file that we're at.
- * MIN: minimum items from JSON
- * MAX: maximum items from JSON
- * (min and max are checked to see if select on or multi select)
- * */
+/**
+ * Adam Percival, Nathan Arrowsmith, Pavel Krokhalev, Conor O'Brien
+ * 6/16/2022
+ *
+ * This component handles initial JSON pull from database and renders titles/descriptions or makes further component call
+ * as needed. It is used to iterate through a JSON file for dynamic rendering of a questionnaire.
+ * @param {props} index key from the ticketForm array that called conditionalForms component.
+ *          use to distinguish conditionalForms iterations/to distinguish list choices
+ * @param {props} jsonObj the object to be sent in on conditional renders. use it to map out the 'layer' of the json file that we're at.
+ * @param {props} min minimum amount of choices required
+ * @param {props} max maximum amount of choices required
+ * @returns {JSX.Element} ConditionalForms component.
+ */
 function ConditionalForms({ index, jsonObj, min, max }) {
     /* this is the current dummy json file. leaving for testing purposes.*/
     //const conJSON = ConditionalExample;
@@ -52,9 +57,7 @@ function ConditionalForms({ index, jsonObj, min, max }) {
     *   IF ANY OF THOSE ARE CONTAINED (I.E. NOT RETURNING UNDEFINED), SEE IF WHAT THEY RETURN IS AN ARRAY OR NOT.
     *       IF IT'S AN ARRAY, IS IT AN ARRAY OF OBJECTS OR ARRAY OF STRINGS/ENUMS/NUMBERS/BOOLEANS?
     *           IF ARRAY OF OBJECTS (KEY-VAL PAIRS), SELECT LIST GENERATION.
-    *           IF ARRAY OF STRING/NUMBER/MAYBE BOOLEAN, WE'VE REACHED AN END POINT. REQUIRE A SELECTION (OR MULTI) AND RETURN ALL INFO ON SUBMIT.
-    * ***** NEXT: NEED TO SETUP MULTI/SINGLE SELECT LOGIC AS WELL AS HANDLING DIFFERENT TYPES OF ENDPOINT SELECTIONS (ENUM, STRING, NUMBER, BOOLEAN. *****
-    * ***** AFTER THAT: CONSOLIDATE CODE. *****
+    *           IF ARRAY OF ENUM, WE'VE REACHED AN END POINT. REQUIRE A SELECTION (OR MULTI) AND RETURN ALL INFO ON SUBMIT.
     */}
 
     return (
@@ -138,7 +141,6 @@ function ConditionalForms({ index, jsonObj, min, max }) {
                     </div>
                     : null }
             </div>
-
         </>
     );
 }

@@ -11,6 +11,10 @@ import Landing from "./Components/Landing";
 import { apiConfig } from "./authConfig";
 import { azureConnection } from "./index";
 
+/**
+ * Application component that handles page routes (standard user, admin, landing, settings, error).
+ * @returns {JSX.Element} App component.
+ */
 function App() {
     const { instance, accounts } = useMsal();
     const account = useAccount(accounts[0] || {});

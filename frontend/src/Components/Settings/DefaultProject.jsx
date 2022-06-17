@@ -7,6 +7,15 @@ import { getSettings } from "../../utils/Util";
 import { backendApi } from "../../index";
 import { azureConnection } from "../../index";
 
+/**
+ * Adam Percival, Nathan Arrowsmith, Pavel Krokhalev, Conor O'Brien
+ * 6/16/2022
+ *
+ * This page sets/gets the admin-set sprint path and default project for ticket creation and tickets viewing.
+ * @param {props} defaultProject the current selected default project.
+ * @param {props} setDefaultProject the new default project.
+ * @returns {JSX.Element} SprintIterationPath component.
+ */
 function SprintIterationPath({ defaultProject, setDefaultProject }) {
     const [projects, setProjects] = useState([]);
 

@@ -2,14 +2,18 @@ import React, { useEffect, useState } from "react";
 import { Form, Container } from "react-bootstrap";
 import PropTypes from "prop-types";
 
-
-/*
- * INDEX: key from the ticketForm array that called conditionalForms component. use to distinguish conditionalForms iterations/to distinguish list choices
- * JSONOBJ: the object to be sent in on conditional renders. use it to map out the 'layer' of the json file that we're at.
- * MIN: minimum items from JSON
- * MAX: maximum items from JSON
- * (min and max are checked to see if select on or multi select)
-* */
+/**
+ * Adam Percival, Nathan Arrowsmith, Pavel Krokhalev, Conor O'Brien
+ * 6/16/2022
+ *
+ * This component handles the final selection list for the conditional questionnaire used during ticket creation.
+ * @param {props} index key from the ticketForm array that called conditionalForms component.
+ *          use to distinguish conditionalForms iterations/to distinguish list choices
+ * @param {props} jsonObj the object to be sent in on conditional renders. use it to map out the 'layer' of the json file that we're at.
+ * @param {props} min minimum amount of choices required
+ * @param {props} max maximum amount of choices required
+ * @returns {JSX.Element} ConditionalAnswers component.
+ */
 function ConditionalAnswers({ index, jsonObj, min, max }) {
 
     /*conditional object  updated on render*/

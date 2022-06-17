@@ -1,7 +1,14 @@
 import { Card, Col } from "react-bootstrap";
 import React from "react";
 
-
+/**
+ * Adam Percival, Nathan Arrowsmith, Pavel Krokhalev, Conor O'Brien
+ * 6/16/2022
+ *
+ * The TicketAttachments component handles mapping/displaying work item-associated attachments.
+ * @param {props} ticketInfo the DevOps work item info containing all related attachments.
+ * @returns {JSX.Element} TicketAttachments component.
+ */
 function TicketAttachments({ ticketInfo }) {
 
     return (

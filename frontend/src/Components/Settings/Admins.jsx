@@ -8,6 +8,13 @@ import { Box, Grid } from "@mui/material";
 import { backendApi } from "../../index";
 import { azureConnection } from "../../index";
 
+/**
+ * Adam Percival, Nathan Arrowsmith, Pavel Krokhalev, Conor O'Brien
+ * 6/16/2022
+ *
+ * This page handles database calls for deciding who is an administrator for the page.
+ * @returns {JSX.Element} Admins component.
+ */
 function Admins() {
     /*devops api data retrieval*/
     const [admins, setAdmins] = useState(null);

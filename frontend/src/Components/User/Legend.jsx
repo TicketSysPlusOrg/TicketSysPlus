@@ -8,6 +8,15 @@ import BlockIcon from "@mui/icons-material/Block";
 import { useState } from "react";
 import PropTypes from "prop-types";
 
+/**
+ * Adam Percival, Nathan Arrowsmith, Pavel Krokhalev, Conor O'Brien
+ * 6/16/2022
+ *
+ * This component contains the code for the main page legend, which has descriptive info for new users.
+ * @param {props} open state that tells the component to display.
+ * @param {props} onClose state handler triggering modal close.
+ * @returns {JSX.Element} SimpleDialog component.
+ */
 function SimpleDialog({ open, onClose }) {
     return (
         <Dialog
@@ -76,13 +85,19 @@ SimpleDialog.propTypes = {
     onClose: PropTypes.func.isRequired
 };
 
+/**
+ * Adam Percival, Nathan Arrowsmith, Pavel Krokhalev, Conor O'Brien
+ * 6/16/2022
+ *
+ * This component contains the code for opening/closing the legend modal.
+ * @returns {JSX.Element} Legend component.
+ */
 function Legend() {
     const [open, setOpen] = useState(false);
 
     const handleClose = () => {
         setOpen(false);
     };
-
     return (
         <>
             <Fab

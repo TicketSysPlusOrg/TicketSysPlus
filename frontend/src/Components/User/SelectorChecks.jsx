@@ -2,6 +2,9 @@ import { Form, Row } from "react-bootstrap";
 import React from "react";
 
 /**
+ * Adam Percival, Nathan Arrowsmith, Pavel Krokhalev, Conor O'Brien
+ * 6/16/2022
+ *
  * This component contains radio selectors for displaying comments, attachments, or neither.
  * @param {props} setRowValue the parent state handler that enables setting the proper state when radio buttons are selected
  * @returns {JSX.Element} SelectorChecks

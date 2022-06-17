@@ -16,10 +16,17 @@ import TicketAttachments from "./TicketAttachments";
 import SelectorChecks from "./SelectorChecks";
 
 /**
- * This component is the basis for ticket creation/updates. It contains forms for creating new tickets or updating contained fields.
- * @param props
- * @returns {JSX.Element}
- * @constructor
+ * Adam Percival, Nathan Arrowsmith, Pavel Krokhalev, Conor O'Brien
+ * 6/16/2022
+ *
+ * This component is the basis for ticket creation/updates. It contains forms for creating new tickets or updating contained fields,
+ * as well as functions required for submitting data for creating new/editing existing tickets.
+ * @param {props} props for different function calls and viewing modes.
+ *          ticketData and ticketInfo are for filling info in edit ticket mode.
+ *              * two state names for different component accessors, can be simplified with future development.
+ *          editTicket is a boolean value for telling the code whether we are editing a ticket or creating a new ticket.
+ *          setShow is a state accessor for hiding a modal and re-rendering the tickets view.
+ * @returns {JSX.Element} TicketForm component.
  */
 function TicketForm(props) {
     /*update statevals, typevals, assignedto, and priorityval onchange. overriding hard set from edit ticket data*/
@@ -303,7 +310,7 @@ function TicketForm(props) {
     /*state for file upload. currently one item at a time*/
     const [uploadVal, setUploadVal] = useState([]);
 
-    /*TODO: need to limit file size, run checks, and add to an array of files for creation*/
+    /*future development opportunity: need to limit file size, run checks, and add to an array of files for creation*/
     function uploadAttach(thisFile) {
         console.log(thisFile);
         setUploadVal(thisFile);

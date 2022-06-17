@@ -11,7 +11,13 @@ import { isAdmin } from "../../utils/Util";
 import Responders from "./Responders";
 import JsonViewer from "./JsonViewer";
 
-
+/**
+ * Adam Percival, Nathan Arrowsmith, Pavel Krokhalev, Conor O'Brien
+ * 6/16/2022
+ *
+ * Admin page component. Calls navbar, responders, and JSON viewer components.
+ * @returns {JSX.Element} Admin component.
+ */
 function Admin() {
     const authRequest = {
         ...loginRequest

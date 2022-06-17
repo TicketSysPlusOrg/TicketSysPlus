@@ -1,12 +1,3 @@
-/**
- * Adam Percival, Nathen Arrowsmith, Pavel Krokhalev
- * 6/16/2022
- *
- * Responders component loads an autocomplete dropdown menu that shows members from a project in devops api
- * and when selected, loads that member's name, devops api profile image, and their email onto the admin page
- * as cards as well to the database
- */
-
 import React, { useEffect, useState } from "react";
 import { Card, CloseButton, Col, Dropdown, Row } from "react-bootstrap";
 import { TextField, Autocomplete, Avatar, Stack } from "@mui/material";
@@ -14,6 +5,16 @@ import { TextField, Autocomplete, Avatar, Stack } from "@mui/material";
 import { backendApi } from "../../index";
 import { azureConnection } from "../../index";
 
+/**
+ * Adam Percival, Nathan Arrowsmith, Pavel Krokhalev, Conor O'Brien
+ * 6/16/2022
+ *
+ * Responders component loads an autocomplete dropdown menu that shows members from a project in devops api
+ * and when selected, loads that member's name, devops api profile image, and their email onto the admin page
+ * as cards as well to the database
+ * @param {props} isAdmin shows whether the user can access admin content or not.
+ * @returns {JSX.Element} Responders component.
+ */
 function Responders({ isAdmin }) {
     /*devops api data retrieval*/
     const [responders, setResponders] = useState(null);

@@ -14,6 +14,11 @@ import Ticket from "./Ticket";
 import TicketForm from "./TicketForm";
 
 /*get only name from username + email string*/
+/**
+ * This component retrieves only a name from a name + email string.
+ * @param {props} thisString the name + email string.
+ * @returns {string} just the username.
+ */
 export function getNameBeforeEmail(thisString) {
     if(thisString !== undefined) {
         let findName = thisString;
@@ -21,6 +26,16 @@ export function getNameBeforeEmail(thisString) {
     }
 }
 
+/**
+ * Adam Percival, Nathan Arrowsmith, Pavel Krokhalev, Conor O'Brien
+ * 6/16/2022
+ *
+ * The tickets component creates a row/column-based display for all DevOps tickets.
+ * @param {props} projects the chosen project for ticket viewing.
+ * @param {props} rerender when triggered, re-renders tickets being shown.
+ * @param {props} iterationPath the admin settings-chosen sprint path for ticket creation.
+ * @returns {JSX.Element} Tickets component.
+ */
 function Tickets({ projects, rerender, iterationPath }) {
     /*modal show and hide*/
     const [show, setShow] = useState(false);
@@ -137,7 +152,7 @@ function Tickets({ projects, rerender, iterationPath }) {
 
     return (
         <>
-            {/* TODO: Replace this div with a metrics box, for Ex:
+            {/* future development opportunity: Replace this div with a metrics box, for Ex:
                 <> blocked tickets
                 <> priority 3 tickets
                 <> priority 2 tickets
@@ -173,15 +188,14 @@ function Tickets({ projects, rerender, iterationPath }) {
                 devOpsTix ?
                     devOpsTix.map((devTix, index) => (
                         <Col xs={12} className={"pe-0"} key={index} >
-                            {/*TODO: double check that areapath will always be filled*/}
-                            {/* TODO: https://mui.com/material-ui/react-stack/ */}
+                            {/* future development opportunity: https://mui.com/material-ui/react-stack/ */}
                             <div className={"projectSelect"}>
-                                {/* TODO: Convert into a data table? https://mui.com/material-ui/react-table/#data-table */}
+
+                                {/* future development opportunity: Convert into a data table? https://mui.com/material-ui/react-table/#data-table */}
                                 <Container fluid className={stateColor(devTix.fields["System.State"]) + " my-1 py-1 px-0 row hoverOver cardOneLine align-items-center fw-bold "} >
                                     <Col xs={1} className={"ps-4"}>{devTix.id}</Col>
                                     <Col xs={2} className={"ps-3 align-self-center text-capitalize"} title={devTix.fields["System.Title"]}>{devTix.fields["System.Title"]}</Col>
                                     <Col xs={1} className={"ps-4"}>{devTix.fields["Microsoft.VSTS.Common.Priority"]}</Col>
-                                    {/*TODO: remove the extra ternary check for no due date present once we require due date for ticket creation*/}
                                     <Col xs={1} title={devTix.fields["Microsoft.VSTS.Scheduling.DueDate"] ? devTix.fields["Microsoft.VSTS.Scheduling.DueDate"].slice(0, 10) : null}>
                                         {devTix.fields["Microsoft.VSTS.Scheduling.DueDate"] ? devTix.fields["Microsoft.VSTS.Scheduling.DueDate"].slice(0, 10) : null}
                                     </Col>

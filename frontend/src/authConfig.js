@@ -11,7 +11,13 @@ const isIE = msie > 0 || msie11 > 0;
 const isEdge = msedge > 0;
 const isFirefox = firefox > 0; // Only needed if you need to support the redirect flow in Firefox incognito
 
-// Config object to be passed to Msal on creation
+/**
+ * Adam Percival, Nathan Arrowsmith, Pavel Krokhalev, Conor O'Brien
+ * 6/16/2022
+ *
+ * Config object to be passed to Msal on creation
+ * @type {{cache: {cacheLocation: string, storeAuthStateInCookie: boolean}, system: {loggerOptions: {loggerCallback: msalConfig.system.loggerOptions.loggerCallback}}, auth: {redirectUri: *, clientId: *, authority: string}}}
+ */
 export const msalConfig = {
     auth: {
         clientId: process.env.REACT_APP_CLIENT_ID,
