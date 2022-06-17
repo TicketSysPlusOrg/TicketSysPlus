@@ -271,7 +271,7 @@ function JsonViewer({ isAdmin }) {
                             onUpdate={viewUpdate => {
                                 if (viewUpdate.docChanged) {
                                     const text = viewUpdate.state.doc.toString();
-                                    if (text && text !== currentData) {
+                                    if (text && text !== currentData && !(initialData.length === 0 && text.length !== 0)) {
                                         verify(text);
                                     }
                                 }
