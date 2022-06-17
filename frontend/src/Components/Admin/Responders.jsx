@@ -5,6 +5,16 @@ import { TextField, Autocomplete, Avatar, Stack } from "@mui/material";
 import { backendApi } from "../../index";
 import { azureConnection } from "../../index";
 
+/**
+ * Adam Percival, Nathan Arrowsmith, Pavel Krokhalev, Conor O'Brien
+ * 6/16/2022
+ *
+ * Responders component loads an autocomplete dropdown menu that shows members from a project in devops api
+ * and when selected, loads that member's name, devops api profile image, and their email onto the admin page
+ * as cards as well to the database
+ * @param {props} isAdmin shows whether the user can access admin content or not.
+ * @returns {JSX.Element} Responders component.
+ */
 function Responders({ isAdmin }) {
     /*devops api data retrieval*/
     const [responders, setResponders] = useState(null);
@@ -17,6 +27,8 @@ function Responders({ isAdmin }) {
         loadResponders();
     }, []);
 
+    //gets all projects from devops api as an array
+    //assigns all members from the project in the index [1] to a usestate
     async function run() {
         const projects = await azureConnection.getProjects();
         const membersObject = await azureConnection.getAllTeamMembers(projects.value[1].id);
@@ -24,6 +36,9 @@ function Responders({ isAdmin }) {
         setResponders(membersObject);
     }
 
+    //posts the devops api image, full name, and email of the member that is selected from the
+    //responder dropdown menu to the database
+    //calls loadResponders to populate the page with updated cards
     function APIDropDownToDB(Image, Name, Email) {
         backendApi.post("responders", {
             image: Image,
@@ -39,6 +54,7 @@ function Responders({ isAdmin }) {
             });
     }
 
+    //populates the page with responder cards
     function loadResponders() {
         backendApi.get("responders")
             .then((res) => {
@@ -50,6 +66,7 @@ function Responders({ isAdmin }) {
             });
     }
 
+    //deletes a responder card from the database and calls loadResponders to populate the page with updated cards
     function deleteResponder(id) {
         backendApi.delete("responders", { data: { "id": id } })
             .then((res) => {
@@ -61,6 +78,8 @@ function Responders({ isAdmin }) {
             });
     }
 
+    //maps members from the responders usestate to values: label, imageUrl, and email to be displayed in Autocomplete
+    //dropdown menu. label == member name, imageUrl == devops api profile picture, email == member email
     const autoResponders = responders ?
         responders.value
             .map((responder) => {

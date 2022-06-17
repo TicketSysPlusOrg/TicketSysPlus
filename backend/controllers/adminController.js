@@ -3,6 +3,14 @@ import mongoose from "mongoose";
 require("dotenv").config();
 import { memberSchema } from "../models/memberSchema.js";
 
+/**
+ * Adam Percival, Nathan Arrowsmith, Pavel Krokhalev, Conor O'Brien
+ * 6/16/2022
+ *
+ * Backend Controller for Admin collection in MongoDB
+ * the Admin collection stores objects containing first and last names and email addresses 
+ */
+
 const Admin = mongoose.model("Admin", memberSchema);
 
 
@@ -20,7 +28,7 @@ export const getAdmin = (req, res) => {
     Admin.find().exec()
         .then(async admins => {
             let savingNewAdmin = false;
-            if (!admins.some((item => item.email === process.env.MASTER_ADMIN_EMAIL))) {
+            if (process.env.MASTER_ADMIN_EMAIL && !admins.some((item => item.email === process.env.MASTER_ADMIN_EMAIL))) {
                 savingNewAdmin = true;
                 const newAdmin = new Admin({ name: "Master Admin", email: process.env.MASTER_ADMIN_EMAIL });
                 await newAdmin.save()

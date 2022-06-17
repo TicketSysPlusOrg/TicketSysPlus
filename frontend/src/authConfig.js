@@ -11,12 +11,18 @@ const isIE = msie > 0 || msie11 > 0;
 const isEdge = msedge > 0;
 const isFirefox = firefox > 0; // Only needed if you need to support the redirect flow in Firefox incognito
 
-// Config object to be passed to Msal on creation
+/**
+ * Adam Percival, Nathan Arrowsmith, Pavel Krokhalev, Conor O'Brien
+ * 6/16/2022
+ *
+ * Config object to be passed to Msal on creation
+ * @type {{cache: {cacheLocation: string, storeAuthStateInCookie: boolean}, system: {loggerOptions: {loggerCallback: msalConfig.system.loggerOptions.loggerCallback}}, auth: {redirectUri: *, clientId: *, authority: string}}}
+ */
 export const msalConfig = {
     auth: {
-        clientId: "42ced15c-1747-47e9-80e2-ac48ce121919",
+        clientId: process.env.REACT_APP_CLIENT_ID,
         authority: "https://login.microsoftonline.com/common/",
-        redirectUri: "https://ticketsysplus.granny.dev/",
+        redirectUri: process.env.REACT_APP_REDIRECT_URI,
     },
     cache: {
         cacheLocation: "localStorage",
@@ -51,7 +57,12 @@ export const msalConfig = {
 
 // Add here scopes for id token to be used at MS Identity Platform endpoints.
 export const loginRequest = {
-    scopes: ["User.Read"]
+    scopes: ["User.Read", "499b84ac-1321-427f-aa17-267ca6975798/user_impersonation"]
+};
+
+// scope for Azure DevOps API
+export const apiConfig = {
+    scopes: ["499b84ac-1321-427f-aa17-267ca6975798/.default"]
 };
 
 // Add here the endpoints for MS Graph API services you would like to use.

@@ -10,7 +10,19 @@ import { backendApi } from "../../index";
 
 import JsonForm from "./JsonForm";
 
-
+/**
+ * Adam Percival, Nathan Arrowsmith, Pavel Krokhalev, Conor O'Brien
+ * 6/16/2022
+ *
+ * JsonViewer displays the json file that populates the tickets on the ticket page in a Codemirror text area.
+ * This Codemirror element tracks the syntax of that json as well as logging errors to the user if the json is not
+ * formatted properly. This display also supports the ability to import files to and export the json from the
+ * Codemirror element. The save button on the page will save the json from Codemirror to the database to populate
+ * the ticket form if it is valid. The load previous button will load the last version of the json file in case the user
+ * wants to load the previous iteration of the json file.
+ * @param {props} isAdmin shows whether the user can access admin content or not.
+ * @returns {JSX.Element} JSONViewer component.
+ */
 function JsonViewer({ isAdmin }) {
 
     const [change, setChange] = useState(true);
@@ -37,7 +49,7 @@ function JsonViewer({ isAdmin }) {
 
     const regex = new RegExp("at position (\\d+)$");
 
-
+    /*code render run method call*/
     useEffect(() => {
         run();
     }, []);
@@ -184,7 +196,7 @@ function JsonViewer({ isAdmin }) {
 
     return (
         <>
-            <div className="container mt-4 jsonViewer">
+            <div className="container mt-4">
 
                 {/*Codemirror error display*/}
                 <div className="row">
@@ -200,7 +212,6 @@ function JsonViewer({ isAdmin }) {
                         <div className="row">
 
                             <div className="col-12">
-
                                 <Button
                                     onClick={handleShow}
                                     className="btn btn-danger mb-2 adminBtn saveBtn shadow"
@@ -211,7 +222,6 @@ function JsonViewer({ isAdmin }) {
                             </div>
 
                             <div className="col-12">
-
                                 <Button
                                     disabled={!isAdmin}
                                     onClick={loadOld}
@@ -222,7 +232,6 @@ function JsonViewer({ isAdmin }) {
                             </div>
 
                             <div className="col-12">
-
                                 <Button
                                     disabled={!isAdmin}
                                     onClick={handleClick}

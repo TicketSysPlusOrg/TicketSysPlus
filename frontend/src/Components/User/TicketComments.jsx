@@ -1,15 +1,19 @@
-import {Card, Col, Button} from "react-bootstrap";
-import {parseHtml} from "../../utils/Util";
-import React, {useState} from "react";
-import {azureConnection} from "../../index";
+import { Card, Col, Button } from "react-bootstrap";
+import React, { useState } from "react";
+
+import { parseHtml } from "../../utils/Util";
+import { azureConnection } from "../../index";
 
 /**
+ * Adam Percival, Nathan Arrowsmith, Pavel Krokhalev, Conor O'Brien
+ * 6/16/2022
+ *
  * This function maps all work item comments and created cards of them.
- * @param {Object} ticketInfo JSON object with all the related work item info
- * @param {array} workItemComments comments associated with work item
+ * @param {props} ticketInfo JSON object with all the related work item info
+ * @param {props} workItemComments comments associated with work item
  * @returns {JSX.Element} TicketComments object
  */
-function TicketComments({ ticketInfo, workItemComments}) {
+function TicketComments({ ticketInfo, workItemComments }) {
     /*set state to display single ticket information*/
     const [singleComment, setSingleComment] = useState(null);
 

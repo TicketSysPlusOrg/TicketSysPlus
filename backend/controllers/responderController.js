@@ -2,6 +2,15 @@ import mongoose from "mongoose";
 
 import { memberSchema } from "../models/memberSchema.js";
 
+/**
+ * Adam Percival, Nathan Arrowsmith, Pavel Krokhalev, Conor O'Brien
+ * 6/16/2022
+ *
+ * Backend Controller for Responder collection in MongoDB
+ * the Responder collection stores objects containing first and last names, email addresses,
+ * and AzureDB avatar image links
+ */
+
 const Responder = mongoose.model("Responder", memberSchema);
 
 //POST

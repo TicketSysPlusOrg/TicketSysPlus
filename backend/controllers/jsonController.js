@@ -2,6 +2,15 @@ import mongoose from "mongoose";
 
 import { jsonSchema } from "../models/jsonSchema";
 
+/**
+ * Adam Percival, Nathan Arrowsmith, Pavel Krokhalev, Conor O'Brien
+ * 6/16/2022
+ *
+ * Backend Controller for Json collection in MongoDB
+ * the Json collection stores ticket information that is displayed in the 
+ * Admin page and used for the conditional logic when creating tickets
+ */
+
 const Json = mongoose.model("Json", jsonSchema);
 
 

@@ -7,6 +7,15 @@ import { getSettings } from "../../utils/Util";
 import { backendApi } from "../../index";
 import { azureConnection } from "../../index";
 
+/**
+ * Adam Percival, Nathan Arrowsmith, Pavel Krokhalev, Conor O'Brien
+ * 6/16/2022
+ *
+ * This component handles the setting of a default iteration path for ticket creation.
+ * @param {props} defaultProject the current selected default project.
+ * @param {props} setDefaultProject the new default project.
+ * @returns {JSX.Element} SprintIterationPath component.
+ */
 function SprintIterationPath({ defaultProject, setDefaultProject }) {
     const [iterationPaths, setIterationPaths] = useState([]);
     const [iterationPath, setIterationPath] = useState({ label: "", path: "" });

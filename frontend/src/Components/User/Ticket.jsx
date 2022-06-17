@@ -12,7 +12,17 @@ import TicketComments from "./TicketComments";
 import TicketAttachments from "./TicketAttachments";
 import SelectorChecks from "./SelectorChecks";
 
-
+/**
+ * Adam Percival, Nathan Arrowsmith, Pavel Krokhalev, Conor O'Brien
+ * 6/16/2022
+ *
+ * The ticket component handles all code for displaying a single ticket, accessible from the edit ticket view or
+ * main tickets display page.
+ * @param {props} ticketData the data needed to fill the ticket modal.
+ * @param {props} clickClose state handler to close modal.
+ * @param {props} setShow state handler to close modal and trigger rerender of tickets in main page.
+ * @returns {JSX.Element} Ticket component.
+ */
 function Ticket({ ticketData, clickClose, setShow }) {
     const [thisTicketInfo, setThisTicketInfo] = useState(null);
     const [allTicketInfo, setAllTicketInfo] = useState(null);
@@ -46,7 +56,6 @@ function Ticket({ ticketData, clickClose, setShow }) {
     /*render edit state. if true, swap to edit ticket view*/
     const [renderEdit, setRenderEdit] = useState(null);
 
-    /*TODO: need to close modal and refresh tickets*/
     /*delete ticket*/
     const [deleteTicket, setDeleteTicket] = useState(false);
     /*delete ticket call when deleteTicketId !== null*/
@@ -63,8 +72,7 @@ function Ticket({ ticketData, clickClose, setShow }) {
                 allTicketInfo ?
                     <Row>
                         <Col>
-                            {/*TODO: fields for project/teams, field for ticket type (task, epic, issue*/}
-                            {/*TODO: validation  for all fields*/}
+                            {/*future development opportunity: validation  for all fields*/}
                             <Form className="col s12">
 
                                 {/*TICKET TITLE*/}

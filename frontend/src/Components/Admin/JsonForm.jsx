@@ -1,12 +1,22 @@
-// forms to fill to create a new ticket
 import React, { createRef, useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import PropTypes from "prop-types";
 
 import { backendApi } from "../../index";
 
+/**
+ * Adam Percival, Nathan Arrowsmith, Pavel Krokhalev, Conor O'Brien
+ * 6/16/2022
+ *
+ * This component contains the jsonModal info display and data change submission.
+ * @param {props} jsonModal current data from viewer component for modal display and usage.
+ * @param {props} jsonObjects all json objects from database.
+ * @param {props} setShow setShow helps trigger tickets view reload in parent component.
+ * @param {props} setInitialData first data values to render.
+ * @param {props} setChange triggers rerender of page if submission made.
+ * @returns {JSX.Element} JsonForm component.
+ */
 function JsonForm({ jsonModal, jsonObjects, setShow, setInitialData, setChange }) {
-
     let inputBody = createRef();
 
     function submitJson(event) {
@@ -32,7 +42,6 @@ function JsonForm({ jsonModal, jsonObjects, setShow, setInitialData, setChange }
             <div className="row">
                 <div className="col">
 
-                    {/*TODO: validation  for all fields*/}
                     <Form className="col s12" onSubmit={submitJson}>
                         {/*Will output JSON file here*/}
                         <div className="row mb-2">

@@ -16,10 +16,17 @@ import TicketAttachments from "./TicketAttachments";
 import SelectorChecks from "./SelectorChecks";
 
 /**
- * This component is the basis for ticket creation/updates. It contains forms for creating new tickets or updating contained fields.
- * @param props
- * @returns {JSX.Element}
- * @constructor
+ * Adam Percival, Nathan Arrowsmith, Pavel Krokhalev, Conor O'Brien
+ * 6/16/2022
+ *
+ * This component is the basis for ticket creation/updates. It contains forms for creating new tickets or updating contained fields,
+ * as well as functions required for submitting data for creating new/editing existing tickets.
+ * @param {props} props for different function calls and viewing modes.
+ *          ticketData and ticketInfo are for filling info in edit ticket mode.
+ *              * two state names for different component accessors, can be simplified with future development.
+ *          editTicket is a boolean value for telling the code whether we are editing a ticket or creating a new ticket.
+ *          setShow is a state accessor for hiding a modal and re-rendering the tickets view.
+ * @returns {JSX.Element} TicketForm component.
  */
 function TicketForm(props) {
     /*update statevals, typevals, assignedto, and priorityval onchange. overriding hard set from edit ticket data*/
@@ -75,6 +82,7 @@ function TicketForm(props) {
     /*TODO: currently, get icons set up just to speak with MotorqProject board. admin env controls should set this properly.*/
     /*get work item icons on page render*/
     useEffect(() => {
+        console.log(editTicket);
         setReadyToClose(null);
         (async () => {
             const projID = await azureConnection.getProjects();
@@ -96,7 +104,6 @@ function TicketForm(props) {
 
     /*get processes and work item type for ticket editing*/
     useEffect(() => {
-        //TODO: admin control of selected state
         /*get all available ticket states*/
         (async () => {
             /*currently hardcoded for particular inherited process with custom states*/
@@ -303,7 +310,7 @@ function TicketForm(props) {
     /*state for file upload. currently one item at a time*/
     const [uploadVal, setUploadVal] = useState([]);
 
-    /*TODO: need to limit file size, run checks, and add to an array of files for creation*/
+    /*future development opportunity: need to limit file size, run checks, and add to an array of files for creation*/
     function uploadAttach(thisFile) {
         console.log(thisFile);
         setUploadVal(thisFile);
@@ -514,17 +521,17 @@ function TicketForm(props) {
                                 : null}
 
                             {/*COMMENTS/ATTACHMENTS SELECTORS*/}
-                            <SelectorChecks setRowValue={setRowValue} rowValue={rowValue} />
+                            {editTicket ? <SelectorChecks setRowValue={setRowValue} rowValue={rowValue} /> : null}
 
                             {/*CURRENT COMMENTS AND ATTACHMENTS*/}
-                            {rowValue === "comments" ?
+                            {editTicket && rowValue === "comments" ?
                                 <Row className={"mb-3"}>
                                     <h6 className={"fw-bold"}>Ticket Comments</h6>
                                     {workItemComments ?
                                         <TicketComments ticketInfo={props.ticketInfo} workItemComments={workItemComments} />
                                         : <p>No ticket comments available.</p>}
                                 </Row>
-                                : rowValue === "attachments" ?
+                                : editTicket && rowValue === "attachments" ?
                                     <Row className={"mb-3"}>
                                         <h6 className={"fw-bold"}>Current Attachments</h6>
                                         {props.ticketInfo.relations ?
