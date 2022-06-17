@@ -57,7 +57,7 @@ export const msalConfig = {
 
 // Add here scopes for id token to be used at MS Identity Platform endpoints.
 export const loginRequest = {
-    scopes: ["User.Read"]
+    scopes: ["User.Read", "499b84ac-1321-427f-aa17-267ca6975798/user_impersonation"]
 };
 
 // scope for Azure DevOps API

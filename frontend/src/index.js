@@ -80,7 +80,7 @@ async function run() {
     const getStates = await azureConnection.getWorkItemStates(getProcesses.value[4].id, getTickTypes.value[0].id);
     console.log(getStates);
 
-    const thisData = {"fields": {"System.State": "To Do", "System.Title": "A Ticket Title"}};
+    const thisData = { "fields": { "System.State": "To Do", "System.Title": "A Ticket Title" } };
 
     const createTicket = await azureConnection.createWorkItem(projects.value[0].id, "Task", thisData);
     console.log(createTicket);
