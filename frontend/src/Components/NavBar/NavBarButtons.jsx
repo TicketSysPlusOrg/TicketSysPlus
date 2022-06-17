@@ -93,17 +93,17 @@ function NavBarButtons({ setShow, show, currLocation, btnVertSpace, vertOrNot, i
                     <NavLink to="/admin">
                         <Button className=
                             {currLocation.pathname == "/admin" ? btnVertSpace + actvStyles + " disableStyle" : btnVertSpace + btnStyles}>
-                                Admin Page</Button>
+                            Admin Page</Button>
                     </NavLink>
                 </div>
                 <div>
                     <NavLink to="/settings" >
                         <Button className=
                             {currLocation.pathname == "/settings" ? btnVertSpace + actvStyles + " disableStyle" : btnVertSpace + btnStyles}>
-                                Settings</Button>
+                            Settings</Button>
                     </NavLink>
                 </div>
-                {/*TODO: https://mui.com/material-ui/react-menu/#basic-menu  */}
+
                 <div>
                     <Button onClick={logout}
                         onBlur={toggleBlur}
