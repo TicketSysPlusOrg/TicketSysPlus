@@ -68,7 +68,6 @@ function User() {
     const[rerender, setRerender] = useState(false);
     useEffect(() => {
         if(!show) {
-            console.log("setshowtoggle");
             rerender === false ? setRerender(true) : setRerender(false);
         }
     }, [show]);
