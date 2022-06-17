@@ -71,8 +71,6 @@ function Tickets({ projects, rerender, iterationPath }) {
 
         if (projects === null) return;
 
-        console.log(`path: ${iterationPath}`);
-
         var getProj = await azureConnection.getProject(projects[0]);
         console.log(getProj);
         setActiveProj(getProj.name);

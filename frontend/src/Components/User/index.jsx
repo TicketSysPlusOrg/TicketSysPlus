@@ -15,10 +15,9 @@ import Tickets from "./Tickets";
  * Main tickets page component. Calls sidebar projects and main tickets content, as well as navbar.
  * @returns {JSX.Element} User component
  */
-function User() {
+function User({ iterationPath }) {
     const [projectList, setPrjList] = useState(null);
     const [prjVal, setPrjVal] = useState(null);
-    const [iterationPath, setIterationPath] = useState("");
 
     /*when prj val change is called and prjVal is altered, run azure calls, which renders tickets based on projects. also runs for initial page render*/
     useEffect(() => {
@@ -28,13 +27,12 @@ function User() {
     async function initRun() {
         const settings = await getSettings();
 
-        /*set default project and iteration path per admin settings panel*/
+        /*set default project per admin settings panel*/
         let defaultProject = "";
         if (prjVal === null) {
             if (settings !== undefined && settings.length > 0) {
                 const settingsObj = JSON.parse(settings[0].body);
                 defaultProject = settingsObj.defaultProject;
-                setIterationPath(settingsObj.iterationPath);
             }
         }
 

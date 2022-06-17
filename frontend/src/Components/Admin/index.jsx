@@ -18,7 +18,7 @@ import JsonViewer from "./JsonViewer";
  * Admin page component. Calls navbar, responders, and JSON viewer components.
  * @returns {JSX.Element} Admin component.
  */
-function Admin() {
+function Admin({ iterationPath }) {
     const authRequest = {
         ...loginRequest
     };
@@ -43,7 +43,7 @@ function Admin() {
             interactionType={InteractionType.Redirect}
             authenticationRequest={authRequest}
         >
-            <NavBar show={show} setShow={setShow} />
+            <NavBar show={show} setShow={setShow} iterationPath={iterationPath} />
             <Row className={"me-0"}>
                 <Col xs={10} id={"inset-shadow"}>
                     <JsonViewer isAdmin={admin}/>

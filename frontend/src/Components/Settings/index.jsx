@@ -19,7 +19,7 @@ import DefaultProject from "./DefaultProject";
  * (namely default project and sprint) and setting current administrators.
  * @returns {JSX.Element} Settings component.
  */
-function Settings() {
+function Settings({ iterationPath }) {
     const authRequest = {
         ...loginRequest
     };
@@ -34,7 +34,7 @@ function Settings() {
             authenticationRequest={authRequest}
         >
             <div id={"settingsComponent"}>
-                <NavBar show={show} setShow={setShow} />
+                <NavBar show={show} setShow={setShow} iterationPath={iterationPath} />
                 <Container>
                     <Box sx={{ marginTop: "10vh", height: "83vh" }}>
                         <Stack spacing={2}>
