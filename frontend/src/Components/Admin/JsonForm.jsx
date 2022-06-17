@@ -42,7 +42,6 @@ function JsonForm({ jsonModal, jsonObjects, setShow, setInitialData, setChange }
             <div className="row">
                 <div className="col">
 
-                    {/*TODO: validation  for all fields*/}
                     <Form className="col s12" onSubmit={submitJson}>
                         {/*Will output JSON file here*/}
                         <div className="row mb-2">
