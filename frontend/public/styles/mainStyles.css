@@ -48,11 +48,6 @@ input[type=radio] {
     min-width: 100vw;
 }
 
-.jsonViewer {
-    background-image: url("/motorqAdmin.svg");
-    background-repeat: no-repeat;
-    background-position: left;
-}
 
 .bootstrapOverride .landingBox {
     background-color: whitesmoke;

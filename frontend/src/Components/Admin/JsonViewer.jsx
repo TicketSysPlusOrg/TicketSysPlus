@@ -193,7 +193,7 @@ function JsonViewer({ isAdmin }) {
 
     return (
         <>
-            <div className="container mt-4 jsonViewer">
+            <div className="container mt-4">
 
                 {/*Codemirror error display*/}
                 <div className="row">
