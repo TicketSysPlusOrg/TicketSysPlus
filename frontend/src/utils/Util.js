@@ -3,6 +3,9 @@ import parse from "html-react-parser";
 import { backendApi } from "../index";
 
 /**
+ * Adam Percival, Nathan Arrowsmith, Pavel Krokhalev, Conor O'Brien
+ * 6/16/2022
+ *
  * Parses HTML String into React Components.
  * Also capitalizes first character inside HTML elements prior to parsing to React Components.
  * @param {string} input The HTML string to parse into React Components

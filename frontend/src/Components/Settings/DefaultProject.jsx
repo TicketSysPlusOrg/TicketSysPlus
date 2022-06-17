@@ -7,6 +7,15 @@ import { getSettings } from "../../utils/Util";
 import { backendApi } from "../../index";
 import { azureConnection } from "../../index";
 
+/**
+ * Adam Percival, Nathan Arrowsmith, Pavel Krokhalev, Conor O'Brien
+ * 6/16/2022
+ *
+ * This page sets/gets the admin-set sprint path and default project for ticket creation and tickets viewing.
+ * @param {props} defaultProject the current selected default project.
+ * @param {props} setDefaultProject the new default project.
+ * @returns {JSX.Element} SprintIterationPath component.
+ */
 function SprintIterationPath({ defaultProject, setDefaultProject }) {
     const [projects, setProjects] = useState([]);
 
@@ -39,10 +48,10 @@ function SprintIterationPath({ defaultProject, setDefaultProject }) {
     return (
         <>
             <Grid container className={"mt-4"}>
-                <Grid item xs={8} className={"mt-2"}>
+                <Grid item xs={4} className={"mt-2"}>
                     <h4 className={"text-center"}>Default Project</h4>
                 </Grid>
-                <Grid item xs={4}>
+                <Grid item xs={8}>
                     <Autocomplete
                         className={"mb-3"}
                         disablePortal
@@ -50,7 +59,7 @@ function SprintIterationPath({ defaultProject, setDefaultProject }) {
                         value={defaultProject}
                         options={projects}
                         isOptionEqualToValue={(option, value) => option.label === value.label}
-                        sx={{ width: 300 }}
+                        sx={{ pr: 4 }}
                         renderInput={(params) => <TextField {...params} label="Set Default Project..." />}
                         onChange={async (_event, value, reason) => {
                             if(reason === "selectOption") {

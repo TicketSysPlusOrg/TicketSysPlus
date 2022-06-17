@@ -8,6 +8,13 @@ import { Box, Grid } from "@mui/material";
 import { backendApi } from "../../index";
 import { azureConnection } from "../../index";
 
+/**
+ * Adam Percival, Nathan Arrowsmith, Pavel Krokhalev, Conor O'Brien
+ * 6/16/2022
+ *
+ * This page handles database calls for deciding who is an administrator for the page.
+ * @returns {JSX.Element} Admins component.
+ */
 function Admins() {
     /*devops api data retrieval*/
     const [admins, setAdmins] = useState(null);
@@ -65,10 +72,10 @@ function Admins() {
     return (
         <>
             <Grid container className={"mt-4"}>
-                <Grid item xs={8} className={"mt-2"}>
+                <Grid item xs={4} className={"mt-2"}>
                     <h4 className={"text-center"}>Admins</h4>
                 </Grid>
-                <Grid item xs={4}>
+                <Grid item xs={8}>
                     <Autocomplete
                         className={"mb-3"}
                         disablePortal
@@ -81,7 +88,7 @@ function Admins() {
                                 return card.every(card => card.email !== responder.email);
                             });
                         }}
-                        sx={{ width: 300 }}
+                        sx={{ pr: 4 }}
                         renderInput={(params) => <TextField {...params} label="Set Admins..." />}
                         onChange={(_event, value, reason) => {
                             if(reason === "selectOption") {

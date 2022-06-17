@@ -1,3 +1,6 @@
+/**
+ * This component is the backup dummy JSON data initially provided to the developer team.
+ */
 export const ConditionalExample = {
     "type": "object",
     "properties": {

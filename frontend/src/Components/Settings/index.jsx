@@ -11,28 +11,18 @@ import Admins from "./Admins";
 import SprintIterationPath from "./SprintIterationPath";
 import DefaultProject from "./DefaultProject";
 
-/*
-    {
-        iterationPath: "",
-        defaultProject: ""
-    }
-*/
-
-/*
-    [
-        {
-            image: "",
-            name: "",
-            email: ""
-        }
-    ]
-*/
-
+/**
+ * Adam Percival, Nathan Arrowsmith, Pavel Krokhalev, Conor O'Brien
+ * 6/16/2022
+ *
+ * This component calls the admin settings components used for ticket creation handling
+ * (namely default project and sprint) and setting current administrators.
+ * @returns {JSX.Element} Settings component.
+ */
 function Settings() {
     const authRequest = {
         ...loginRequest
     };
-
 
     const [show, setShow] = useState(false);
 

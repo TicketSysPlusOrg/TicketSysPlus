@@ -9,11 +9,24 @@ import { parseHtml } from "../../utils/Util";
 import TicketForm from "./TicketForm";
 import DeleteButton from "./DeleteButton";
 import TicketComments from "./TicketComments";
+import TicketAttachments from "./TicketAttachments";
+import SelectorChecks from "./SelectorChecks";
 
-
+/**
+ * Adam Percival, Nathan Arrowsmith, Pavel Krokhalev, Conor O'Brien
+ * 6/16/2022
+ *
+ * The ticket component handles all code for displaying a single ticket, accessible from the edit ticket view or
+ * main tickets display page.
+ * @param {props} ticketData the data needed to fill the ticket modal.
+ * @param {props} clickClose state handler to close modal.
+ * @param {props} setShow state handler to close modal and trigger rerender of tickets in main page.
+ * @returns {JSX.Element} Ticket component.
+ */
 function Ticket({ ticketData, clickClose, setShow }) {
     const [thisTicketInfo, setThisTicketInfo] = useState(null);
     const [allTicketInfo, setAllTicketInfo] = useState(null);
+    const [rowValue, setRowValue] = useState("none");
 
     useEffect(() => {
         setThisTicketInfo(ticketData);
@@ -32,16 +45,17 @@ function Ticket({ ticketData, clickClose, setShow }) {
     /*comments from work item*/
     const [workItemComments, setWorkItemComments] = useState(null);
     useEffect(() => {
-        (async () => {
-            const workItemComments = await azureConnection.getWorkItemComments(allTicketInfo.fields["System.AreaPath"], allTicketInfo.id);
-            setWorkItemComments(workItemComments);
-        })();
+        if(allTicketInfo !== null) {
+            (async () => {
+                const ticketComments = await azureConnection.getWorkItemComments(allTicketInfo.fields["System.AreaPath"], allTicketInfo.id, "");
+                setWorkItemComments(ticketComments);
+            })();
+        }
     }, [allTicketInfo]);
 
     /*render edit state. if true, swap to edit ticket view*/
     const [renderEdit, setRenderEdit] = useState(null);
 
-    /*TODO: need to close modal and refresh tickets*/
     /*delete ticket*/
     const [deleteTicket, setDeleteTicket] = useState(false);
     /*delete ticket call when deleteTicketId !== null*/
@@ -58,8 +72,7 @@ function Ticket({ ticketData, clickClose, setShow }) {
                 allTicketInfo ?
                     <Row>
                         <Col>
-                            {/*TODO: fields for project/teams, field for ticket type (task, epic, issue*/}
-                            {/*TODO: validation  for all fields*/}
+                            {/*future development opportunity: validation  for all fields*/}
                             <Form className="col s12">
 
                                 {/*TICKET TITLE*/}
@@ -142,34 +155,25 @@ function Ticket({ ticketData, clickClose, setShow }) {
                                     </Col>
                                 </Row>
 
-                                {/*TICKET COMMENTS*/}
-                                <Row className={"mb-4"}>
-                                    <h6 className={"fw-bold"}>Ticket Comments</h6>
-                                    {workItemComments ?
-                                        <TicketComments workItemComments={workItemComments} />
-                                        : <p>No ticket comments available.</p>}
-                                </Row>
+                                {/*COMMENTS/ATTACHMENTS SELECTORS*/}
+                                <SelectorChecks setRowValue={setRowValue} />
 
-                                {/*TICKET ATTACHMENTS*/}
-                                <Row className="mb-4">
-                                    <h5>Attachments</h5>
-                                    {allTicketInfo.relations ?
-                                        allTicketInfo.relations.map((thisAttachment, index) => {
-                                            return(
-                                                <Col xs={3} key={index} className={"my-2"}>
-                                                    <Card className={"shadow"}>
-                                                        <Card.Body>
-                                                            <Card.Title title={thisAttachment.attributes.name} className={"text-truncate"}>
-                                                                {thisAttachment.attributes.name}
-                                                            </Card.Title>
-                                                            <br />
-                                                            <a className={"float-end"} href={thisAttachment.url + "?fileName=" + thisAttachment.attributes.name + "&download=true"} download>Download</a>
-                                                        </Card.Body>
-                                                    </Card>
-                                                </Col>);
-                                        })
-                                        : <div className={"border border-1 p-2 articleStyle"}>No attachments.</div>}
-                                </Row>
+                                {/*TICKET COMMENTS AND ATTACHMENTS*/}
+                                {rowValue === "comments" ?
+                                    <Row className={"mb-4"}>
+                                        <h5>Ticket Comments</h5>
+                                        {workItemComments && workItemComments.totalCount !== 0 ?
+                                            <TicketComments ticketInfo={allTicketInfo} workItemComments={workItemComments} />
+                                            : <div className={"text-center"}>No ticket comments.</div>}
+                                    </Row>
+                                    : rowValue === "attachments" ?
+                                        <Row className={"mb-4"} >
+                                            <h5>Attachments</h5>
+                                            {allTicketInfo.relations ?
+                                                <TicketAttachments ticketInfo={allTicketInfo} />
+                                                : <div className={"text-center"}>No ticket attachments.</div>}
+                                        </Row>
+                                        : null}
 
                                 <hr />
 

@@ -12,13 +12,29 @@ import AutoCompleteNames from "./AutoCompleteNames";
 import DeleteButton from "./DeleteButton";
 import Ticket from "./Ticket";
 import TicketComments from "./TicketComments";
+import TicketAttachments from "./TicketAttachments";
+import SelectorChecks from "./SelectorChecks";
 
+/**
+ * Adam Percival, Nathan Arrowsmith, Pavel Krokhalev, Conor O'Brien
+ * 6/16/2022
+ *
+ * This component is the basis for ticket creation/updates. It contains forms for creating new tickets or updating contained fields,
+ * as well as functions required for submitting data for creating new/editing existing tickets.
+ * @param {props} props for different function calls and viewing modes.
+ *          ticketData and ticketInfo are for filling info in edit ticket mode.
+ *              * two state names for different component accessors, can be simplified with future development.
+ *          editTicket is a boolean value for telling the code whether we are editing a ticket or creating a new ticket.
+ *          setShow is a state accessor for hiding a modal and re-rendering the tickets view.
+ * @returns {JSX.Element} TicketForm component.
+ */
 function TicketForm(props) {
     /*update statevals, typevals, assignedto, and priorityval onchange. overriding hard set from edit ticket data*/
     const [priorityVal, changePriorityVal] = useState(null);
     const [typeVal, changeTypeVal] = useState(null);
     const [stateVal, changeStateVal] = useState(null);
     const [assignedTo, changeAssignedTo] = useState(null);
+    const [rowValue, setRowValue] = useState("none");
 
     /*show and close vars for modal*/
     const handleClose = () => {
@@ -106,9 +122,10 @@ function TicketForm(props) {
         })();
     }, []);
 
+    /*get work item comments*/
     useEffect(() => {
         (async () => {
-            const workItemComments = await azureConnection.getWorkItemComments(props.ticketInfo.fields["System.AreaPath"], props.ticketInfo.id);
+            const workItemComments = await azureConnection.getWorkItemComments(props.ticketInfo.fields["System.AreaPath"], props.ticketInfo.id, "");
             setWorkItemComments(workItemComments);
         })();
     }, [props.ticketInfo]);
@@ -156,6 +173,10 @@ function TicketForm(props) {
                     "System.AssignedTo": assignedPerson,
                 }
             };
+
+            if (props.iterationPath !== undefined && props.iterationPath !== "") {
+                devOpsTickData.fields["System.IterationPath"] = props.iterationPath;
+            }
 
             const createTicket = await azureConnection.createWorkItem(prjID, ticketType, devOpsTickData);
 
@@ -289,7 +310,7 @@ function TicketForm(props) {
     /*state for file upload. currently one item at a time*/
     const [uploadVal, setUploadVal] = useState([]);
 
-    /*TODO: need to limit file size, run checks, and add to an array of files for creation*/
+    /*future development opportunity: need to limit file size, run checks, and add to an array of files for creation*/
     function uploadAttach(thisFile) {
         console.log(thisFile);
         setUploadVal(thisFile);
@@ -327,8 +348,6 @@ function TicketForm(props) {
             {viewTicketMode === false ?
                 <Row>
                     <Col>
-                        {/*TODO: fields for project/teams*/}
-                        {/*TODO: validation  for all fields*/}
                         <Form className={"col s12"} onSubmit={submitTicket}>
 
                             {/*EDIT TICKET HEADER AND DELETE BUTTON. AVAILABLE WHEN IN EDIT TICKET MODE.*/}
@@ -417,7 +436,7 @@ function TicketForm(props) {
                             <Row className={"mb-2"}>
                                 <Form.Group className={"col s12"}>
                                     <Form.Label htmlFor={"tickAssigned"}
-                                        className={"fw-bold d-inline-block"}>{editTicket === true ? "ASSIGNED TO" : "ASSIGN TO"}</Form.Label>
+                                        className={"fw-bold d-inline-block"}>Assign To</Form.Label>
                                     <AutoCompleteNames index={1} id={"tickAssigned"} setMentionChoices={setMentionChoices}
                                         setAssignee={setAssignee} />
                                 </Form.Group>
@@ -501,33 +520,25 @@ function TicketForm(props) {
                                 </Form.Group>
                                 : null}
 
-                            {/*CURRENT COMMENTS*/}
-                            <Row className={"mb-3"}>
-                                <h6 className={"fw-bold"}>Ticket Comments</h6>
-                                {workItemComments ?
-                                    <TicketComments workItemComments={workItemComments} />
-                                    : <p>No ticket comments available.</p>}
-                            </Row>
+                            {/*COMMENTS/ATTACHMENTS SELECTORS*/}
+                            <SelectorChecks setRowValue={setRowValue} rowValue={rowValue} />
 
-                            {/*CURRENT ATTACHMENTS*/}
-                            {props.editTicket ?
+                            {/*CURRENT COMMENTS AND ATTACHMENTS*/}
+                            {rowValue === "comments" ?
                                 <Row className={"mb-3"}>
-                                    <h6 className={"fw-bold"}>Current Attachments</h6>
-                                    {props.ticketInfo.relations ?
-                                        props.ticketInfo.relations.map((thisAttachment, index) => {
-                                            return(
-                                                <Col xs={3} key={index} className={"my-2"}>
-                                                    <Card className={"shadow-sm"}>
-                                                        <Card.Body>
-                                                            <Card.Title title={thisAttachment.attributes.name} className={"text-truncate"}>{thisAttachment.attributes.name}</Card.Title>
-                                                            <br />
-                                                            <a className={"float-end"} href={thisAttachment.url + "?fileName=" + thisAttachment.attributes.name + "&content-disposition=attachment"} download>Download</a>
-                                                        </Card.Body>
-                                                    </Card>
-                                                </Col>); } )
-                                        : <p>No current attachments.</p>}
+                                    <h6 className={"fw-bold"}>Ticket Comments</h6>
+                                    {workItemComments ?
+                                        <TicketComments ticketInfo={props.ticketInfo} workItemComments={workItemComments} />
+                                        : <p>No ticket comments available.</p>}
                                 </Row>
-                                : null}
+                                : rowValue === "attachments" ?
+                                    <Row className={"mb-3"}>
+                                        <h6 className={"fw-bold"}>Current Attachments</h6>
+                                        {props.ticketInfo.relations ?
+                                            <TicketAttachments ticketInfo={props.ticketInfo} />
+                                            : <p>No current attachments.</p>}
+                                    </Row>
+                                    : null}
 
                             {/*ADD ATTACHMENTS*/}
                             <Row className={"mb-3"}>

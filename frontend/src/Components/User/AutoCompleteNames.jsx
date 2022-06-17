@@ -1,19 +1,21 @@
 import React, { useEffect, useState } from "react";
-import CheckIcon from "@mui/icons-material/Check";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
-import CloseIcon from "@mui/icons-material/Close";
-import { styled } from "@mui/material/styles";
-import { autocompleteClasses } from "@mui/material/Autocomplete";
 import PropTypes from "prop-types";
 
 import { azureConnection, backendApi } from "../../index";
 
 
-/*
- * INDEX: number used to differentiate between single or multiple version of autocomplete
- * SETMENTIONCHOICES: state setter from parent for multi choice mentions list
- * SETASSIGNEE: state setter from parent for single choice assignee
+/**
+ * Adam Percival, Nathan Arrowsmith, Pavel Krokhalev, Conor O'Brien
+ * 6/16/2022
+ *
+ * This component handles autocompletion of organization members for assigning people to a ticket
+ * or mentioning them. It automatically mentions anyone assigned as an on call responder.
+ * @param {props} index number used to differentiate between single or multiple version of autocomplete.
+ * @param setMentionChoices state setter from parent for multi choice mentions list.
+ * @param setAssignee state setter from parent for single choice assignee.
+ * @returns {JSX.Element} AutoCompleteNames component.
  */
 function AutoCompleteNames({ index, setMentionChoices, setAssignee }) {
     const [teamMembersList, setTeamMembersList] = useState([]);
@@ -24,9 +26,10 @@ function AutoCompleteNames({ index, setMentionChoices, setAssignee }) {
     /*assigned is used for the parent component's 'assigned to'*/
     const [assigned, setAssigned] = useState(null);
 
-    /*oncall members to auto select*/
+    /*on call members to auto select*/
     const [onCallMembers, setOnCallMembers] = useState([]);
 
+    /*DevOps calls on render for retrieving data and setting to states*/
     useEffect(() => {
         (async () => {
             const projects = await azureConnection.getProjects();
@@ -51,10 +54,12 @@ function AutoCompleteNames({ index, setMentionChoices, setAssignee }) {
         })();
     }, []);
 
+    /*auto setting on call members for dynamically setting mentions*/
     useEffect(() => {
         setChooseList(onCallMembers);
     }, [onCallMembers]);
 
+    /*setting all possible choices for mentions*/
     useEffect(() => {
         setMentionChoices(chooseList);
     }, [chooseList]);
@@ -64,7 +69,7 @@ function AutoCompleteNames({ index, setMentionChoices, setAssignee }) {
         setAssignee(assigned);
     }, [assigned]);
 
-    /*value={onCallMembers ? onCallMembers.map((eachMember) => eachMember) : null}*/
+    /*two render options - one for single-choice assignee of a ticket, other for ticket mentions*/
     return (
         <>
             {teamMembers !== null ?

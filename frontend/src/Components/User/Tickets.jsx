@@ -14,6 +14,11 @@ import Ticket from "./Ticket";
 import TicketForm from "./TicketForm";
 
 /*get only name from username + email string*/
+/**
+ * This component retrieves only a name from a name + email string.
+ * @param {props} thisString the name + email string.
+ * @returns {string} just the username.
+ */
 export function getNameBeforeEmail(thisString) {
     if(thisString !== undefined) {
         let findName = thisString;
@@ -21,7 +26,17 @@ export function getNameBeforeEmail(thisString) {
     }
 }
 
-function Tickets({ projects, rerender }) {
+/**
+ * Adam Percival, Nathan Arrowsmith, Pavel Krokhalev, Conor O'Brien
+ * 6/16/2022
+ *
+ * The tickets component creates a row/column-based display for all DevOps tickets.
+ * @param {props} projects the chosen project for ticket viewing.
+ * @param {props} rerender when triggered, re-renders tickets being shown.
+ * @param {props} iterationPath the admin settings-chosen sprint path for ticket creation.
+ * @returns {JSX.Element} Tickets component.
+ */
+function Tickets({ projects, rerender, iterationPath }) {
     /*modal show and hide*/
     const [show, setShow] = useState(false);
     const handleShow = () => setShow(true);
@@ -35,9 +50,6 @@ function Tickets({ projects, rerender }) {
 
     /*getting org/project info for opening ticket in DevOps*/
     const [currentOrgInfo, setCurrentOrgInfo] = useState(null);
-
-    /*FOR PAVEL*/
-    const [defaultPrj, setDefaultPrj] = useState(null);
 
     function showTicketModal(ticketData){
         setTicketInfo(ticketData);
@@ -59,12 +71,7 @@ function Tickets({ projects, rerender }) {
 
         if (projects === null) return;
 
-        // const settings = await getSettings();
-
-        // stuff = "";
-        // if (settings !== undefined && settings.length > 0) {
-        //     const stuff = JSON.parse(settings[0].body);
-        // }
+        console.log(`path: ${iterationPath}`);
 
         var getProj = await azureConnection.getProject(projects[0]);
         console.log(getProj);
@@ -137,9 +144,15 @@ function Tickets({ projects, rerender }) {
         setDevOpsTix(sortArr);
     }
 
+    /*returns the generic iteration path or sprint path following / if there is one*/
+    function splitPath(iterationInfo) {
+        const splitInfo = iterationInfo.split("\\");
+        return splitInfo[splitInfo.length - 1];
+    }
+
     return (
         <>
-            {/* TODO: Replace this div with a metrics box, for Ex:
+            {/* future development opportunity: Replace this div with a metrics box, for Ex:
                 <> blocked tickets
                 <> priority 3 tickets
                 <> priority 2 tickets
@@ -152,10 +165,11 @@ function Tickets({ projects, rerender }) {
             <Col xs={12} className={"pe-0"}>
                 <div className={"projectSelect"}>
                     <Container fluid className={"my-1 py-1 px-0 row infoBar cardOneLine align-items-center fw-bold text-decoration-underline"} >
-                        <Col xs={1} className={"ps-3"}><a href={"#"} onClick={() => clickSort("id", null)} className={"sortTicket"}>ID</a></Col>
+                        <Col xs={1} className={"ps-4"}><a href={"#"} onClick={() => clickSort("id", null)} className={"sortTicket"}>ID</a></Col>
                         <Col xs={2}><a href={"#"} onClick={() => clickSort("fields", "System.Title")}  className={"sortTicket"}>Title</a></Col>
                         <Col xs={1}><a href={"#"} onClick={() => clickSort("fields", "Microsoft.VSTS.Common.Priority")} className={"sortTicket"}>Priority</a></Col>
-                        <Col xs={2}><a href={"#"} onClick={() => clickSort("fields", "Microsoft.VSTS.Scheduling.DueDate")} className={"sortTicket"}>Due Date</a></Col>
+                        <Col xs={1}><a href={"#"} onClick={() => clickSort("fields", "Microsoft.VSTS.Scheduling.DueDate")} className={"sortTicket"}>Due Date</a></Col>
+                        <Col xs={1}><a href={"#"} onClick={() => clickSort("fields", "System.IterationPath")} className={"sortTicket"}>Sprint</a></Col>
                         <Col xs={2}><a href={"#"} onClick={() => clickSort("fields", "System.AssignedTo")} className={"sortTicket"}>Assigned To</a></Col>
                         <Col xs={1}><a href={"#"} onClick={() => clickSort("fields", "System.State")} className={"sortTicket"}>State</a></Col>
                         <Col xs={3} className={"d-flex justify-content-around "}>
@@ -174,18 +188,18 @@ function Tickets({ projects, rerender }) {
                 devOpsTix ?
                     devOpsTix.map((devTix, index) => (
                         <Col xs={12} className={"pe-0"} key={index} >
-                            {/*TODO: double check that areapath will always be filled*/}
-                            {/* TODO: https://mui.com/material-ui/react-stack/ */}
+                            {/* future development opportunity: https://mui.com/material-ui/react-stack/ */}
                             <div className={"projectSelect"}>
-                                {/* TODO: Convert into a data table? https://mui.com/material-ui/react-table/#data-table */}
+
+                                {/* future development opportunity: Convert into a data table? https://mui.com/material-ui/react-table/#data-table */}
                                 <Container fluid className={stateColor(devTix.fields["System.State"]) + " my-1 py-1 px-0 row hoverOver cardOneLine align-items-center fw-bold "} >
-                                    <Col xs={1} className={"ps-3"}>{devTix.id}</Col>
+                                    <Col xs={1} className={"ps-4"}>{devTix.id}</Col>
                                     <Col xs={2} className={"ps-3 align-self-center text-capitalize"} title={devTix.fields["System.Title"]}>{devTix.fields["System.Title"]}</Col>
                                     <Col xs={1} className={"ps-4"}>{devTix.fields["Microsoft.VSTS.Common.Priority"]}</Col>
-                                    {/*TODO: remove the extra ternary check for no due date present once we require due date for ticket creation*/}
-                                    <Col xs={2} title={devTix.fields["Microsoft.VSTS.Scheduling.DueDate"] ? devTix.fields["Microsoft.VSTS.Scheduling.DueDate"].slice(0, 10) : null}>
+                                    <Col xs={1} title={devTix.fields["Microsoft.VSTS.Scheduling.DueDate"] ? devTix.fields["Microsoft.VSTS.Scheduling.DueDate"].slice(0, 10) : null}>
                                         {devTix.fields["Microsoft.VSTS.Scheduling.DueDate"] ? devTix.fields["Microsoft.VSTS.Scheduling.DueDate"].slice(0, 10) : null}
                                     </Col>
+                                    <Col xs={1} title={devTix.fields["System.IterationPath"]}>{splitPath(devTix.fields["System.IterationPath"])}</Col>
                                     <Col xs={2} title={devTix.fields["System.AssignedTo"]}>{getNameBeforeEmail(devTix.fields["System.AssignedTo"])}</Col>
                                     <Col xs={1} title={devTix.fields["System.State"]}>{devTix.fields["System.State"]}</Col>
                                     <Col xs={3} className={"d-flex justify-content-around"}>
@@ -251,7 +265,7 @@ function Tickets({ projects, rerender }) {
                 <Modal.Dialog className={"mx-3"}>
                     <Modal.Body>
                         {renderEdit === true ?
-                            <TicketForm ticketData={ticketInfo} editTicket={true} ticketInfo={allTicketInfo} setShow={setShow} />
+                            <TicketForm ticketData={ticketInfo} editTicket={true} ticketInfo={allTicketInfo} setShow={setShow} iterationPath={iterationPath} />
                             :
                             <Ticket ticketData={ticketInfo} clickClose={handleClose} setShow={setShow} renderTicket={renderEdit} ticketInfo={allTicketInfo}/>
                         }

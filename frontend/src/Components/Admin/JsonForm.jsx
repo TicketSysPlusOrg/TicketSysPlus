@@ -1,12 +1,22 @@
-// forms to fill to create a new ticket
 import React, { createRef, useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import PropTypes from "prop-types";
 
 import { backendApi } from "../../index";
 
-function JsonForm({ jsonModal, jsonObjects, setShow }) {
-
+/**
+ * Adam Percival, Nathan Arrowsmith, Pavel Krokhalev, Conor O'Brien
+ * 6/16/2022
+ *
+ * This component contains the jsonModal info display and data change submission.
+ * @param {props} jsonModal current data from viewer component for modal display and usage.
+ * @param {props} jsonObjects all json objects from database.
+ * @param {props} setShow setShow helps trigger tickets view reload in parent component.
+ * @param {props} setInitialData first data values to render.
+ * @param {props} setChange triggers rerender of page if submission made.
+ * @returns {JSX.Element} JsonForm component.
+ */
+function JsonForm({ jsonModal, jsonObjects, setShow, setInitialData, setChange }) {
     let inputBody = createRef();
 
     function submitJson(event) {
@@ -17,21 +27,14 @@ function JsonForm({ jsonModal, jsonObjects, setShow }) {
 
         jsonObjects[1].body = jsonObjects[0].body;
         jsonObjects[0].body = inputBody.current.value;
-        console.log(jsonObjects[0].body);
-        backendApi.put("jsons", jsonObjects[0])
-            .then((res) => {
-                console.log(res);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-        backendApi.put("jsons", jsonObjects[1])
-            .then((res) => {
-                console.log(res);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+
+        Promise.all([
+            backendApi.put("jsons", jsonObjects[0]),
+            backendApi.put("jsons", jsonObjects[1])
+        ]).then(_result => {
+            setInitialData(jsonObjects[0].body);
+            setChange(true);
+        }).catch(console.error);
     }
 
     return (
