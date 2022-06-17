@@ -10,21 +10,32 @@ import { loginRequest } from "../../authConfig";
 import { callMsGraph } from "../../utils/MsGraphApiCall";
 import TicketForm from "../User/TicketForm";
 
-
+/**
+ * Adam Percival, Nathan Arrowsmith, Pavel Krokhalev, Conor O'Brien
+ * 6/16/2022
+ *
+ * Component contains the tickets to be displayed in the navbar on each page.
+ * @param {props} setShow helps trigger tickets view reload in parent component
+ * @param {props} show helps trigger tickets view reload in parent component
+ * @param {props} currLocation decides whether to apply current loaction styling or not
+ * @param {props} btnVertSpace switches navbar to offcanvas modal based on screen size
+ * @param {props} vertOrNot switches navbar to offcanvas modal based on screen size
+ * @param {props} iterationPath the sprint that tickets will be created for. used in ticket creation.
+ * @returns {JSX.Element} NavBarButtons component
+ */
 function NavBarButtons({ setShow, show, currLocation, btnVertSpace, vertOrNot, iterationPath }) {
-    const [btnStyles] = useState("adminButton btn mx-2");
-    const [actvStyles] = useState("makeTicket btn mx-2");
+    const [btnStyles] = useState(" adminButton btn mx-2");
+    const [actvStyles] = useState(" makeTicket btn mx-2");
     const handleShow = () => setShow(true);
     const handleClose = () => setShow(false);
 
-
     const { instance, accounts } = useMsal();
     const account = useAccount(accounts[0] || {});
-
     const [graphData, setGraphData] = useState(null);
 
+    /*Silently acquires an access token which is then attached to a request for MS Graph data*/
     useEffect(() => {
-        // Silently acquires an access token which is then attached to a request for MS Graph data
+
         instance.acquireTokenSilent({
             ...loginRequest,
             account: accounts[0]
@@ -48,6 +59,7 @@ function NavBarButtons({ setShow, show, currLocation, btnVertSpace, vertOrNot, i
     const toggleFunc = useCallback(() => setToggle(!toggle));
     const toggleBlur = () => { if (toggle) { toggleFunc(); } };
 
+    /*logs the user out of their current account session*/
     function logout() {
         instance.logoutRedirect({
             account: account,
@@ -73,21 +85,21 @@ function NavBarButtons({ setShow, show, currLocation, btnVertSpace, vertOrNot, i
                 <div>
                     <NavLink to="/" >
                         <Button className=
-                            {currLocation.pathname == "/" ? btnVertSpace + actvStyles : btnVertSpace + btnStyles}>
+                            {currLocation.pathname == "/" ? btnVertSpace + actvStyles + " disableStyle" : btnVertSpace + btnStyles}>
                             Tickets</Button>
                     </NavLink>
                 </div>
                 <div>
                     <NavLink to="/admin">
                         <Button className=
-                            {currLocation.pathname == "/admin" ? btnVertSpace + actvStyles : btnVertSpace + btnStyles}>
+                            {currLocation.pathname == "/admin" ? btnVertSpace + actvStyles + " disableStyle" : btnVertSpace + btnStyles}>
                                 Admin Page</Button>
                     </NavLink>
                 </div>
                 <div>
                     <NavLink to="/settings" >
                         <Button className=
-                            {currLocation.pathname == "/settings" ? btnVertSpace + actvStyles : btnVertSpace + btnStyles}>
+                            {currLocation.pathname == "/settings" ? btnVertSpace + actvStyles + " disableStyle" : btnVertSpace + btnStyles}>
                                 Settings</Button>
                     </NavLink>
                 </div>
@@ -97,13 +109,13 @@ function NavBarButtons({ setShow, show, currLocation, btnVertSpace, vertOrNot, i
                         onBlur={toggleBlur}
                         onMouseEnter={() => setToggle(true)}
                         onMouseLeave={() => setToggle(false)}
-                        className={btnVertSpace + "adminButton ms-3 pr-5"} >
+                        className={btnVertSpace + " adminButton ms-3 pr-5"} >
 
                         <p className={toggle ? "invisible" : " "}>
                             {graphData ? graphData.displayName : "Loading..."}
                         </p>
 
-                        <p className="logOutButton text-decoration-underline">
+                        <p className={btnVertSpace ? "logOutButtonVert text-decoration-underline" : "logOutButton text-decoration-underline"}>
                             {toggle ? "Logout" : " "}
                         </p>
                     </Button>

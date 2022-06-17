@@ -1,3 +1,7 @@
+/**
+This page contains all of the site's styling.
+ */
+
 body {
     overflow: hidden;
 }
@@ -54,12 +58,15 @@ input[type=radio] {
     background-position: left;
 }
 
-.bootstrapOverride .landingBox {
+.bootstrapOverride #landBoxBorder.landingBox {
     background-color: whitesmoke;
     border-radius: 25px;
-    border-color: rgba(95, 94, 94, 0.272) !important;
+    border: solid 5px rgba(95, 94, 94, 0.272);
+}
 
-
+.bootstrapOverride .onCall {
+    color: rgb(104, 171, 193);
+    font-weight: bold;
 }
 
 #settingsComponent {
@@ -68,11 +75,6 @@ input[type=radio] {
 
 #settingsComponent::-webkit-scrollbar {
     display: none;
-}
-
-.bootstrapOverride .onCall {
-    color: rgb(104, 171, 193);
-    font-weight: bold !important;
 }
 
 #sidebar {
@@ -252,6 +254,10 @@ input[type=radio] {
     color: rgb(255, 126, 68);
 }
 
+.disableStyle, .disableStyle:hover, .disableStyle:active, .disableStyle:focus {
+    pointer-events: none;
+}
+
 /*style overrides for create ticket button*/
 .bootstrapOverride .makeTicket {
     border: none;
@@ -267,7 +273,6 @@ input[type=radio] {
     background-color: transparent;
     color: rgb(0, 58, 139);
 }
-
 
 .bootstrapOverride .makeTicket:hover,
 .bootstrapOverride .adminButton:hover,
@@ -299,6 +304,11 @@ input[type=radio] {
 .bootstrapOverride .logOutButton {
     position: fixed;
     top: 0.8rem;
+}
+
+.bootstrapOverride .logOutButtonVert {
+    position: relative;
+    top: -1rem;
 }
 
 .bootstrapOverride #userCollapse {
