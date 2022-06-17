@@ -2,6 +2,15 @@ import mongoose from "mongoose";
 
 import { settingsSchema } from "../models/settingsSchema";
 
+/**
+ * Adam Percival, Nathan Arrowsmith, Pavel Krokhalev, Conor O'Brien
+ * 6/16/2022
+ *
+ * Backend Controller for Settings collection in MongoDB
+ * the Settings collection stores single string objects used in adding/removing settings from 
+ * the settings page 
+ */
+
 const Settings = mongoose.model("Settings", settingsSchema);
 
 

@@ -3,6 +3,14 @@ import mongoose from "mongoose";
 require("dotenv").config();
 import { memberSchema } from "../models/memberSchema.js";
 
+/**
+ * Adam Percival, Nathan Arrowsmith, Pavel Krokhalev, Conor O'Brien
+ * 6/16/2022
+ *
+ * Backend Controller for Admin collection in MongoDB
+ * the Admin collection stores objects containing first and last names and email addresses 
+ */
+
 const Admin = mongoose.model("Admin", memberSchema);
 
 
