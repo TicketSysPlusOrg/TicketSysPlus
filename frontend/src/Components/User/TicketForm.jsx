@@ -82,6 +82,7 @@ function TicketForm(props) {
     /*TODO: currently, get icons set up just to speak with MotorqProject board. admin env controls should set this properly.*/
     /*get work item icons on page render*/
     useEffect(() => {
+        console.log(editTicket);
         setReadyToClose(null);
         (async () => {
             const projID = await azureConnection.getProjects();
@@ -103,7 +104,6 @@ function TicketForm(props) {
 
     /*get processes and work item type for ticket editing*/
     useEffect(() => {
-        //TODO: admin control of selected state
         /*get all available ticket states*/
         (async () => {
             /*currently hardcoded for particular inherited process with custom states*/
@@ -521,17 +521,17 @@ function TicketForm(props) {
                                 : null}
 
                             {/*COMMENTS/ATTACHMENTS SELECTORS*/}
-                            <SelectorChecks setRowValue={setRowValue} rowValue={rowValue} />
+                            {editTicket ? <SelectorChecks setRowValue={setRowValue} rowValue={rowValue} /> : null}
 
                             {/*CURRENT COMMENTS AND ATTACHMENTS*/}
-                            {rowValue === "comments" ?
+                            {editTicket && rowValue === "comments" ?
                                 <Row className={"mb-3"}>
                                     <h6 className={"fw-bold"}>Ticket Comments</h6>
                                     {workItemComments ?
                                         <TicketComments ticketInfo={props.ticketInfo} workItemComments={workItemComments} />
                                         : <p>No ticket comments available.</p>}
                                 </Row>
-                                : rowValue === "attachments" ?
+                                : editTicket && rowValue === "attachments" ?
                                     <Row className={"mb-3"}>
                                         <h6 className={"fw-bold"}>Current Attachments</h6>
                                         {props.ticketInfo.relations ?
