@@ -9,7 +9,7 @@
   "main": "index.js",
   "scripts": {
     "start": "concurrently \"nodemon ./index.js --exec babel-node -e js\" \"cd ../frontend && npm start\"",
-    "server": "nodemon index.js"
+    "server": "nodemon ./index.js --exec babel-node -e js"
   },
   "author": "TicketSys+ Team",
   "contributors": [
